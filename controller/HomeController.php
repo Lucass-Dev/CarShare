@@ -1,12 +1,12 @@
 <?php
-    require "./model/Home.php";
+    require "./model/HomeModel.php";
 
      class HomeController {
 
         public function index(){
-            $index = new Home();
+            $index = new HomeModel();
             echo($index->getStrHelloWorld());
-            include './view/home.php';
+            include './view/HomeView.php';
         }
 
     }

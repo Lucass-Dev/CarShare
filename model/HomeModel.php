@@ -1,5 +1,5 @@
 <?php
-class Home {
+class HomeModel {
 
     private $strHelloWorld = "Hello World from Model";
 
