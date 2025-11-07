@@ -7,7 +7,9 @@
     <link href="./assets/styles/index.css" rel="stylesheet">
     <link href="./assets/styles/header.css" rel="stylesheet">
     <link href="./assets/styles/footer.css" rel="stylesheet">
+    <link href="./assets/styles/searchPage.css" rel="stylesheet">
     <script src="./script/index.js"></script>
+    <script src="./script/searchPage.js"></script>
     <title>CarShare</title>
 </head>
 <body>
@@ -22,47 +24,51 @@
 
         Database::instanciateDb("carshare", "localhost", "root", "root");
 
-        $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+        $action = "home";
+
+        if(isset($_GET["action"])){
+            $action = $_GET["action"];
+        }
     ?>
     <main>
         <?php
-            switch ($path) {
-                case "/home":
+            switch ($action) {
+                case "home":
                     require_once("./controller/HomeController.php");
                     $mainController = new HomeController();
                     $mainController->index();
                     break;
-                case "/search":
+                case "search":
                     require_once "./controller/SearchPageController.php";
                     $searchPageController = new SearchPageController();
                     $searchPageController->render();
                     break;
-                case "/login":
+                case "login":
                     require_once("./controller/LoginController.php");
                     $loginController = new LoginController();
                     $loginController->index();
                     break;
-                case "/register":
+                case "register":
                     require_once("./controller/RegisterController.php");
                     $registerController = new RegisterController();
                     $registerController->index();
                     break;
-                case "/profile":
+                case "profile":
                     require_once("./controller/ProfileController.php");
                     $profileController = new ProfileController();
                     $profileController->index();
                     break;
-                case "/carpooling":
+                case "carpooling":
                     require_once("./controller/CarpoolingController.php");
                     $carpoolingController = new CarpoolingController();
                     $carpoolingController->index();
                     break;
-                case "/admin":
+                case "admin":
                     require_once("./controller/AdminController.php");
                     $adminController = new AdminController();
                     $adminController->index();
                     break;
-                case "/faq":
+                case "faq":
                     require_once("./controller/FAQController.php");
                     $faqController = new FAQController();
                     $faqController->index();
@@ -72,9 +78,11 @@
                     echo "Page non trouvée";
                     break;
                 }
-            include_once("./view/components/Footer.php");
+            
         ?>
     </main>
+    <?php
+        include_once("./view/components/Footer.php");
+    ?>
 </body>
 </html>
-

@@ -15,16 +15,10 @@
         }
 
         public function render() {
-            $query = null;
-
-
-            //switch
             if (isset($_GET["q"])) {
                 $query = $_GET["q"];
-                echo $query;
             }
 
-            $this->searchPageView::render_data($this->searchPageModel::getAllCarpoolings());
         }
     }   
 
