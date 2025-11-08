@@ -10,7 +10,7 @@ class Database {
 
             Database::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            echo "Connexion à la BDD réussie !";
+            //echo "Connexion à la BDD réussie !";
         } catch (PDOException $e) {
             die("Erreur de connexion à la base de données : " . $e->getMessage());
         }
@@ -20,6 +20,6 @@ class Database {
 // ⚠️ Vérifie bien ces valeurs :
 Database::instanciateDb('covoiturage', 'localhost', 'root', 'admin');
 // ou, si jamais ça coince, teste aussi :
-// Database::instanciateDb('covoiturage', '127.0.0.1', 'root', 'admin');
+// Database::instanciateDb('covoiturage', '127.0.0.1', 'root', '');
 
 ?>
