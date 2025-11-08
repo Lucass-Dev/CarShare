@@ -1,13 +1,21 @@
+
 <div class="search-bar-container">
     <form id="search-form" method="GET" action="/search" class="search-form">
-        <div class="field">
+        <div class="field autocomplete">
             <label for="start_place">Start place</label>
             <input type="text" id="start_place" name="start_place" placeholder="City or address" required>
+
+            <div id="start-suggestion-box">
+
+            </div>
         </div>
 
         <div class="field">
             <label for="end_place">End place</label>
             <input type="text" id="end_place" name="end_place" placeholder="City or address" required>
+            <div id="end-suggestion-box">
+
+            </div>
         </div>
 
         <div class="field">

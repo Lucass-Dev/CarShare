@@ -9,7 +9,7 @@
     <link href="./assets/styles/footer.css" rel="stylesheet">
     <link href="./assets/styles/searchPage.css" rel="stylesheet">
     <script src="./script/index.js"></script>
-    <script src="./script/searchPage.js"></script>
+    
     <title>CarShare</title>
 </head>
 <body>
@@ -73,6 +73,9 @@
                     $faqController = new FAQController();
                     $faqController->index();
                     break;
+                case "utils":
+                    require_once("./model/Utils.php");
+                    break;
                 default:
                     http_response_code(404);
                     echo "Page non trouvée";
@@ -85,4 +88,5 @@
         include_once("./view/components/Footer.php");
     ?>
 </body>
+<script src="./script/searchPage.js"></script>
 </html>
