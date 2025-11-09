@@ -15,9 +15,21 @@
         }
 
         public function render() {
-            if (isset($_GET["q"])) {
-                $query = $_GET["q"];
-            }
+            $this->searchPageView->display_search_bar();
+
+            ?> 
+                                <h2>Search Results</h2>
+                <div class="search-page-container">
+
+                    <?php
+                        $this->searchPageView->display_search_filters();
+                        if (isset($_GET['display_search']) && $_GET['display_search'] === 'true') {
+                            $carpoolings = $this->searchPageModel->getAllCarpoolings();
+                            $this->searchPageView->display_search_results($carpoolings);
+                        }
+                    ?>
+                </div>
+            <?php
 
         }
     }   

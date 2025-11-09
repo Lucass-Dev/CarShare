@@ -18,11 +18,12 @@
         ini_set('display_errors', '1');
         ini_set('display_startup_errors', '1');
         error_reporting(E_ALL);
-        require_once("./model/Database.php");
-        include_once("./view/components/Header.php");
     //Fin à enlever
+        
+        require_once("./model/Database.php");
+        include_once("./view/components/header.html");
 
-        Database::instanciateDb("carshare", "localhost", "root", "root");
+        Database::instanciateDb();
 
         $action = "home";
 
@@ -85,7 +86,7 @@
         ?>
     </main>
     <?php
-        include_once("./view/components/Footer.php");
+        include_once("./view/components/footer.html");
     ?>
 </body>
 <script src="./script/searchPage.js"></script>
