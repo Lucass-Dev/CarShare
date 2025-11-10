@@ -40,6 +40,7 @@
                     $mainController->index();
                     break;
                 case "search":
+                case "display_search":
                     require_once "./controller/SearchPageController.php";
                     $searchPageController = new SearchPageController();
                     $searchPageController->render();

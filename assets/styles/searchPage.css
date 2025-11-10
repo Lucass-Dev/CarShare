@@ -64,17 +64,51 @@
 .search-page-container{
     display : flex;
     flex-direction: row;
+    width: 100%;
 }
 
 .search-result-card {
-    border : 1px solid #ddd;
-    border-radius : 8px;
-    margin-bottom: 1rem;
-}¨
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    margin-bottom: 1.2rem;
+    padding: 16px 20px;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.search-result-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.search-result-card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+}
+
+.search-result-card p {
+    margin: 4px 0;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.search-result-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.search-result-card .trip-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
 
 .search-result-container {
     width: 67%;
-    background-color: #3a78c9;
 }
 
 .search-filters-container {
