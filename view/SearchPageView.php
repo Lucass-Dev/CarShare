@@ -5,8 +5,8 @@
                 <div class="search-bar-container">
                     <form id="search-form" method="GET" action="" class="search-form">
                         <input type="hidden" name="action" value="display_search" />
-                        <input type="hidden" id="form_start_input" name="form_start_input" value=<?php echo ($start_id != null && $start_id != "") ? $start_id : ""?>>
-                        <input type="hidden" id="form_end_input" name="form_end_input" value=<?php echo ($end_id != null && $end_id != "") ? $end_id : ""?>>
+                        <input type="hidden" id="form_start_input" name="form_start_input" value="<?php echo ($start_id != null && $start_id != "") ? $start_id : ""?>">
+                        <input type="hidden" id="form_end_input" name="form_end_input" value="<?php echo ($end_id != null && $end_id != "") ? $end_id : ""?>">
 
                         <div class="field">
                             <label for="start_place">Start place</label>
@@ -54,13 +54,13 @@
                     foreach ($carpoolings as $carpooling) {
                         ?>
                             <div class="search-result-card">
-                                <a href="&action=carpooling_details">
-                                    <h3><?php echo htmlspecialchars($carpooling['start_name'] . " to " . $carpooling['end_name']); ?></h3>
-                                    <div class="trip-info">
-                                        <p>Date: <?php echo htmlspecialchars($carpooling['start_date']); ?></p>
-                                        <p>Available Seats: <?php echo htmlspecialchars($carpooling['available_places']); ?></p>
-                                    </div>
-                                </a>
+                                <h3><?php echo htmlspecialchars($carpooling['start_name'] . " to " . $carpooling['end_name']); ?></h3>
+                                <div class="trip-info">
+                                    <p>Date: <?php echo htmlspecialchars($carpooling['start_date']); ?></p>
+                                    <p>Available Seats: <?php echo htmlspecialchars($carpooling['available_places']); ?></p>
+                                    <p>Voyage proposé par : <a href="&action=user_info"><?php echo htmlspecialchars($carpooling['provider_name'])?></a></p>
+                                    <a href="&action=carpooling_details">Voir plus ></a>
+                                </div>
                             </div>
                         <?php
                     }

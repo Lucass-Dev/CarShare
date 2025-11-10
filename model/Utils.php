@@ -23,8 +23,8 @@ require_once("./Database.php");
 
     function fetchCities($strQuery){
         try {
-            $query = Database::$db->prepare("SELECT * from location WHERE name LIKE ? LIMIT 10");
-            $query->execute(array("%{$strQuery}%"));
+            $query = Database::$db->prepare("SELECT * from location WHERE name LIKE ? or postal_code LIKE ? LIMIT 10");
+            $query->execute(array("%{$strQuery}%", "%{$strQuery}%"));
             header('Content-Type: application/json; charset=utf-8');
             echo(json_encode($query->fetchAll(PDO::FETCH_ASSOC)));
         } catch (Throwable $th) {
