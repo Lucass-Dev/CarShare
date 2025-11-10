@@ -4,7 +4,7 @@
 
     class SearchPageModel
     {
-        public function getCarpooling($start_id, $end_id, $date, $seats) : array{
+        public function getCarpooling($start_id, $end_id, $date, $seats, $filters) : array{
             $results = "";
             $db = Database::$db;
             $stmt = $db->query(

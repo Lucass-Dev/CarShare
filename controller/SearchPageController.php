@@ -47,7 +47,7 @@
                     <?php
                         $this->searchPageView->display_search_filters();
                         if (isset($_GET['action']) && $_GET['action'] === 'display_search') {
-                            $carpoolings = $this->searchPageModel->getCarpooling($start_id, $end_id, $requested_date, $requested_seats);
+                            $carpoolings = $this->searchPageModel->getCarpooling($start_id, $end_id, $requested_date, $requested_seats, array());
                             $this->searchPageView->display_search_results($carpoolings);
                         }
                     ?>
