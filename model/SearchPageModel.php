@@ -7,16 +7,33 @@
         public function getCarpooling($start_id, $end_id, $date, $seats, $filters) : array{
             $results = "";
             $db = Database::$db;
-            $stmt = $db->query(
+            $sql =
                 "SELECT l2.name as start_name, l1.name as end_name, c.start_date, available_places , u.first_name as provider_name
                         FROM `carpoolings` c
                         INNER JOIN `location` l2 on (c.start_id = l2.id)
                         INNER JOIN `location` l1 on (c.end_id = l1.id)
                         INNER JOIN `users` u on (c.provider_id = u.id)
-                        WHERE $start_id = c.start_id AND $end_id = c.end_id AND c.start_date >= '$date' AND available_places >= $seats
-                        ORDER BY c.start_date ASC;
-            ");
+                        WHERE :start_id = c.start_id";
 
+            if (!empty($end_id)) {
+                $sql .= " AND c.end_id = :end_id";
+            }
+
+            $sql .= " AND c.start_date >= :start_date 
+                    AND c.available_places >= :seats
+                    ORDER BY c.start_date ASC";
+            $stmt = $db->prepare($sql);
+            $params = [
+                ':start_id' => $start_id,
+                ':start_date' => $date,
+                ':seats' => $seats
+            ];
+
+            if (!empty($end_id)) {
+                $params[':end_id'] = $end_id;
+            }
+
+            $stmt->execute($params);
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $results;
 

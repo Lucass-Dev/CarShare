@@ -19,7 +19,7 @@
 
                         <div class="field">
                             <label for="end_place">End place</label>
-                            <input type="text" id="end_place" placeholder="City or address" required value=<?php echo ($end_name != null && $end_name != "") ? $end_name : ""?>>
+                            <input type="text" id="end_place" placeholder="City or address" value=<?php echo ($end_name != null && $end_name != "") ? $end_name : ""?>>
                             <div id="end-suggestion-box">
 
                             </div>

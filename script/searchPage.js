@@ -17,7 +17,7 @@ start_suggestion_box.addEventListener('click', function(e) {
 });
 
 start_input.addEventListener('input', async function() {
-     await fetchCities(start_input, start_suggestion_box);
+    await fetchCities(start_input, start_suggestion_box);
 });
 
 end_suggestion_box.addEventListener('click', function(e) {
@@ -29,7 +29,7 @@ end_suggestion_box.addEventListener('click', function(e) {
 });
 
 end_input.addEventListener('input', async function() {
-     await fetchCities(end_input, end_suggestion_box);
+    await fetchCities(end_input, end_suggestion_box);
 });
 
 
@@ -37,6 +37,7 @@ end_input.addEventListener('input', async function() {
 async function fetchCities(input, box){
     var suggestions_html = '';
     if (input.value.length > 2) {
+        
         const response = await fetch(`../model/Utils.php?query=${input.value}&need=fetchCities`)
             .then(res => {return res.json()});
         for (let city of response) {
@@ -45,6 +46,7 @@ async function fetchCities(input, box){
         };
         
         box.innerHTML = suggestions_html;
-            
-    }   
+    }else{
+        box.innerHTML = '';
+    }
 }
