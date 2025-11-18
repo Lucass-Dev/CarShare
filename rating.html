@@ -4,33 +4,22 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>CarShare — Notation du trajet</title>
+  <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="assets/styles/rating.css">
+  <link href="./assets/styles/header.css" rel="stylesheet">
+  <link href="./assets/styles/footer.css" rel="stylesheet">
 </head>
-<body class="page page--rating">
-  <header class="header">
-    <div class="header__inner container">
-      <div class="header__brand">
+    <header>
         <div class="logo">
-          <!-- Simple logo placeholder -->
-          <svg class="logo__icon" width="44" height="28" viewBox="0 0 44 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M3 18c0-4 5-7 9-7h14l7 7" stroke="#2a6db0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="12" cy="21" r="3" fill="#2a6db0"/>
-            <circle cx="32" cy="21" r="3" fill="#2a6db0"/>
-          </svg>
-          <span class="logo__text">CarShare</span>
+            <img src="/assets/img/photo_hextech.jpeg" alt="CarShare Logo">
+            CarShare
         </div>
-      </div>
 
-      <div class="header__actions">
-        <button class="header__btn header__btn--icon" aria-label="Recherche">
-          <span class="icon icon--search" aria-hidden="true">🔍</span>
-        </button>
-        <button class="header__btn header__btn--icon" aria-label="Compte">
-          <span class="icon icon--user" aria-hidden="true">👤</span>
-        </button>
-      </div>
-    </div>
-  </header>
+        <div class="header-icons">
+            <a href="/search" title="Rechercher">🔍</a>
+            <a href="/login" title="Mon compte">👤</a>
+        </div>
+    </header>
 
   <main class="main container">
     <section class="rating">
@@ -84,12 +73,12 @@
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="footer__inner container">
-      <div class="footer__item">HexTech ®</div>
-      <div class="footer__item">CGU</div>
-      <div class="footer__item">Informations légales</div>
-      <div class="footer__item">Tout droits réservés</div>
+  <footer>
+    <div class="footer-container">
+        <div>HexTech ®</div>
+        <div>CGU</div>
+        <div>Informations légales</div>
+        <div>Tous droits réservés</div>
     </div>
   </footer>
 </body>
