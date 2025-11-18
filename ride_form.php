@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <!-- Importation des fichiers CSS existants -->
     <link rel="stylesheet" href="./assets/styles/header.css">
     <link rel="stylesheet" href="./assets/styles/footer.css">
-    <link rel="stylesheet" href="./assets/styles/index.css"> <!-- facultatif -->
+    <link rel="stylesheet" href="./assets/styles/ride_form.css">
 </head>
 
 <body>
@@ -112,51 +112,53 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <p class="success"><?= htmlspecialchars($message) ?></p>
         <?php endif; ?>
 
-        <!-- Formulaire -->
-        <form method="POST" action="ride_form.php" class="ride-form">
-            <label for="date">Date :</label>
-            <input type="date" id="date" name="date" required>
+    <form method="POST" action="ride_form.php" class="ride-form">
+    <!-- Adresse de départ -->
+    <fieldset class="ride-section">
+        <legend>Adresse de départ</legend>
 
-            <label for="heure">Heure :</label>
-            <input type="time" id="heure" name="heure" required>
+        <label for="depart_numero">Numéro :</label>
+        <input type="number" id="depart_numero" name="depart_numero" min="1" required>
 
-            <label for="places">Nombre de places :</label>
-            <input type="number" id="places" name="places" min="1" max="10" required>
+        <label for="depart_rue">Rue :</label>
+        <input type="text" id="depart_rue" name="depart_rue" required>
 
-            <!-- Adresse de départ -->
-            <fieldset>
-                <legend>Adresse de départ</legend>
-                <label for="depart_numero">Numéro :</label>
-                <input type="number" id="depart_numero" name="depart_numero" min="1" required>
+        <label for="depart_code_postal">Code postal :</label>
+        <input type="text" id="depart_code_postal" name="depart_code_postal" pattern="\d{5}" required>
 
-                <label for="depart_rue">Rue :</label>
-                <input type="text" id="depart_rue" name="depart_rue" required>
+        <label for="depart_ville">Ville :</label>
+        <input type="text" id="depart_ville" name="depart_ville" required>
+    </fieldset>
 
-                <label for="depart_code_postal">Code postal :</label>
-                <input type="text" id="depart_code_postal" name="depart_code_postal" pattern="\d{5}" required>
+    <!-- Adresse d'arrivée -->
+    <fieldset class="ride-section">
+        <legend>Adresse d'arrivée</legend>
 
-                <label for="depart_ville">Ville :</label>
-                <input type="text" id="depart_ville" name="depart_ville" required>
-            </fieldset>
+        <label for="arrivee_numero">Numéro :</label>
+        <input type="number" id="arrivee_numero" name="arrivee_numero" min="1" required>
 
-            <!-- Adresse d'arrivée -->
-            <fieldset>
-                <legend>Adresse d'arrivée</legend>
-                <label for="arrivee_numero">Numéro :</label>
-                <input type="number" id="arrivee_numero" name="arrivee_numero" min="1" required>
+        <label for="arrivee_rue">Rue :</label>
+        <input type="text" id="arrivee_rue" name="arrivee_rue" required>
 
-                <label for="arrivee_rue">Rue :</label>
-                <input type="text" id="arrivee_rue" name="arrivee_rue" required>
+        <label for="arrivee_code_postal">Code postal :</label>
+        <input type="text" id="arrivee_code_postal" name="arrivee_code_postal" pattern="\d{5}" required>
 
-                <label for="arrivee_code_postal">Code postal :</label>
-                <input type="text" id="arrivee_code_postal" name="arrivee_code_postal" pattern="\d{5}" required>
+        <label for="arrivee_ville">Ville :</label>
+        <input type="text" id="arrivee_ville" name="arrivee_ville" required>
+    </fieldset>
 
-                <label for="arrivee_ville">Ville :</label>
-                <input type="text" id="arrivee_ville" name="arrivee_ville" required>
-            </fieldset>
+    <label for="date">Date :</label>
+    <input type="date" id="date" name="date" required>
 
-            <button type="submit">Envoyer</button>
-        </form>
+    <label for="heure">Heure :</label>
+    <input type="time" id="heure" name="heure" required>
+
+    <label for="places">Nombre de places :</label>
+    <input type="number" id="places" name="places" min="1" max="10" required>
+
+    <button type="submit" class="ride-submit">Envoyer</button>
+</form>
+
     </main>
 
     <?php include './view/components/footer.php'; ?>
