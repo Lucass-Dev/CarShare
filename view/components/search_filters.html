@@ -1,38 +1,38 @@
 <div class="search-filters-container">
-    <div class="sort-by-filters">
-        <h2>Trier par</h2>
+    <div class="sort-by-filters filter-group">
+        <h3>Trier par</h3>
 
-        <input type="checkbox" id="sort_by_price_checkbox">
+        <input form="search-form" type="checkbox" id="sort_by_price_checkbox" name="sort_by_price">
         <label for="sort_by_price_checkbox">Prix</label><br>
-        <input type="checkbox" id="sort_by_date_checkbox">
+        <input form="search-form" type="checkbox" id="sort_by_date_checkbox">
         <label for="sort_by_date_checkbox">Date</label><br>
-        <input type="checkbox" id="sort_by_seats_checkbox">
+        <input form="search-form" type="checkbox" id="sort_by_seats_checkbox">
         <label for="sort_by_seats_checkbox">Places</label><br>
-        <input type="checkbox" id="sort_by_rating_checkbox">
+        <input form="search-form" type="checkbox" id="sort_by_rating_checkbox">
         <label for="sort_by_rating_checkbox">Note</label><br>
     </div>
 
-    <div class="date-filters">
-        <h2>Horaires</h2>
-        <input type="range" min="0" max="24" step="1" value="0" id="start_time_range">
+    <div class="date-filters filter-group">
+        <h3>Horaires</h3>
+        <input form="search-form" type="range" min="0" max="24" step="1" value="0" id="start_time_range">
         <label for="start_time_range">Heure de début</label><br>
     </div>
 
-    <div class="user-filters">
-        <h2>Utilisateurs</h2>
+    <div class="user-filters filter-group">
+        <h3>Utilisateurs</h3>
 
-        <input type="checkbox" id="user_verified_checkbox">
+        <input form="search-form" type="checkbox" id="user_verified_checkbox">
         <label for="user_verified_checkbox">Utilisateur vérifié</label><br>
     </div>
 
-    <div class="contraintes-filters">
-        <h2>Services</h2>
+    <div class="contraintes-filters filter-group">
+        <h3>Services</h3>
 
-        <input type="checkbox" id="pets-chechbox">
+        <input form="search-form" type="checkbox" id="pets-chechbox">
         <label for="pets-chechbox">Animaux autorisés</label><br>
-        <input type="checkbox" id="smoker-chechbox">
+        <input form="search-form" type="checkbox" id="smoker-chechbox">
         <label for="smoker-chechbox">Fumeurs autorisés</label><br>
-        <input type="checkbox" id="luggage-checkbox">
+        <input form="search-form" type="checkbox" id="luggage-checkbox">
         <label for="luggage-checkbox">Bagages autorisés</label><br>
     </div>
 </div>

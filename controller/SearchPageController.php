@@ -9,9 +9,17 @@
         private $searchPageModel;
         private $searchPageView;
 
+        private $filters;
+
         public function __construct() {
             $this->searchPageModel = new SearchPageModel();
             $this->searchPageView = new SearchPageView();
+            $this->filters = array();
+            $this->filters["pets_allowed"] = "";
+            $this->filters["smoker_allowed"] = "";
+            $this->filters["luggage_allowed"] = "";
+            $this->filters["user_verified"] = "";
+            $this->filters["start_time_range"] = "";
         }
 
         public function render() {
@@ -20,6 +28,7 @@
             $end_name = null;
             $end_id = null;
             $requested_date = null;
+            $requested_hour = null;
             $requested_seats = null;
 
             if (isset($_GET["form_start_input"]) && $_GET["form_start_input"] != "") {
@@ -34,11 +43,14 @@
             if (isset($_GET["date"]) && $_GET["date"] != ""){
                 $requested_date = $_GET["date"];
             }
+            if (isset($_GET["hour"]) && $_GET["hour"] != ""){
+                $requested_hour = $_GET["hour"];
+            }
             if (isset($_GET["seats"]) && $_GET["seats"] != ""){
                 $requested_seats = $_GET["seats"];
             }
 
-            $this->searchPageView->display_search_bar($start_name, $start_id,$end_name, $end_id,$requested_date, $requested_seats);
+            $this->searchPageView->display_search_bar($start_name, $start_id,$end_name, $end_id,$requested_date, $requested_hour, $requested_seats);
 
             ?> 
                 <h2>Search Results</h2>
@@ -47,7 +59,38 @@
                     <?php
                         $this->searchPageView->display_search_filters();
                         if (isset($_GET['action']) && $_GET['action'] === 'display_search') {
-                            $carpoolings = $this->searchPageModel->getCarpooling($start_id, $end_id, $requested_date, $requested_seats, array());
+                            $filters = array();
+                            if (isset($_GET['pets_allowed'])) {
+                                $filters['pets_allowed'] = true;
+                            } else {
+                                $filters['pets_allowed'] = false;
+                            }
+                            if (isset($_GET['smoker_allowed'])) {
+                                $filters['smoker_allowed'] = true;
+                            } else {
+                                $filters['smoker_allowed'] = false;
+                            }
+                            if (isset($_GET['luggage_allowed'])) {
+                                $filters['luggage_allowed'] = true;
+                            } else {
+                                $filters['luggage_allowed'] = false;
+                            }
+                            if (isset($_GET['user_is_verified'])) {
+                                $filters['user_verified'] = true;
+                            } else {
+                                $filters['user_verified'] = false;
+                            }
+                            if (isset($_GET['start_time_range_before'])) {
+                                $filters['start_time_range_before'] = $_GET['start_time_range_before'];
+                            } else {
+                                $filters['start_time_range_before'] = 1;
+                            }
+                            if (isset($_GET['start_time_range_after'])) {
+                                $filters['start_time_range_after'] = $_GET['start_time_range_after'];
+                            } else {
+                                $filters['start_time_range_after'] = 1;
+                            }
+                            $carpoolings = $this->searchPageModel->getCarpooling($start_id, $end_id, $requested_date, $requested_hour, $requested_seats, $filters);
                             $this->searchPageView->display_search_results($carpoolings);
                         }
                     ?>
