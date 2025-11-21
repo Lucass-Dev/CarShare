@@ -4,19 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CarShare - Connexion</title>
-  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="./assets/styles/conn.css" />
+  <link href="./assets/styles/index.css" rel="stylesheet">
+    <link href="./assets/styles/header.css" rel="stylesheet">
+    <link href="./assets/styles/footer.css" rel="stylesheet">
+    <link href="./assets/styles/searchPage.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/styles/home.css">
 </head>
 <body>
-  <header class="header">
-    <div class="logo">
-      <img src="https://cdn-icons-png.flaticon.com/512/3097/3097144.png" alt="logo" />
-      <span>CarShare</span>
-    </div>
-    <div class="header-icons">
-      <input type="text" placeholder="🔍" class="search" />
-      <div class="profile-icon">👤</div>
-    </div>
-  </header>
+<header>
+        <div class="logo">
+            <a href="./index.html"><img src="./assets/img/photo_hextech.jpeg" alt="CarShare Logo"></a>
+            CarShare
+        </div>
+
+        <div class="header-icons">
+            <a href="./searchPage.html" title="Rechercher">🔍</a>
+            <a href="./connexion.html" title="Mon compte">👤</a>
+        </div>
+    </header>
 
   <main>
     <div class="login-box">
@@ -25,7 +31,7 @@
         <input type="email" placeholder="Email" required />
         <input type="password" placeholder="Mot de passe" required />
         <div class="buttons">
-          <button type="button" class="secondary">Pas de compte ?</button>
+          <a class="secondary" href="./inscription.html">Pas de compte ?</a>
           <button type="submit" class="primary">Se connecter</button>
         </div>
       </form>

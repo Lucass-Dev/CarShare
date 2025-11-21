@@ -46,7 +46,7 @@
                     $searchPageController->render();
                     break;
                 case "login":
-                    require_once("./controller/LoginController.php");
+                    require_once("./controller./connexion.htmlController.php");
                     $loginController = new LoginController();
                     $loginController->index();
                     break;

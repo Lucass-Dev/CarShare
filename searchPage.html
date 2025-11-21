@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Recherche Covoiturage</title>
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link href="./assets/styles/index.css" rel="stylesheet">
+    <link href="./assets/styles/header.css" rel="stylesheet">
+    <link href="./assets/styles/footer.css" rel="stylesheet">
+    <link href="./assets/styles/searchPage.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/styles/home.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="./index.html"><img src="./assets/img/photo_hextech.jpeg" alt="CarShare Logo"></a>
+            CarShare
+        </div>
+
+        <div class="header-icons">
+            <a href="/search" title="Rechercher">🔍</a>
+            <a href="./connexion.html" title="Mon compte">👤</a>
+        </div>
+    </header>
+
+    <!-- SEARCH BAR -->
+    <div class="search-bar-container">
+        <form id="search-form" method="GET" action="" class="search-form">
+            <input type="hidden" name="action" value="display_search" />
+            <input type="hidden" id="form_start_input" name="form_start_input" value="123">
+            <input type="hidden" id="form_end_input" name="form_end_input" value="456">
+
+            <div class="field">
+                <label for="start_place">Start place</label>
+                <input type="text" id="start_place" placeholder="City or address" required value="Paris">
+                <div id="start-suggestion-box"></div>
+            </div>
+
+            <div class="field">
+                <label for="end_place">End place</label>
+                <input type="text" id="end_place" placeholder="City or address" value="Lyon">
+                <div id="end-suggestion-box"></div>
+            </div>
+
+            <div class="field date-fields">
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" required value="2025-02-10">
+                <label for="hour"></label>
+                <input type="time" name="hour" id="hour" value="14:00">
+            </div>
+
+            <div class="field">
+                <label for="seats">Available seats</label>
+                <input type="number" id="seats" name="seats" min="1" max="10" required value="2">
+            </div>
+
+            <div class="actions">
+                <button type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- SEARCH FILTERS -->
+    <div class="search-filters-container">
+        <div class="sort-by-filters">
+            <h2>Trier par</h2>
+
+            <input form="search-form" type="radio" id="sort_by_price_radio" name="sort_by" value="price">
+            <label for="sort_by_price_radio">Prix</label><br>
+
+            <input form="search-form" type="radio" id="sort_by_date_radio" name="sort_by" value="date">
+            <label for="sort_by_date_radio">Date</label><br>
+
+            <input form="search-form" type="radio" id="sort_by_seats_radio" name="sort_by" value="seats">
+            <label for="sort_by_seats_radio">Places</label><br>
+
+            <input form="search-form" type="radio" id="sort_by_rating_radio" name="sort_by" value="rating">
+            <label for="sort_by_rating_radio">Note</label><br>
+
+            <div>
+                <input form="search-form" type="radio" id="sort_order_radio" name="sort_by" value="rating">
+                <label for="sort_order_radio">Note</label><br>
+            </div>
+        </div>
+
+        <div class="date-filters">
+            <h2>Horaires</h2>
+
+            <svg viewBox="0 0 240 1" width="100%" height="15" style="padding-left: 2%;">
+                <g fill="#444">
+                    <!-- graduation bars -->
+                    <!-- 24 bars -->
+                    <!-- copy/pasted exactly as in original -->
+                    <rect x="0" y="0" width="1" height="10" />
+                    <rect x="10" y="0" width="1" height="10" />
+                    <rect x="20" y="0" width="1" height="10" />
+                    <rect x="30" y="0" width="1" height="10" />
+                    <rect x="40" y="0" width="1" height="10" />
+                    <rect x="50" y="0" width="1" height="10" />
+                    <rect x="60" y="0" width="1" height="10" />
+                    <rect x="70" y="0" width="1" height="10" />
+                    <rect x="80" y="0" width="1" height="10" />
+                    <rect x="90" y="0" width="1" height="10" />
+                    <rect x="100" y="0" width="1" height="10" />
+                    <rect x="110" y="0" width="1" height="10" />
+                    <rect x="120" y="0" width="1" height="10" />
+                    <rect x="130" y="0" width="1" height="10" />
+                    <rect x="140" y="0" width="1" height="10" />
+                    <rect x="150" y="0" width="1" height="10" />
+                    <rect x="160" y="0" width="1" height="10" />
+                    <rect x="170" y="0" width="1" height="10" />
+                    <rect x="180" y="0" width="1" height="10" />
+                    <rect x="190" y="0" width="1" height="10" />
+                    <rect x="200" y="0" width="1" height="10" />
+                    <rect x="210" y="0" width="1" height="10" />
+                    <rect x="220" y="0" width="1" height="10" />
+                    <rect x="230" y="0" width="1" height="10" />
+                </g>
+            </svg>
+
+            <input form="search-form" type="range" min="0" max="24" step="1" value="8" id="start_time_range_after" name="start_time_range_after">
+            <label for="start_time_range_after">Partir plus tard</label>
+
+            <br><br>
+
+            <svg viewBox="0 0 240 1" width="100%" height="15" style="padding-left: 2%;">
+                <g fill="#444">
+                    <!-- same graduation -->
+                    <rect x="0" y="0" width="1" height="10" />
+                    <rect x="10" y="0" width="1" height="10" />
+                    <rect x="20" y="0" width="1" height="10" />
+                    <rect x="30" y="0" width="1" height="10" />
+                    <rect x="40" y="0" width="1" height="10" />
+                    <rect x="50" y="0" width="1" height="10" />
+                    <rect x="60" y="0" width="1" height="10" />
+                    <rect x="70" y="0" width="1" height="10" />
+                    <rect x="80" y="0" width="1" height="10" />
+                    <rect x="90" y="0" width="1" height="10" />
+                    <rect x="100" y="0" width="1" height="10" />
+                    <rect x="110" y="0" width="1" height="10" />
+                    <rect x="120" y="0" width="1" height="10" />
+                    <rect x="130" y="0" width="1" height="10" />
+                    <rect x="140" y="0" width="1" height="10" />
+                    <rect x="150" y="0" width="1" height="10" />
+                    <rect x="160" y="0" width="1" height="10" />
+                    <rect x="170" y="0" width="1" height="10" />
+                    <rect x="180" y="0" width="1" height="10" />
+                    <rect x="190" y="0" width="1" height="10" />
+                    <rect x="200" y="0" width="1" height="10" />
+                    <rect x="210" y="0" width="1" height="10" />
+                    <rect x="220" y="0" width="1" height="10" />
+                    <rect x="230" y="0" width="1" height="10" />
+                </g>
+            </svg>
+
+            <input form="search-form" type="range" min="0" max="24" step="1" value="14" id="start_time_range_before" name="start_time_range_before">
+            <label for="start_time_range_before">Partir plus tôt</label>
+        </div>
+
+        <div class="user-filters">
+            <h2>Utilisateurs</h2>
+
+            <input form="search-form" type="checkbox" id="user_verified_checkbox" name="user_is_verified">
+            <label for="user_verified_checkbox">Utilisateur vérifié</label><br>
+        </div>
+
+        <div class="contraintes-filters">
+            <h2>Services</h2>
+
+            <input form="search-form" type="checkbox" id="pets-chechbox" name="pets_allowed">
+            <label for="pets-chechbox">Animaux autorisés</label><br>
+
+            <input form="search-form" type="checkbox" id="smoker-chechbox" name="smoker_allowed">
+            <label for="smoker-chechbox">Fumeurs autorisés</label><br>
+
+            <input form="search-form" type="checkbox" id="luggage-checkbox" name="luggage_allowed">
+            <label for="luggage-checkbox">Bagages autorisés</label><br>
+        </div>
+    </div>
+
+    <!-- SEARCH RESULTS -->
+    <div class="search-result-container">
+
+        <div class="search-result-card">
+            <h3>Paris to Lyon</h3>
+            <div class="trip-info">
+                <p>Date: 2025-02-10</p>
+                <p>Available Seats: 3</p>
+                <p>Voyage proposé par : <a href="?action=user_info">Jean Dupont</a></p>
+                <a href="?action=carpooling_details">Voir plus ></a>
+            </div>
+        </div>
+
+        <div class="search-result-card">
+            <h3>Paris to Marseille</h3>
+            <div class="trip-info">
+                <p>Date: 2025-02-11</p>
+                <p>Available Seats: 1</p>
+                <p>Voyage proposé par : <a href="?action=user_info">Marie Leblanc</a></p>
+                <a href="?action=carpooling_details">Voir plus ></a>
+            </div>
+        </div>
+
+    </div>
+  <footer>
+    <div class="footer-container">
+        <div>HexTech ®</div>
+        <div>CGU</div>
+        <div>Informations légales</div>
+        <div>Tous droits réservés</div>
+<div><a href="./FAQ.html">FAQ</a>/div>
+    </div>
+</footer>
+</body>
+</html>

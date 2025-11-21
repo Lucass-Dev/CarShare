@@ -5,19 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CarShare - Inscription</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="./assets/styles/index.css" rel="stylesheet">
+    <link href="./assets/styles/header.css" rel="stylesheet">
+    <link href="./assets/styles/footer.css" rel="stylesheet">
+    <link href="./assets/styles/searchPage.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/styles/home.css">
+    <link rel="stylesheet" href="./assets/styles/inscr.css">
 </head>
 <body>
-  <!-- HEADER -->
-  <header class="header">
-    <div class="logo">
-      <img src="https://cdn-icons-png.flaticon.com/512/3097/3097144.png" alt="logo" />
-      <span>CarShare</span>
-    </div>
-    <div class="header-icons">
-      <input type="text" placeholder="🔍" class="search" />
-      <div class="profile-icon">👤</div>
-    </div>
-  </header>
+  <header>
+        <div class="logo">
+            <a href="./index.html"><img src="./assets/img/photo_hextech.jpeg" alt="CarShare Logo"></a>
+            CarShare
+        </div>
+
+        <div class="header-icons">
+            <a href="./searchPage.html" title="Rechercher">🔍</a>
+            <a href="./connexion.html" title="Mon compte">👤</a>
+        </div>
+    </header>
 
   <!-- MAIN -->
   <main>
@@ -41,6 +47,7 @@
         </div>
 
         <div class="buttons">
+          <a class="secondary" href="./connexion.html">Déjà un compte ?</a>
           <button type="submit" class="primary">S’inscrire</button>
         </div>
       </form>

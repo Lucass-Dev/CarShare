@@ -8,6 +8,7 @@
     <link href="./assets/styles/header.css" rel="stylesheet">
     <link href="./assets/styles/footer.css" rel="stylesheet">
     <link href="./assets/styles/searchPage.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/styles/home.css">
     <script src="./script/index.js"></script>
     
     <title>CarShare</title>
@@ -15,21 +16,117 @@
 <body>
     <header>
         <div class="logo">
-            <img src="/assets/img/photo_hextech.jpeg" alt="CarShare Logo">
+            <a href="./index.html"><img src="./assets/img/photo_hextech.jpeg" alt="CarShare Logo"></a>
             CarShare
         </div>
 
         <div class="header-icons">
-            <a href="/search" title="Rechercher">🔍</a>
-            <a href="/login" title="Mon compte">👤</a>
+            <a href="connexion.html" title="Rechercher">🔍</a>
+            <a href="./connexion.html" title="Mon compte">👤</a>
         </div>
     </header>
+    <main>
+        <section class="hero">
+            <div class="search-container">
+                <form class="search-form">
+                    <input type="text" placeholder="Départ">
+                    <input type="text" placeholder="Arrivée">
+                    <input type="text" placeholder="Date">
+                    <input type="text" placeholder="Nombre de passagers (1)">
+                    <button type="submit" class="search-button">Rechercher</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="reviews-section">
+            <div class="review-card">
+                <h4>BlaBlaCar est noté</h4>
+                <h3>Mauvais</h3>
+                <p class="review-source">Basé sur 1 112 avis</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="trustpilot-logo">
+                    <i class="fas fa-star"></i>
+                    Trustpilot
+                </div>
+            </div>
+            
+            <div class="review-card">
+                <h4>BlaBlaCar est noté</h4>
+                <h3>Mauvais</h3>
+                <p class="review-source">Basé sur 1 112 avis</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="trustpilot-logo">
+                    <i class="fas fa-star"></i>
+                    Trustpilot
+                </div>
+            </div>
+            
+            <div class="review-card">
+                <h4>BlaBlaCar est noté</h4>
+                <h3>Mauvais</h3>
+                <p class="review-source">Basé sur 1 112 avis</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="trustpilot-logo">
+                    <i class="fas fa-star"></i>
+                    Trustpilot
+                </div>
+            </div>
+            
+            <div class="review-card">
+                <h4>BlaBlaCar est noté</h4>
+                <h3>Mauvais</h3>
+                <p class="review-source">Basé sur 1 112 avis</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="trustpilot-logo">
+                    <i class="fas fa-star"></i>
+                    Trustpilot
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <div class="feature-text">
+                <h2>Partagez vos trajets simplement.</h2>
+                <p>
+                    Économique, écologique et convivial, le covoiturage CarShare aide à réduire les coûts et l'impact environnemental tout en favorisant la rencontre entre voyageurs.
+                </p>
+            </div>
+            <div class="feature-image">
+                <img src="ville.jpg" alt="Ville futuriste écologique">
+            </div>
+        </section>
+    </main>
     <footer>
     <div class="footer-container">
         <div>HexTech ®</div>
         <div>CGU</div>
         <div>Informations légales</div>
         <div>Tous droits réservés</div>
+<div><a href="./FAQ.html">FAQ</a>/div>
     </div>
 </footer>
 </body>
