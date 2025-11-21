@@ -6,7 +6,7 @@ class HomeModel {
     public function getStrHelloWorld() {
         return $this->strHelloWorld;
     }
-
+    echo "coucou";
 }
 
 ?>
