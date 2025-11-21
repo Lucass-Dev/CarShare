@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Détails du trajet - CarShare</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background-color: #fff;
+      color: #0b0b0b;
+    }
+
+    /* Header */
+    header {
+      background-color: #e9effc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 40px;
+      border-bottom: 2px solid #0b1b3f;
+    }
+
+    header img {
+      height: 40px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .header-right button {
+      background-color: #dbe4ff;
+      color: #0b1b3f;
+      border: none;
+      border-radius: 20px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .profile-icon {
+      width: 35px;
+      height: 35px;
+      background-color: #9dbafc;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #0b1b3f;
+    }
+
+    /* Section principale */
+    main {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .trajet-info {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 60px;
+      margin-top: 40px;
+    }
+
+    .trajet-info h2 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .trajet-info span {
+      font-size: 16px;
+    }
+
+    .card {
+      border: 1px solid #b6b6b6;
+      border-radius: 20px;
+      padding: 30px 50px;
+      width: 550px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .left {
+      text-align: center;
+      border-right: 2px solid black;
+      padding-right: 30px;
+    }
+
+    .left img {
+      width: 60px;
+      border-radius: 50%;
+    }
+
+    .right {
+      flex: 1;
+      padding-left: 40px;
+      text-align: left;
+    }
+
+    .right table {
+      width: 100%;
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+    .right td {
+      padding: 3px 0;
+    }
+
+    .details-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+      border-top: 1px solid black;
+      padding-top: 10px;
+    }
+
+    .price {
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .btn-reserver {
+      background-color: #b6c8ff;
+      border: none;
+      border-radius: 15px;
+      padding: 8px 18px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #e9effc;
+      border-top: 1px solid #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      margin-top: 80px;
+      font-size: 14px;
+    }
+
+    footer a {
+      color: #0b1b3f;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <img src="logo.png" alt="Logo CarShare">
+    <div class="header-right">
+      <button>Publier un trajet +</button>
+      <div class="profile-icon">👤</div>
+    </div>
+  </header>
+
+  <main>
+    <h1>Détails du trajet</h1>
+
+    <div class="trajet-info">
+      <div>
+        <h2>Paris → Tours</h2>
+        <span>24/10/2025</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="left">
+        <img src="driver.png" alt="Photo du conducteur">
+        <p><strong>Noé</strong><br>⭐ 4</p>
+      </div>
+
+      <div class="right">
+        <table>
+          <tr><td><strong>Départ</strong></td><td>Lieu : Paris</td><td>Date : 24/10/2025</td><td>Heure : 8h00</td></tr>
+          <tr><td><strong>Arrivée</strong></td><td>Lieu : Tours</td><td>Date : 24/10/2025</td><td>Heure : 10h30</td></tr>
+        </table>
+
+        <div class="details-bottom">
+          <div>
+            🐾 Animaux acceptés<br>
+            👥 1 passager
+          </div>
+          <div>
+            <span class="price">15 € TTC</span><br>
+            <button class="btn-reserver">Réserver</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <span>HexTech ®</span>
+    <div>
+      <a href="#">CGU</a> |
+      <a href="#">Informations légales</a>
+    </div>
+    <span>Tous droits réservés</span>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ - CarShare</title>
+  <style>
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      background-color: #f9fbff;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      background-color: #e9f0ff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 40px;
+      border-bottom: 2px solid #0a1f44;
+    }
+
+    header h2 {
+      color: #0a1f44;
+      font-weight: 700;
+      font-size: 1.5em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #0a1f44;
+      font-size: 2em;
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      color: #1e88e5;
+      font-size: 1.4em;
+      margin: 40px 0 20px;
+      border-bottom: 2px solid #1e88e5;
+      padding-bottom: 5px;
+    }
+
+    .faq-item {
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      margin-bottom: 15px;
+      padding: 18px 22px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      transition: 0.3s;
+    }
+
+    .faq-item:hover {
+      border-color: #1e88e5;
+    }
+
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1.1em;
+    }
+
+    .faq-answer {
+      display: none;
+      margin-top: 12px;
+      line-height: 1.6;
+      font-size: 0.97em;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .faq-icon {
+      font-size: 1.4em;
+      font-weight: bold;
+      transition: transform 0.3s;
+    }
+
+    .faq-item.active .faq-icon {
+      transform: rotate(45deg);
+      color: #1e88e5;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    footer {
+      background-color: #f0f4ff;
+      color: #0a1f44;
+      text-align: center;
+      padding: 15px 10px;
+      font-size: 0.9em;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      border-top: 1px solid #ccd8ff;
+    }
+
+    footer span {
+      font-weight: 600;
+    }
+
+    @media (max-width: 600px) {
+      .faq-item {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h2>🚗 CarShare</h2>
+    <div style="display:flex; gap:15px; align-items:center;">
+      <span style="font-size:1.2em; color:#1e88e5;">🔍</span>
+      <span style="font-size:1.4em; color:#1e88e5;">👤</span>
+    </div>
+  </header>
+
+  <main>
+    <h1>Foire Aux Questions</h1>
+
+    <!-- 🧭 Fonctionnement général -->
+    <h2>Fonctionnement général</h2>
+
+    <div class="faq-item">
+      <div class="faq-question">Comment fonctionne CarShare ? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">CarShare met en relation conducteurs et passagers pour partager un trajet simplement et à moindre coût.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">Faut-il créer un compte pour utiliser CarShare ? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Oui, un compte est nécessaire pour proposer ou réserver un trajet.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">Le service est-il payant ? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">L’inscription est gratuite. Seuls les trajets comportent une participation aux frais du conducteur.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">Comment contacter un conducteur ou un passager ? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Une messagerie interne est disponible après la réservation.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">Puis-je voyager avec des bagages ? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Oui, mais il est conseillé de prévenir le conducteur pour vérifier la place disponible.</div>
+    </div>
+
+    <!-- 🚗 Réservations et trajets -->
+    <h2>Réservations et trajets</h2>
+
+    <div class="faq-item">
+      <div class="faq-question">Comment réserver une place ? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Cherchez un trajet, cliquez sur “Réserver” et validez le paiement sécurisé.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">Comment proposer un trajet ? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Rendez-vous dans “Publier un trajet”, puis entrez votre itinéraire, date et prix.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">Comment annuler une réservation ? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">L’annulation est possible depuis votre profil, jusqu’à 24h avant le départ.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">Que se passe-t-il si le conducteur ne vient pas ? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Contactez le support CarShare pour signaler le problème et obtenir un remboursement.</div>
+    </div>
+
+    <!-- 🔐 Sécurité et confiance -->
+    <h2>Sécurité et confiance</h2>
+
+    <div class="faq-item">
+      <div class="faq-question">CarShare est-il sécurisé ? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Oui, les profils sont vérifiés et les avis utilisateurs garantissent la fiabilité.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">Comment signaler un comportement inapproprié ? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Utilisez le bouton “Signaler” ou contactez notre support.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">Les paiements sont-ils sécurisés ? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Oui, toutes les transactions passent par un système de paiement certifié.</div>
+    </div>
+
+    <!-- 💬 Compte et assistance -->
+    <h2>Compte et assistance</h2>
+
+    <div class="faq-item">
+      <div class="faq-question">J’ai oublié mon mot de passe, que faire ? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Cliquez sur “Mot de passe oublié” à la connexion pour le réinitialiser.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">Comment modifier mes informations personnelles ? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Depuis votre profil, vous pouvez modifier vos données à tout moment.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">Comment contacter le support CarShare ? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Via la page “Contact” ou directement depuis la section “Aide”.</div>
+    </div>
+
+  </main>
+
+  <footer>
+    <span>HexTech ®</span>
+    <span>CGU</span>
+    <span>Informations légales</span>
+    <span>Tout droits réservés</span>
+  </footer>
+
+  <script>
+    const items = document.querySelectorAll('.faq-item');
+    items.forEach(item => {
+      item.addEventListener('click', () => {
+        item.classList.toggle('active');
+        const icon = item.querySelector('.faq-icon');
+        icon.textContent = item.classList.contains('active') ? '–' : '+';
+      });
+    });
+  </script>
+
+</body>
+</html>
