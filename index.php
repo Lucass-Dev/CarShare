@@ -18,15 +18,12 @@
         ini_set('display_errors', '1');
         ini_set('display_startup_errors', '1');
         error_reporting(E_ALL);
-
+    //Fin à enlever
+        
         require_once("./model/Database.php");
-        include_once("./view/components/Header.php");
-        // Fin à enlever
+        include_once("./view/components/header.html");
 
-        // ✅ Connexion à la BDD avec les bons identifiants
-        if (Database::$db === null) {
-            Database::instanciateDb("carshare", "localhost", "root", "admin");
-        }
+        Database::instanciateDb();
 
         $action = "home";
 
@@ -43,6 +40,7 @@
                     $mainController->index();
                     break;
                 case "search":
+                case "display_search":
                     require_once "./controller/SearchPageController.php";
                     $searchPageController = new SearchPageController();
                     $searchPageController->render();
@@ -88,7 +86,7 @@
         ?>
     </main>
     <?php
-        include_once("./view/components/Footer.php");
+        include_once("./view/components/footer.html");
     ?>
 </body>
 <script src="./script/searchPage.js"></script>
