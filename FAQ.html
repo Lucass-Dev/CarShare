@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FAQ - CarShare</title>
+  <link href="./assets/styles/header.css" rel="stylesheet">
+  <link href="./assets/styles/footer.css" rel="stylesheet">
   <style>
     body {
       font-family: "Inter", Arial, sans-serif;
@@ -11,24 +13,6 @@
       margin: 0;
       padding: 0;
       color: #333;
-    }
-
-    header {
-      background-color: #e9f0ff;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 40px;
-      border-bottom: 2px solid #0a1f44;
-    }
-
-    header h2 {
-      color: #0a1f44;
-      font-weight: 700;
-      font-size: 1.5em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     main {
@@ -103,22 +87,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    footer {
-      background-color: #f0f4ff;
-      color: #0a1f44;
-      text-align: center;
-      padding: 15px 10px;
-      font-size: 0.9em;
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      border-top: 1px solid #ccd8ff;
-    }
-
-    footer span {
-      font-weight: 600;
-    }
-
     @media (max-width: 600px) {
       .faq-item {
         padding: 15px;
@@ -129,12 +97,16 @@
 <body>
 
   <header>
-    <h2>🚗 CarShare</h2>
-    <div style="display:flex; gap:15px; align-items:center;">
-      <span style="font-size:1.2em; color:#1e88e5;">🔍</span>
-      <span style="font-size:1.4em; color:#1e88e5;">👤</span>
-    </div>
-  </header>
+        <div class="logo">
+            <a href="./index.html"><img src="./assets/img/photo_hextech.jpeg" alt="CarShare Logo"></a>
+            CarShare
+        </div>
+
+        <div class="header-icons">
+            <a href="/search" title="Rechercher">🔍</a>
+            <a href="./connexion.html" title="Mon compte">👤</a>
+        </div>
+    </header>
 
   <main>
     <h1>Foire Aux Questions</h1>
@@ -229,11 +201,14 @@
   </main>
 
   <footer>
-    <span>HexTech ®</span>
-    <span>CGU</span>
-    <span>Informations légales</span>
-    <span>Tout droits réservés</span>
-  </footer>
+    <div class="footer-container">
+        <div>HexTech ®</div>
+        <div>CGU</div>
+        <div>Informations légales</div>
+        <div>Tous droits réservés</div>
+<div><a href="./FAQ.html">FAQ</a></div>
+    </div>
+</footer>
 
   <script>
     const items = document.querySelectorAll('.faq-item');
