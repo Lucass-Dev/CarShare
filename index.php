@@ -31,7 +31,6 @@
             $action = $_GET["action"];
         }
     ?>
-    <main>
         <?php
             switch ($action) {
                 case "home":
@@ -85,7 +84,6 @@
                 }
             
         ?>
-    </main>
     <?php
         include_once("./view/components/footer.html");
     ?>

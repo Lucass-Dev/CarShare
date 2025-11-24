@@ -1,4 +1,5 @@
 <?php
+    
     class SearchPageView {
         public function display_search_bar($start_name, $start_id, $end_name, $end_id, $start_date, $start_hour, $requested_seats) {
             ?>
@@ -56,12 +57,41 @@
                     foreach ($carpoolings as $carpooling) {
                         ?>
                             <div class="search-result-card">
-                                <h3><?php echo htmlspecialchars($carpooling['start_name'] . " to " . $carpooling['end_name']); ?></h3>
+                                
                                 <div class="trip-info">
-                                    <p>Date: <?php echo htmlspecialchars($carpooling['start_date']); ?></p>
-                                    <p>Available Seats: <?php echo htmlspecialchars($carpooling['available_places']); ?></p>
-                                    <p>Voyage proposé par : <a href="&action=user_info"><?php echo htmlspecialchars($carpooling['provider_name'])?></a></p>
-                                    <a href="&action=carpooling_details">Voir plus ></a>
+                                    <div class="top">
+                                        <div class="resume-card">
+                                            <img src="<?php echo UPP_BASE_PATH.$carpooling['profile_picture_path'] ?>" alt="user_photo">
+                                            <div class="resume-card-details">
+                                                <a href="&action=user_info/<?php echo $carpooling['provider_id']; ?>">
+                                                    <?php echo htmlspecialchars($carpooling['provider_name']); ?>
+                                                </a>
+                                                <span>(<?php echo $carpooling['global_rating'] ?> ⭐)</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="trip-road">
+                                            <span class="location start"><?php echo $carpooling['start_name']; ?></span>
+
+                                            <div class="road">
+                                                <div class="line"></div>
+                                                <div class="dot start-dot"></div>
+                                                <div class="dot end-dot"></div>
+                                            </div>
+
+                                            <span class="location end"><?php echo $carpooling['end_name']; ?></span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="trip-details">
+                                        <p>Date: <?php echo htmlspecialchars($carpooling['start_date']); ?></p>
+                                        <p>Places: <?php echo htmlspecialchars($carpooling['available_places']); ?></p>
+                                    
+                                        <P>Prix : <span><?php echo $carpooling["price"];?> €</span></P>
+                                        <a href="&action=carpooling_details/<?php echo $carpooling['id'];?>">Voir plus ></a>
+                                        
+                                    </div>
                                 </div>
                             </div>
                         <?php
@@ -78,17 +108,22 @@
                 <div class="sort-by-filters">
                     <h2>Trier par</h2>
 
-                    <input form="search-form" type="radio" id="sort_by_price_radio" name="sort_by" value="price" <?php if (isset($_GET['sort_by_price'])) echo 'checked'; ?>>
+                    <input form="search-form" type="radio" id="sort_by_price_radio" name="sort_by" value="price" <?php if (isset($_GET['sort_by']) && $_GET['sort_by'] == "price") echo 'checked'; ?>>
                     <label for="sort_by_price_radio">Prix</label><br>
-                    <input form="search-form" type="radio" id="sort_by_date_radio" name="sort_by" value="date" <?php if (isset($_GET['sort_by_date'])) echo 'checked'; ?>>
-                    <label for="sort_by_date_radio">Date</label><br>
-                    <input form="search-form" type="radio" id="sort_by_seats_radio" name="sort_by" value="seats" <?php if (isset($_GET['sort_by_seats'])) echo 'checked'; ?>>
+                    <input form="search-form" type="radio" id="sort_by_date" name="sort_by" value="date" <?php if (isset($_GET['sort_by']) && $_GET['sort_by'] == "date") echo 'checked'; ?>>
+                    <label for="sort_by_date">Date de départ</label><br>
+                    <input form="search-form" type="radio" id="sort_by_seats_radio" name="sort_by" value="seats" <?php if (isset($_GET['sort_by']) && $_GET['sort_by'] == "seats") echo 'checked'; ?>>
                     <label for="sort_by_seats_radio">Places</label><br>
-                    <input form="search-form" type="radio" id="sort_by_rating_radio" name="sort_by" value="rating" <?php if (isset($_GET['sort_by_rating'])) echo 'checked'; ?>>
-                    <label for="sort_by_rating_radio">Note</label><br>
-                    <div>
-                        <input form="search-form" type="radio" id="sort_order_radio" name="sort_by" value="rating" <?php if (isset($_GET['sort_by_rating'])) echo 'checked'; ?>>
-                        <label for="sort_order_radio">Note</label><br>
+                    <input form="search-form" type="radio" id="sort_by_note_radio" name="sort_by" value="rating" <?php if (isset($_GET['sort_by']) && $_GET['sort_by'] == "rating") echo 'checked'; ?>>
+                    <label for="sort_by_note_radio">Note</label><br>
+                    <div class="order-type-container">
+                        <h3>Ordre :</h3>
+                        <div class="order-type-inputs">
+                            <input form="search-form" type="radio" name="order_type" id="order_asc" value="asc" <?php if (isset($_GET['order_type']) && $_GET['order_type'] == "asc") echo 'checked'; ?>>
+                            <label for="order_asc">Le plus petit d'abord</label><br>
+                            <input form="search-form" type="radio" name="order_type" id="order_desc" value="desc" <?php if (isset($_GET['order_type']) && $_GET['order_type'] == "desc") echo 'checked'; ?>>
+                            <label for="order_desc">Le plus grand d'abord</label><br>
+                        </div>
                     </div>
                 </div>
 
@@ -160,7 +195,7 @@
                 <div class="user-filters">
                     <h2>Utilisateurs</h2>
 
-                    <input form="search-form" type="checkbox" id="user_verified_checkbox" name="user_is_verified" <?php if (isset($_GET['user_is_verified'])) echo 'checked'; ?>>
+                    <input form="search-form" type="checkbox" id="user_verified_checkbox" name="is_verified_user" <?php if (isset($_GET['is_verified_user'])) echo 'checked'; ?>>
                     <label for="user_verified_checkbox">Utilisateur vérifié</label><br>
                 </div>
 

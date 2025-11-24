@@ -27,12 +27,14 @@
             return $tolerance_date.":00";
 
         }
+
+
         public function getCarpooling($start_id, $end_id, $date, $hour, $seats, $filters) : array{
             $results = "";
             $db = Database::$db;
 
             $sql =
-                "SELECT l2.name as start_name, l1.name as end_name, c.start_date, available_places , u.first_name as provider_name
+                "SELECT l2.name as start_name, l1.name as end_name, c.start_date, available_places , u.first_name as provider_name, c.id, c.price, c.provider_id, u.global_rating, u.profile_picture_path
                         FROM `carpoolings` c
                         INNER JOIN `location` l2 on (c.start_id = l2.id)
                         INNER JOIN `location` l1 on (c.end_id = l1.id)
@@ -49,23 +51,53 @@
             $sql .= " AND c.start_date >= :start_date
                     AND c.start_date <= :tolerance
                     AND c.available_places >= :seats
-                    AND c.pets_allowed = :pets_allowed
-                    AND c.smoker_allowed = :smoker_allowed
-                    AND c.luggage_allowed = :luggage_allowed
                     ";
+            if (isset($filters["is_verified_user"]) && $filters["is_verified_user"] == "on") {
+                $sql .= " AND u.is_verified_user = 1 ";
+            }
+            if (isset($filters["luggage_allowed"]) && $filters["luggage_allowed"] == "on") {
+                $sql .= " AND c.luggage_allowed = 1 ";
+            }
+            if (isset($filters["smoker_allowed"]) && $filters["smoker_allowed"] == "on") {
+                $sql .= " AND c.smoker_allowed = 1 ";
+            }
+            if (isset($filters["pets_allowed"]) && $filters["pets_allowed"] == "on") {
+                $sql .= " AND c.pets_allowed = 1 ";
+            }
 
-            
-            $sql .= "ORDER BY c.start_date ASC";
-
+            if (isset($filters["sort_by"]) && $filters["sort_by"] != "") {
+                switch ($filters["sort_by"]) {
+                    case 'price':
+                        $sql .= 'ORDER BY c.price ';
+                        break;
+                    case 'date':
+                        $sql .= 'ORDER BY c.start_date ';
+                        break;
+                    case 'seats':
+                        $sql .= 'ORDER BY c.available_places ';
+                        break;
+                    case 'rating':
+                        $sql .= 'ORDER BY u.global_rating ';
+                        break;
+                    default:
+                        break;
+                }
+                if (isset($filters["order_type"]) && $filters["order_type"] != "") {
+                    if ($filters["order_type"] == "asc") {
+                        $sql .= "ASC";
+                    }else if ($filters["order_type"] == "desc"){
+                        $sql .= "DESC";
+                    }
+                }
+            }else{
+                $sql .= "ORDER BY c.start_date ASC";
+            }
 
             $stmt = $db->prepare($sql);
             $params = [
                 ':start_id' => $start_id,
                 ':start_date' => $start_date,
                 ':seats' => $seats,
-                ':pets_allowed' => $filters['pets_allowed'],
-                ':smoker_allowed' => $filters['smoker_allowed'],
-                ':luggage_allowed' => $filters['luggage_allowed'],
                 ':tolerance' => $tolerance_date
             ];
 

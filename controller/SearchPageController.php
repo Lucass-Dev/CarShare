@@ -20,6 +20,7 @@
             $this->filters["luggage_allowed"] = "";
             $this->filters["user_verified"] = "";
             $this->filters["start_time_range"] = "";
+            $this->filters["is_verified_user"] = "";
         }
 
         public function render() {
@@ -30,6 +31,7 @@
             $requested_date = null;
             $requested_hour = null;
             $requested_seats = null;
+            $sorting = null;
 
             if (isset($_GET["form_start_input"]) && $_GET["form_start_input"] != "") {
                 $start_id = $_GET["form_start_input"];
@@ -49,6 +51,7 @@
             if (isset($_GET["seats"]) && $_GET["seats"] != ""){
                 $requested_seats = $_GET["seats"];
             }
+            
 
             $this->searchPageView->display_search_bar($start_name, $start_id,$end_name, $end_id,$requested_date, $requested_hour, $requested_seats);
 
@@ -89,6 +92,15 @@
                                 $filters['start_time_range_after'] = $_GET['start_time_range_after'];
                             } else {
                                 $filters['start_time_range_after'] = 1;
+                            }
+                            if (isset($_GET["sort_by"]) && $_GET["sort_by"] != ""){
+                                $filters['sort_by'] = $_GET["sort_by"];
+                            }
+                            if (isset($_GET["order_type"]) && $_GET["order_type"] != ""){
+                                $filters['order_type'] = $_GET["order_type"];
+                            }
+                            if (isset($_GET["is_verified_user"]) && $_GET["is_verified_user"] != ""){
+                                $filters['is_verified_user'] = $_GET["is_verified_user"];
                             }
                             $carpoolings = $this->searchPageModel->getCarpooling($start_id, $end_id, $requested_date, $requested_hour, $requested_seats, $filters);
                             $this->searchPageView->display_search_results($carpoolings);
