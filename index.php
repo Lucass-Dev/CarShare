@@ -8,6 +8,8 @@
     <link href="./assets/styles/header.css" rel="stylesheet">
     <link href="./assets/styles/footer.css" rel="stylesheet">
     <link href="./assets/styles/searchPage.css" rel="stylesheet">
+    <link href="./assets/styles/anchor.css" rel="stylesheet">
+    <link href="./assets/styles/message_anchor.css" rel="stylesheet">
     <script src="./script/index.js"></script>
     
     <title>CarShare</title>
@@ -86,6 +88,8 @@
         ?>
     <?php
         include_once("./view/components/footer.html");
+        include_once("./view/components/message_anchor.html");
+        include_once("./view/components/anchor.html");
     ?>
 </body>
 <script src="./script/searchPage.js"></script>
