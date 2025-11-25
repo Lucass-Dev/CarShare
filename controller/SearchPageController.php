@@ -31,7 +31,6 @@
             $requested_date = null;
             $requested_hour = null;
             $requested_seats = null;
-            $sorting = null;
 
             if (isset($_GET["form_start_input"]) && $_GET["form_start_input"] != "") {
                 $start_id = $_GET["form_start_input"];

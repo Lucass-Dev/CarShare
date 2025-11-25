@@ -10,6 +10,7 @@
     <link href="./assets/styles/searchPage.css" rel="stylesheet">
     <link href="./assets/styles/anchor.css" rel="stylesheet">
     <link href="./assets/styles/message_anchor.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/styles/login.css">
     <script src="./script/index.js"></script>
     
     <title>CarShare</title>
@@ -49,7 +50,7 @@
                 case "login":
                     require_once("./controller/LoginController.php");
                     $loginController = new LoginController();
-                    $loginController->index();
+                    $loginController->render();
                     break;
                 case "register":
                     require_once("./controller/RegisterController.php");
