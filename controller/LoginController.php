@@ -14,8 +14,8 @@ class LoginController {
     public function render(){
         $this->loginView->display_form();
 
-        if ($_POST[""]) {
-            # code...
+        if (isset($_POST[""])) {
+
         }
     }
 }

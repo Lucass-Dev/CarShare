@@ -55,7 +55,7 @@
                 case "register":
                     require_once("./controller/RegisterController.php");
                     $registerController = new RegisterController();
-                    $registerController->index();
+                    $registerController->render();
                     break;
                 case "profile":
                     require_once("./controller/ProfileController.php");
