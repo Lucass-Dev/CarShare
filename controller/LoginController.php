@@ -14,8 +14,8 @@ class LoginController {
     public function render(){
         $this->loginView->display_form();
 
-        if (isset($_POST[""])) {
-
+        if (sizeof($_POST) > 0) {
+            $this->loginModel->send_form($_POST);
         }
     }
 }

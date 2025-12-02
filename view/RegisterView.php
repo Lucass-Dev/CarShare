@@ -1,17 +1,17 @@
 <?php
 class RegisterView {
 
-    public function display_error_message(){
+    public function display_result_message($message, $success){
         ?>
-        <div class="error-message-box">
-            <p>Erreur survenue lors de la création de votre compte, veuillez rééssayer ultérieurement</p>
+        <div class="error-message <?php echo $success == "true" ? "success" : "error" ?>">
+            <p><?php echo $message;?></p>
         </div>
         <?php
     }
 
     public function display_form(){
         ?>
-        <div class="login-box">
+        
             <h2>S’inscrire</h2>
             <form action="./?action=register" method="POST">
                 <input type="text" placeholder="Nom" name="first_name" required />
@@ -27,17 +27,14 @@ class RegisterView {
                     <div><input type="radio" name="sexe" value="M" id="M"/><label for="M">M ♂</label></div>
                     <div><input type="radio" name="sexe" value="F" id="F"/><label for="F">F ♀</label></div>
                     <div><input type="radio" name="sexe" value="X" id="X"/><label for="X">X ⚪</label></div>
-                    
-                    
                 </div>
                 </div>
 
                 <div class="buttons">
-                    <a class="secondary" href="?action=login">Déjà un compte ?</a>
-                    <button type="submit" class="primary">S’inscrire</button>
+                    <a class="secondary" href="?action=register">Déjà un compte ?</a>
+                    <button type="submit" class="primary" id="register-button">S’inscrire</button>
                 </div>
             </form>
-        </div>
         <?php
     }
 }

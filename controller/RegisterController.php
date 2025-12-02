@@ -10,16 +10,20 @@ class RegisterController {
         $this->registerView = new registerView();
     }
     public function render(){
+        ?>
+        <div class="register-box">
+        <?php
         $this->registerView->display_form();
-
         if (sizeof($_POST) > 0) {
-            print_r($_POST);
             if ($this->registerModel->check_form_values($_POST)) {
-            }else{
-                $this->registerView->display_error_message();
+                $result = $this->registerModel->send_form($_POST);
+                $this->registerView->display_result_message($result["message"], $result["success"]);
             }
         }
 
-        //$_POST = array(); // Flush le $_POST pour éviter de garder en mémoire, à décommenter à la fin
+        ?>
+        </div>
+        <?php
+        $_POST =[]; // Flush le $_POST pour éviter de garder en mémoire
     }
 }

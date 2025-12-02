@@ -1,3 +1,40 @@
+<?php
+    //A enlever en PROD
+    ini_set('display_errors', '1');
+    ini_set('display_startup_errors', '1');
+    error_reporting(E_ALL);
+    //Fin à enlever
+
+    //démarrage de la session
+    session_start();
+
+    //Chargement automatiques des controlleurs, des modèles et des vues
+    spl_autoload_register(function ($class){
+        $paths = [
+            './controller/',
+            './model/',
+            './view/'
+        ];
+        foreach ($paths as $path) {
+            $file = $path . DIRECTORY_SEPARATOR . $class .'.php';
+            if (file_exists($file)) {
+                require_once $file;
+                return;
+            }
+        }
+    });
+
+    //Chargement de la BDD
+    Database::instanciateDb();
+
+    //Variables de session
+    $userId = $_SESSION["user_id"] ?? null; //est ce que l'utilsateur est déjà log ?
+    $profilePicturePath = null;
+
+    if ($userId) {
+        $profilePicturePath = UserModel::getUserProfilePicturePath($userId);
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +47,7 @@
     <link href="./assets/styles/searchPage.css" rel="stylesheet">
     <link href="./assets/styles/anchor.css" rel="stylesheet">
     <link href="./assets/styles/message_anchor.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/styles/register.css">
     <link rel="stylesheet" href="./assets/styles/login.css">
     <script src="./script/index.js"></script>
     
@@ -17,77 +55,66 @@
 </head>
 <body>
     <?php
-    //A enlever en PROD
-        ini_set('display_errors', '1');
-        ini_set('display_startup_errors', '1');
-        error_reporting(E_ALL);
-    //Fin à enlever
+        include_once("./view/components/header.php");
+    
         
-        require_once("./model/Database.php");
-        include_once("./view/components/header.html");
 
-        Database::instanciateDb();
+        
 
         $action = "home";
 
         if(isset($_GET["action"])){
             $action = $_GET["action"];
         }
-    ?>
-        <?php
-            switch ($action) {
-                case "home":
-                    require_once("./controller/HomeController.php");
-                    $mainController = new HomeController();
-                    $mainController->index();
-                    break;
-                case "search":
-                case "display_search":
-                    require_once "./controller/SearchPageController.php";
-                    $searchPageController = new SearchPageController();
-                    $searchPageController->render();
-                    break;
-                case "login":
-                    require_once("./controller/LoginController.php");
-                    $loginController = new LoginController();
-                    $loginController->render();
-                    break;
-                case "register":
-                    require_once("./controller/RegisterController.php");
-                    $registerController = new RegisterController();
-                    $registerController->render();
-                    break;
-                case "profile":
-                    require_once("./controller/ProfileController.php");
-                    $profileController = new ProfileController();
-                    $profileController->index();
-                    break;
-                case "carpooling":
-                    require_once("./controller/CarpoolingController.php");
-                    $carpoolingController = new CarpoolingController();
-                    $carpoolingController->index();
-                    break;
-                case "admin":
-                    require_once("./controller/AdminController.php");
-                    $adminController = new AdminController();
-                    $adminController->index();
-                    break;
-                case "faq":
-                    require_once("./controller/FAQController.php");
-                    $faqController = new FAQController();
-                    $faqController->index();
-                    break;
-                case "utils":
-                    require_once("./model/Utils.php");
-                    break;
-                default:
-                    http_response_code(404);
-                    echo "Page non trouvée";
-                    break;
-                }
-            
-        ?>
-    <?php
+
+        switch ($action) {
+            case "home":
+                require_once("./controller/HomeController.php");
+                $controller = new HomeController();
+                $controller->index();
+                break;
+            case "search":
+            case "display_search":
+                require_once "./controller/SearchPageController.php";
+                $controller = new SearchPageController();
+                $controller->render();
+                break;
+            case "login":
+                require_once("./controller/LoginController.php");
+                $controller = new LoginController();
+                $controller->render();
+                break;
+            case "register":
+                require_once("./controller/RegisterController.php");
+                $controller = new RegisterController();
+                $controller->render();
+                break;
+            case "profile":
+                require_once("./controller/ProfileController.php");
+                $controller = new ProfileController();
+                $controller->index();
+                break;
+            case "carpooling":
+                require_once("./controller/CarpoolingController.php");
+                $controller = new CarpoolingController();
+                $controller->index();
+                break;
+            case "admin":
+                require_once("./controller/AdminController.php");
+                $controller = new AdminController();
+                $controller->index();
+                break;
+            case "faq":
+                require_once("./controller/FAQController.php");
+                $controller = new FAQController();
+                $controller->index();
+                break;
+            default:
+                http_response_code(404);
+                echo "Page non trouvée";
+                break;
+            }
+
         include_once("./view/components/footer.html");
         include_once("./view/components/message_anchor.html");
         include_once("./view/components/anchor.html");

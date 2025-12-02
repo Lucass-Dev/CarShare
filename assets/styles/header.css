@@ -1,33 +1,49 @@
 header {
     display: flex;
     justify-content: space-between;
+    padding: 0.5rem;
     align-items: center;
     background-color: #eef3fb;
     border-bottom: 1px solid #ccc;
-    padding: 10px 30px;
+    height: auto;
+    font-size: 2em;
+    font-style: bold;
+}
+
+.home-link{
+    margin-left: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-decoration: none;
 }
 
 .logo {
     display: flex;
     align-items: center;
-    font-size: 1.4em;
     font-weight: bold;
     color: #2b4d9a;
 }
 
-.logo img {
-    height: 35px;
-    margin-right: 10px;
+.home-link img {
+    width: 3rem;
 }
 
 .header-icons {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 20px;
 }
 
 .header-icons a {
     text-decoration: none;
     color: #2b4d9a;
     font-size: 1.5em;
+    display: flex;
+    align-items: center;
+}
+
+.icon{
+    width: 3rem;
+    border-radius: 50%;
 }

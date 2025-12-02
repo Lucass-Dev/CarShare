@@ -3,7 +3,7 @@
     flex-direction: row;
 }
 
-.login-box {
+.register-box {
   margin: auto;
   max-width: 600px;
   border-radius: 15px;
@@ -16,14 +16,14 @@
   align-items: center;
 }
 
-.login-box h2 {
+.register-box h2 {
   margin-bottom: 25px;
   font-size: 28px;
   font-weight: 600;
   color: #333;
 }
 
-.login-box input {
+.register-box input {
   width: 100%;
   padding: 12px 14px;
   margin: 12px 0;
@@ -33,7 +33,7 @@
   transition: 0.2s;
 }
 
-.login-box input:focus {
+.register-box input:focus {
   border-color: #a3b8ec;
   box-shadow: 0 0 8px rgba(163, 184, 236, 0.4);
   outline: none;
@@ -77,7 +77,7 @@ button {
   background-color: #b8c8ed;
 }
 
-.error-message{
+.error{
   color: red;
 }
 
