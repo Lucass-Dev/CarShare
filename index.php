@@ -109,6 +109,11 @@
                 $controller = new FAQController();
                 $controller->index();
                 break;
+            case "disconnect":
+                session_unset();
+                session_destroy();
+                header("Location: index.php");
+                break;
             default:
                 http_response_code(404);
                 echo "Page non trouvée";
