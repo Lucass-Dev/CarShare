@@ -1,0 +1,248 @@
+/* =========================
+   HEADER & FOOTER (modèle fourni)
+   ========================= */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #eef3fb;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 30px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #2b4d9a;
+}
+
+.logo img {
+    height: 35px;
+    margin-right: 10px;
+}
+
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-icons a {
+    text-decoration: none;
+    color: #2b4d9a;
+    font-size: 1.5em;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #eef3fb;
+    border-top: 1px solid #ccc;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: #333;
+    font-size: 0.9em;
+}
+
+/* =========================
+   BASE
+   ========================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    background: #f5f7fb;
+    color: #1f2a37;
+}
+
+/* espace sous le header + au-dessus du footer fixe */
+.report-main {
+    padding: 70px 16px 90px;
+    min-height: 100vh;
+}
+
+/* =========================
+   BLOC PRINCIPAL
+   ========================= */
+.report-container {
+    max-width: 960px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 20px;
+    padding: 28px 32px 32px;
+    border: 1px solid #cfddeb;
+    box-shadow: 0 6px 24px rgba(35, 60, 90, 0.08);
+}
+
+.report-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 22px;
+    color: #0f172a;
+}
+
+/* =========================
+   RÉSUMÉ DU PROFIL
+   ========================= */
+.profile-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 18px;
+    border-radius: 16px;
+    background: #f3f6ff;
+    border: 1px solid #d6e0fb;
+    margin-bottom: 24px;
+}
+
+.profile-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #9fc0ff, #7fa7f4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.profile-line {
+    font-size: 14px;
+}
+
+.profile-line .label {
+    font-weight: 600;
+    color: #111827;
+    margin-right: 6px;
+}
+
+.profile-line .value {
+    color: #374151;
+}
+
+/* =========================
+   FORMULAIRE
+   ========================= */
+.report-form {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #4b5563;
+}
+
+.required {
+    color: #dc2626;
+    margin-left: 4px;
+}
+
+.form-select,
+.form-textarea {
+    font-size: 14px;
+    border-radius: 10px;
+    border: 1px solid #cfddeb;
+    padding: 10px 12px;
+    background: #ffffff;
+    color: #111827;
+}
+
+.form-select {
+    height: 40px;
+}
+
+.form-textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: #7fa7f4;
+    box-shadow: 0 0 0 3px rgba(127, 167, 244, 0.25);
+}
+
+.report-hint {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* Bouton d’envoi */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4px;
+}
+
+.btn-submit {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 26px;
+    background: linear-gradient(180deg, #85B2EF, #4389E7);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn-submit:hover {
+    box-shadow: 0 8px 20px rgba(67, 137, 231, 0.35);
+    transform: translateY(-1px);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+@media (max-width: 720px) {
+    .report-container {
+        padding: 20px 18px 26px;
+    }
+
+    .profile-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-actions {
+        justify-content: center;
+    }
+}
