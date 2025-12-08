@@ -4,11 +4,11 @@ class LoginView {
         ?>
         <div class="login-box">
             <h2>Se connecter</h2>
-            <form action="?action=login" method="POST">
+            <form controller="?controller=login" method="POST">
                 <input name="email" type="email" placeholder="Email" required />
                 <input name="password" type="password" placeholder="Mot de passe" required />
                 <div class="buttons">
-                <a class="secondary" href="?action=register">Pas de compte ?</a>
+                <a class="secondary" href="?controller=register">Pas de compte ?</a>
                 <button type="submit" class="primary">Se connecter</button>
                 </div>
             </form>

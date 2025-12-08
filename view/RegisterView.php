@@ -13,7 +13,7 @@ class RegisterView {
         ?>
         
             <h2>S’inscrire</h2>
-            <form action="./?action=register" method="POST">
+            <form controller="./?controller=register" method="POST">
                 <input type="text" placeholder="Nom" name="first_name" required />
                 <input type="text" placeholder="Prénom" name="last_name" required />
                 <input type="email" placeholder="Email" name="mail" required />
@@ -31,7 +31,7 @@ class RegisterView {
                 </div>
 
                 <div class="buttons">
-                    <a class="secondary" href="?action=register">Déjà un compte ?</a>
+                    <a class="secondary" href="?controller=register">Déjà un compte ?</a>
                     <button type="submit" class="primary" id="register-button">S’inscrire</button>
                 </div>
             </form>

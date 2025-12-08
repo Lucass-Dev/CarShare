@@ -9,7 +9,7 @@
                         foreach($resumes as $resume){
                     ?>
                     
-                        <a class="resume" href="?action=mp&chat_with=<?php echo $resume["id_conv"] ?>">
+                        <a class="resume" href="?controller=mp&chat_with=<?php echo $resume["id_conv"] ?>">
                             <div class="mp-photo">
                                 <img src="./assets/upp/<?php echo $resume["profile_picture_path"]?>" alt="<?php echo $resume["first_name"]?>">
                                 <span><?php echo $resume["first_name"]?></span>
@@ -40,7 +40,7 @@
                 }
                 ?>
                 </div>
-                <form class="message-input-form" action="?action=mp&chat_with=<?php echo $_GET['chat_with']?>&send=true" method="POST">
+                <form class="message-input-form" controller="?controller=mp&chat_with=<?php echo $_GET['chat_with']?>&send=true" method="POST">
                     <input type="text" name="sended_message_content" id="sended_message_content" placeholder="Écrivez un message...">
                     <button type="submit">Envoyer</button>
                 </form>

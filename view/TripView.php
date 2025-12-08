@@ -1,108 +1,47 @@
 <?php
-    
-    class SearchPageView {
-        public function display_search_bar($start_name, $start_id, $end_name, $end_id, $start_date, $start_hour, $requested_seats) {
+    class TripView{
+        public static function display_trip_infos(){
             ?>
-                <div class="search-bar-container">
-                    <form id="search-form" method="GET" action="" class="search-form">
-                        <input type="hidden" name="action" value="display_search" />
-                        <input type="hidden" id="form_start_input" name="form_start_input" value="<?php echo ($start_id != null && $start_id != "") ? $start_id : ""?>">
-                        <input type="hidden" id="form_end_input" name="form_end_input" value="<?php echo ($end_id != null && $end_id != "") ? $end_id : ""?>">
+            <div>
+                <h1>Détails du trajet</h1>
 
-                        <div class="field">
-                            <label for="start_place">Start place</label>
-                            <input type="text" id="start_place" placeholder="City or address" required value=<?php echo ($start_name != null && $start_name != "") ? $start_name : ""?>>
-
-                            <div id="start-suggestion-box">
-
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <label for="end_place">End place</label>
-                            <input type="text" id="end_place" placeholder="City or address" value=<?php echo ($end_name != null && $end_name != "") ? $end_name : ""?>>
-                            <div id="end-suggestion-box">
-
-                            </div>
-                        </div>
-
-                        <div class="field date-fields">
-                            <label for="date">Date</label>
-                            <input type="date" id="date" name="date" required value=<?php echo ($start_date != null && $start_date != "") ? $start_date : ""?>>
-                            <label for="hour"></label>
-                            <input type="time" name="hour" id="hour" value="<?php echo ($start_hour != null && $start_hour != "") ? $start_hour : ""?>">
-                        </div>
-
-                        <div class="field">
-                            <label for="seats">Available seats</label>
-                            <input type="number" id="seats" name="seats" min="1" max="10" required value="<?php echo ($requested_seats != null && $requested_seats != "") ? $requested_seats : 1?>">
-                        </div>
-
-                        <div class="actions">
-                            <button type="submit">Search</button>
-                        </div>
-                    </form>
+                <div class="trajet-info">
+                    <div>
+                    <h2>Paris → Marseille</h2>
+                    <span>24/10/2025</span>
+                    </div>
                 </div>
 
+                <div class="card">
+                    <div class="left">
+                    <img src="assets/img/avatar.jpg" alt="Photo du conducteur">
+                    <p><strong>Noé</strong><br>4⭐</p>
+                    </div>
+
+                    <div class="right">
+                    <table>
+                        <tr><td><strong>Départ</strong></td><td>Lieu : Paris</td><td>Date : 24/10/2025</td><td>Heure : 8h00</td></tr>
+                        <tr><td><strong>Arrivée</strong></td><td>Lieu : Marseille</td><td>Date : 24/10/2025</td><td>Heure : 17h30</td></tr>
+                    </table>
+
+                    <div class="details-bottom">
+                        <div>
+                        <p>Animaux acceptés</p>
+                        <p>1 place disponible</p>
+                        <p>1 bagage inclu</p>
+                        </div>
+                        <div>
+                        <span class="price">15 € TTC</span><br>
+                        <br>
+                        <a class="btn-reserver" href="./payment.html">Réserver</a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
             <?php
         }
-
-        public function display_search_results(array $carpoolings){
-            ?>
-            <div class="search-result-container">
-                <?php
-                if (empty($carpoolings)) {
-                    echo "<p>Aucun résultat ne correspond à votre recherche.</p>";
-                } else {
-                    foreach ($carpoolings as $carpooling) {
-                        ?>
-                            <div class="search-result-card">
-                                
-                                <div class="trip-info">
-                                    <div class="top">
-                                        <div class="resume-card">
-                                            <img src="<?php echo UPP_BASE_PATH.$carpooling['profile_picture_path'] ?>" alt="user_photo">
-                                            <div class="resume-card-details">
-                                                <a href="&action=user_info/<?php echo $carpooling['provider_id']; ?>">
-                                                    <?php echo htmlspecialchars($carpooling['provider_name']); ?>
-                                                </a>
-                                                <span>(<?php echo $carpooling['global_rating'] ?> ⭐)</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="trip-road">
-                                            <span class="location start"><?php echo $carpooling['start_name']; ?></span>
-
-                                            <div class="road">
-                                                <div class="line"></div>
-                                                <div class="dot start-dot"></div>
-                                                <div class="dot end-dot"></div>
-                                            </div>
-
-                                            <span class="location end"><?php echo $carpooling['end_name']; ?></span>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="trip-details">
-                                        <p>Date: <?php echo htmlspecialchars($carpooling['start_date']); ?></p>
-                                        <p>Places: <?php echo htmlspecialchars($carpooling['available_places']); ?></p>
-                                    
-                                        <P>Prix : <span><?php echo $carpooling["price"];?> €</span></P>
-                                        <a href="&action=carpooling_details/<?php echo $carpooling['id'];?>">Voir plus ></a>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                        <?php
-                    }
-                }
-                ?>
-            </div>
-            <?php
-        }
-
-        public function display_search_filters(){
+        public static function display_search_filters(){
             ?>
             <div class="search-filters-container">
                 <div class="sort-by-filters">
@@ -188,7 +127,8 @@
                             <rect x="220" y="0" width="1" height="10" />
                             <rect x="230" y="0" width="1" height="10" />
                         </g>
-                    </svg>                    <input form="search-form" type="range" min="0" max="24" step="1" value="<?= isset($_GET['start_time_range_before']) ? htmlspecialchars($_GET['start_time_range_before']) : '0' ?>" id="start_time_range_before" name="start_time_range_before" >
+                    </svg>
+                    <input form="search-form" type="range" min="0" max="24" step="1" value="<?= isset($_GET['start_time_range_before']) ? htmlspecialchars($_GET['start_time_range_before']) : '0' ?>" id="start_time_range_before" name="start_time_range_before" >
                     <label for="start_time_range_before">Partir plus tôt</label>
                 </div>
 
@@ -210,6 +150,108 @@
                     <label for="luggage-checkbox">Bagages autorisés</label><br>
                 </div>
             </div>
+            <?php
+        }
+
+        public static function display_search_results(array $carpoolings){
+            ?>
+            <div class="search-result-container">
+                <?php
+                if (empty($carpoolings)) {
+                    echo "<p>Aucun résultat ne correspond à votre recherche.</p>";
+                } else {
+                    foreach ($carpoolings as $carpooling) {
+                        ?>
+                            <div class="search-result-card">
+                                
+                                <div class="trip-info">
+                                    <div class="top">
+                                        <div class="resume-card">
+                                            <img src="<?php echo UPP_BASE_PATH.$carpooling['profile_picture_path'] ?>" alt="user_photo">
+                                            <div class="resume-card-details">
+                                                <a href="&controller=user_info/<?php echo $carpooling['provider_id']; ?>">
+                                                    <?php echo htmlspecialchars($carpooling['provider_name']); ?>
+                                                </a>
+                                                <span>(<?php echo $carpooling['global_rating'] ?> ⭐)</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="trip-road">
+                                            <span class="location start"><?php echo $carpooling['start_name']; ?></span>
+
+                                            <div class="road">
+                                                <div class="line"></div>
+                                                <div class="dot start-dot"></div>
+                                                <div class="dot end-dot"></div>
+                                            </div>
+
+                                            <span class="location end"><?php echo $carpooling['end_name']; ?></span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="trip-details">
+                                        <p>Date: <?php echo htmlspecialchars($carpooling['start_date']); ?></p>
+                                        <p>Places: <?php echo htmlspecialchars($carpooling['available_places']); ?></p>
+                                    
+                                        <P>Prix : <span><?php echo $carpooling["price"];?> €</span></P>
+                                        <a href="&controller=carpooling_details/<?php echo $carpooling['id'];?>">Voir plus ></a>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        <?php
+                    }
+                }
+                ?>
+            </div>
+            <?php
+        }
+
+        public static function display_search_bar($start_name, $start_id, $end_name, $end_id, $start_date, $start_hour, $requested_seats) {
+            ?>
+                <div class="search-bar-container">
+                    <form id="search-form" method="GET" action="?controller=trip" class="search-form">
+                        <input type="hidden" name="controller" value="trip"/>
+                        <input type="hidden" name="action" value="display_search"/>
+                        <input type="hidden" id="form_start_input" name="form_start_input" value="<?php echo ($start_id != null && $start_id != "") ? $start_id : ""?>">
+                        <input type="hidden" id="form_end_input" name="form_end_input" value="<?php echo ($end_id != null && $end_id != "") ? $end_id : ""?>">
+
+                        <div class="field">
+                            <label for="start_place">Start place</label>
+                            <input type="text" id="start_place" placeholder="City or address" required value=<?php echo ($start_name != null && $start_name != "") ? $start_name : ""?>>
+
+                            <div id="start-suggestion-box">
+
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="end_place">End place</label>
+                            <input type="text" id="end_place" placeholder="City or address" value=<?php echo ($end_name != null && $end_name != "") ? $end_name : ""?>>
+                            <div id="end-suggestion-box">
+
+                            </div>
+                        </div>
+
+                        <div class="field date-fields">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" name="date" required value=<?php echo ($start_date != null && $start_date != "") ? $start_date : ""?>>
+                            <label for="hour"></label>
+                            <input type="time" name="hour" id="hour" value="<?php echo ($start_hour != null && $start_hour != "") ? $start_hour : ""?>">
+                        </div>
+
+                        <div class="field">
+                            <label for="seats">Available seats</label>
+                            <input type="number" id="seats" name="seats" min="1" max="10" required value="<?php echo ($requested_seats != null && $requested_seats != "") ? $requested_seats : 1?>">
+                        </div>
+
+                        <div class="controllers">
+                            <button type="submit">Search</button>
+                        </div>
+                    </form>
+                </div>
+
             <?php
         }
     }

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="./assets/styles/register.css">
     <link rel="stylesheet" href="./assets/styles/login.css">
     <link rel="stylesheet" href="./assets/styles/mp.css">
+    <link rel="stylesheet" href="./assets/styles/trip_infos.css">
     <script src="./script/index.js"></script>
     
     <title>CarShare</title>
@@ -64,21 +65,16 @@
     <?php
         
 
-        $action = "home";
+        $controller = "home";
 
-        if(isset($_GET["action"])){
-            $action = $_GET["action"];
+        if(isset($_GET["controller"])){
+            $controller = $_GET["controller"];
         }
 
-        switch ($action) {
+        switch ($controller) {
             case "home":
                 $controller = new HomeController();
                 $controller->index();
-                break;
-            case "search":
-            case "display_search":
-                $controller = new SearchPageController();
-                $controller->render();
                 break;
             case "login":
                 $controller = new LoginController();
@@ -92,9 +88,9 @@
                 $controller = new ProfileController();
                 $controller->index();
                 break;
-            case "carpooling":
-                $controller = new CarpoolingController();
-                $controller->index();
+            case "trip":
+                $controller = new TripController();
+                $controller->render();
                 break;
             case "admin":
                 $controller = new AdminController();

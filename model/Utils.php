@@ -7,8 +7,8 @@ require_once("./Database.php");
     
 
     if(isset($_GET["need"])){
-        $action = $_GET["need"];
-        switch($action){
+        $controller = $_GET["need"];
+        switch($controller){
             case "fetchCities":
                 if(isset($_GET["query"])){
                     $strQuery = $_GET["query"];

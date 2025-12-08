@@ -52,7 +52,7 @@
     background: #fff;
 }
 
-.search-form .actions {
+.search-form .controllers {
     grid-column: 1 / -1;
     display: flex;
     justify-content: flex-end;
