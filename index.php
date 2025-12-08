@@ -28,11 +28,11 @@
     Database::instanciateDb();
 
     //Variables de session
-    $userId = $_SESSION["user_id"] ?? null; //est ce que l'utilsateur est déjà log ?
+    $user_id = $_SESSION["user_id"] ?? null; //est ce que l'utilsateur est déjà log ?
     $profilePicturePath = null;
 
-    if ($userId) {
-        $profilePicturePath = UserModel::getUserProfilePicturePath($userId);
+    if ($user_id) {
+        $profilePicturePath = UserModel::getUserProfilePicturePath($user_id);
     }
 ?>
 <!DOCTYPE html>
@@ -49,6 +49,7 @@
     <link href="./assets/styles/message_anchor.css" rel="stylesheet">
     <link rel="stylesheet" href="./assets/styles/register.css">
     <link rel="stylesheet" href="./assets/styles/login.css">
+    <link rel="stylesheet" href="./assets/styles/mp.css">
     <script src="./script/index.js"></script>
     
     <title>CarShare</title>
@@ -58,7 +59,9 @@
         include_once("./view/components/header.php");
     
         
-
+?>
+<main>
+    <?php
         
 
         $action = "home";
@@ -69,43 +72,35 @@
 
         switch ($action) {
             case "home":
-                require_once("./controller/HomeController.php");
                 $controller = new HomeController();
                 $controller->index();
                 break;
             case "search":
             case "display_search":
-                require_once "./controller/SearchPageController.php";
                 $controller = new SearchPageController();
                 $controller->render();
                 break;
             case "login":
-                require_once("./controller/LoginController.php");
                 $controller = new LoginController();
                 $controller->render();
                 break;
             case "register":
-                require_once("./controller/RegisterController.php");
                 $controller = new RegisterController();
                 $controller->render();
                 break;
             case "profile":
-                require_once("./controller/ProfileController.php");
                 $controller = new ProfileController();
                 $controller->index();
                 break;
             case "carpooling":
-                require_once("./controller/CarpoolingController.php");
                 $controller = new CarpoolingController();
                 $controller->index();
                 break;
             case "admin":
-                require_once("./controller/AdminController.php");
                 $controller = new AdminController();
                 $controller->index();
                 break;
             case "faq":
-                require_once("./controller/FAQController.php");
                 $controller = new FAQController();
                 $controller->index();
                 break;
@@ -113,6 +108,10 @@
                 session_unset();
                 session_destroy();
                 header("Location: index.php");
+                break;
+            case "mp":
+                $controller = new MPController();
+                $controller->render();
                 break;
             default:
                 http_response_code(404);
@@ -122,8 +121,8 @@
 
         include_once("./view/components/footer.html");
         include_once("./view/components/message_anchor.html");
-        include_once("./view/components/anchor.html");
     ?>
+</main>
 </body>
 <script src="./script/searchPage.js"></script>
 </html>

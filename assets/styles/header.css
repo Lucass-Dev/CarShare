@@ -5,9 +5,12 @@ header {
     align-items: center;
     background-color: #eef3fb;
     border-bottom: 1px solid #ccc;
-    height: auto;
+    height: 8vh;
     font-style: bold;
     color: #2b4d9a;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
 }
 
 .home-link{
