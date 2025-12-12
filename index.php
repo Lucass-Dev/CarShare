@@ -22,7 +22,10 @@
         include_once("./view/components/Header.php");
     //Fin à enlever
 
-        Database::instanciateDb("carshare", "localhost", "root", "root");
+        
+
+        $db = Database::getDb();
+
 
         $action = "home";
 

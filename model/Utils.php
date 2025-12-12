@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 require_once("./Database.php");
 
     if (Database::$db == null) {
-        Database::instanciateDb("carshare", "localhost", "root", "root");
+        $db = Database::getDb();
     }
     
 
