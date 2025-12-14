@@ -14,12 +14,10 @@
 </head>
 <body>
     <?php
-    //A enlever en PROD
+        // A enlever en PROD
         ini_set('display_errors', '1');
         ini_set('display_startup_errors', '1');
         error_reporting(E_ALL);
-        require_once("./model/Database.php");
-        include_once("./view/components/Header.php");
     //Fin à enlever
 
         
@@ -29,7 +27,7 @@
 
         $action = "home";
 
-        if(isset($_GET["action"])){
+        if (isset($_GET["action"])) {
             $action = $_GET["action"];
         }
     ?>
@@ -42,12 +40,13 @@
                     $mainController->index();
                     break;
                 case "search":
+                case "display_search":
                     require_once "./controller/SearchPageController.php";
                     $searchPageController = new SearchPageController();
                     $searchPageController->render();
                     break;
                 case "login":
-                    require_once("./controller/LoginController.php");
+                    require_once("./controller./connexion.htmlController.php");
                     $loginController = new LoginController();
                     $loginController->index();
                     break;
@@ -83,12 +82,11 @@
                     http_response_code(404);
                     echo "Page non trouvée";
                     break;
-                }
-            
+            }
         ?>
     </main>
     <?php
-        include_once("./view/components/Footer.php");
+        include_once("./view/components/footer.html");
     ?>
 </body>
 <script src="./script/searchPage.js"></script>

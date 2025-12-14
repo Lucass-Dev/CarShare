@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CarShare — Notation du trajet</title>
+  <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="assets/styles/rating.css">
+  <link href="./assets/styles/header.css" rel="stylesheet">
+  <link href="./assets/styles/footer.css" rel="stylesheet">
+</head>
+    <header>
+        <div class="logo">
+            <img src="/assets/img/photo_hextech.jpeg" alt="CarShare Logo">
+            CarShare
+        </div>
+
+        <div class="header-icons">
+            <a href="/search" title="Rechercher">🔍</a>
+            <a href="./connexion.html" title="Mon compte">👤</a>
+        </div>
+    </header>
+
+  <main class="main container">
+    <section class="rating">
+      <h1 class="rating__title">Merci d'avoir choisi CarShare</h1>
+
+      <div class="rating__card">
+        <div class="rating__card-inner">
+          <div class="rating__profile">
+            <div class="avatar avatar--large" aria-hidden="true">
+              <!-- avatar placeholder -->
+              <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="36" cy="36" r="36" fill="#9fc0ff"/>
+                <circle cx="36" cy="28" r="13" fill="#fff"/>
+                <path d="M14 58c8-10 30-10 44 0" fill="#fff"/>
+              </svg>
+            </div>
+            <div class="rating__profile-meta">
+              <div class="rating__name">Paul</div>
+              <div class="rating__avg">Moy. <span class="rating__avg-value">4.0</span></div>
+            </div>
+          </div>
+
+          <div class="rating__form">
+            <label class="form__label" for="comment">Laissez un commentaire</label>
+            <textarea id="comment" class="form__textarea" placeholder="Comment s'est passé votre voyage avec Paul ?"></textarea>
+
+            <div class="rating__stars-row">
+              <div class="stars stars--big" aria-hidden="true">
+                <span class="star star--on">★</span>
+                <span class="star star--on">★</span>
+                <span class="star star--on">★</span>
+                <span class="star star--on">★</span>
+                <span class="star">☆</span>
+              </div>
+
+              <button class="btn btn--primary rating__submit">Donner un avis</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="rating__footer-stars" aria-hidden="true">
+          <div class="stars stars--footer">
+            <span class="star star--on">★</span>
+            <span class="star star--on">★</span>
+            <span class="star star--on">★</span>
+            <span class="star star--on">★</span>
+            <span class="star">☆</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+        <div>HexTech ®</div>
+        <div>CGU</div>
+        <div>Informations légales</div>
+        <div>Tous droits réservés</div>
+<div><a href="./FAQ.html">FAQ</a></div>
+    </div>
+  </footer>
+</body>
+</html>

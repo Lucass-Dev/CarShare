@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CarShare — Publier un nouveau trajet</title>
+  <link rel="stylesheet" href="assets/styles/create-trip.css">
+</head>
+<body class="page page--create">
+  <header class="header header--transparent">
+    <div class="header__inner container">
+      <div class="header__brand">
+        <div class="logo">
+          <svg class="logo__icon" width="44" height="28" viewBox="0 0 44 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3 18c0-4 5-7 9-7h14l7 7" stroke="#2a6db0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="21" r="3" fill="#2a6db0"/>
+            <circle cx="32" cy="21" r="3" fill="#2a6db0"/>
+          </svg>
+          <span class="logo__text">CarShare</span>
+        </div>
+      </div>
+
+      <div class="header__actions">
+        <button class="header__btn header__btn--icon" aria-label="Recherche">
+          <span class="icon icon--search" aria-hidden="true">🔍</span>
+        </button>
+        <button class="header__btn header__btn--icon" aria-label="Compte">
+          <span class="icon icon--user" aria-hidden="true">👤</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero__overlay">
+      <h1 class="hero__title">Publier un nouveau trajet</h1>
+
+      <form class="trip-form" novalidate>
+        <div class="trip-form__row">
+          <div class="form__group">
+            <label class="form__label" for="dep-city">Adresse de départ <span class="form__required">*</span></label>
+            <input id="dep-city" class="form__input" placeholder="Ville (France)" />
+          </div>
+
+          <div class="form__group">
+            <label class="form__label" for="dep-street">Rue</label>
+            <input id="dep-street" class="form__input" placeholder="Rue" />
+          </div>
+
+          <div class="form__group form__group--small">
+            <label class="form__label" for="dep-num">N° voie</label>
+            <input id="dep-num" class="form__input" placeholder="N° voie" />
+          </div>
+        </div>
+
+        <div class="trip-form__row">
+          <div class="form__group">
+            <label class="form__label" for="arr-city">Adresse d'arrivée <span class="form__required">*</span></label>
+            <input id="arr-city" class="form__input" placeholder="Ville (France)" />
+          </div>
+
+          <div class="form__group">
+            <label class="form__label" for="arr-street">Rue</label>
+            <input id="arr-street" class="form__input" placeholder="Rue" />
+          </div>
+
+          <div class="form__group form__group--small">
+            <label class="form__label" for="arr-num">N° voie</label>
+            <input id="arr-num" class="form__input" placeholder="N° voie" />
+          </div>
+        </div>
+
+        <div class="trip-form__row trip-form__row--compact">
+          <div class="form__group form__group--small">
+            <label class="form__label" for="date">Date <span class="form__required">*</span></label>
+            <input id="date" class="form__input" placeholder="JJ/MM/AAAA" />
+          </div>
+
+          <div class="form__group form__group--small">
+            <label class="form__label" for="time">Heure</label>
+            <input id="time" class="form__input" placeholder="00:00" />
+          </div>
+
+          <div class="form__group form__group--small">
+            <label class="form__label" for="places">Nombre de place(s) <span class="form__required">*</span></label>
+            <select id="places" class="form__input">
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="trip-form__row trip-form__row--options">
+          <fieldset class="options">
+            <legend class="options__title">Options</legend>
+            <label class="options__item"><input type="checkbox"> Animaux</label>
+            <label class="options__item"><input type="checkbox"> Fumeur</label>
+          </fieldset>
+
+          <div class="trip-form__actions">
+            <button class="btn btn--primary btn--pill">Publier</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__inner container">
+      <div class="footer__item">HexTech ®</div>
+      <div class="footer__item">CGU</div>
+      <div class="footer__item">Informations légales</div>
+      <div class="footer__item">Tout droits réservés</div>
+    </div>
+  </footer>
+</body>
+</html>
