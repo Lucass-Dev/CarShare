@@ -18,12 +18,9 @@
         ini_set('display_errors', '1');
         ini_set('display_startup_errors', '1');
         error_reporting(E_ALL);
-    //Fin à enlever
-
         
-
+        require_once __DIR__ . "/model/Database.php";
         $db = Database::getDb();
-
 
         $action = "home";
 
@@ -39,45 +36,66 @@
                     $mainController = new HomeController();
                     $mainController->index();
                     break;
+
                 case "search":
                 case "display_search":
                     require_once "./controller/SearchPageController.php";
                     $searchPageController = new SearchPageController();
                     $searchPageController->render();
                     break;
+
                 case "login":
                     require_once("./controller./connexion.htmlController.php");
                     $loginController = new LoginController();
                     $loginController->index();
                     break;
+
                 case "register":
                     require_once("./controller/RegisterController.php");
                     $registerController = new RegisterController();
                     $registerController->index();
                     break;
+
                 case "profile":
                     require_once("./controller/ProfileController.php");
                     $profileController = new ProfileController();
                     $profileController->index();
                     break;
+
                 case "carpooling":
                     require_once("./controller/CarpoolingController.php");
                     $carpoolingController = new CarpoolingController();
                     $carpoolingController->index();
                     break;
+
                 case "admin":
                     require_once("./controller/AdminController.php");
                     $adminController = new AdminController();
                     $adminController->index();
                     break;
+
                 case "faq":
                     require_once("./controller/FAQController.php");
                     $faqController = new FAQController();
                     $faqController->index();
                     break;
+
+                case "rating":
+                    require_once("./controller/RatingController.php");
+                    $ratingController = new RatingController();
+                    $ratingController->index();
+                    break;
+
+                case "signalement":
+                    require_once("./controller/SignalementController.php");
+                    $signalementController = new SignalementController();
+                    $signalementController->index();
+                    break;
+
                 case "utils":
                     require_once("./model/Utils.php");
                     break;
+
                 default:
                     http_response_code(404);
                     echo "Page non trouvée";
@@ -85,9 +103,11 @@
             }
         ?>
     </main>
+
     <?php
         include_once("./view/components/footer.html");
     ?>
 </body>
+
 <script src="./script/searchPage.js"></script>
 </html>

@@ -2,11 +2,11 @@
 class Database {
     private static $db = null;
 
-    // 🔧 Config centralisée
+    
     private static $dbName   = 'covoiturage';
     private static $host     = 'localhost';
     private static $user     = 'root';
-    private static $password = ''; // met ici ton mot de passe
+    private static $password = ''; 
 
     public static function getDb() {
         if (self::$db === null) {
