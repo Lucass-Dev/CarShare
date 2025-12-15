@@ -1,113 +1,46 @@
+<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+$action = $_GET['action'] ?? 'home';
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-    <link href="./assets/styles/index.css" rel="stylesheet">
-    <link href="./assets/styles/header.css" rel="stylesheet">
-    <link href="./assets/styles/footer.css" rel="stylesheet">
-    <link href="./assets/styles/searchPage.css" rel="stylesheet">
-    <script src="./script/index.js"></script>
-    
     <title>CarShare</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/CarShare/assets/styles/home.css">
+    <!-- CSS global -->
+    <link rel="stylesheet" href="/CarShare/assets/styles/header.css">
+    <link rel="stylesheet" href="/CarShare/assets/styles/footer.css">
+    <link rel="stylesheet" href="/CarShare/assets/styles/home.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body>
-    <?php
-        // A enlever en PROD
-        ini_set('display_errors', '1');
-        ini_set('display_startup_errors', '1');
-        error_reporting(E_ALL);
-        
-        require_once __DIR__ . "/model/Database.php";
-        $db = Database::getDb();
 
-        $action = "home";
+<?php require __DIR__ . "/view/components/header.php"; ?>
 
-        if (isset($_GET["action"])) {
-            $action = $_GET["action"];
-        }
-    ?>
-    <main>
-        <?php
-            switch ($action) {
-                case "home":
-                    require_once("./controller/HomeController.php");
-                    $mainController = new HomeController();
-                    $mainController->index();
-                    break;
+<main>
+<?php
+switch ($action) {
+    case 'home':
+        require __DIR__ . "/controller/HomeController.php";
+        (new HomeController())->index();
+        break;
 
-                case "search":
-                case "display_search":
-                    require_once "./controller/SearchPageController.php";
-                    $searchPageController = new SearchPageController();
-                    $searchPageController->render();
-                    break;
+    default:
+        echo "<h2>Page non trouvée</h2>";
+}
+?>
+</main>
 
-                case "login":
-                    require_once("./controller./connexion.htmlController.php");
-                    $loginController = new LoginController();
-                    $loginController->index();
-                    break;
+<?php require __DIR__ . "/view/components/footer.php"; ?>
 
-                case "register":
-                    require_once("./controller/RegisterController.php");
-                    $registerController = new RegisterController();
-                    $registerController->index();
-                    break;
-
-                case "profile":
-                    require_once("./controller/ProfileController.php");
-                    $profileController = new ProfileController();
-                    $profileController->index();
-                    break;
-
-                case "carpooling":
-                    require_once("./controller/CarpoolingController.php");
-                    $carpoolingController = new CarpoolingController();
-                    $carpoolingController->index();
-                    break;
-
-                case "admin":
-                    require_once("./controller/AdminController.php");
-                    $adminController = new AdminController();
-                    $adminController->index();
-                    break;
-
-                case "faq":
-                    require_once("./controller/FAQController.php");
-                    $faqController = new FAQController();
-                    $faqController->index();
-                    break;
-
-                case "rating":
-                    require_once("./controller/RatingController.php");
-                    $ratingController = new RatingController();
-                    $ratingController->index();
-                    break;
-
-                case "signalement":
-                    require_once("./controller/SignalementController.php");
-                    $signalementController = new SignalementController();
-                    $signalementController->index();
-                    break;
-
-                case "utils":
-                    require_once("./model/Utils.php");
-                    break;
-
-                default:
-                    http_response_code(404);
-                    echo "Page non trouvée";
-                    break;
-            }
-        ?>
-    </main>
-
-    <?php
-        include_once("./view/components/footer.html");
-    ?>
 </body>
-
-<script src="./script/searchPage.js"></script>
 </html>

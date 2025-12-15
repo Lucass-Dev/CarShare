@@ -1,3 +1,4 @@
+/* HEADER */
 header {
     display: flex;
     justify-content: space-between;
@@ -5,21 +6,27 @@ header {
     background-color: #eef3fb;
     border-bottom: 1px solid #ccc;
     padding: 10px 30px;
+    height: 70px;          /* hauteur fixe */
+    overflow: visible;    /* autorise le débordement du logo */
 }
 
+/* LOGO CONTAINER */
 .logo {
     display: flex;
     align-items: center;
-    font-size: 1.4em;
-    font-weight: bold;
-    color: #2b4d9a;
+    position: relative;
 }
 
-.logo img {
-    height: 35px;
-    margin-right: 10px;
+/* 🔥 LOGO IMAGE 🔥 */
+.logo-img {
+    height: 90px;          /* PLUS GRAND que le header */
+    width: auto;
+    object-fit: contain;
+    position: relative;
+    top: 10px;             /* fait dépasser vers le bas */
 }
 
+/* ICÔNES À DROITE */
 .header-icons {
     display: flex;
     align-items: center;
