@@ -1,44 +1,98 @@
 <?php
     class TripView{
-        public static function display_trip_infos(){
+        public static function display_trip_infos($details){
             ?>
             <div>
-                <h1>Détails du trajet</h1>
+                <h2>Détails du trajet</h2>
 
                 <div class="trajet-info">
                     <div>
-                    <h2>Paris → Marseille</h2>
-                    <span>24/10/2025</span>
+                    <h2><?php echo $details["start_name"]?> → <?php echo $details["end_name"]?></h2>
+                    <span><?php echo $details["start_date"]?></span>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="left">
-                    <img src="assets/img/avatar.jpg" alt="Photo du conducteur">
-                    <p><strong>Noé</strong><br>4⭐</p>
+                    <img src="<?php echo UPP_BASE_PATH.$details["profile_picture_path"]?>" alt="Photo du conducteur">
+                    <a href="?controller=user&uid=<?php echo $details["provider_id"]?>"><strong><?php echo $details["provider_name"]?></strong></a>
+                    <span><?php echo $details["global_rating"]?> ⭐</span>
                     </div>
 
                     <div class="right">
                     <table>
-                        <tr><td><strong>Départ</strong></td><td>Lieu : Paris</td><td>Date : 24/10/2025</td><td>Heure : 8h00</td></tr>
-                        <tr><td><strong>Arrivée</strong></td><td>Lieu : Marseille</td><td>Date : 24/10/2025</td><td>Heure : 17h30</td></tr>
+                        <tr><td><strong>Départ</strong></td><td>Lieu : <?php echo $details["start_name"]?></td><td>Date : <?php echo explode(" ", $details["start_date"])[0]?></td><td>Heure : <?php echo explode(" ", $details["start_date"])[1]?></td></tr>
+                        <tr><td><strong>Arrivée</strong></td><td>Lieu : <?php echo $details["end_name"]?></td><td>Date : Insérer calcul</td><td>Heure : Insérer calcul</td></tr>
                     </table>
 
                     <div class="details-bottom">
                         <div>
-                        <p>Animaux acceptés</p>
-                        <p>1 place disponible</p>
-                        <p>1 bagage inclu</p>
+                        <?php echo $details["luggage_allowed"] ? "<p>Bagages autorisés</p>" : ""?>
+                        <?php echo $details["smoker_allowed"] ? "<p>Fumeurs autorisés</p>" : ""?>
+                        <?php echo $details["pets_allowed"] ? "<p>Animaux autorisés</p>" : ""?>
                         </div>
                         <div>
-                        <span class="price">15 € TTC</span><br>
+                        <span class="price"><?php echo $details["price"]?> € TTC</span><br>
                         <br>
-                        <a class="btn-reserver" href="./payment.html">Réserver</a>
+                        <a class="btn-reserver" href="?controller=trip&action=payment&trip_id=<?php echo $details["trip_id"]?>">Réserver</a>
                         </div>
                     </div>
                     </div>
                 </div>
                 </div>
+            <?php
+        }
+
+        public static function display_trip_payment($details){
+            ?>
+            <div class="payment-card">
+                <div class="payment-info">
+                <div class="section-title">Récapitulatif du trajet</div>
+
+                <table>
+                    <tr><td><strong>Trajet :</strong></td><td>Paris → Marseille</td></tr>
+                    <tr><td><strong>Date :</strong></td><td>24/10/2025</td></tr>
+                    <tr><td><strong>Heure :</strong></td><td>8h00</td></tr>
+                    <tr><td><strong>Conducteur :</strong></td><td>Noé (⭐ 4)</td></tr>
+                </table>
+
+                <div class="total-price">
+                    Total : 15 € TTC
+                </div>
+                </div>
+
+                <div class="payment-form">
+                <div class="section-title">Informations de paiement</div>
+
+                <div>
+                    <label>Nom sur la carte</label>
+                    <input type="text" placeholder="Ex : Marie Dupont">
+                </div>
+
+                <div>
+                    <label>Numéro de carte</label>
+                    <input type="text" placeholder="1234 5678 9012 3456">
+                </div>
+
+                <div style="display:flex; gap:20px;">
+                    <div style="flex:1;">
+                    <label>Expiration</label>
+                    <input type="text" placeholder="MM/AA">
+                    </div>
+                    <div style="flex:1;">
+                    <label>CVV</label>
+                    <input type="text" placeholder="123">
+                    </div>
+                </div>
+
+                <a class="btn-payer" href="./index.html">Payer maintenant</a>
+
+                <div class="details-resume">
+                    En cliquant sur "Payer maintenant", vous confirmez votre réservation.
+                </div>
+                </div>
+
+            </div>
             <?php
         }
         public static function display_search_filters(){
@@ -195,7 +249,7 @@
                                         <p>Places: <?php echo htmlspecialchars($carpooling['available_places']); ?></p>
                                     
                                         <P>Prix : <span><?php echo $carpooling["price"];?> €</span></P>
-                                        <a href="&controller=carpooling_details/<?php echo $carpooling['id'];?>">Voir plus ></a>
+                                        <a href="?controller=trip&action=details&trip_id=<?php echo $carpooling['id'];?>">Voir plus ></a>
                                         
                                     </div>
                                 </div>

@@ -12,12 +12,32 @@ class TripController {
             case 'display_search':
                 $this->display_search();
                 break;
-            
+            case 'details':
+                $this->display_trip_details();
+                break;
+            case 'payment':
+                $this->display_trip_payment();
+                break;
             default:
                 echo "404";
                 break;
         }
     }
+    private function display_trip_payment(){
+        if (isset($_GET['trip_id']) && !empty($_GET['trip_id'])){
+            $details = [];
+            $details = TripModel::getCarpoolingById($_GET['trip_id']);
+            TripView::display_trip_payment($details);
+        }
+    }
+    private function display_trip_details(){
+        if (isset($_GET['trip_id']) && !empty($_GET['trip_id'])){
+            $details = [];
+            $details = TripModel::getCarpoolingById($_GET['trip_id']);
+            TripView::display_trip_infos($details);
+        }
+    }
+
     private function display_search(){
         $filters = array();
         $filters["pets_allowed"] = "";

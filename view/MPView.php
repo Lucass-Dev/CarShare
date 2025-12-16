@@ -31,10 +31,10 @@
                 global $user_id;
                 foreach($discussion as $key => $value){
             ?>
-                    <div class="message <?php echo $value["sender_id"] == $user_id ? "right" : "left" ?>">
-                        <span class="sender-name <?php echo $value["sender_id"] == $user_id ? "right" : "left" ?>"><?php echo $value["first_name"]?> a dit :</span>
+                    <div class="message <?php echo $value["sender_id"] == $user_id ? "right-message" : "left-message" ?>">
+                        <span class="sender-name <?php echo $value["sender_id"] == $user_id ? "right-message" : "left-message" ?>"><?php echo $value["first_name"]?> a dit :</span>
                         <span class="sender-message <?php echo $value["sender_id"] == $user_id ? "send" : "received" ?>"><?php echo $value["content"]?></span>
-                        <span class="send-time <?php echo $value["sender_id"] == $user_id ? "right" : "left" ?>"><?php echo $value["send_at"]?></span>
+                        <span class="send-time <?php echo $value["sender_id"] == $user_id ? "right-message" : "left-message" ?>"><?php echo $value["send_at"]?></span>
                     </div>
                 <?php
                 }

@@ -41,16 +41,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-    <link href="./assets/styles/index.css" rel="stylesheet">
-    <link href="./assets/styles/header.css" rel="stylesheet">
-    <link href="./assets/styles/footer.css" rel="stylesheet">
-    <link href="./assets/styles/searchPage.css" rel="stylesheet">
-    <link href="./assets/styles/anchor.css" rel="stylesheet">
-    <link href="./assets/styles/message_anchor.css" rel="stylesheet">
-    <link rel="stylesheet" href="./assets/styles/register.css">
-    <link rel="stylesheet" href="./assets/styles/login.css">
-    <link rel="stylesheet" href="./assets/styles/mp.css">
-    <link rel="stylesheet" href="./assets/styles/trip_infos.css">
+    <link href="./assets/styles/main.css" rel="stylesheet">
     <script src="./script/index.js"></script>
     
     <title>CarShare</title>
@@ -63,8 +54,6 @@
 ?>
 <main>
     <?php
-        
-
         $controller = "home";
 
         if(isset($_GET["controller"])){
@@ -115,10 +104,13 @@
                 break;
             }
 
-        include_once("./view/components/footer.html");
-        include_once("./view/components/message_anchor.html");
+
     ?>
 </main>
+<?php
+        include_once("./view/components/footer.html");
+        include_once("./view/components/message_anchor.html");
+        ?>
 </body>
 <script src="./script/searchPage.js"></script>
 </html>
