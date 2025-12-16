@@ -2,26 +2,29 @@
 require_once __DIR__ . '/Database.php';
 
 class LoginModel {
-    private $db;
+    public function send_form($values): string {
+        $str = "SELECT id FROM users WHERE email=:email AND password_hash=:pass_hash";
 
-    public function __construct() {
-        $this->db = Database::getDb();
-    }
-
-    public function authenticate($email, $password) {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");
-        $stmt->execute([$email]);
-        $user = $stmt->fetch();
-
-        if ($user && password_verify($password, $user['password_hash'])) {
-            return $user;
+        Database::instanciateDb();
+        $stmt = Database::$db->prepare($str);
+        $stmt->execute([
+            ":email"=> $values["email"],
+            ":pass_hash"=> hash("sha256", $values["password"])
+        ]);
+        $result = $stmt->fetchObject();
+        if ($result) {
+            $_SESSION["user_id"] = $result->id;
+            $_SESSION["logged"] = true;
+            session_regenerate_id(true);
+            ini_set('session.gc_maxlifetime', 86400);
+            header('Location: index.php');
+            exit;
+        }else{
+            return "L'email ou le mot de passe n'est pas correct";
         }
-        return false;
-    }
 
-    public function getUserById($id) {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE id = ?");
-        $stmt->execute([$id]);
-        return $stmt->fetch();
+
     }
 }
+
+?>

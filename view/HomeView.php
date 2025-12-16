@@ -1,4 +1,8 @@
-<section class="hero">
+<?php
+    class HomeView{
+        public static function render(){
+            ?>
+            <section class="hero">
     <div class="search-container">
         <form class="search-form">
             <input type="text" placeholder="Départ">
@@ -10,7 +14,7 @@
         </form>
 
         <p style="margin-top:10px; font-size:14px; color:#555;">
-            <?= htmlspecialchars($hello) ?>
+            Trouvez des trajets abordables et partagez vos voyages avec CarShare !
         </p>
     </div>
 </section>
@@ -50,3 +54,7 @@
         <img src="/CarShare/assets/img/ville.jpg" alt="Ville écologique">
     </div>
 </section>
+            <?php
+        }
+    }
+?>

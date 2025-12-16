@@ -1,18 +1,26 @@
-<div class="login-box">
-  <h2>Se connecter</h2>
-  
-  <?php if (isset($error)): ?>
-    <div class="error-message" style="color: red; margin-bottom: 15px;">
-      <?= htmlspecialchars($error) ?>
-    </div>
-  <?php endif; ?>
-  
-  <form method="POST" action="/CarShare/index.php?action=login">
-    <input type="email" name="email" placeholder="Email" required />
-    <input type="password" name="password" placeholder="Mot de passe" required />
-    <div class="buttons">
-      <a class="secondary" href="/CarShare/index.php?action=register">Pas de compte ?</a>
-      <button type="submit" class="primary">Se connecter</button>
-    </div>
-  </form>
-</div>
+<?php
+class LoginView {
+    public function display_form(){
+        ?>
+        <div class="login-box">
+            <h2>Se connecter</h2>
+            <form controller="?controller=login" method="POST">
+                <input name="email" type="email" placeholder="Email" required />
+                <input name="password" type="password" placeholder="Mot de passe" required />
+                <div class="buttons">
+                <a class="secondary" href="?controller=register">Pas de compte ?</a>
+                <button type="submit" class="primary">Se connecter</button>
+                </div>
+            </form>
+        </div>
+        <?php
+    }
+
+    public function display_error_message($message){
+        ?>
+        <div class="error-message">
+            <p><?php echo $message;?></p>
+        </div>
+        <?php
+    }
+}

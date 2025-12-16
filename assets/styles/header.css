@@ -2,39 +2,107 @@
 header {
     display: flex;
     justify-content: space-between;
+    padding: 0.5rem;
     align-items: center;
     background-color: #eef3fb;
     border-bottom: 1px solid #ccc;
-    padding: 10px 30px;
-    height: 70px;          /* hauteur fixe */
-    overflow: visible;    /* autorise le débordement du logo */
+    height: 8vh;
+    font-style: bold;
+    color: #2b4d9a;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+.home-link{
+    margin-left: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-decoration: none;
+}
+
+.site-name{
+    font-size: 2em;
 }
 
 /* LOGO CONTAINER */
 .logo {
     display: flex;
     align-items: center;
-    position: relative;
+    font-weight: bold;
+    color: #2b4d9a;
 }
 
-/* 🔥 LOGO IMAGE 🔥 */
-.logo-img {
-    height: 90px;          /* PLUS GRAND que le header */
-    width: auto;
-    object-fit: contain;
-    position: relative;
-    top: 10px;             /* fait dépasser vers le bas */
+.home-link img {
+    width: 3rem;
 }
 
 /* ICÔNES À DROITE */
 .header-icons {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 20px;
 }
 
 .header-icons a {
     text-decoration: none;
     color: #2b4d9a;
-    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+}
+
+.icon{
+    width: 3rem;
+    border-radius: 50%;
+}
+
+.dropdown{
+    padding-left: 2rem;
+    padding-right: 2rem;
+    border-left: #2b4d9a 1px solid;
+}
+
+.dropdown:hover .hidden{
+    display: block;
+}
+
+.hidden{
+    display: none;
+    list-style: none;
+    font-size: 1rem;
+    padding: 0;
+}
+
+.dropdown ul {
+    position: absolute;
+    top: 4%;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    width: inherit;
+}
+
+.dropdown ul.hidden {
+    display: none;
+    width: inherit;
+}
+
+.dropdown:hover ul {
+    display: block;
+    width: inherit;
+    
+}
+
+.dropdown ul li {
+    cursor: pointer;
+    width: inherit;
+    padding: 1rem;
+    border: #2b4d9a 1px solid;
+
+}
+
+.dropdown ul li:hover {
+    background-color: #eef3fb;
+    width: inherit;
 }
