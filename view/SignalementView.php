@@ -1,70 +1,64 @@
 <?php
-// app/views/signalement/signalement.php
+if (!isset($userData) || !is_array($userData) || empty($userData['id'])) {
+    header('Location: /CarShare/index.php?action=signalement');
+    exit;
+}
 ?>
-<!doctype html>
-<html lang="fr">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CarShare — Signaler un utilisateur</title>
-
-    <link rel="stylesheet" href="/assets/styles/report-user.css">
-    <link rel="stylesheet" href="/assets/styles/header.css">
-    <link rel="stylesheet" href="/assets/styles/footer.css">
-</head>
-
-<body>
-<header>
-    <div class="logo">
-        <img src="/assets/img/photo_hextech.jpeg" alt="CarShare Logo">
-        CarShare
-    </div>
-
-    <div class="header-icons">
-        <a href="/search" title="Rechercher">🔍</a>
-        <a href="/login" title="Mon compte">👤</a>
-    </div>
-</header>
-
-<main class="report-main">
+<section class="report-main">
     <section class="report-container">
         <h1 class="report-title">Signaler un utilisateur</h1>
 
         <?php if (isset($_GET['success'])): ?>
-            <p class="report-hint" style="color:green;">
-                ✅ Merci, votre signalement a bien été transmis à l'équipe CarShare.
+            <p class="report-hint" style="color:#155724; background:#d4edda; padding:15px; border-radius:8px; margin:15px 0;">
+                ✅ Signalement reçu ! Merci, votre signalement a bien été transmis à l'équipe CarShare.
+            </p>
+        <?php elseif (isset($_GET['error'])): ?>
+            <?php 
+            $errorMsg = 'Une erreur est survenue';
+            if ($_GET['error'] === 'user_not_found') $errorMsg = 'Utilisateur non trouvé';
+            elseif ($_GET['error'] === 'carpooling_not_found') $errorMsg = 'Trajet non trouvé';
+            elseif ($_GET['error'] === 'save_failed') $errorMsg = 'Erreur lors de l\'enregistrement';
+            elseif ($_GET['error'] === 'empty_description') $errorMsg = 'La description est obligatoire';
+            elseif ($_GET['error'] === 'empty_reason') $errorMsg = 'Le motif est obligatoire';
+            elseif ($_GET['error'] === 'self_reporting') $errorMsg = 'Vous ne pouvez pas vous signaler vous-même';
+            ?>
+            <p style="margin:12px 0; padding:15px; border-radius:8px; background:#f8d7da; color:#721c24;">
+                ❌ <?= htmlspecialchars($errorMsg) ?>
             </p>
         <?php endif; ?>
 
         <!-- Résumé du profil -->
         <div class="profile-card">
             <div class="profile-avatar" aria-hidden="true">
-                <span><?= strtoupper($user['name'][0]) ?></span>
+                <span><?= strtoupper(substr($userData['name'], 0, 1)) ?></span>
             </div>
 
             <div class="profile-info">
                 <div class="profile-line">
                     <span class="label">Utilisateur :</span>
-                    <span class="value"><?= htmlspecialchars($user['name']) ?></span>
-                </div>
-                <div class="profile-line">
-                    <span class="label">Trajet concerné :</span>
-                    <span class="value"><?= htmlspecialchars($user['trip']) ?></span>
+                    <span class="value"><?= htmlspecialchars($userData['name']) ?></span>
                 </div>
                 <div class="profile-line">
                     <span class="label">Note moyenne :</span>
-                    <span class="value"><?= htmlspecialchars($user['avg']) ?></span>
+                    <span class="value"><?= htmlspecialchars($userData['avg']) ?></span>
+                </div>
+                <div class="profile-line">
+                    <span class="label">Avis reçus :</span>
+                    <span class="value"><?= htmlspecialchars($userData['reviews']) ?></span>
                 </div>
                 <div class="profile-line">
                     <span class="label">Nombre de trajets :</span>
-                    <span class="value"><?= htmlspecialchars($user['count']) ?></span>
+                    <span class="value"><?= htmlspecialchars($userData['count']) ?></span>
                 </div>
             </div>
         </div>
 
         <!-- Formulaire -->
-        <form method="POST" action="/signalement/submit" class="report-form">
-            <input type="hidden" name="user" value="<?= htmlspecialchars($user['name']) ?>">
+        <form method="POST" action="/CarShare/index.php?action=signalement_submit" class="report-form">
+            <input type="hidden" name="user_id" value="<?= htmlspecialchars($userData['id']) ?>">
+            <?php if (!empty($userData['carpooling_id'])): ?>
+            <input type="hidden" name="carpooling_id" value="<?= htmlspecialchars($userData['carpooling_id']) ?>">
+            <?php endif; ?>
 
             <div class="form-row">
                 <label for="reason" class="form-label">Motif du signalement</label>
@@ -102,15 +96,5 @@
             </div>
         </form>
     </section>
-</main>
 
-<footer>
-    <div class="footer-container">
-        <div>HexTech ®</div>
-        <div>CGU</div>
-        <div>Informations légales</div>
-        <div>Tous droits réservés</div>
-    </div>
-</footer>
-</body>
-</html>
+<script src="/CarShare/assets/js/signalement-form.js"></script>
