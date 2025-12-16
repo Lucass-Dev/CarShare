@@ -12,11 +12,24 @@ class TripController {
             case 'display_search':
                 $this->display_search();
                 break;
+            case "publish":
+                TripView::display_publish_form();
+                break;
             case 'details':
                 $this->display_trip_details();
                 break;
             case 'payment':
                 $this->display_trip_payment();
+                break;
+            case "report":
+                TripView::display_report_form();
+                break;
+            case "rate":
+                $test = TripModel::getCarpoolingById($_GET['trip_id']);
+                $driver = UserModel::getUserById($test['provider_id']);
+                print_r($test, $driver);
+
+                TripView::display_rate_form();
                 break;
             default:
                 echo "404";
@@ -37,7 +50,6 @@ class TripController {
             TripView::display_trip_infos($details);
         }
     }
-
     private function display_search(){
         $filters = array();
         $filters["pets_allowed"] = "";

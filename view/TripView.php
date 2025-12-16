@@ -308,5 +308,395 @@
 
             <?php
         }
+
+        public static function display_publish_form(){
+            ?>
+            <?php $success = $success ?? false; ?>
+            <section class="hero">
+            <div class="hero__overlay">
+            <h1 class="hero__title">Publier un nouveau trajet</h1>
+
+            <?php if ($success): ?>
+                <div style="margin:20px 0; padding:15px; border-radius:8px; background:#d4edda; color:#155724; text-align:center;">
+                ✅ Trajet créé avec succès !
+                </div>
+            <?php endif; ?>
+
+            <?php 
+            $errors = $_SESSION['trip_form_errors'] ?? [];
+            $formData = $_SESSION['trip_form_data'] ?? [];
+            if (!empty($errors)): 
+            ?>
+                <div style="margin:20px 0; padding:15px; border-radius:8px; background:#f8d7da; color:#721c24;">
+                <strong>Erreurs :</strong>
+                <ul style="margin:10px 0 0 0; padding-left:20px;">
+                    <?php foreach ($errors as $err): ?>
+                    <li><?= htmlspecialchars($err) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+                </div>
+            <?php 
+                // Clear errors after displaying
+                unset($_SESSION['trip_form_errors']);
+            endif; 
+            ?>
+
+            <form class="trip-form" method="POST" action="/CarShare/index.php?action=create_trip_submit" novalidate>
+                <div class="trip-form__row">
+                <div class="form__group">
+                    <label class="form__label" for="dep-city">Ville de départ <span class="form__required">*</span></label>
+                    <input 
+                    id="dep-city" 
+                    name="dep-city"
+                    class="form__input" 
+                    placeholder="Ville (France)"
+                    value="<?= htmlspecialchars($formData['dep-city'] ?? '') ?>"
+                    list="locations-list"
+                    required
+                    />
+                </div>
+
+                <div class="form__group">
+                    <label class="form__label" for="dep-street">Rue</label>
+                    <input 
+                    id="dep-street" 
+                    name="dep-street"
+                    class="form__input" 
+                    placeholder="Rue"
+                    value="<?= htmlspecialchars($formData['dep-street'] ?? '') ?>"
+                    />
+                </div>
+
+                <div class="form__group form__group--small">
+                    <label class="form__label" for="dep-num">N° voie</label>
+                    <input 
+                    id="dep-num" 
+                    name="dep-num"
+                    class="form__input" 
+                    placeholder="N° voie"
+                    value="<?= htmlspecialchars($formData['dep-num'] ?? '') ?>"
+                    />
+                </div>
+                </div>
+
+                <div class="trip-form__row">
+                <div class="form__group">
+                    <label class="form__label" for="arr-city">Ville d'arrivée <span class="form__required">*</span></label>
+                    <input 
+                    id="arr-city" 
+                    name="arr-city"
+                    class="form__input" 
+                    placeholder="Ville (France)"
+                    value="<?= htmlspecialchars($formData['arr-city'] ?? '') ?>"
+                    list="locations-list"
+                    required
+                    />
+                </div>
+
+                <div class="form__group">
+                    <label class="form__label" for="arr-street">Rue</label>
+                    <input 
+                    id="arr-street" 
+                    name="arr-street"
+                    class="form__input" 
+                    placeholder="Rue"
+                    value="<?= htmlspecialchars($formData['arr-street'] ?? '') ?>"
+                    />
+                </div>
+
+                <div class="form__group form__group--small">
+                    <label class="form__label" for="arr-num">N° voie</label>
+                    <input 
+                    id="arr-num" 
+                    name="arr-num"
+                    class="form__input" 
+                    placeholder="N° voie"
+                    value="<?= htmlspecialchars($formData['arr-num'] ?? '') ?>"
+                    />
+                </div>
+                </div>
+
+                <div class="trip-form__row trip-form__row--compact">
+                <div class="form__group form__group--small">
+                    <label class="form__label" for="date">Date <span class="form__required">*</span></label>
+                    <input 
+                    id="date" 
+                    name="date"
+                    class="form__input" 
+                    type="date"
+                    value="<?= htmlspecialchars($formData['date'] ?? '') ?>"
+                    required
+                    />
+                </div>
+
+                <div class="form__group form__group--small">
+                    <label class="form__label" for="time">Heure</label>
+                    <input 
+                    id="time" 
+                    name="time"
+                    class="form__input" 
+                    type="time"
+                    value="<?= htmlspecialchars($formData['time'] ?? '') ?>"
+                    />
+                </div>
+
+                <div class="form__group form__group--small">
+                    <label class="form__label" for="price">Prix (€)</label>
+                    <input 
+                    id="price" 
+                    name="price"
+                    class="form__input" 
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    placeholder="0.00"
+                    value="<?= htmlspecialchars($formData['price'] ?? '') ?>"
+                    />
+                </div>
+                </div>
+
+                <div class="trip-form__row trip-form__row--options">
+                <fieldset class="options">
+                    <legend class="options__title">Options</legend>
+                    
+                    <div class="form__group form__group--small">
+                    <label class="form__label" for="places">Nombre de place(s) <span class="form__required">*</span></label>
+                    <select id="places" name="places" class="form__input" required>
+                        <option value="0">0</option>
+                        <?php for ($i = 1; $i <= 10; $i++): ?>
+                        <option value="<?= $i ?>" <?= (isset($formData['places']) && $formData['places'] == $i) ? 'selected' : '' ?>>
+                            <?= $i ?>
+                        </option>
+                        <?php endfor; ?>
+                    </select>
+                    </div>
+
+                    <label class="options__item"><input type="checkbox" name="animals" <?= isset($formData['animals']) ? 'checked' : '' ?>> Animaux</label>
+                    <label class="options__item"><input type="checkbox" name="smoking" <?= isset($formData['smoking']) ? 'checked' : '' ?>> Fumeur</label>
+                </fieldset>
+
+                <div class="trip-form__actions">
+                    <button type="submit" class="btn btn--primary btn--pill">Publier</button>
+                </div>
+                </div>
+            </form>
+
+            <!-- Datalist for location autocomplete -->
+            <datalist id="locations-list">
+                <?php foreach ($locations as $location): ?>
+                <option value="<?= htmlspecialchars($location['name']) ?>">
+                    <?= htmlspecialchars($location['postal_code']) ?>
+                </option>
+                <?php endforeach; ?>
+            </datalist>
+            </div>
+        </section>
+        <script src="/CarShare/assets/js/create-trip.js"></script>
+            <?php
+        }
+
+        public static function display_rate_form($trip_infos, $driver){
+            ?>
+            <section class="main container">
+                <section class="rating">
+                <h1 class="rating__title">Merci d'avoir choisi CarShare</h1>
+
+                <?php if (isset($_GET['success'])): ?>
+                    <p style="margin:12px 0; padding:10px; border-radius:8px; background:#d4edda; color:#155724; text-align:center;">
+                    ✅ Merci pour votre avis !
+                    </p>
+                <?php elseif (isset($_GET['error'])): ?>
+                    <?php 
+                    $errorMsg = 'Une erreur est survenue';
+                    if ($_GET['error'] === 'user_not_found') $errorMsg = 'Utilisateur non trouvé';
+                    elseif ($_GET['error'] === 'carpooling_not_found') $errorMsg = 'Trajet non trouvé';
+                    elseif ($_GET['error'] === 'save_failed') $errorMsg = 'Erreur lors de l\'enregistrement';
+                    elseif ($_GET['error'] === 'self_rating') $errorMsg = 'Vous ne pouvez pas vous évaluer vous-même';
+                    ?>
+                    <p style="margin:12px 0; padding:10px; border-radius:8px; background:#f8d7da; color:#721c24; text-align:center;">
+                    ❌ <?= htmlspecialchars($errorMsg) ?>
+                    </p>
+                <?php endif; ?>
+
+                <div class="rating__card">
+                    <div class="rating__card-inner">
+                    <div class="rating__profile">
+                        <div class="avatar avatar--large" aria-hidden="true">
+                        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="36" cy="36" r="36" fill="#9fc0ff"/>
+                            <circle cx="36" cy="28" r="13" fill="#fff"/>
+                            <path d="M14 58c8-10 30-10 44 0" fill="#fff"/>
+                        </svg>
+                        </div>
+                        <div class="rating__profile-meta">
+                        <div class="rating__name"><?= htmlspecialchars($driver['name']) ?></div>
+                        <div class="rating__avg">Moy. <span class="rating__avg-value"><?= htmlspecialchars((string)$driver['avg']) ?></span></div>
+                        <div class="rating__avg" style="display:flex; gap:8px; color:#4a5568; font-size:14px;">
+                            <span><?= htmlspecialchars((string)$driver['trips']) ?> trajets</span>
+                            <span>•</span>
+                            <span><?= htmlspecialchars((string)$driver['reviews']) ?> avis</span>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="rating__form">
+                        <form method="POST" action="/CarShare/index.php?action=rating_submit">
+                        <input type="hidden" name="user_id" value="<?= htmlspecialchars($driver['id']) ?>">
+                        <?php if (!empty($driver['carpooling_id'])): ?>
+                        <input type="hidden" name="carpooling_id" value="<?= htmlspecialchars($driver['carpooling_id']) ?>">
+                        <?php endif; ?>
+
+                        <label class="form__label" for="comment">Laissez un commentaire</label>
+                        <textarea
+                            id="comment"
+                            name="comment"
+                            class="form__textarea"
+                            placeholder="Comment s'est passé votre voyage avec <?= htmlspecialchars($driver['name']) ?> ?"
+                        ></textarea>
+
+                        <div style="margin-top:10px;">
+                            <label class="form__label" for="stars">Note</label>
+                            <select id="stars" name="stars" class="form__textarea" style="height:44px;">
+                            <option value="5">★★★★★ (5)</option>
+                            <option value="4" selected>★★★★☆ (4)</option>
+                            <option value="3">★★★☆☆ (3)</option>
+                            <option value="2">★★☆☆☆ (2)</option>
+                            <option value="1">★☆☆☆☆ (1)</option>
+                            </select>
+                        </div>
+
+                        <div class="rating__stars-row" style="margin-top:12px;">
+                            <div class="stars stars--big" aria-hidden="true" id="star-display">
+                            <span class="star star--on">★</span>
+                            <span class="star star--on">★</span>
+                            <span class="star star--on">★</span>
+                            <span class="star star--on">★</span>
+                            <span class="star">☆</span>
+                            </div>
+
+                            <button type="submit" class="btn btn--primary rating__submit">Donner un avis</button>
+                        </div>
+                        </form>
+                    </div>
+                    </div>
+
+                    <div class="rating__footer-stars" aria-hidden="true">
+                    <div class="stars stars--footer" id="footer-stars">
+                        <?php 
+                        $avgRating = is_numeric($driver['avg']) ? (int)round($driver['avg']) : 0;
+                        for ($i = 1; $i <= 5; $i++): 
+                        ?>
+                        <span class="star <?= $i <= $avgRating ? 'star--on' : '' ?>">
+                            <?= $i <= $avgRating ? '★' : '☆' ?>
+                        </span>
+                        <?php endfor; ?>
+                    </div>
+                    </div>
+                </div>
+                </section>
+            </section>
+
+            <script src="/CarShare/assets/js/rating-form.js"></script>
+            <?php
+        }
+
+        public static function display_report_form() {
+            ?>
+            <section class="report-main">
+                <section class="report-container">
+                    <h1 class="report-title">Signaler un utilisateur</h1>
+
+                    <?php if (isset($_GET['success'])): ?>
+                        <p class="report-hint" style="color:#155724; background:#d4edda; padding:15px; border-radius:8px; margin:15px 0;">
+                            ✅ Signalement reçu ! Merci, votre signalement a bien été transmis à l'équipe CarShare.
+                        </p>
+                    <?php elseif (isset($_GET['error'])): ?>
+                        <?php 
+                        $errorMsg = 'Une erreur est survenue';
+                        if ($_GET['error'] === 'user_not_found') $errorMsg = 'Utilisateur non trouvé';
+                        elseif ($_GET['error'] === 'carpooling_not_found') $errorMsg = 'Trajet non trouvé';
+                        elseif ($_GET['error'] === 'save_failed') $errorMsg = 'Erreur lors de l\'enregistrement';
+                        elseif ($_GET['error'] === 'empty_description') $errorMsg = 'La description est obligatoire';
+                        elseif ($_GET['error'] === 'empty_reason') $errorMsg = 'Le motif est obligatoire';
+                        elseif ($_GET['error'] === 'self_reporting') $errorMsg = 'Vous ne pouvez pas vous signaler vous-même';
+                        ?>
+                        <p style="margin:12px 0; padding:15px; border-radius:8px; background:#f8d7da; color:#721c24;">
+                            ❌ <?= htmlspecialchars($errorMsg) ?>
+                        </p>
+                    <?php endif; ?>
+
+                    <!-- Résumé du profil -->
+                    <div class="profile-card">
+                        <div class="profile-avatar" aria-hidden="true">
+                            <span><?= strtoupper(substr($userData['name'], 0, 1)) ?></span>
+                        </div>
+
+                        <div class="profile-info">
+                            <div class="profile-line">
+                                <span class="label">Utilisateur :</span>
+                                <span class="value"><?= htmlspecialchars($userData['name']) ?></span>
+                            </div>
+                            <div class="profile-line">
+                                <span class="label">Note moyenne :</span>
+                                <span class="value"><?= htmlspecialchars($userData['avg']) ?></span>
+                            </div>
+                            <div class="profile-line">
+                                <span class="label">Avis reçus :</span>
+                                <span class="value"><?= htmlspecialchars($userData['reviews']) ?></span>
+                            </div>
+                            <div class="profile-line">
+                                <span class="label">Nombre de trajets :</span>
+                                <span class="value"><?= htmlspecialchars($userData['count']) ?></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formulaire -->
+                    <form method="POST" action="/CarShare/index.php?action=signalement_submit" class="report-form">
+                        <input type="hidden" name="user_id" value="<?= htmlspecialchars($userData['id']) ?>">
+                        <?php if (!empty($userData['carpooling_id'])): ?>
+                        <input type="hidden" name="carpooling_id" value="<?= htmlspecialchars($userData['carpooling_id']) ?>">
+                        <?php endif; ?>
+
+                        <div class="form-row">
+                            <label for="reason" class="form-label">Motif du signalement</label>
+                            <select id="reason" name="reason" class="form-select" required>
+                                <option value="">Sélectionnez un motif</option>
+                                <option value="behavior">Comportement inapproprié</option>
+                                <option value="security">Problème de sécurité</option>
+                                <option value="payment">Problème de paiement</option>
+                                <option value="vehicle">Problème avec le véhicule</option>
+                                <option value="other">Autre</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="description" class="form-label">
+                                Décrivez le problème <span class="required">*</span>
+                            </label>
+                            <textarea
+                                id="description"
+                                name="description"
+                                class="form-textarea"
+                                required
+                                placeholder="Expliquez ce qu'il s'est passé de manière précise et factuelle."
+                            ></textarea>
+                        </div>
+
+                        <p class="report-hint">
+                            ⚠ Les signalements abusifs peuvent entraîner des sanctions sur votre compte.
+                        </p>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-submit">
+                                Envoyer le signalement
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+            <script src="/CarShare/assets/js/signalement-form.js"></script>
+            <?php
+        }
     }
 ?>
