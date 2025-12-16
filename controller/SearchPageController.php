@@ -96,8 +96,7 @@
                     ?>
                 </div>
             <?php
-
         }
     }   
-
 ?>
+<script src="/CarShare/script/searchPage.js"></script>

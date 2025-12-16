@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Paiement - CarShare</title>
-  <link href="./assets/styles/header.css" rel="stylesheet">
-  <link href="./assets/styles/footer.css" rel="stylesheet">
+  <link href="/CarShare/assets/styles/header.css" rel="stylesheet">
+  <link href="/CarShare/assets/styles/footer.css" rel="stylesheet">
 
   <style>
     body {
@@ -89,22 +89,20 @@
       margin-top: 10px;
       font-size: 14px;
     }
+
+    .error-message {
+      color: red;
+      background-color: #ffe6e6;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
   </style>
 </head>
 
 <body>
 
-<header>
-    <div class="logo">
-        <a href="./index.html"><img src="./assets/img/photo_hextech.jpeg" alt="CarShare Logo"></a>
-        CarShare
-    </div>
-
-    <div class="header-icons">
-        <a href="/search" title="Rechercher">🔍</a>
-        <a href="./connexion.html" title="Mon compte">👤</a>
-    </div>
-</header>
+<?php require __DIR__ . "/components/header.php"; ?>
 
 <main>
 
@@ -112,65 +110,63 @@
 
   <div class="card">
 
+    <?php if (isset($error)): ?>
+      <div class="error-message">
+        <?= htmlspecialchars($error) ?>
+      </div>
+    <?php endif; ?>
+
     <div class="payment-info">
       <div class="section-title">Récapitulatif du trajet</div>
 
       <table>
-        <tr><td><strong>Trajet :</strong></td><td>Paris → Marseille</td></tr>
-        <tr><td><strong>Date :</strong></td><td>24/10/2025</td></tr>
-        <tr><td><strong>Heure :</strong></td><td>8h00</td></tr>
-        <tr><td><strong>Conducteur :</strong></td><td>Noé (⭐ 4)</td></tr>
+        <tr><td><strong>Trajet :</strong></td><td><?= htmlspecialchars($carpooling['start_location']) ?> → <?= htmlspecialchars($carpooling['end_location']) ?></td></tr>
+        <tr><td><strong>Date :</strong></td><td><?= date('d/m/Y', strtotime($carpooling['start_date'])) ?></td></tr>
+        <tr><td><strong>Heure :</strong></td><td><?= date('H:i', strtotime($carpooling['start_date'])) ?></td></tr>
+        <tr><td><strong>Conducteur :</strong></td><td><?= htmlspecialchars($carpooling['first_name']) ?> (⭐ <?= $carpooling['global_rating'] ? round($carpooling['global_rating'], 1) : 'N/A' ?>)</td></tr>
       </table>
 
       <div class="total-price">
-        Total : 15 € TTC
+        Total : <?= number_format($carpooling['price'], 2) ?> € TTC
       </div>
     </div>
 
-    <div class="payment-form">
+    <form class="payment-form" method="POST" action="/CarShare/index.php?action=payment&carpooling_id=<?= $carpooling['id'] ?>">
       <div class="section-title">Informations de paiement</div>
 
       <div>
         <label>Nom sur la carte</label>
-        <input type="text" placeholder="Ex : Marie Dupont">
+        <input type="text" name="card_name" placeholder="Ex : Marie Dupont" required>
       </div>
 
       <div>
         <label>Numéro de carte</label>
-        <input type="text" placeholder="1234 5678 9012 3456">
+        <input type="text" name="card_number" placeholder="1234 5678 9012 3456" required>
       </div>
 
       <div style="display:flex; gap:20px;">
         <div style="flex:1;">
           <label>Expiration</label>
-          <input type="text" placeholder="MM/AA">
+          <input type="text" name="card_expiry" placeholder="MM/AA" required>
         </div>
         <div style="flex:1;">
           <label>CVV</label>
-          <input type="text" placeholder="123">
+          <input type="text" name="card_cvv" placeholder="123" required>
         </div>
       </div>
 
-      <a class="btn-payer" href="./index.html">Payer maintenant</a>
+      <button type="submit" class="btn-payer">Payer maintenant</button>
 
       <div class="details-resume">
         En cliquant sur "Payer maintenant", vous confirmez votre réservation.
       </div>
-    </div>
+    </form>
 
   </div>
 
 </main>
 
-<footer>
-  <div class="footer-container">
-      <div>HexTech ®</div>
-      <div>CGU</div>
-      <div>Informations légales</div>
-      <div>Tous droits réservés</div>
-      <div><a href="./FAQ.html">FAQ</a></div>
-  </div>
-</footer>
+<?php require __DIR__ . "/components/footer.php"; ?>
 
 </body>
 </html>
