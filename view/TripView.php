@@ -491,12 +491,13 @@
             </datalist>
             </div>
         </section>
-        <script src="/CarShare/assets/js/create-trip.js"></script>
+        <script src="/assets/js/create-trip.js"></script>
             <?php
         }
 
         public static function display_rate_form($trip_infos, $driver){
             ?>
+            <link rel="stylesheet" href="/assets/styles/rating.css">
             <section class="main container">
                 <section class="rating">
                 <h1 class="rating__title">Merci d'avoir choisi CarShare</h1>
@@ -540,7 +541,7 @@
                     </div>
 
                     <div class="rating__form">
-                        <form method="POST" action="/CarShare/index.php?action=rating_submit">
+                        <form method="POST" action="index.php?controller=trip&action=rating_submit">
                         <input type="hidden" name="user_id" value="<?= htmlspecialchars($driver['id']) ?>">
                         <?php if (!empty($driver['carpooling_id'])): ?>
                         <input type="hidden" name="carpooling_id" value="<?= htmlspecialchars($driver['carpooling_id']) ?>">
@@ -596,12 +597,13 @@
                 </section>
             </section>
 
-            <script src="/CarShare/assets/js/rating-form.js"></script>
+            <script src="/assets/js/rating-form.js"></script>
             <?php
         }
 
-        public static function display_report_form() {
+        public static function display_report_form($tripInfo, $userData) {
             ?>
+            <link rel="stylesheet" href="/assets/styles/report-user.css">
             <section class="report-main">
                 <section class="report-container">
                     <h1 class="report-title">Signaler un utilisateur</h1>
@@ -624,6 +626,20 @@
                             ❌ <?= htmlspecialchars($errorMsg) ?>
                         </p>
                     <?php endif; ?>
+
+                    <!-- Résumé du voyage -->
+                    <div class="profile-card" style="margin-bottom:12px;">
+                        <div class="profile-info">
+                            <div class="profile-line">
+                                <span class="label">Trajet :</span>
+                                <span class="value"><?= htmlspecialchars($tripInfo['start']) ?> → <?= htmlspecialchars($tripInfo['end']) ?></span>
+                            </div>
+                            <div class="profile-line">
+                                <span class="label">Date :</span>
+                                <span class="value"><?= htmlspecialchars($tripInfo['date']) ?></span>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Résumé du profil -->
                     <div class="profile-card">
@@ -652,7 +668,7 @@
                     </div>
 
                     <!-- Formulaire -->
-                    <form method="POST" action="/CarShare/index.php?action=signalement_submit" class="report-form">
+                    <form method="POST" action="index.php?controller=trip&action=signalement_submit" class="report-form">
                         <input type="hidden" name="user_id" value="<?= htmlspecialchars($userData['id']) ?>">
                         <?php if (!empty($userData['carpooling_id'])): ?>
                         <input type="hidden" name="carpooling_id" value="<?= htmlspecialchars($userData['carpooling_id']) ?>">
@@ -695,7 +711,7 @@
                     </form>
                 </section>
 
-            <script src="/CarShare/assets/js/signalement-form.js"></script>
+            <script src="/assets/js/signalement-form.js"></script>
             <?php
         }
     }

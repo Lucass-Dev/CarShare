@@ -51,17 +51,37 @@ class RatingModel
     public function save(array $rating): bool
     {
         try {
-            $stmt = $this->db->prepare("
-                INSERT INTO ratings (rater_id, carpooling_id, rating, content)
-                VALUES (:rater_id, :carpooling_id, :rating, :content)
-            ");
-            
-            $result = $stmt->execute([
+            // Primary insert (expects ratings.id to be AUTO_INCREMENT)
+            $stmt = $this->db->prepare(
+                "INSERT INTO ratings (rater_id, carpooling_id, rating, content)
+                 VALUES (:rater_id, :carpooling_id, :rating, :content)"
+            );
+            $params = [
                 ':rater_id' => $rating['rater_id'],
                 ':carpooling_id' => $rating['carpooling_id'],
                 ':rating' => $rating['rating'],
                 ':content' => $rating['content'] ?? null
-            ]);
+            ];
+
+            $result = false;
+            try {
+                $result = $stmt->execute($params);
+            } catch (PDOException $e) {
+                // Fallback: if id has no auto-increment, compute next id manually
+                if (strpos($e->getMessage(), "Field 'id' doesn't have a default value") !== false ||
+                    strpos($e->getMessage(), 'Column \x27id\x27 cannot be null') !== false ||
+                    strpos($e->getMessage(), 'doesn\'t have a default value') !== false) {
+                    $nextId = (int)$this->db->query('SELECT COALESCE(MAX(id),0)+1 AS next_id FROM ratings')->fetch()['next_id'];
+                    $stmt2 = $this->db->prepare(
+                        "INSERT INTO ratings (id, rater_id, carpooling_id, rating, content)
+                         VALUES (:id, :rater_id, :carpooling_id, :rating, :content)"
+                    );
+                    $params[':id'] = $nextId;
+                    $result = $stmt2->execute($params);
+                } else {
+                    throw $e;
+                }
+            }
 
             // Update user's global rating
             if ($result) {

@@ -10,13 +10,13 @@ class BookingController {
         
         // Check if user is logged in
         if (!isset($_SESSION['user_id'])) {
-            header('Location: /CarShare/index.php?action=login');
+            header('Location: index.php?controller=login');
             exit();
         }
 
         $bookingId = $_GET['booking_id'] ?? null;
         if (!$bookingId) {
-            header('Location: /CarShare/index.php?action=home');
+            header('Location: index.php?controller=home');
             exit();
         }
 
@@ -30,7 +30,7 @@ class BookingController {
         
         // Check if user is logged in
         if (!isset($_SESSION['user_id'])) {
-            header('Location: /CarShare/index.php?action=login');
+            header('Location: index.php?controller=login');
             exit();
         }
 

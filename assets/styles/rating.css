@@ -67,10 +67,12 @@ body{
 }
 
 /* Stars & actions */
-.stars { color:#333; font-size:18px; letter-spacing:6px; }
-.stars--big { font-size:24px; letter-spacing:6px; }
-.star { color:#1f2a37; opacity:0.28; }
-.star--on { color:#111; opacity:1; }
+.stars { color:#2b6ff0; font-size:18px; letter-spacing:4px; }
+.stars--big { font-size:26px; letter-spacing:4px; }
+.star { color:#a9c7ff; opacity:0.7; transition: color .15s ease, transform .1s ease; cursor: default; }
+.star--on { color:#2b6ff0; opacity:1; }
+.stars.stars--interactive .star { cursor: pointer; }
+.stars.stars--interactive .star:hover { transform: scale(1.05); }
 .rating__stars-row {
   display:flex;
   align-items:center;

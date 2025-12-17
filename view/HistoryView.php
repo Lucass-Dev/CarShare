@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CarShare - Historique</title>
-    <link rel="stylesheet" href="/CarShare/historique style.css">
-    <link href="/CarShare/assets/styles/header.css" rel="stylesheet">
-    <link href="/CarShare/assets/styles/footer.css" rel="stylesheet">
-    <style>
+<style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -111,12 +102,6 @@
             text-align: center;
         }
     </style>
-</head>
-
-<body>
-
-<?php require __DIR__ . "/components/header.php"; ?>
-
 <main>
     <h1 class="title">Mes trajets</h1>
 
@@ -141,7 +126,7 @@
                     <?php endif; ?>
                 <?php endforeach; ?>
             <?php endif; ?>
-            <a href="/CarShare/index.php?action=create_trip" class="small-btn">Publier un trajet +</a>
+            <a href="index.php?controller=trip&action=publish" class="small-btn">Publier un trajet +</a>
         </div>
 
         <div class="col">
@@ -168,7 +153,7 @@
                     <?php endif; ?>
                 <?php endforeach; ?>
             <?php endif; ?>
-            <a href="/CarShare/index.php?action=search" class="small-btn">Réserver un trajet</a>
+            <a href="index.php?controller=trip&action=search" class="small-btn">Réserver un trajet</a>
         </div>
     </section>
 
@@ -177,7 +162,9 @@
     <section class="section-historique">
         <div class="col">
             <h2>Historique - Conducteur</h2>
-            <?php foreach ($carpoolings as $trip): ?>
+            <?php if (empty($carpoolings)): ?>
+                <p>Aucun trajet passé</p>
+            <?php else: foreach ($carpoolings as $trip): ?>
                 <?php if (strtotime($trip['start_date']) <= time()): ?>
                 <div class="trajet-card">
                     <div class="middle">
@@ -190,12 +177,14 @@
                     </div>
                 </div>
                 <?php endif; ?>
-            <?php endforeach; ?>
+            <?php endforeach; endif; ?>
         </div>
 
         <div class="col">
             <h2>Historique - Voyageur</h2>
-            <?php foreach ($bookings as $booking): ?>
+            <?php if (empty($bookings)): ?>
+                <p>Aucun trajet passé</p>
+            <?php else: foreach ($bookings as $booking): ?>
                 <?php if (strtotime($booking['start_date']) <= time()): ?>
                 <div class="trajet-card">
                     <div class="left">
@@ -209,16 +198,15 @@
                     </div>
                     <div class="right">
                         <small>Le <?= date('d/m/Y', strtotime($booking['start_date'])) ?></small>
+                        <div>
+                            <a class="small-btn" href="?controller=trip&action=rating&trip_id=<?= urlencode($booking['carpooling_id']) ?>">Noter le conducteur</a>
+                            <a class="small-btn" href="?controller=trip&action=signalement&trip_id=<?= urlencode($booking['carpooling_id']) ?>">Signaler</a>
+                        </div>
                     </div>
                 </div>
                 <?php endif; ?>
-            <?php endforeach; ?>
+            <?php endforeach; endif; ?>
         </div>
     </section>
 
 </main>
-
-<?php require __DIR__ . "/components/footer.php"; ?>
-
-</body>
-</html>

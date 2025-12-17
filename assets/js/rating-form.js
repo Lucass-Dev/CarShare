@@ -5,6 +5,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (!starsSelect || !starDisplay) return;
 
+    // Make stars interactive: click to set rating
+    starDisplay.classList.add('stars--interactive');
+    const stars = Array.from(starDisplay.querySelectorAll('.star'));
+    stars.forEach((starEl, idx) => {
+        starEl.addEventListener('click', function() {
+            const newRating = idx + 1; // stars are 1-indexed visually
+            starsSelect.value = String(newRating);
+            updateStarDisplay(newRating);
+        });
+    });
+
     // Update star display when selection changes
     starsSelect.addEventListener('change', function() {
         const rating = parseInt(this.value);
@@ -12,9 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function updateStarDisplay(rating) {
-        const stars = starDisplay.querySelectorAll('.star');
-        
-        stars.forEach(function(star, index) {
+        const nodes = starDisplay.querySelectorAll('.star');
+        nodes.forEach(function(star, index) {
             if (index < rating) {
                 star.classList.add('star--on');
                 star.textContent = '★';
