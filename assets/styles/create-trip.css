@@ -130,7 +130,7 @@ body {
   gap:18px;
   align-items:flex-end;
   margin-bottom:6px;
-}
+}  
 .trip-form__row--compact { align-items:center; }
 .trip-form__row--options { align-items:flex-start; justify-content:space-between; margin-top:8px; }
 .form__group { flex:1; display:flex; flex-direction:column; text-align:left; }
