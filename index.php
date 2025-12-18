@@ -42,9 +42,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <link href="./assets/styles/main.css" rel="stylesheet">
-    <script src="./script/index.js"></script>
+    <link href="./assets/styles/index.css" rel="stylesheet">
     <title>CarShare</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <?php
@@ -159,5 +158,8 @@
         include_once("./view/components/footer.php");
         include_once("./view/components/message_anchor.html");
         ?>
+<script src="./assets/js/rating.js"></script>
+<script src="./assets/js/signalement.js"></script>
+<script src="./script/index.js"></script>
 </body>
 </html>

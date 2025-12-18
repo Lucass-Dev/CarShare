@@ -3,7 +3,7 @@
 
         static function display_MP(array $resumes){
         ?>
-            
+            <link rel="stylesheet" href="./assets/styles/mp.css">
                 <div class="mp-resume-container">
                     <?php
                         foreach($resumes as $resume){

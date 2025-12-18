@@ -2,6 +2,7 @@
 class LoginView {
     public function display_form(){
         ?>
+        <link rel="stylesheet" href="./assets/styles/login.css">
         <div class="login-box">
             <h2>Se connecter</h2>
             <form controller="?controller=login" method="POST">

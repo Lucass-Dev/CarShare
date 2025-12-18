@@ -2,6 +2,7 @@
     class HomeView{
         public static function render(){
             ?>
+            <link rel="stylesheet" href="./assets/styles/home.css">
             <section class="hero">
     <div class="search-container">
         <form class="search-form">

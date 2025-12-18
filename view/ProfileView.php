@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="./assets/styles/page_profil.css">
 <?php if (isset($error)): ?>
     <div style="color: red; text-align: center; margin: 20px;">
         <?= htmlspecialchars($error) ?>

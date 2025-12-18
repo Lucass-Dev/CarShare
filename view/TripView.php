@@ -2,6 +2,7 @@
     class TripView{
         public static function display_trip_infos($details){
             ?>
+            <link rel="stylesheet" href="./assets/styles/trip_infos.css">
             <div>
                 <h2>Détails du trajet</h2>
 
@@ -43,6 +44,7 @@
 
         public static function display_trip_payment($details){
             ?>
+            <link rel="stylesheet" href="./assets/styles/trip_payment.css">
             <div class="payment-card">
                 <div class="payment-info">
                 <div class="section-title">Récapitulatif du trajet</div>
@@ -95,6 +97,7 @@
         }
         public static function display_search_filters(){
             ?>
+            <link rel="stylesheet" href="./assets/styles/searchPage.css">
             <div class="search-filters-container">
                 <div class="sort-by-filters">
                     <h2>Trier par</h2>
@@ -262,6 +265,8 @@
 
         public static function display_search_bar($start_name, $start_id, $end_name, $end_id, $start_date, $start_hour, $requested_seats) {
             ?>
+                <link rel="stylesheet" href="./assets/styles/searchPage.css">
+                <script src="./script/searchPage.js" defer></script>
                 <div class="search-bar-container">
                     <form id="search-form" method="GET" action="?controller=trip" class="search-form">
                         <input type="hidden" name="controller" value="trip"/>
@@ -309,6 +314,7 @@
 
         public static function display_publish_form(){
             ?>
+            <link rel="stylesheet" href="./assets/styles/create-trip.css">
             <?php $success = $success ?? false; ?>
             <section class="hero">
             <div class="hero__overlay">
@@ -489,13 +495,13 @@
             </datalist>
             </div>
         </section>
-        <script src="/assets/js/create-trip.js"></script>
+        <script src="./assets/js/create-trip.js"></script>
             <?php
         }
 
         public static function display_rate_form($trip_infos, $driver){
             ?>
-            <link rel="stylesheet" href="/assets/styles/rating.css">
+            <link rel="stylesheet" href="./assets/styles/rating.css">
             <section class="main container">
                 <section class="rating">
                 <h1 class="rating__title">Merci d'avoir choisi CarShare</h1>
@@ -595,13 +601,13 @@
                 </section>
             </section>
 
-            <script src="/assets/js/rating-form.js"></script>
+            <script src="./assets/js/rating-form.js"></script>
             <?php
         }
 
         public static function display_report_form($tripInfo, $userData) {
             ?>
-            <link rel="stylesheet" href="/assets/styles/report-user.css">
+            <link rel="stylesheet" href="./assets/styles/report-user.css">
             <section class="report-main">
                 <section class="report-container">
                     <h1 class="report-title">Signaler un utilisateur</h1>
@@ -709,7 +715,7 @@
                     </form>
                 </section>
 
-            <script src="/assets/js/signalement-form.js"></script>
+            <script src="./assets/js/signalement-form.js"></script>
             <?php
         }
     }

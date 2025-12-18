@@ -3,6 +3,7 @@ class RegisterView {
 
     public function display_result_message($message, $success){
         ?>
+        <link rel="stylesheet" href="./assets/styles/register.css">
         <div class="error-message <?php echo $success == "true" ? "success" : "error" ?>">
             <p><?php echo $message;?></p>
         </div>
@@ -10,8 +11,7 @@ class RegisterView {
     }
 
     public function display_form(){
-        ?>
-        
+        ?>        <link rel="stylesheet" href="./assets/styles/register.css">        
             <h2>S’inscrire</h2>
             <form controller="./?controller=register" method="POST">
                 <input type="text" placeholder="Nom" name="first_name" required />
