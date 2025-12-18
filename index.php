@@ -54,11 +54,8 @@
 ?>
 <main>
     <?php
-        $controller = "home";
-
-        if(isset($_GET["controller"])){
-            $controller = $_GET["controller"];
-        }
+        // Compatibilité: accepter ?controller=... ou ?action=...
+        $controller = $_GET["controller"] ?? $_GET["action"] ?? "home";
 
         switch ($controller) {
             case "home":
@@ -101,6 +98,53 @@
             case "mp":
                 $controller = new MPController();
                 $controller->render();
+                break;
+            // --- Nouvelles routes sans impacter l'existant ---
+            case "history":
+                $controller = new BookingController();
+                $controller->history();
+                break;
+            case "rating":
+                $controller = new RatingController();
+                // Méthode d'affichage du formulaire
+                if (method_exists($controller, 'render')) {
+                    $controller->render();
+                } else if (method_exists($controller, 'index')) {
+                    $controller->index();
+                }
+                break;
+            case "rating_submit":
+                $controller = new RatingController();
+                $controller->submit();
+                break;
+            case "rating_get_carpoolings":
+                $controller = new RatingController();
+                // API JSON pour récupérer les trajets d'un utilisateur
+                if (method_exists($controller, 'getCarpoolings')) {
+                    $controller->getCarpoolings();
+                } else if (method_exists($controller, 'getUserCarpoolings')) {
+                    $controller->getUserCarpoolings();
+                }
+                break;
+            case "signalement":
+                $controller = new SignalementController();
+                if (method_exists($controller, 'render')) {
+                    $controller->render();
+                } else if (method_exists($controller, 'index')) {
+                    $controller->index();
+                }
+                break;
+            case "signalement_submit":
+                $controller = new SignalementController();
+                $controller->submit();
+                break;
+            case "signalement_get_carpoolings":
+                $controller = new SignalementController();
+                if (method_exists($controller, 'getCarpoolings')) {
+                    $controller->getCarpoolings();
+                } else if (method_exists($controller, 'getUserCarpoolings')) {
+                    $controller->getUserCarpoolings();
+                }
                 break;
             default:
                 http_response_code(404);
