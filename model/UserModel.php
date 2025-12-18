@@ -1,13 +1,9 @@
 <?php
     class UserModel{
         static public function getUserProfilePicturePath($id){
-            $str = "SELECT profile_picture_path FROM users WHERE id=:id";
-            $stmt = Database::$db->prepare($str);
-            $stmt->execute([
-                ":id"=> $id
-            ]);
-            $result = $stmt->fetchObject();
-            return $result->profile_picture_path;
+            // La colonne profile_picture_path n'existe pas dans la base de données
+            // Retourne null ou une image par défaut
+            return null;
         }
     }
 ?>

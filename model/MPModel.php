@@ -13,7 +13,7 @@
         }
         public static function getResumes($user_id): array{
             $return = [];
-            $str = "SELECT c.*, p.*, u.first_name, u.profile_picture_path
+            $str = "SELECT c.*, p.*, u.first_name
                     FROM conversations c
                     INNER JOIN private_message p ON p.id_conv = c.id
                     INNER JOIN (
@@ -46,7 +46,7 @@
                 ]);
             $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
             if($res){
-                $str = "SELECT content, sender_id, send_at, first_name, profile_picture_path
+                $str = "SELECT content, sender_id, send_at, first_name
                         FROM private_message
                         INNER JOIN conversations ON private_message.id_conv=conversations.id
                         INNER JOIN users u1 ON u1.id=private_message.sender_id

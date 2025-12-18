@@ -11,7 +11,7 @@
                     
                         <a class="resume" href="?controller=mp&chat_with=<?php echo $resume["id_conv"] ?>">
                             <div class="mp-photo">
-                                <img src="./assets/upp/<?php echo $resume["profile_picture_path"]?>" alt="<?php echo $resume["first_name"]?>">
+                                <img src="./assets/img/avatar.jpg" alt="<?php echo $resume["first_name"]?>">
                                 <span><?php echo $resume["first_name"]?></span>
                             </div>
                             <span><?php echo $resume["content"]?></span>

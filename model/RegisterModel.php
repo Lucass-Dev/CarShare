@@ -46,8 +46,8 @@ class RegisterModel {
     }
 
     public function send_form($values): array {
-        $str = "INSERT INTO users(first_name, last_name, email, password_hash, is_admin, is_verified_user, car_brand, car_model, car_plate, car_is_verified, created_at, global_rating, profile_picture_path)
-                VALUES (:first_name, :last_name, :mail, :password_hash, 0, 0, NULL, NULL, NULL, 0, NOW(), 5, NULL)";
+        $str = "INSERT INTO users(first_name, last_name, email, password_hash, is_admin, is_verified_user, car_brand, car_model, car_plate, car_is_verified, created_at, global_rating)
+                VALUES (:first_name, :last_name, :mail, :password_hash, 0, 0, NULL, NULL, NULL, 0, NOW(), 5)";
         try {
             $db = Database::$db;
             $stmt = $db->prepare($str);

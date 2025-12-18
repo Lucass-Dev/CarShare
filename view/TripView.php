@@ -14,7 +14,7 @@
 
                 <div class="card">
                     <div class="left">
-                    <img src="<?php echo UPP_BASE_PATH.$details["profile_picture_path"]?>" alt="Photo du conducteur">
+                    <img src="./assets/img/avatar.jpg" alt="Photo du conducteur">
                     <a href="?controller=user&uid=<?php echo $details["provider_id"]?>"><strong><?php echo $details["provider_name"]?></strong></a>
                     <span><?php echo $details["global_rating"]?> ⭐</span>
                     </div>
@@ -27,9 +27,7 @@
 
                     <div class="details-bottom">
                         <div>
-                        <?php echo $details["luggage_allowed"] ? "<p>Bagages autorisés</p>" : ""?>
-                        <?php echo $details["smoker_allowed"] ? "<p>Fumeurs autorisés</p>" : ""?>
-                        <?php echo $details["pets_allowed"] ? "<p>Animaux autorisés</p>" : ""?>
+                        <!-- Les informations sur bagages/fumeurs/animaux ne sont pas disponibles dans la base de données -->
                         </div>
                         <div>
                         <span class="price"><?php echo $details["price"]?> € TTC</span><br>
@@ -221,7 +219,7 @@
                                 <div class="trip-info">
                                     <div class="top">
                                         <div class="resume-card">
-                                            <img src="<?php echo UPP_BASE_PATH.$carpooling['profile_picture_path'] ?>" alt="user_photo">
+                                            <img src="./assets/img/avatar.jpg" alt="user_photo">
                                             <div class="resume-card-details">
                                                 <a href="&controller=user_info/<?php echo $carpooling['provider_id']; ?>">
                                                     <?php echo htmlspecialchars($carpooling['provider_name']); ?>

@@ -28,7 +28,7 @@ class TripModel {
         $db = Database::$db;
 
         $sql =
-            "SELECT l2.name as start_name, l1.name as end_name, c.start_date, available_places , u.first_name as provider_name, c.id, c.price, c.provider_id, u.global_rating, u.profile_picture_path
+            "SELECT l2.name as start_name, l1.name as end_name, c.start_date, available_places , u.first_name as provider_name, c.id, c.price, c.provider_id, u.global_rating
                     FROM `carpoolings` c
                     INNER JOIN `location` l2 on (c.start_id = l2.id)
                     INNER JOIN `location` l1 on (c.end_id = l1.id)
@@ -49,15 +49,8 @@ class TripModel {
         if (isset($filters["is_verified_user"]) && $filters["is_verified_user"] == "on") {
             $sql .= " AND u.is_verified_user = 1 ";
         }
-        if (isset($filters["luggage_allowed"]) && $filters["luggage_allowed"] == "on") {
-            $sql .= " AND c.luggage_allowed = 1 ";
-        }
-        if (isset($filters["smoker_allowed"]) && $filters["smoker_allowed"] == "on") {
-            $sql .= " AND c.smoker_allowed = 1 ";
-        }
-        if (isset($filters["pets_allowed"]) && $filters["pets_allowed"] == "on") {
-            $sql .= " AND c.pets_allowed = 1 ";
-        }
+        // Note: luggage_allowed, smoker_allowed, pets_allowed n'existent pas dans la table carpoolings
+        // Ces filtres sont ignorés
 
         if (isset($filters["sort_by"]) && $filters["sort_by"] != "") {
             switch ($filters["sort_by"]) {
@@ -108,7 +101,7 @@ class TripModel {
     public static function getCarpoolingById($trip_id) : array{
         $result = array();
         $db = Database::$db;
-        $stmt = $db->prepare("SELECT c.id as trip_id, l1.name as start_name, l2.name as end_name, c.start_date, c.available_places , c.luggage_allowed, c.pets_allowed, c.smoker_allowed, u.first_name as provider_name, u.id as provider_id, c.price, c.provider_id, u.global_rating, u.profile_picture_path
+        $stmt = $db->prepare("SELECT c.id as trip_id, l1.name as start_name, l2.name as end_name, c.start_date, c.available_places, u.first_name as provider_name, u.id as provider_id, c.price, c.provider_id, u.global_rating
                     FROM `carpoolings` c
                     INNER JOIN `location` l2 on (c.start_id = l2.id)
                     INNER JOIN `location` l1 on (c.end_id = l1.id)
