@@ -53,8 +53,38 @@
 ?>
 <main>
     <?php
-        // Compatibilité: accepter ?controller=... ou ?action=...
-        $controller = $_GET["controller"] ?? $_GET["action"] ?? "home";
+        // Routage avec support de ?controller=... et ?action=...
+        $controllerParam = $_GET["controller"] ?? null;
+        $actionParam = $_GET["action"] ?? null;
+        
+        // Si controller est défini, on route selon controller + action
+        if ($controllerParam) {
+            switch ($controllerParam) {
+                case "booking":
+                    $controller = new BookingController();
+                    if ($actionParam === "history") {
+                        $controller->history();
+                    } else {
+                        http_response_code(404);
+                        echo "Page non trouvée";
+                    }
+                    break;
+                case "trip":
+                    $controller = new TripController();
+                    $controller->render();
+                    break;
+                case "user":
+                    $controller = new UserController();
+                    $controller->index();
+                    break;
+                default:
+                    http_response_code(404);
+                    echo "Page non trouvée";
+                    break;
+            }
+        } else {
+            // Fallback sur l'ancien système ?action=...
+            $controller = $actionParam ?? "home";
 
         switch ($controller) {
             case "home":
@@ -150,6 +180,7 @@
                 echo "Page non trouvée";
                 break;
             }
+        }
 
 
     ?>

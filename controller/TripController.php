@@ -31,6 +31,22 @@ class TripController {
 
                 TripView::display_rate_form();
                 break;
+            case 'rating':
+                $this->display_rating();
+                break;
+            case 'signalement':
+                $this->display_signalement();
+                break;
+            case 'rating_submit':
+                // Redirection vers RatingController pour le submit
+                $ratingController = new RatingController();
+                $ratingController->submit();
+                break;
+            case 'signalement_submit':
+                // Redirection vers SignalementController pour le submit
+                $signalementController = new SignalementController();
+                $signalementController->submit();
+                break;
             default:
                 echo "404";
                 break;
@@ -50,6 +66,88 @@ class TripController {
             TripView::display_trip_infos($details);
         }
     }
+    private function display_rating() {
+        if (isset($_GET['trip_id']) && !empty($_GET['trip_id'])) {
+            $ratingModel = new RatingModel();
+            $carpoolingId = (int)$_GET['trip_id'];
+            
+            $carpooling = $ratingModel->getCarpoolingById($carpoolingId);
+            if (!$carpooling) {
+                echo "Trajet non trouvé";
+                return;
+            }
+            
+            $userId = (int)$carpooling['provider_id'];
+            $user = $ratingModel->getUserById($userId);
+            if (!$user) {
+                echo "Utilisateur non trouvé";
+                return;
+            }
+            
+            // Formater les données pour display_rate_form
+            $tripInfo = [
+                'id' => $carpooling['id'],
+                'start' => $carpooling['start_name'],
+                'end' => $carpooling['end_name'],
+                'date' => date('d/m/Y', strtotime($carpooling['start_date']))
+            ];
+            
+            $driver = [
+                'id' => $user['id'],
+                'name' => $user['first_name'] . ' ' . $user['last_name'],
+                'avg' => $user['global_rating'] ?? 0,
+                'trips' => $ratingModel->countUserTrips($userId),
+                'reviews' => $ratingModel->countUserRatings($userId),
+                'carpooling_id' => $carpoolingId
+            ];
+            
+            TripView::display_rate_form($tripInfo, $driver);
+        } else {
+            echo "ID de trajet manquant";
+        }
+    }
+
+    private function display_signalement() {
+        if (isset($_GET['trip_id']) && !empty($_GET['trip_id'])) {
+            $signalementModel = new SignalementModel();
+            $carpoolingId = (int)$_GET['trip_id'];
+            
+            $carpooling = $signalementModel->getCarpoolingById($carpoolingId);
+            if (!$carpooling) {
+                echo "Trajet non trouvé";
+                return;
+            }
+            
+            $userId = (int)$carpooling['provider_id'];
+            $user = $signalementModel->getUserById($userId);
+            if (!$user) {
+                echo "Utilisateur non trouvé";
+                return;
+            }
+            
+            // Formater les données pour display_report_form
+            $tripInfo = [
+                'id' => $carpooling['id'],
+                'start' => $carpooling['start_name'],
+                'end' => $carpooling['end_name'],
+                'date' => date('d/m/Y', strtotime($carpooling['start_date']))
+            ];
+            
+            $userData = [
+                'id' => $user['id'],
+                'name' => $user['first_name'] . ' ' . $user['last_name'],
+                'avg' => $user['global_rating'] ?? 0,
+                'reviews' => $signalementModel->countUserRatings($userId),
+                'count' => $signalementModel->countUserTrips($userId),
+                'carpooling_id' => $carpoolingId
+            ];
+            
+            TripView::display_report_form($tripInfo, $userData);
+        } else {
+            echo "ID de trajet manquant";
+        }
+    }
+
     private function display_search(){
         $filters = array();
         $filters["pets_allowed"] = "";

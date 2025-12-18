@@ -90,27 +90,30 @@ class SignalementController
 
         // Check that user is not reporting themselves
         if ($userId === $_SESSION['user_id']) {
-            $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&error=self_reporting';
             if ($carpoolingId) {
-                $redirectUrl .= '&carpooling_id=' . $carpoolingId;
+                $redirectUrl = '/CarShare/index.php?controller=trip&action=signalement&trip_id=' . $carpoolingId . '&error=self_reporting';
+            } else {
+                $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&error=self_reporting';
             }
             header('Location: ' . $redirectUrl);
             exit;
         }
 
         if (empty($description)) {
-            $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&error=empty_description';
             if ($carpoolingId) {
-                $redirectUrl .= '&carpooling_id=' . $carpoolingId;
+                $redirectUrl = '/CarShare/index.php?controller=trip&action=signalement&trip_id=' . $carpoolingId . '&error=empty_description';
+            } else {
+                $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&error=empty_description';
             }
             header('Location: ' . $redirectUrl);
             exit;
         }
 
         if (empty($reason)) {
-            $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&error=empty_reason';
             if ($carpoolingId) {
-                $redirectUrl .= '&carpooling_id=' . $carpoolingId;
+                $redirectUrl = '/CarShare/index.php?controller=trip&action=signalement&trip_id=' . $carpoolingId . '&error=empty_reason';
+            } else {
+                $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&error=empty_reason';
             }
             header('Location: ' . $redirectUrl);
             exit;
@@ -147,15 +150,17 @@ class SignalementController
         $result = $this->model->save($data);
 
         if ($result) {
-            $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&success=1';
             if ($carpoolingId) {
-                $redirectUrl .= '&carpooling_id=' . $carpoolingId;
+                $redirectUrl = '/CarShare/index.php?controller=trip&action=signalement&trip_id=' . $carpoolingId . '&success=1';
+            } else {
+                $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&success=1';
             }
             header('Location: ' . $redirectUrl);
         } else {
-            $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&error=save_failed';
             if ($carpoolingId) {
-                $redirectUrl .= '&carpooling_id=' . $carpoolingId;
+                $redirectUrl = '/CarShare/index.php?controller=trip&action=signalement&trip_id=' . $carpoolingId . '&error=save_failed';
+            } else {
+                $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&error=save_failed';
             }
             header('Location: ' . $redirectUrl);
         }

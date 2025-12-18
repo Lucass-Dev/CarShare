@@ -89,9 +89,10 @@ class RatingController
 
         // Check that user is not rating themselves
         if ($userId === $_SESSION['user_id']) {
-            $redirectUrl = '/CarShare/index.php?action=rating&user_id=' . $userId . '&error=self_rating';
             if ($carpoolingId) {
-                $redirectUrl .= '&carpooling_id=' . $carpoolingId;
+                $redirectUrl = '/CarShare/index.php?controller=trip&action=rating&trip_id=' . $carpoolingId . '&error=self_rating';
+            } else {
+                $redirectUrl = '/CarShare/index.php?action=rating&user_id=' . $userId . '&error=self_rating';
             }
             header('Location: ' . $redirectUrl);
             exit;
@@ -118,15 +119,17 @@ class RatingController
         $result = $this->model->save($ratingData);
 
         if ($result) {
-            $redirectUrl = '/CarShare/index.php?action=rating&user_id=' . $userId . '&success=1';
             if ($carpoolingId) {
-                $redirectUrl .= '&carpooling_id=' . $carpoolingId;
+                $redirectUrl = '/CarShare/index.php?controller=trip&action=rating&trip_id=' . $carpoolingId . '&success=1';
+            } else {
+                $redirectUrl = '/CarShare/index.php?action=rating&user_id=' . $userId . '&success=1';
             }
             header('Location: ' . $redirectUrl);
         } else {
-            $redirectUrl = '/CarShare/index.php?action=rating&user_id=' . $userId . '&error=save_failed';
             if ($carpoolingId) {
-                $redirectUrl .= '&carpooling_id=' . $carpoolingId;
+                $redirectUrl = '/CarShare/index.php?controller=trip&action=rating&trip_id=' . $carpoolingId . '&error=save_failed';
+            } else {
+                $redirectUrl = '/CarShare/index.php?action=rating&user_id=' . $userId . '&error=save_failed';
             }
             header('Location: ' . $redirectUrl);
         }
