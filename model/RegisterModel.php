@@ -57,7 +57,7 @@ class RegisterModel {
             if ($values["pass"] !== $values["confirm_pass"]) {
                 return ["message" =>"Attention, les mots de passes ne corespondent pas.", "success" => "false"];
             }
-            if (sizeof($values["pass"]) <12) {
+            if (strlen($values["pass"]) <12) {
                 return ["message" =>"Le mot de passe doit contenir au minimum 12 carcatères.", "success" => "false"];
             }
             $stmt->execute([

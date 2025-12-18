@@ -217,7 +217,6 @@
                     foreach ($carpoolings as $carpooling) {
                         ?>
                             <div class="search-result-card">
-                                
                                 <div class="trip-info">
                                     <div class="top">
                                         <div class="resume-card">

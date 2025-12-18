@@ -38,12 +38,18 @@ class TripModel {
             $sql .= " AND c.end_id = :end_id";
         }
 
+        if(empty($hour)){
+            $hour = date("00:00");
+        }
+
         $start_date = TripModel::getToleranceDate($date, $hour, $filters['start_time_range_before'], true);
-        $tolerance_date = TripModel::getToleranceDate($date, $hour, $filters['start_time_range_after'], false);
+        if($filters['start_time_range_before'] != 0){
+            $tolerance_date = TripModel::getToleranceDate($date, $hour, $filters['start_time_range_after'], false);
+            $sql .= " AND c.start_date <= :tolerance ";
+        }
 
 
         $sql .= " AND c.start_date >= :start_date
-                AND c.start_date <= :tolerance
                 AND c.available_places >= :seats
                 ";
         if (isset($filters["is_verified_user"]) && $filters["is_verified_user"] == "on") {
@@ -92,8 +98,11 @@ class TripModel {
             ':start_id' => $start_id,
             ':start_date' => $start_date,
             ':seats' => $seats,
-            ':tolerance' => $tolerance_date
         ];
+
+        if($filters['start_time_range_before'] != 0){
+            $params[':tolerance'] = $tolerance_date;
+        }
 
         if (!empty($end_id)) {
             $params[':end_id'] = $end_id;
