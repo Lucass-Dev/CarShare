@@ -116,4 +116,5 @@
         include_once("./view/components/message_anchor.html");
         ?>
 </body>
+<script src="./script/searchPage.js"></script>
 </html>

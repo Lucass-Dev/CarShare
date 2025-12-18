@@ -11,3 +11,167 @@ main {
     padding-top: 9vh;
     min-height: auto;
 }
+
+/* ======================
+   HERO
+====================== */
+.hero {
+    height: 420px;
+    background: url("../img/index_bg.gif") center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    padding-left: 80px;
+}
+
+.search-container {
+    background: #fff;
+
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+.search-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.search-form input {
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.search-form input:focus {
+    outline: none;
+    border-color: #5b82f6;
+}
+
+.search-button {
+    margin-top: 10px;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    background: #5b82f6;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.search-button:hover {
+    background: #4a6fe0;
+}
+
+/* ======================
+   REVIEWS
+====================== */
+.reviews-section {
+    margin-top: -60px;
+    padding: 60px 80px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.review-card {
+    background: #fff;
+    padding: 24px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.review-card h4 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+}
+
+.review-card h3 {
+    margin: 6px 0;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.review-source {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 12px;
+}
+
+.stars {
+    margin-bottom: 10px;
+}
+
+.stars i {
+    color: #e74c3c;
+    font-size: 16px;
+}
+
+.trustpilot-logo {
+    font-size: 13px;
+    color: #00b67a;
+    font-weight: 600;
+}
+
+/* ======================
+   FEATURES
+====================== */
+.features-section {
+    padding: 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    background: #fff;
+}
+
+.feature-text h2 {
+    font-size: 32px;
+    margin-bottom: 16px;
+}
+
+.feature-text p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #444;
+    max-width: 520px;
+}
+
+.feature-image img {
+    width: 100%;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+/* ======================
+   RESPONSIVE
+====================== */
+@media (max-width: 1024px) {
+    .reviews-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .features-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .hero {
+        padding: 20px;
+        justify-content: center;
+    }
+
+    .reviews-section {
+        padding: 40px 20px;
+        grid-template-columns: 1fr;
+    }
+
+    .features-section {
+        padding: 40px 20px;
+    }
+}

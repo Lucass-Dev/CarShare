@@ -1,6 +1,6 @@
 <?php
 class Database {
-    public static $db = null;
+    private static $db = null;
 
     public static function instanciateDb(){
         if (Database::$db == null) {
@@ -13,5 +13,12 @@ class Database {
             Database::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
     return self::$db;
+    }
+
+    public static function getDb(){
+       if (Database::$db == null) {
+        Database::instanciateDb();
+       }
+       return Database::$db;
     }
 }

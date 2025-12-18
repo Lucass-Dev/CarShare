@@ -32,7 +32,7 @@ class RegisterModel {
     private function user_exists($mail): bool{
         $str = "SELECT * FROM users WHERE email=:email";
         try {
-            $db = Database::$db;
+            $db = Database::getDb();
             $stmt = $db->prepare($str);
             $stmt->execute([
                 ":email"=> $mail
@@ -49,7 +49,7 @@ class RegisterModel {
         $str = "INSERT INTO users(first_name, last_name, email, password_hash, is_admin, is_verified_user, car_brand, car_model, car_plate, car_is_verified, created_at, global_rating, profile_picture_path)
                 VALUES (:first_name, :last_name, :mail, :password_hash, 0, 0, NULL, NULL, NULL, 0, NOW(), 5, NULL)";
         try {
-            $db = Database::$db;
+            $db = Database::getDb();
             $stmt = $db->prepare($str);
             if ($this->user_exists($values["mail"])) {
                 return ["message" => "Un utilisateur avec cet email existe déjà. S'il s'agit de vous, veuillez vous connecter ou en choisir un autre.", "success" => "false"];
