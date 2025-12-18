@@ -18,6 +18,7 @@ class RegisterController {
             if ($this->registerModel->check_form_values($_POST)) {
                 $result = $this->registerModel->send_form($_POST);
                 $this->registerView->display_result_message($result["message"], $result["success"]);
+                //header("Location: index.php?controller=login");
             }
         }
 

@@ -171,7 +171,7 @@ class TripController {
         }
         if (isset($_GET["form_end_input"]) && $_GET["form_end_input"] != ""){
             $end_id = $_GET["form_end_input"];
-            $end_name = TripModel::getCityNameWithPostalCode( $end_id);
+            $end_name = TripModel::getCityNameWithPostalCode($end_id);
         }
         if (isset($_GET["date"]) && $_GET["date"] != ""){
             $requested_date = $_GET["date"];
@@ -187,9 +187,8 @@ class TripController {
         TripView::display_search_bar($start_name, $start_id,$end_name, $end_id,$requested_date, $requested_hour, $requested_seats);
 
         ?> 
-            <h2>Search Results</h2>
+            
             <div class="search-page-container">
-
                 <?php
                     TripView::display_search_filters();
                     if (isset($_GET['action']) && $_GET['action'] === 'display_search') {

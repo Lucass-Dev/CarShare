@@ -6,7 +6,7 @@ class LoginModel {
         $str = "SELECT id FROM users WHERE email=:email AND password_hash=:pass_hash";
 
         Database::instanciateDb();
-        $stmt = Database::$db->prepare($str);
+        $stmt = Database::getDb()->prepare($str);
         $stmt->execute([
             ":email"=> $values["email"],
             ":pass_hash"=> hash("sha256", $values["password"])

@@ -25,7 +25,7 @@ class TripModel {
     }
     public static function getCarpooling($start_id, $end_id, $date, $hour, $seats, $filters) : array{
         $results = "";
-        $db = Database::$db;
+        $db = Database::getDb();
 
         $sql =
             "SELECT l2.name as start_name, l1.name as end_name, c.start_date, available_places , u.first_name as provider_name, c.id, c.price, c.provider_id, u.global_rating
@@ -38,12 +38,18 @@ class TripModel {
             $sql .= " AND c.end_id = :end_id";
         }
 
+        if(empty($hour)){
+            $hour = date("00:00");
+        }
+
         $start_date = TripModel::getToleranceDate($date, $hour, $filters['start_time_range_before'], true);
-        $tolerance_date = TripModel::getToleranceDate($date, $hour, $filters['start_time_range_after'], false);
+        if($filters['start_time_range_before'] != 0){
+            $tolerance_date = TripModel::getToleranceDate($date, $hour, $filters['start_time_range_after'], false);
+            $sql .= " AND c.start_date <= :tolerance ";
+        }
 
 
         $sql .= " AND c.start_date >= :start_date
-                AND c.start_date <= :tolerance
                 AND c.available_places >= :seats
                 ";
         if (isset($filters["is_verified_user"]) && $filters["is_verified_user"] == "on") {
@@ -85,8 +91,11 @@ class TripModel {
             ':start_id' => $start_id,
             ':start_date' => $start_date,
             ':seats' => $seats,
-            ':tolerance' => $tolerance_date
         ];
+
+        if($filters['start_time_range_before'] != 0){
+            $params[':tolerance'] = $tolerance_date;
+        }
 
         if (!empty($end_id)) {
             $params[':end_id'] = $end_id;
@@ -100,8 +109,8 @@ class TripModel {
 
     public static function getCarpoolingById($trip_id) : array{
         $result = array();
-        $db = Database::$db;
-        $stmt = $db->prepare("SELECT c.id as trip_id, l1.name as start_name, l2.name as end_name, c.start_date, c.available_places, u.first_name as provider_name, u.id as provider_id, c.price, c.provider_id, u.global_rating
+        $db = Database::getDb();
+        $stmt = $db->prepare("SELECT c.id as trip_id, l1.name as start_name, l2.name as end_name, c.start_date, c.available_places , c.luggage_allowed, c.pets_allowed, c.smoker_allowed, u.first_name as provider_name, u.id as provider_id, c.price, c.provider_id, u.global_rating, u.profile_picture_path
                     FROM `carpoolings` c
                     INNER JOIN `location` l2 on (c.start_id = l2.id)
                     INNER JOIN `location` l1 on (c.end_id = l1.id)
@@ -115,7 +124,7 @@ class TripModel {
 
     public static function getAllCarpoolings() : array{
         $arResults = array();
-        $db = Database::$db;
+        $db = Database::getDb();
         $stmt = $db->query("SELECT l2.name as start_name, l1.name as end_name, c.start_date, available_places FROM `carpoolings` c INNER JOIN `location` l2 on (c.start_id = l2.id) INNER JOIN `location` l1 on (c.end_id = l1.id) ORDER BY l2.id DESC;");
         $arResults = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $arResults;
@@ -123,7 +132,7 @@ class TripModel {
 
     public static function getCityNameWithPostalCode($cityId) : string{
         $stResult = "";
-        $db = Database::$db;
+        $db = Database::getDb();
         $stmt = $db->prepare("SELECT name, postal_code FROM `location` WHERE id = :city_id;");
         $stmt->bindParam(":city_id", $cityId, PDO::PARAM_INT);
         $stmt->execute();

@@ -193,4 +193,5 @@
 <script src="./assets/js/signalement.js"></script>
 <script src="./script/index.js"></script>
 </body>
+<script src="./script/searchPage.js"></script>
 </html>

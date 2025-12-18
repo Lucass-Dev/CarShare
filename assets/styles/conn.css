@@ -1,21 +1,4 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
 
-/* --- Header --- */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #e9f0ff;
-  padding: 10px 30px;
-  border-bottom: 2px solid #0a2b70;
-}
 
 .logo {
   display: flex;

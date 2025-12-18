@@ -4,10 +4,6 @@ ini_set('display_errors', 1);
 
 require_once("./Database.php");
 
-if (Database::getDb() == null) {
-    $db = Database::getDb();
-}
-
 if(isset($_GET["need"])){
     $action = $_GET["need"];
     switch($action){

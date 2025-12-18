@@ -3,7 +3,7 @@
 
         public static function sendMessage($user_id, $message_content, $discussion){
             $str = "INSERT INTO private_message (id_conv, sender_id, content, send_at) VALUES (:id_conv, :sender_id, :content, NOW())";
-            $stmt = Database::$db->prepare($str);
+            $stmt = Database::getDb()->prepare($str);
             $stmt->execute([
                 ":sender_id"=> $user_id,
                 ":content"=> $message_content,
@@ -24,7 +24,7 @@
                     INNER JOIN users u ON u.id = (CASE WHEN c.user1_id=:user_id THEN c.user2_id ELSE c.user1_id END)
                     WHERE c.user1_id=:user_id
                     OR c.user2_id=:user_id";
-            $stmt = Database::$db->prepare($str);
+            $stmt = Database::getDb()->prepare($str);
             $stmt->execute([":user_id"=> $user_id]);
             $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
             if($res){
@@ -39,7 +39,7 @@
             $return = [];
             $str = "SELECT * FROM conversations WHERE id=:conv_id AND (user1_id=:user_id OR user2_id=:user_id)";
             
-            $stmt = Database::$db->prepare($str);
+            $stmt = Database::getDb()->prepare($str);
             $stmt->execute([
                 ":user_id"=> $user_id,
                 ":conv_id"=> $conversation_id
@@ -52,7 +52,7 @@
                         INNER JOIN users u1 ON u1.id=private_message.sender_id
                         WHERE conversations.id=:id_conv
                         ORDER BY send_at ASC;";
-                $stmt = Database::$db->prepare($str);
+                $stmt = Database::getDb()->prepare($str);
                 $stmt->execute([
                     ":id_conv"=> $conversation_id
                     ]);

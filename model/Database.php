@@ -1,6 +1,6 @@
 <?php
 class Database {
-    public static $db = null;
+    private static $db = null;
 
     public static function instanciateDb(){
         if (self::$db === null) {
@@ -18,5 +18,12 @@ class Database {
 
     public static function getDb(){
         return self::instanciateDb();
+    }
+
+    public static function getDb(){
+       if (Database::$db == null) {
+        Database::instanciateDb();
+       }
+       return Database::$db;
     }
 }

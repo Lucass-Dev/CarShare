@@ -39,7 +39,7 @@ async function fetchCities(input, box){
     if (input.value.length > 2) {
         
         const response = await fetch(`../model/Utils.php?query=${input.value}&need=fetchCities`)
-            .then(res => {return res.json()});
+            .then(res => {console.log(res); return res.json()});
         for (let city of response) {
 
             suggestions_html += `<div class="suggestion-item" id="${city.id}">${city.name} (${city.postal_code})</div>`;
