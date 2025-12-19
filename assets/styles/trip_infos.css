@@ -1,0 +1,103 @@
+/* Styles pour la page de détails du trajet */
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  background-color: #fff;
+  color: #051220;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Section principale */
+main {
+  text-align: center;
+  margin-top: 8vh;
+  padding-top: 40px;
+  flex: 1;
+}
+
+h1 {
+  font-size: 50px;
+  font-weight: 600;
+}
+
+.trajet-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+  margin-top: 40px;
+  margin-bottom: 50px;
+}
+
+.trajet-info h2 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.trajet-info span {
+  font-size: 16px;
+}
+
+.card {
+  border: 1px solid #051220;
+  border-radius: 20px;
+  padding: 30px 50px;
+  width: 550px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.left {
+  text-align: center;
+  border-right: 2px solid #051220;
+  padding-right: 30px;
+}
+
+.left img {
+  width: 60px;
+  border-radius: 50%;
+}
+
+.right {
+  flex: 1;
+  padding-left: 40px;
+  text-align: left;
+}
+
+.right table {
+  width: 100%;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.right td {
+  padding: 3px 0;
+}
+
+.details-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+  border-top: 1px solid #051220;
+  padding-top: 10px;
+}
+
+.price {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.btn-reserver {
+  background-color: #C8D6F8;
+  border: none;
+  border-radius: 15px;
+  padding: 8px 18px;
+  cursor: pointer;
+  font-weight: 500;
+}

@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarShare - Historique</title>
+    <link rel="stylesheet" href="../assets/styles/historique.css">
+    <link rel="stylesheet" href="../assets/styles/header.css">
+</head>
+
+<body>
+
+    <!-- HEADER FIXE -->
+    <header>
+        <div class="logo">
+            <a href="index.html" class="home-link">
+                <img src="../assets/img/carshare.png" alt="CarShare Logo">
+            </a>
+        </div>
+
+        <span class="site-name">CarShare</span>
+
+        <div class="header-icons">
+            <a href="searchPage.html" title="Rechercher" class="icon">🔍</a>
+            <div class="dropdown">
+                <a href="page_profil.html" class="upp">
+                    <img src="../assets/img/avatar.jpg" alt="Ma photo de profile" class="icon">
+                </a>
+                <ul class="hidden">
+                    <li><a href="page_profil.html">Profile</a></li>
+                    <li><a href="Page_historique.html">Historique</a></li>
+                    <li><a href="create-trip.html">Créer un trajet</a></li>
+                    <li><a href="connexion.html">Se déconnecter</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENU SCROLLABLE -->
+    <main>
+
+        <h1 class="title">Prochaines courses</h1>
+
+        <section class="section-prochaines">
+
+            <!-- Conducteur -->
+            <div class="col">
+                <h2>Conducteur</h2>
+
+                <div class="trajet-card">
+                    <div class="left">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4140/4140037.png" class="avatar">
+                        <span class="nom">Eric</span>
+                    </div>
+
+                    <div class="middle">
+                        <span>Sarcelles</span>
+                        <span class="fleche">→</span>
+                        <span>Ivry-sur-Seine</span>
+                    </div>
+
+                    <div class="right">
+                        <small>Le 12/09/2025 à 7:30</small>
+                    </div>
+                </div>
+
+                <button class="small-btn">Publier un trajet +</button>
+            </div>
+
+            <div class="bar-vertical"></div>
+
+            <!-- Voyageur -->
+            <div class="col">
+                <h2>Voyageur</h2>
+
+                <div class="trajet-card">
+                    <div class="left">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4140/4140037.png" class="avatar">
+                        <span class="nom">Gaspard</span>
+                    </div>
+
+                    <div class="middle">
+                        <span>Ivry-sur-Seine</span>
+                        <span class="fleche">→</span>
+                        <span>Sarcelles</span>
+                    </div>
+
+                    <div class="right">
+                        <small>Le 07/11/2025 à 9:30</small>
+                    </div>
+                </div>
+
+                <button class="small-btn">Réservez un autre trajet</button>
+            </div>
+
+        </section>
+
+        <hr class="bar-horizontal">
+
+        <!-- Historique -->
+        <section class="section-historique">
+
+            <div class="col">
+                <h2>Conducteur</h2>
+                <button class="small-btn">Publier un trajet +</button>
+            </div>
+
+            <div class="historique-center">
+                <h2>Historique</h2>
+            </div>
+
+            <div class="col">
+                <h2>Voyageur</h2>
+
+                <div class="trajet-card">
+                    <div class="left">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4140/4140037.png" class="avatar">
+                        <span class="nom">Fabien</span>
+                    </div>
+
+                    <div class="middle">
+                        <span>Sarcelles</span>
+                        <span class="fleche">→</span>
+                        <span>Ivry-sur-Seine</span>
+                    </div>
+
+                    <div class="right">
+                        <small>Le 12/09/2025 à 7:30</small>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER (FAQ FIXE) -->
+    <footer>
+        <div class="footer-container">
+            <div>HexTech ®</div>
+            <div>CGU</div>
+            <div>Informations légales</div>
+            <div>Tous droits réservés</div>
+            <div><a href="FAQ.html">FAQ</a></div>
+        </div>
+    </footer>
+
+</body>
+</html>

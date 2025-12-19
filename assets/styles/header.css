@@ -5,15 +5,38 @@ header {
     align-items: center;
     background-color: #eef3fb;
     border-bottom: 1px solid #ccc;
+<<<<<<< Updated upstream
     padding: 10px 30px;
     height: 70px;          /* hauteur fixe */
     overflow: visible;    /* autorise le débordement du logo */
+=======
+    height: 8vh;
+    font-style: bold;
+    color: #2b4d9a;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    overflow: visible;
+}
+
+.home-link{
+    margin-left: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-decoration: none;
+}
+
+.site-name{
+    font-size: 2em;
+>>>>>>> Stashed changes
 }
 
 /* LOGO CONTAINER */
 .logo {
     display: flex;
     align-items: center;
+<<<<<<< Updated upstream
     position: relative;
 }
 
@@ -24,6 +47,19 @@ header {
     object-fit: contain;
     position: relative;
     top: 10px;             /* fait dépasser vers le bas */
+=======
+    font-weight: bold;
+    color: #2b4d9a;
+    position: relative;
+}
+
+.home-link img {
+    height: 150px;
+    width: auto;
+    object-fit: contain;
+    position: relative;
+    top: 20px;
+>>>>>>> Stashed changes
 }
 
 /* ICÔNES À DROITE */
@@ -37,4 +73,76 @@ header {
     text-decoration: none;
     color: #2b4d9a;
     font-size: 1.5em;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    header {
+        height: 60px;
+        padding: 0.3rem;
+    }
+
+    .home-link img {
+        height: 80px;
+        top: 10px;
+    }
+
+    .site-name {
+        font-size: 1.2em;
+    }
+
+    .home-link {
+        margin-left: 20%;
+    }
+
+    .icon {
+        width: 2rem;
+    }
+
+    .dropdown {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .dropdown ul {
+        right: 0;
+        width: 200px;
+    }
+
+    .dropdown ul li {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-link img {
+        height: 60px;
+    }
+
+    .site-name {
+        font-size: 1em;
+    }
+
+    .home-link {
+        margin-left: 10%;
+    }
+
+    .icon {
+        width: 1.5rem;
+    }
+
+    .dropdown {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .dropdown ul {
+        width: 150px;
+    }
+
+    .dropdown ul li {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+    }
 }

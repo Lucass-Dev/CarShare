@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!form) return;
 
+    // Real-time field validation on blur (before submit)
+    setupRealtimeValidation();
+
     form.addEventListener('submit', function(e) {
         const errors = [];
         
@@ -19,31 +22,31 @@ document.addEventListener('DOMContentLoaded', function() {
         // Validate departure city
         if (!depCity.value.trim()) {
             errors.push('La ville de départ est obligatoire');
-            depCity.style.borderColor = 'red';
+            markFieldAsInvalid(depCity);
         } else {
-            depCity.style.borderColor = '';
+            markFieldAsValid(depCity);
         }
 
         // Validate arrival city
         if (!arrCity.value.trim()) {
             errors.push('La ville d\'arrivée est obligatoire');
-            arrCity.style.borderColor = 'red';
+            markFieldAsInvalid(arrCity);
         } else {
-            arrCity.style.borderColor = '';
+            markFieldAsValid(arrCity);
         }
 
         // Validate cities are different
         if (depCity.value.trim() && arrCity.value.trim() && 
             depCity.value.trim() === arrCity.value.trim()) {
             errors.push('La ville de départ et d\'arrivée doivent être différentes');
-            depCity.style.borderColor = 'red';
-            arrCity.style.borderColor = 'red';
+            markFieldAsInvalid(depCity);
+            markFieldAsInvalid(arrCity);
         }
 
         // Validate date
         if (!date.value) {
             errors.push('La date est obligatoire');
-            date.style.borderColor = 'red';
+            markFieldAsInvalid(date);
         } else {
             // Check if date is in the future
             const selectedDate = new Date(date.value);
@@ -52,9 +55,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (selectedDate < today) {
                 errors.push('La date doit être dans le futur');
-                date.style.borderColor = 'red';
+                markFieldAsInvalid(date);
             } else {
-                date.style.borderColor = '';
+                markFieldAsValid(date);
             }
         }
 
@@ -62,9 +65,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const placesValue = parseInt(places.value);
         if (isNaN(placesValue) || placesValue < 1 || placesValue > 10) {
             errors.push('Le nombre de places doit être entre 1 et 10');
-            places.style.borderColor = 'red';
+            markFieldAsInvalid(places);
         } else {
-            places.style.borderColor = '';
+            markFieldAsValid(places);
         }
 
         // Validate street numbers if provided
@@ -72,24 +75,24 @@ document.addEventListener('DOMContentLoaded', function() {
             const depNumValue = parseInt(depNum.value);
             if (isNaN(depNumValue) || depNumValue < 0) {
                 errors.push('Le numéro de voie de départ doit être un nombre positif');
-                depNum.style.borderColor = 'red';
+                markFieldAsInvalid(depNum);
             } else {
-                depNum.style.borderColor = '';
+                markFieldAsValid(depNum);
             }
         } else {
-            depNum.style.borderColor = '';
+            markFieldAsValid(depNum);
         }
 
         if (arrNum.value && arrNum.value.trim() !== '') {
             const arrNumValue = parseInt(arrNum.value);
             if (isNaN(arrNumValue) || arrNumValue < 0) {
                 errors.push('Le numéro de voie d\'arrivée doit être un nombre positif');
-                arrNum.style.borderColor = 'red';
+                markFieldAsInvalid(arrNum);
             } else {
-                arrNum.style.borderColor = '';
+                markFieldAsValid(arrNum);
             }
         } else {
-            arrNum.style.borderColor = '';
+            markFieldAsValid(arrNum);
         }
 
         // Validate price if provided
@@ -97,12 +100,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const priceValue = parseFloat(price.value);
             if (isNaN(priceValue) || priceValue < 0) {
                 errors.push('Le prix doit être un nombre positif');
-                price.style.borderColor = 'red';
+                markFieldAsInvalid(price);
             } else {
-                price.style.borderColor = '';
+                markFieldAsValid(price);
             }
         } else {
-            price.style.borderColor = '';
+            markFieldAsValid(price);
         }
 
         // If there are errors, prevent submission and show them
@@ -112,71 +115,132 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Real-time validation feedback
-    const depCity = document.getElementById('dep-city');
-    const arrCity = document.getElementById('arr-city');
-    
-    if (depCity && arrCity) {
-        depCity.addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.style.borderColor = '';
-            }
-        });
-        
-        arrCity.addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.style.borderColor = '';
-            }
-        });
+    // Helper functions for field validation styling
+    function markFieldAsInvalid(field) {
+        field.style.borderColor = '#d9534f';
+        field.style.backgroundColor = '#ffebee';
     }
 
-    const dateInput = document.getElementById('date');
-    if (dateInput) {
-        dateInput.addEventListener('change', function() {
-            const selectedDate = new Date(this.value);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            if (selectedDate >= today) {
-                this.style.borderColor = '';
-            }
-        });
+    function markFieldAsValid(field) {
+        field.style.borderColor = '';
+        field.style.backgroundColor = '';
     }
 
-    const placesInput = document.getElementById('places');
-    if (placesInput) {
-        placesInput.addEventListener('change', function() {
-            const value = parseInt(this.value);
-            if (!isNaN(value) && value >= 1 && value <= 10) {
-                this.style.borderColor = '';
-            }
-        });
-    }
+    // Real-time validation setup
+    function setupRealtimeValidation() {
+        const depCity = document.getElementById('dep-city');
+        const arrCity = document.getElementById('arr-city');
+        const dateInput = document.getElementById('date');
+        const placesInput = document.getElementById('places');
+        const depNum = document.getElementById('dep-num');
+        const arrNum = document.getElementById('arr-num');
+        const priceInput = document.getElementById('price');
 
-    const depNum = document.getElementById('dep-num');
-    if (depNum) {
-        depNum.addEventListener('input', function() {
-            if (this.value === '' || (!isNaN(parseInt(this.value)) && parseInt(this.value) >= 0)) {
-                this.style.borderColor = '';
-            }
-        });
-    }
+        // Departure city validation
+        if (depCity) {
+            depCity.addEventListener('blur', function() {
+                if (!this.value.trim()) {
+                    markFieldAsInvalid(this);
+                } else {
+                    markFieldAsValid(this);
+                }
+            });
 
-    const arrNum = document.getElementById('arr-num');
-    if (arrNum) {
-        arrNum.addEventListener('input', function() {
-            if (this.value === '' || (!isNaN(parseInt(this.value)) && parseInt(this.value) >= 0)) {
-                this.style.borderColor = '';
-            }
-        });
-    }
+            depCity.addEventListener('input', function() {
+                if (this.value.trim()) {
+                    markFieldAsValid(this);
+                }
+            });
+        }
 
-    const priceInput = document.getElementById('price');
-    if (priceInput) {
-        priceInput.addEventListener('input', function() {
-            if (this.value === '' || (!isNaN(parseFloat(this.value)) && parseFloat(this.value) >= 0)) {
-                this.style.borderColor = '';
-            }
-        });
+        // Arrival city validation
+        if (arrCity) {
+            arrCity.addEventListener('blur', function() {
+                if (!this.value.trim()) {
+                    markFieldAsInvalid(this);
+                } else {
+                    markFieldAsValid(this);
+                }
+            });
+
+            arrCity.addEventListener('input', function() {
+                if (this.value.trim()) {
+                    markFieldAsValid(this);
+                }
+            });
+        }
+
+        // Date validation
+        if (dateInput) {
+            dateInput.addEventListener('blur', function() {
+                if (!this.value) {
+                    markFieldAsInvalid(this);
+                } else {
+                    const selectedDate = new Date(this.value);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    
+                    if (selectedDate < today) {
+                        markFieldAsInvalid(this);
+                    } else {
+                        markFieldAsValid(this);
+                    }
+                }
+            });
+
+            dateInput.addEventListener('change', function() {
+                const selectedDate = new Date(this.value);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                if (selectedDate >= today) {
+                    markFieldAsValid(this);
+                }
+            });
+        }
+
+        // Places validation
+        if (placesInput) {
+            placesInput.addEventListener('blur', function() {
+                const value = parseInt(this.value);
+                if (isNaN(value) || value < 1 || value > 10) {
+                    markFieldAsInvalid(this);
+                } else {
+                    markFieldAsValid(this);
+                }
+            });
+
+            placesInput.addEventListener('change', function() {
+                const value = parseInt(this.value);
+                if (!isNaN(value) && value >= 1 && value <= 10) {
+                    markFieldAsValid(this);
+                }
+            });
+        }
+
+        // Number fields validation
+        if (depNum) {
+            depNum.addEventListener('input', function() {
+                if (this.value === '' || (!isNaN(parseInt(this.value)) && parseInt(this.value) >= 0)) {
+                    markFieldAsValid(this);
+                }
+            });
+        }
+
+        if (arrNum) {
+            arrNum.addEventListener('input', function() {
+                if (this.value === '' || (!isNaN(parseInt(this.value)) && parseInt(this.value) >= 0)) {
+                    markFieldAsValid(this);
+                }
+            });
+        }
+
+        if (priceInput) {
+            priceInput.addEventListener('input', function() {
+                if (this.value === '' || (!isNaN(parseFloat(this.value)) && parseFloat(this.value) >= 0)) {
+                    markFieldAsValid(this);
+                }
+            });
+        }
     }
 });

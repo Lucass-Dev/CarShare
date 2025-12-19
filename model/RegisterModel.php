@@ -31,9 +31,38 @@ class RegisterModel {
         }
     }
 
+<<<<<<< Updated upstream
     public function emailExists($email) {
         $stmt = $this->db->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->execute([$email]);
         return $stmt->fetch() !== false;
+=======
+    public function send_form($values): array {
+        $str = "INSERT INTO users(first_name, last_name, email, password_hash, is_admin, is_verified_user, car_brand, car_model, car_plate, car_is_verified, created_at, global_rating)
+                VALUES (:first_name, :last_name, :mail, :password_hash, 0, 0, NULL, NULL, NULL, 0, NOW(), 5)";
+        try {
+            $db = Database::$db;
+            $stmt = $db->prepare($str);
+            if ($this->user_exists($values["mail"])) {
+                return ["message" => "Un utilisateur avec cet email existe déjà. S'il s'agit de vous, veuillez vous connecter ou en choisir un autre.", "success" => "false"];
+            }
+            if ($values["pass"] !== $values["confirm_pass"]) {
+                return ["message" =>"Attention, les mots de passes ne corespondent pas.", "success" => "false"];
+            }
+            if (strlen($values["pass"]) < 12) {
+                return ["message" =>"Le mot de passe doit contenir au minimum 12 caractères.", "success" => "false"];
+            }
+            $stmt->execute([
+                ":first_name"=> $values["first_name"],
+                ":last_name"=> $values["last_name"],
+                ":mail"=> $values["mail"],
+                ":password_hash"=> hash("sha256", $values["pass"]),
+
+            ]);
+            return ["message"=> "Compte créé avec succès","success"=> "true"];
+        } catch (\Throwable $th) {
+            return ["message" => $th->getMessage(), "success" => false];
+        }
+>>>>>>> Stashed changes
     }
 }

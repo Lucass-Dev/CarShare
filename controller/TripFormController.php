@@ -26,7 +26,9 @@ class TripFormController
         $error = $_GET['error'] ?? null;
         $success = $_GET['success'] ?? null;
 
-        require __DIR__ . '/../view/TripFormView.php';
+        // Use TripView to display the form
+        require_once __DIR__ . '/../view/TripView.php';
+        TripView::display_publish_form();
     }
 
     public function submit(): void

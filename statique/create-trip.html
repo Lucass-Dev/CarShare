@@ -5,28 +5,30 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>CarShare — Publier un nouveau trajet</title>
   <link rel="stylesheet" href="../assets/styles/create-trip.css">
+  <link rel="stylesheet" href="../assets/styles/header.css">
 </head>
 <body class="page page--create">
-  <header class="header header--transparent">
-    <div class="header__inner container">
-      <div class="header__brand">
-        <div class="logo">
-          <svg class="logo__icon" width="44" height="28" viewBox="0 0 44 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M3 18c0-4 5-7 9-7h14l7 7" stroke="#2a6db0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="12" cy="21" r="3" fill="#2a6db0"/>
-            <circle cx="32" cy="21" r="3" fill="#2a6db0"/>
-          </svg>
-          <span class="logo__text">CarShare</span>
-        </div>
-      </div>
+  <header>
+    <div class="logo">
+      <a href="index.html" class="home-link">
+        <img src="../assets/img/carshare.png" alt="CarShare Logo">
+      </a>
+    </div>
 
-      <div class="header__actions">
-        <button class="header__btn header__btn--icon" aria-label="Recherche">
-          <span class="icon icon--search" aria-hidden="true">🔍</span>
-        </button>
-        <button class="header__btn header__btn--icon" aria-label="Compte">
-          <span class="icon icon--user" aria-hidden="true">👤</span>
-        </button>
+    <span class="site-name">CarShare</span>
+
+    <div class="header-icons">
+      <a href="searchPage.html" title="Rechercher" class="icon">🔍</a>
+      <div class="dropdown">
+        <a href="page_profil.html" class="upp">
+          <img src="../assets/img/avatar.jpg" alt="Ma photo de profile" class="icon">
+        </a>
+        <ul class="hidden">
+          <li><a href="page_profil.html">Profile</a></li>
+          <li><a href="Page_historique.html">Historique</a></li>
+          <li><a href="create-trip.html">Créer un trajet</a></li>
+          <li><a href="connexion.html">Se déconnecter</a></li>
+        </ul>
       </div>
     </div>
   </header>
@@ -108,12 +110,13 @@
     </div>
   </section>
 
-  <footer class="footer">
-    <div class="footer__inner container">
-      <div class="footer__item">HexTech ®</div>
-      <div class="footer__item">CGU</div>
-      <div class="footer__item">Informations légales</div>
-      <div class="footer__item">Tout droits réservés</div>
+  <footer>
+    <div class="footer-container">
+        <div>HexTech ®</div>
+        <div>CGU</div>
+        <div>Informations légales</div>
+        <div>Tous droits réservés</div>
+        <div><a href="FAQ.html">FAQ</a></div>
     </div>
   </footer>
 </body>

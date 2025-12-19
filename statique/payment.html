@@ -6,104 +6,34 @@
   <title>Paiement - CarShare</title>
   <link href="../assets/styles/header.css" rel="stylesheet">
   <link href="../assets/styles/footer.css" rel="stylesheet">
-
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      background-color: #fff;
-      color: #0b0b0b;
-    }
-
-    main {
-      text-align: center;
-      margin-top: 40px;
-    }
-
-    h1 {
-      font-size: 24px;
-      font-weight: 600;
-    }
-
-    .card {
-      border: 1px solid #b6b6b6;
-      border-radius: 20px;
-      padding: 30px 50px;
-      width: 550px;
-      margin: 40px auto;
-      text-align: left;
-    }
-
-    .section-title {
-      font-weight: 600;
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-
-    .payment-info table {
-      width: 100%;
-      font-size: 15px;
-      margin-bottom: 20px;
-    }
-
-    .payment-info td {
-      padding: 6px 0;
-    }
-
-    .total-price {
-      font-size: 20px;
-      font-weight: 600;
-      margin-top: 15px;
-      border-top: 1px solid #000;
-      padding-top: 15px;
-      text-align: right;
-    }
-
-    .payment-form div {
-      margin-bottom: 12px;
-    }
-
-    .payment-form label {
-      font-weight: 500;
-    }
-
-    .payment-form input {
-      width: 100%;
-      padding: 8px;
-      border-radius: 8px;
-      border: 1px solid #b6b6b6;
-    }
-
-    .btn-payer {
-      background-color: #b6c8ff;
-      border: none;
-      border-radius: 15px;
-      padding: 10px 25px;
-      cursor: pointer;
-      font-weight: 500;
-      width: 100%;
-      margin-top: 15px;
-    }
-
-    .details-resume {
-      margin-top: 10px;
-      font-size: 14px;
-    }
-  </style>
+  <link href="../assets/styles/trip_payment.css" rel="stylesheet">
 </head>
 
 <body>
 
 <header>
-    <div class="logo">
-        <a href="./index.html"><img src="../assets/img/photo_hextech.jpeg" alt="CarShare Logo"></a>
-        CarShare
-    </div>
+  <div class="logo">
+    <a href="index.html" class="home-link">
+      <img src="../assets/img/carshare.png" alt="CarShare Logo">
+    </a>
+  </div>
 
-    <div class="header-icons">
-        <a href="/search" title="Rechercher">🔍</a>
-        <a href="./connexion.html" title="Mon compte">👤</a>
+  <span class="site-name">CarShare</span>
+
+  <div class="header-icons">
+    <a href="searchPage.html" title="Rechercher" class="icon">🔍</a>
+    <div class="dropdown">
+      <a href="page_profil.html" class="upp">
+        <img src="../assets/img/avatar.jpg" alt="Ma photo de profile" class="icon">
+      </a>
+      <ul class="hidden">
+        <li><a href="page_profil.html">Profile</a></li>
+        <li><a href="Page_historique.html">Historique</a></li>
+        <li><a href="create-trip.html">Créer un trajet</a></li>
+        <li><a href="connexion.html">Se déconnecter</a></li>
+      </ul>
     </div>
+  </div>
 </header>
 
 <main>
@@ -168,7 +98,7 @@
       <div>CGU</div>
       <div>Informations légales</div>
       <div>Tous droits réservés</div>
-      <div><a href="./FAQ.html">FAQ</a></div>
+      <div><a href="FAQ.html">FAQ</a></div>
   </div>
 </footer>
 

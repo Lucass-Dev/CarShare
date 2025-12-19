@@ -5,17 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CarShare — Signaler un utilisateur</title>
     <link rel="stylesheet" href="../assets/styles/report-user.css">
+    <link rel="stylesheet" href="../assets/styles/header.css">
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="/assets/img/photo_hextech.jpeg" alt="CarShare Logo">
-            CarShare
+            <a href="index.html" class="home-link">
+                <img src="../assets/img/carshare.png" alt="CarShare Logo">
+            </a>
         </div>
 
+        <span class="site-name">CarShare</span>
+
         <div class="header-icons">
-            <a href="/search" title="Rechercher">🔍</a>
-            <a href="/login" title="Mon compte">👤</a>
+            <a href="searchPage.html" title="Rechercher" class="icon">🔍</a>
+            <div class="dropdown">
+                <a href="page_profil.html" class="upp">
+                    <img src="../assets/img/avatar.jpg" alt="Ma photo de profile" class="icon">
+                </a>
+                <ul class="hidden">
+                    <li><a href="page_profil.html">Profile</a></li>
+                    <li><a href="Page_historique.html">Historique</a></li>
+                    <li><a href="create-trip.html">Créer un trajet</a></li>
+                    <li><a href="connexion.html">Se déconnecter</a></li>
+                </ul>
+            </div>
         </div>
     </header>
 
@@ -94,6 +108,7 @@
             <div>CGU</div>
             <div>Informations légales</div>
             <div>Tous droits réservés</div>
+            <div><a href="FAQ.html">FAQ</a></div>
         </div>
     </footer>
 

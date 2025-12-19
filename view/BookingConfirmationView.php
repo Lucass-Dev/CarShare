@@ -17,7 +17,7 @@
             min-height: 80vh;
             padding: 60px 20px;
             display: flex;
-            flex-direction: column;
+            flex-direction: column;            http://localhost/CarShare/index.php?controller=booking&action=history
             align-items: center;
         }
 

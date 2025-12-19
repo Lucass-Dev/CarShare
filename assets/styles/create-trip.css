@@ -12,23 +12,13 @@
   --border: #cfddeb;
 }
 
-/* Reset & base */
-* { box-sizing: border-box; margin:0; padding:0; }
-html,body { height:100%; }
-body {
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  color:var(--text);
-  background:#fff;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
-
 /* Layout helper */
 .container {
   width: min(1200px, 92%);
   margin: 0 auto;
 }
 
+<<<<<<< Updated upstream
 /* Header (shared) */
 .header {
   background: var(--blue-50);
@@ -85,6 +75,8 @@ body {
   color:var(--muted);
 }
 
+=======
+>>>>>>> Stashed changes
 /* Hero & form (create-trip) */
 .page--create .hero {
   min-height:520px;
@@ -95,16 +87,83 @@ body {
   display:flex;
   align-items:center;
   justify-content:center;
+  padding: 40px 20px 40px 20px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+  }
+
+  .page--create .hero {
+    min-height: 400px;
+    padding: 30px 15px;
+  }
+
+  .hero__overlay {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .hero__title {
+    font-size: 22px;
+  }
+
+  .form__row {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .form__group {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .page--create .hero {
+    min-height: 350px;
+    padding: 20px 10px;
+  }
+
+  .hero__overlay {
+    padding: 15px;
+  }
+
+  .hero__title {
+    font-size: 18px;
+  }
+
+  .form__label {
+    font-size: 13px;
+  }
+
+  .form__input {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .btn {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
 }
 
 /* overlay to produce glass effect and center form */
 .hero__overlay {
-  width:min(1100px,94%);
-  background: linear-gradient(rgba(255,255,255,0.86), rgba(255,255,255,0.86));
+  width:min(900px, 95%);
+  max-width: 900px;
+  background: linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.92));
   padding:36px 44px;
+<<<<<<< Updated upstream
   border-radius:6px;
   box-shadow: var /*(--shadow)*/ none;
+=======
+  border-radius:12px;
+  box-shadow: var(--shadow);
+>>>>>>> Stashed changes
   text-align:center;
+  margin: 0 auto;
 }
 
 /*.hero__title {
@@ -151,7 +210,13 @@ body {
 .options__item { display:block; font-size:14px; color:var(--text); margin-bottom:6px; }
 
 /* Publish button area aligns to right like in reference */
-.trip-form__actions { display:flex; align-items:center; justify-content:flex-end; width:420px; }
+.trip-form__actions { 
+  display:flex; 
+  align-items:center; 
+  justify-content:center; 
+  width:100%; 
+  margin-top: 20px;
+}
 
 .btn {
   border:1px solid var(--blue-500);
@@ -173,8 +238,23 @@ body {
 @media (max-width:900px){
   .trip-form__row { flex-direction:column; align-items:stretch; }
   .form__group--small { flex:auto; }
-  .trip-form__actions { width:100%; justify-content:flex-end; margin-top:6px; }
+  .trip-form__actions { width:100%; justify-content:center; margin-top:20px; }
   .hero__title { font-size:24px; }
+  .hero__overlay { 
+    width: 95%; 
+    padding: 24px 20px;
+  }
+  .page--create .hero {
+    padding: 100px 10px 40px 10px;
+  }
+}
+
+@media (max-width:600px){
+  .hero__overlay { 
+    padding: 20px 16px;
+  }
+  .trip-form__row { gap: 12px; }
+  .hero__title { font-size: 20px; margin-bottom: 16px; }
 }
 
 /* small niceties */

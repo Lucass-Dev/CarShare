@@ -32,6 +32,7 @@ $action = $_GET['action'] ?? 'home';
     <link rel="stylesheet" href="/CarShare/assets/styles/searchPage.css">
     
     <?php
+<<<<<<< Updated upstream
     // Load page-specific CSS based on action
     $pageCss = [
         'create_trip' => 'create-trip.css',
@@ -45,6 +46,170 @@ $action = $_GET['action'] ?? 'home';
     if (isset($pageCss[$action])) {
         echo '<link rel="stylesheet" href="/CarShare/assets/styles/' . $pageCss[$action] . '">';
     }
+=======
+        // Routage avec support de ?controller=... et ?action=...
+        $controllerParam = $_GET["controller"] ?? null;
+        $actionParam = $_GET["action"] ?? null;
+        
+        // Si controller est défini, on route selon controller + action
+        if ($controllerParam) {
+            switch ($controllerParam) {
+                case "booking":
+                    $controller = new BookingController();
+                    if ($actionParam === "history") {
+                        $controller->history();
+                    } else {
+                        http_response_code(404);
+                        echo "Page non trouvée";
+                    }
+                    break;
+                case "trip":
+                    $controller = new TripController();
+                    $controller->render();
+                    break;
+                case "user":
+                    $controller = new UserController();
+                    $controller->index();
+                    break;
+                case "login":
+                    $controller = new LoginController();
+                    $controller->render();
+                    break;
+                case "register":
+                    $controller = new RegisterController();
+                    $controller->render();
+                    break;
+                case "mp":
+                    $controller = new MPController();
+                    $controller->render();
+                    break;
+                case "profile":
+                    $controller = new ProfileController();
+                    $controller->render();
+                    break;
+                default:
+                    http_response_code(404);
+                    echo "Page non trouvée";
+                    break;
+            }
+        } else {
+            // Fallback sur l'ancien système ?action=...
+            $controller = $actionParam ?? "home";
+
+        switch ($controller) {
+            case "home":
+                $controller = new HomeController();
+                $controller->render();
+                break;
+            case "user":
+                $controller = new UserController();
+                $controller->index();
+                break;
+            case "login":
+                $controller = new LoginController();
+                $controller->render();
+                break;
+            case "register":
+                $controller = new RegisterController();
+                $controller->render();
+                break;
+            case "profile":
+                $controller = new ProfileController();
+                $controller->render();
+                break;
+            case "trip":
+                $controller = new TripController();
+                $controller->render();
+                break;
+            case "admin":
+                $controller = new AdminController();
+                $controller->index();
+                break;
+            case "faq":
+                $controller = new FAQController();
+                $controller->index();
+                break;
+            case "cgu":
+                $controller = new CGUController();
+                $controller->index();
+                break;
+            case "legal":
+                $controller = new LegalController();
+                $controller->index();
+                break;
+            case "disconnect":
+                session_unset();
+                session_destroy();
+                header("Location: index.php");
+                break;
+            case "mp":
+                $controller = new MPController();
+                $controller->render();
+                break;
+            case "create_trip":
+                $controller = new TripFormController();
+                $controller->render();
+                break;
+            case "create_trip_submit":
+                $controller = new TripFormController();
+                $controller->submit();
+                break;
+            // --- Nouvelles routes sans impacter l'existant ---
+            case "history":
+                $controller = new BookingController();
+                $controller->history();
+                break;
+            case "rating":
+                $controller = new RatingController();
+                // Méthode d'affichage du formulaire
+                if (method_exists($controller, 'render')) {
+                    $controller->render();
+                } else if (method_exists($controller, 'index')) {
+                    $controller->index();
+                }
+                break;
+            case "rating_submit":
+                $controller = new RatingController();
+                $controller->submit();
+                break;
+            case "rating_get_carpoolings":
+                $controller = new RatingController();
+                // API JSON pour récupérer les trajets d'un utilisateur
+                if (method_exists($controller, 'getCarpoolings')) {
+                    $controller->getCarpoolings();
+                } else if (method_exists($controller, 'getUserCarpoolings')) {
+                    $controller->getUserCarpoolings();
+                }
+                break;
+            case "signalement":
+                $controller = new SignalementController();
+                if (method_exists($controller, 'render')) {
+                    $controller->render();
+                } else if (method_exists($controller, 'index')) {
+                    $controller->index();
+                }
+                break;
+            case "signalement_submit":
+                $controller = new SignalementController();
+                $controller->submit();
+                break;
+            case "signalement_get_carpoolings":
+                $controller = new SignalementController();
+                if (method_exists($controller, 'getCarpoolings')) {
+                    $controller->getCarpoolings();
+                } else if (method_exists($controller, 'getUserCarpoolings')) {
+                    $controller->getUserCarpoolings();
+                }
+                break;
+            default:
+                http_response_code(404);
+                echo "Page non trouvée";
+                break;
+            }
+        }
+
+
+>>>>>>> Stashed changes
     ?>
 </head>
 
