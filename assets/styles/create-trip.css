@@ -1,84 +1,6 @@
-:root{
-  --blue-50: #eef4ff;
-  --blue-100: #e3eeff;
-  --blue-500: #6f9fe6;
-  --accent: #7fa7f4;
-  --text: #1f2a37;
-  --muted: #6b7280;
-  --white: #ffffff;
-  --glass: rgba(255,255,255,0.85);
-  --glass-strong: rgba(255,255,255,0.95);
-  --shadow: 0 6px 24px rgba(35,60,90,0.08);
-  --border: #cfddeb;
-}
 
-/* Reset & base */
-* { box-sizing: border-box; margin:0; padding:0; }
-html,body { height:100%; }
-body {
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  color:var(--text);
-  background:#fff;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
-
-/* Layout helper */
-.container {
-  width: min(1200px, 92%);
-  margin: 0 auto;
-}
-
-/* Header (shared) */
-.header {
-  background: var(--blue-50);
-  border-bottom: 3px solid #2a6db0;
-  padding: 14px 0;
-  position: sticky;
-  top: 0;
-  z-index: 30;
-}
-.header__inner {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-.logo {
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-.logo__text {
-  font-weight:700;
-  color:#1f3b64;
-  font-size:20px;
-}
-.header__actions { display:flex; gap:8px; align-items:center; }
-.header__btn--icon {
-  width:36px; height:36px;
-  display:flex; align-items:center; justify-content:center;
-  background:rgba(111,159,230,0.12);
-}
-.header--transparent { background: transparent; border-bottom:0; margin-top:8px; }
-
-/* Footer (shared) */
-.footer {
-  background: var(--blue-50);
-  border-top:1px solid var(--border);
-  padding:18px 0;
-  margin-top:48px;
-}
-.footer__inner {
-  display:flex;
-  justify-content:space-between;
-  gap:8px;
-  font-size:13px;
-  color:var(--muted);
-}
-
-/* Hero & form (create-trip) */
 .page--create .hero {
-  min-height:520px;
+  min-height:100%;
   background-image: url('../images/bg-road.jpg');
   background-size:cover;
   background-position:center;
@@ -90,7 +12,6 @@ body {
 
 /* overlay to produce glass effect and center form */
 .hero__overlay {
-  width:min(1100px,94%);
   background: linear-gradient(rgba(255,255,255,0.86), rgba(255,255,255,0.86));
   padding:36px 44px;
   border-radius:6px;

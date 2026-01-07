@@ -60,13 +60,3 @@ button {
   background-color: #a3b8ec;
   color: #000;
 }
-
-/* --- Footer --- */
-footer {
-  background-color: #e9f0ff;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px;
-  border-top: 1px solid #ccc;
-  font-size: 14px;
-}

@@ -38,14 +38,6 @@
   font-size: 18px;
 }
 
-/* --- Main --- */
-main {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .login-box {
   border: 1px solid #ccc;
   border-radius: 15px;
@@ -89,14 +81,4 @@ button {
 .secondary {
   background-color: #c7d7f5;
   color: #000;
-}
-
-/* --- Footer --- */
-footer {
-  background-color: #e9f0ff;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px;
-  border-top: 1px solid #ccc;
-  font-size: 14px;
 }

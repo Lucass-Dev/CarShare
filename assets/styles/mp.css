@@ -9,8 +9,6 @@
 .mp-page-container{
     display: flex;
     flex-direction: row;
-    max-height: calc(100vh - var(--header-height));
-    z-index: -1;
     overflow: hidden;
 }
 
@@ -26,7 +24,7 @@
     width: calc(100% - var(--resume-width));
     display: flex;
     flex-direction: column;
-    height: calc(100vh - var(--header-height) - var(--input-bottom));
+    height: 80vh;
     position: relative;
 
     scroll-behavior: smooth;
@@ -66,13 +64,11 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding-bottom: calc(var(--input-bottom) + 20px); /* espace pour la barre d'input fixe */
     background: #fafafa;
     overflow-y: scroll;
     padding-left: 3vh;
     padding-top: 3vh;
     padding-right: 3vh;
-    padding-bottom: 10vh;
 }
 
 .no-selection{
@@ -85,7 +81,6 @@
     max-width: 60%;
     width: fit-content;
     padding: 0.75rem 1rem;
-    margin: 0.25rem 0;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -129,21 +124,12 @@
     left: var(--resume-width);
     right: 0;
     display: flex;
-    gap: 10px;
     padding: 12px 20px;
     background: #fff;
     border-top: 1px solid #e6e6e6;
     box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
     z-index: 100;
     align-items: center;
-}
-
-/* responsive: si pas de colonne resume, ou écran petit, input full width */
-@media (max-width: 900px) {
-    :root{ --resume-width: 0px; }
-    .mp-resume-container{ display: none; }
-    .mp-window-container{ width: 100%; }
-    .message-input-form{ left: 0; padding-left: 12px; padding-right: 12px; }
 }
 
 .message-input-form input {

@@ -93,6 +93,9 @@
     min-height: 100%;
 }
 
+.ui-datepicker-calendar {
+   display: none;
+}
 
 .profile-card{
     width:35vw;
@@ -146,4 +149,8 @@
     color:white;
     cursor:pointer;
     float:right;
+}
+
+.car-success{
+    color: green;
 }

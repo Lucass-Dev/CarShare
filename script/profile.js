@@ -28,6 +28,25 @@ async function check_update_profile_values() {
     
 }
 
+async function check_update_car_values() {
+    let form = document.getElementById("update-car-form");
+
+    let carBrandInput = document.getElementById('car_brand');
+    let carModelInput = document.getElementById('car_model');
+    let carYearInput = document.getElementById('car_year');
+    let carCritAirInput = document.getElementById('car_crit_air');
+    let carPlateInput = document.getElementById('car_plate');
+
+    carBrandInput.value = sanitize(carBrandInput.value)
+    carModelInput.value = sanitize(carModelInput.value)
+    carYearInput.value = sanitize(carYearInput.value)
+    carCritAirInput.value = sanitize(carCritAirInput.value)
+    carPlateInput.value = sanitize(carPlateInput.value)
+
+    form.submit()
+    
+}
+
 function sanitize(str) {
         return str.trim()
                   .replace(/</g, "&lt;")

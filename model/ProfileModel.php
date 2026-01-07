@@ -46,10 +46,10 @@ class ProfileModel {
         }
     }
 
-    public function updateVehicle($userId, $data) {
-        $stmt = $this->db->prepare("
+    static public function updateVehicle($userId, $data) {
+        $stmt = Database::getDb()->prepare("
             UPDATE users 
-            SET car_brand = ?, car_model = ?, car_plate = ?
+            SET car_brand = ?, car_model = ?, car_plate = ?, car_year = ?, car_crit_air = ?
             WHERE id = ?
         ");
         
@@ -58,6 +58,8 @@ class ProfileModel {
                 $data['car_brand'],
                 $data['car_model'],
                 $data['car_plate'],
+                $data['car_year'],
+                $data['car_crit_air'],
                 $userId
             ]);
             return true;
