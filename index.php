@@ -79,7 +79,7 @@
                 break;
             case "profile":
                 $controller = new ProfileController();
-                $controller->index();
+                $controller->render();
                 break;
             case "trip":
                 $controller = new TripController();
@@ -91,7 +91,7 @@
                 break;
             case "faq":
                 $controller = new FAQController();
-                $controller->index();
+                $controller->render();
                 break;
             case "disconnect":
                 session_unset();
@@ -117,4 +117,5 @@
         ?>
 </body>
 <script src="./script/searchPage.js"></script>
+<script src="./script/profile.js"></script>
 </html>
