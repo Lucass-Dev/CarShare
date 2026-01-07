@@ -118,4 +118,5 @@
 </body>
 <script src="./script/searchPage.js"></script>
 <script src="./script/profile.js"></script>
+<script src="./script/create-trip.js"></script>
 </html>

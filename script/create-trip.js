@@ -1,5 +1,5 @@
 // Client-side validation for create-trip form
-document.addEventListener('DOMContentLoaded', function() {
+async function createTrip() {
     const form = document.querySelector('.trip-form');
     
     if (!form) return;
@@ -179,4 +179,4 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-});
+}

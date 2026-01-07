@@ -129,33 +129,51 @@ class ProfileView{
             <button class="btn" type="button" id="profile-button" onclick="check_update_profile_values()">
                 Modifier
             </button>
+            <?php
+                    if (isset($_GET["profile_update"]) && $_GET["profile_update"]=="1") {
+                        ?>
+                        <div class="car-success">
+                            <span>Profile mis à jour !</span>
+                        </div>
+                        <?php
+                    }
+                ?>
         </form>
-        <form class="profile-card" method="POST">
+        <form class="profile-card" id="update-car-form" method="POST" action="index.php?controller=profile&action=update_car">
             <h2>Mon véhicule</h2>
 
             <div class="profile-top" action="index.php?controller=profile&action=update_vehicle">
                 <div class="profile-top-left">
                     <label class="profile-label">Marque</label>
-                    <input class="profile-input" type="text" value="<?php echo $user->car_brand?>" name="car_brand">
+                    <input class="profile-input" type="text" value="<?php echo $user->car_brand?>" name="car_brand" id="car_brand">
 
                     <label class="profile-label">Modèle</label>
-                    <input class="profile-input" type="text" value="<?php echo $user->car_model?>" name="car_model">
+                    <input class="profile-input" type="text" value="<?php echo $user->car_model?>" name="car_model" id="car_model">
                 </div>
 
                 <div class="profile-top-right">
                     <label class="profile-label">Année</label>
-                    <input class="profile-input" type="text" value="<?php echo $user->car_year?>" name="car_year">
+                    <input class="profile-input" type="number" min="1900" max="2026" step="1" value="<?php echo $user->car_year?>" name="car_year" id="car_year">
 
                     <label class="profile-label">Crit'Air</label>
-                    <input class="profile-input" type="text" value="<?php echo $user->car_crit_air?>" name="car_crit_air">
+                    <input class="profile-input" type="number" type="number" min="1" max="5" step="1" value="<?php echo $user->car_crit_air?>" name="car_crit_air" id="car_crit_air">
                 </div>
             </div>
                 <label class="profile-label">Plaque d'immatriculation</label>
-                <input class="profile-input" type="text" value="<?php echo $user->car_plate?>" name="car_plate">
+                <input class="profile-input" type="text" value="<?php echo $user->car_plate?>" name="car_plate" id="car_plate" >
 
-                <button type="submit" class="btn">
+                <button class="btn" type="button" id="car-button" onclick="check_update_car_values()">
                     Modifier
                 </button>
+                <?php
+                    if (isset($_GET["car_update"]) && $_GET["car_update"]=="1") {
+                        ?>
+                        <div class="car-success">
+                            <span>Véhicule mis à jour !</span>
+                        </div>
+                        <?php
+                    }
+                ?>
             </div>
     </form>
         <?php

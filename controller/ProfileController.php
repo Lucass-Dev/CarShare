@@ -38,7 +38,19 @@ class ProfileController {
                    <?php
                 }
                 sleep(2);
-                header('Location: index.php?controller=profile&action=show');
+                header('Location: index.php?controller=profile&action=show&profile_update=1');
+            case "update_car":
+                if (!ProfileModel::updateVehicle($_SESSION['user_id'], $_POST)) {
+                   ?>
+                   <span>Une erreur est survenue, veuillez réessayer plus tard. Si le problème persiste, contactez le support.</span>
+                   <?php
+                }else{
+                    ?>
+                   <span>Mise à jour du profil avec succès, redirection dans 5 secondes...</span>
+                   <?php
+                }
+                sleep(2);
+                header('Location: index.php?controller=profile&action=show&car_update=1');
             default:
                 # code...
                 break;
