@@ -112,7 +112,7 @@
   <div class="faq-item">
     <input type="checkbox" id="faq2" class="faq-toggle">
     <label for="faq2" class="faq-question">Faut-il créer un compte pour utiliser CarShare ? <span class="faq-icon">+</span></label>
-    <div class="faq-answer">Oui, un compte est nécessaire pour proposer ou réserver un trajet.</div>
+    <div class="faq-answer">Oui, un compte est nécessaire pour proposer ou réserver un trajet. Cependant, vous pouvez visiter le site sans avoir de compte.</div>
   </div>
 
   <div class="faq-item">
@@ -124,13 +124,13 @@
   <div class="faq-item">
     <input type="checkbox" id="faq4" class="faq-toggle">
     <label for="faq4" class="faq-question">Comment contacter un conducteur ou un passager ? <span class="faq-icon">+</span></label>
-    <div class="faq-answer">Une messagerie interne est disponible après la réservation.</div>
+    <div class="faq-answer">Une messagerie interne est disponible après la réservation, facilitant les échanges pour préparer le trajet.</div>
   </div>
 
   <div class="faq-item">
     <input type="checkbox" id="faq5" class="faq-toggle">
     <label for="faq5" class="faq-question">Puis-je voyager avec des bagages ? <span class="faq-icon">+</span></label>
-    <div class="faq-answer">Oui, mais il est conseillé de prévenir le conducteur pour vérifier la place disponible.</div>
+    <div class="faq-answer">Oui, mais il est conseillé de prévenir le conducteur pour vérifier la place disponible. Le nombre de bagages autorisés sera renseigné par le conducteur lors de la publication de son trajet.</div>
   </div>
 
   <h2>Réservations et trajets</h2>
@@ -138,20 +138,15 @@
   <div class="faq-item">
     <input type="checkbox" id="faq6" class="faq-toggle">
     <label for="faq6" class="faq-question">Comment réserver une place ? <span class="faq-icon">+</span></label>
-    <div class="faq-answer">Cherchez un trajet, cliquez sur "Réserver" et validez le paiement sécurisé.</div>
+    <div class="faq-answer">Cherchez un trajet, sélectionnez le trajet qui vous intéresse et cliquez sur "Réserver", puisvalidez le paiement sécurisé. Vous recevrez ensuite une confirmation de réservation.</div>
   </div>
 
   <div class="faq-item">
     <input type="checkbox" id="faq7" class="faq-toggle">
     <label for="faq7" class="faq-question">Comment proposer un trajet ? <span class="faq-icon">+</span></label>
-    <div class="faq-answer">Rendez-vous dans "Publier un trajet", puis entrez votre itinéraire, date, prix, nombre de places disponibles et détails (optionnel).</div>
+    <div class="faq-answer">Le bouton "Publier un trajet" se situe en haut de votre écran, cliquez dessus puis renseignez votre itinéraire, date, prix, nombre de places disponibles et détails (optionnel).</div>
   </div>
 
-  <div class="faq-item">
-    <input type="checkbox" id="faq8" class="faq-toggle">
-    <label for="faq8" class="faq-question">Comment annuler une réservation ? <span class="faq-icon">+</span></label>
-    <div class="faq-answer">L'annulation est possible depuis votre profil, jusqu'à 24h avant le départ.</div>
-  </div>
 
   <div class="faq-item">
     <input type="checkbox" id="faq9" class="faq-toggle">
@@ -164,19 +159,19 @@
   <div class="faq-item">
     <input type="checkbox" id="faq10" class="faq-toggle">
     <label for="faq10" class="faq-question">CarShare est-il sécurisé ? <span class="faq-icon">+</span></label>
-    <div class="faq-answer">Oui, les profils sont vérifiés et les avis utilisateurs garantissent la fiabilité.</div>
+    <div class="faq-answer">Oui, les profils conducteurs sont vérifiés et les avis utilisateurs garantissent la fiabilité.</div>
   </div>
 
   <div class="faq-item">
     <input type="checkbox" id="faq11" class="faq-toggle">
     <label for="faq11" class="faq-question">Comment signaler un comportement inapproprié ? <span class="faq-icon">+</span></label>
-    <div class="faq-answer">Utilisez le bouton "Signaler" ou contactez notre support.</div>
+    <div class="faq-answer">Utilisez le bouton "Signaler" sur le profil de l'utilisateur ou le trajet que vous souhaitez signaler. Cette option n'est disponible qu'une fois le trajet effectué.</div>
   </div>
 
   <div class="faq-item">
     <input type="checkbox" id="faq12" class="faq-toggle">
     <label for="faq12" class="faq-question">Les paiements sont-ils sécurisés ? <span class="faq-icon">+</span></label>
-    <div class="faq-answer">Oui, toutes les transactions passent par un système de paiement certifié.</div>
+    <div class="faq-answer">Oui, toutes les transactions passent par un système de paiement certifié et simple d'utilisation</div>
   </div>
 
   <h2>Compte et assistance</h2>
@@ -196,7 +191,7 @@
   <div class="faq-item">
     <input type="checkbox" id="faq15" class="faq-toggle">
     <label for="faq15" class="faq-question">Comment contacter le support CarShare ? <span class="faq-icon">+</span></label>
-    <div class="faq-answer">Via la page "Contact" ou directement depuis la section "Aide".</div>
+    <div class="faq-answer">Depuis la page "Qui sommes-nous?" disponible en fin de chaque page du site CarShare. Vous y trouverez notre contact.</div>
   </div>
 
 </main>
