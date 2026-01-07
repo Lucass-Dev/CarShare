@@ -2,7 +2,6 @@
 header {
     display: flex;
     justify-content: space-between;
-    padding: 0.5rem;
     align-items: center;
     background-color: #eef3fb;
     border-bottom: 1px solid #ccc;
@@ -72,6 +71,7 @@ header {
     list-style: none;
     font-size: 1rem;
     padding: 0;
+    margin-top: 7vh;
 }
 
 .dropdown ul {

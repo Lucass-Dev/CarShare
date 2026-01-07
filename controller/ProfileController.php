@@ -1,12 +1,8 @@
 <?php
-require_once __DIR__ . "/../model/ProfileModel.php";
 
 class ProfileController {
     
     public function render() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
         
         // Check if user is logged in
         if (!isset($_SESSION['user_id'])) {
@@ -14,53 +10,39 @@ class ProfileController {
             exit();
         }
 
-        $model = new ProfileModel();
-        $user = $model->getUserProfile($_SESSION['user_id']);
-        $error = null;
-        $success = null;
+        $action = "show";
+        if (isset($_GET["action"])) {
+            $action = $_GET["action"];
+        }
+        
+        
 
-        // Handle profile update
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (isset($_POST['update_profile'])) {
-                $data = [
-                    'first_name' => $_POST['first_name'] ?? '',
-                    'last_name' => $_POST['last_name'] ?? '',
-                    'email' => $_POST['email'] ?? ''
-                ];
-                
-                if ($model->updateUserProfile($_SESSION['user_id'], $data)) {
-                    $success = "Profil mis à jour avec succès";
-                    $user = $model->getUserProfile($_SESSION['user_id']);
-                    $_SESSION['user_email'] = $user['email'];
-                    $_SESSION['user_name'] = $user['first_name'] . ' ' . $user['last_name'];
-                } else {
-                    $error = "Erreur lors de la mise à jour du profil";
+        $user = UserModel::getUserById($_SESSION['user_id']);
+
+        switch ($action) {
+            case 'history':
+                $history = UserModel::getUserHistory($user->id);
+                ProfileView::displayHistory($history);
+                break;
+            case "show":
+                ProfileView::displayProfile($user);
+                break;
+            case "update_user":
+                if (!UserModel::updateUser($_POST)) {
+                   ?>
+                   <span>Une erreur est survenue, veuillez réessayer plus tard. Si le problème persiste, contactez le support.</span>
+                   <?php
+                }else{
+                    ?>
+                   <span>Mise à jour du profil avec succès, redirection dans 5 secondes...</span>
+                   <?php
                 }
-            } elseif (isset($_POST['update_vehicle'])) {
-                $data = [
-                    'car_brand' => $_POST['car_brand'] ?? '',
-                    'car_model' => $_POST['car_model'] ?? '',
-                    'car_plate' => $_POST['car_plate'] ?? ''
-                ];
-                
-                if ($model->updateVehicle($_SESSION['user_id'], $data)) {
-                    $success = "Véhicule mis à jour avec succès";
-                    $user = $model->getUserProfile($_SESSION['user_id']);
-                } else {
-                    $error = "Erreur lors de la mise à jour du véhicule";
-                }
-            }
+                sleep(2);
+                header('Location: index.php?controller=profile&action=show');
+            default:
+                # code...
+                break;
         }
 
-        require __DIR__ . "/../view/ProfileView.php";
-    }
-
-    public function logout() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        session_destroy();
-        header('Location: /CarShare/index.php?action=home');
-        exit();
     }
 }

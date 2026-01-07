@@ -18,7 +18,7 @@
                 if (isset($_SESSION['logged']) && $_SESSION['logged'] !=='') {
                     ?>
                     <ul class="hidden">
-                        <li><a href="?controller=profile">Profile</a></li>
+                        <li><a href="?controller=profile&action=show">Profile</a></li>
                         <li><a href="?controller=mp">Messages</a></li>
                         <li><a href="?controller=disconnect">Se déconnecter</a></li>
                     </ul>

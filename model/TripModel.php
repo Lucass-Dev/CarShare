@@ -128,7 +128,6 @@ class TripModel {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
-
     public static function getAllCarpoolings() : array{
         $arResults = array();
         $db = Database::getDb();
