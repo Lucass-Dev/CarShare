@@ -21,6 +21,19 @@ $action = $_GET['action'] ?? 'view';
     <link rel="stylesheet" href="/CarShare/assets/styles/header.css">
     <link rel="stylesheet" href="/CarShare/assets/styles/footer.css">
     <link rel="stylesheet" href="/CarShare/assets/styles/create-trip.css">
+    <style>
+        body.page--create {
+            padding-top: 8vh;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        body.page--create main {
+            flex: 1;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body class="page page--create">

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test - Système de Notation Moderne</title>
+    <link rel="stylesheet" href="/CarShare/assets/styles/modal-system.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #4f46e5;
+        }
+        h2 {
+            color: #1f2937;
+            margin-top: 30px;
+        }
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        button {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .test-rate {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+        }
+        .test-report {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+        .test-profile {
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+            color: white;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        .status {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .status.info {
+            background: #eff6ff;
+            color: #1e40af;
+        }
+        .status.success {
+            background: #f0fdf4;
+            color: #166534;
+        }
+        .status.warning {
+            background: #fffbeb;
+            color: #92400e;
+        }
+        code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-section">
+        <h1>🧪 Test - Système de Notation Moderne 2026</h1>
+        
+        <div class="status info">
+            <strong>ℹ️ Information</strong>
+            <p>Cette page teste les nouvelles fonctionnalités de notation et signalement.</p>
+            <p>Vous devez être connecté pour tester les modales de notation/signalement.</p>
+        </div>
+
+        <h2>1. Test de la Barre de Recherche</h2>
+        <p>La barre de recherche devrait apparaître dans le header ci-dessus.</p>
+        <p>Essayez de rechercher :</p>
+        <ul>
+            <li>Un nom d'utilisateur (ex: "Jean")</li>
+            <li>Une ville (ex: "Paris", "Lyon")</li>
+        </ul>
+        <div class="status info">
+            <code>Debounce: 300ms</code> | <code>API: /CarShare/api/search.php</code>
+        </div>
+
+        <h2>2. Test des Modales</h2>
+        <p>Cliquez sur les boutons ci-dessous pour tester les modales :</p>
+        
+        <div class="button-group">
+            <button class="test-rate" 
+                    data-action="rate-user" 
+                    data-user-id="1" 
+                    data-user-name="Utilisateur Test">
+                ⭐ Ouvrir Modale de Notation
+            </button>
+            
+            <button class="test-report" 
+                    data-action="report-user" 
+                    data-user-id="1" 
+                    data-user-name="Utilisateur Test">
+                ⚠️ Ouvrir Modale de Signalement
+            </button>
+        </div>
+
+        <div class="status warning" style="margin-top: 15px;">
+            <strong>⚠️ Attention</strong>
+            <p>Si les modales ne s'ouvrent pas, vérifiez que vous êtes connecté.</p>
+            <p>Les actions de notation/signalement nécessitent une authentification.</p>
+        </div>
+
+        <h2>3. Test du Profil Public</h2>
+        <p>Cliquez pour voir un profil utilisateur (accessible sans connexion) :</p>
+        
+        <div class="button-group">
+            <button class="test-profile" onclick="window.location.href='/CarShare/index.php?action=user_profile&id=1'">
+                👤 Voir Profil Utilisateur #1
+            </button>
+        </div>
+
+        <h2>4. Test de l'Historique</h2>
+        <p>Si vous êtes connecté et avez des trajets terminés, vous devriez voir :</p>
+        <ul>
+            <li>✅ Liens vers les profils des conducteurs</li>
+            <li>✅ Boutons "Noter" et "Signaler" sur trajets complétés</li>
+            <li>✅ Badge vert sur les trajets terminés</li>
+        </ul>
+        
+        <div class="button-group">
+            <button class="test-profile" onclick="window.location.href='/CarShare/index.php?action=history'">
+                📋 Aller à l'Historique
+            </button>
+            <button class="test-profile" onclick="window.location.href='/CarShare/index.php?action=home'">
+                🏠 Retour à l'Accueil
+            </button>
+        </div>
+
+        <h2>5. Vérification Technique</h2>
+        <div id="techCheck"></div>
+
+        <h2>6. Documentation</h2>
+        <p>Consultez <code>MODERN_FEATURES.md</code> pour la documentation complète.</p>
+        
+        <div class="status success">
+            <strong>✅ Fichiers créés</strong>
+            <ul style="margin: 10px 0 0 20px;">
+                <li><code>api/search.php</code> - API de recherche</li>
+                <li><code>api/rating.php</code> - API de notation</li>
+                <li><code>api/report.php</code> - API de signalement</li>
+                <li><code>assets/js/global-search.js</code> - Recherche frontend</li>
+                <li><code>assets/js/rating-report-modals.js</code> - Modales</li>
+                <li><code>assets/styles/modal-system.css</code> - Styles modales</li>
+                <li><code>assets/styles/user-profile.css</code> - Styles profil</li>
+                <li><code>controller/UserProfileController.php</code> - Contrôleur profil</li>
+                <li><code>view/UserProfileView.php</code> - Vue profil</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="/CarShare/assets/js/rating-report-modals.js"></script>
+    <script>
+        // Technical check
+        const techCheckDiv = document.getElementById('techCheck');
+        let checks = [];
+
+        // Check if global search script is loaded
+        if (typeof GlobalSearch !== 'undefined') {
+            checks.push('✅ GlobalSearch class loaded');
+        } else {
+            checks.push('❌ GlobalSearch class NOT loaded');
+        }
+
+        // Check if rating modal system is loaded
+        if (typeof RatingReportSystem !== 'undefined') {
+            checks.push('✅ RatingReportSystem class loaded');
+        } else {
+            checks.push('❌ RatingReportSystem class NOT loaded');
+        }
+
+        // Check if search input exists in header
+        const searchInput = document.getElementById('global-search');
+        if (searchInput) {
+            checks.push('✅ Search input found in header');
+        } else {
+            checks.push('❌ Search input NOT found in header');
+        }
+
+        // Display results
+        techCheckDiv.innerHTML = `
+            <div class="status ${checks.some(c => c.includes('❌')) ? 'warning' : 'success'}">
+                <ul style="margin: 0; padding-left: 20px;">
+                    ${checks.map(c => `<li>${c}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+
+        // Log API endpoints
+        console.log('%c[CarShare] API Endpoints', 'color: #4f46e5; font-weight: bold;');
+        console.log('Search API:', '/CarShare/api/search.php');
+        console.log('Rating API:', '/CarShare/api/rating.php');
+        console.log('Report API:', '/CarShare/api/report.php');
+        console.log('%c[CarShare] Modern Features Active ✅', 'color: #10b981; font-weight: bold;');
+    </script>
+</body>
+</html>

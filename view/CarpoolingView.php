@@ -1,18 +1,4 @@
-<!doctype html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>CarShare — Publier un nouveau trajet</title>
-  <link rel="stylesheet" href="/CarShare/assets/styles/create-trip.css">
-  <link href="/CarShare/assets/styles/header.css" rel="stylesheet">
-  <link href="/CarShare/assets/styles/footer.css" rel="stylesheet">
-</head>
-<body class="page page--create">
-  
-<?php require __DIR__ . "/components/header.php"; ?>
-
-  <section class="hero">
+<section class="hero">
     <div class="hero__overlay">
       <h1 class="hero__title">Publier un nouveau trajet</h1>
 
@@ -72,8 +58,3 @@
       </form>
     </div>
   </section>
-
-<?php require __DIR__ . "/components/footer.php"; ?>
-
-</body>
-</html>

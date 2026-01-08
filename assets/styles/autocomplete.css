@@ -1,0 +1,60 @@
+/* Autocomplete Dropdown Styles for City Selection */
+.form__group {
+  position: relative;
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #cfddeb;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-top: -1px;
+}
+
+.autocomplete-dropdown.active {
+  display: block;
+}
+
+.autocomplete-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.selected {
+  background: #eef4ff;
+}
+
+.autocomplete-item-name {
+  font-weight: 500;
+  color: #1f2a37;
+}
+
+.autocomplete-item-postal {
+  font-size: 12px;
+  color: #6b7280;
+  margin-left: 8px;
+}
+
+.city-autocomplete {
+  position: relative;
+}
+
+.filter-group {
+  position: relative;
+}

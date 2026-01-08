@@ -50,14 +50,15 @@
                 $requested_seats = $_GET["seats"];
             }
 
-            $this->searchPageView->display_search_bar($start_name, $start_id,$end_name, $end_id,$requested_date, $requested_hour, $requested_seats);
-
             ?> 
-                <h2>Search Results</h2>
-                <div class="search-page-container">
-
-                    <?php
-                        $this->searchPageView->display_search_filters();
+                <div class="search-page-layout">
+                    <aside class="search-sidebar">
+                        <?php $this->searchPageView->display_search_bar($start_name, $start_id,$end_name, $end_id,$requested_date, $requested_hour, $requested_seats); ?>
+                        <?php $this->searchPageView->display_search_filters(); ?>
+                    </aside>
+                    
+                    <main class="search-results">
+                        <?php
                         if (isset($_GET['action']) && $_GET['action'] === 'display_search') {
                             $filters = array();
                             if (isset($_GET['pets_allowed'])) {
@@ -93,10 +94,25 @@
                             $carpoolings = $this->searchPageModel->getCarpooling($start_id, $end_id, $requested_date, $requested_hour, $requested_seats, $filters);
                             $this->searchPageView->display_search_results($carpoolings);
                         }
-                    ?>
+                        ?>
+                    </main>
                 </div>
             <?php
+        }
+
+        public function get_cities() {
+            header('Content-Type: application/json');
+            
+            if (!isset($_GET['query']) || strlen($_GET['query']) < 2) {
+                echo json_encode(['cities' => []]);
+                return;
+            }
+
+            $query = $_GET['query'];
+            $cities = $this->searchPageModel->searchCities($query);
+            echo json_encode(['cities' => $cities]);
         }
     }   
 ?>
 <script src="/CarShare/script/searchPage.js"></script>
+<script src="/CarShare/assets/js/city-autocomplete.js"></script>

@@ -1,26 +1,19 @@
-<<<<<<< Updated upstream
-<section class="hero">
-=======
 <?php
     class HomeView{
         public static function render($topUsers = []){
             ?>
             <link rel="stylesheet" href="./assets/styles/home.css">
             <section class="hero">
->>>>>>> Stashed changes
     <div class="search-container">
-        <form class="search-form">
-            <input type="text" placeholder="Départ">
-            <input type="text" placeholder="Arrivée">
-            <input type="text" placeholder="Date">
-            <input type="text" placeholder="Nombre de passagers">
-
-            <button class="search-button">Rechercher</button>
+        <h2>Rechercher un trajet</h2>
+        <form class="search-form" method="GET" action="index.php">
+            <input type="hidden" name="action" value="search">
+            <input type="text" name="start_place" placeholder="Ville de départ" required>
+            <input type="text" name="end_place" placeholder="Ville d'arrivée" required>
+            <input type="date" name="date" required>
+            <input type="number" name="seats" placeholder="Passagers" min="1" max="10" value="1">
+            <button type="submit" class="search-button">Rechercher</button>
         </form>
-
-        <p style="margin-top:10px; font-size:14px; color:#555;">
-            <?= htmlspecialchars($hello) ?>
-        </p>
     </div>
 </section>
 
@@ -84,3 +77,7 @@
         <img src="./assets/img/Ville_eco.jpg" alt="Ville écologique">
     </div>
 </section>
+<?php
+        } // Fin de la méthode render()
+    } // Fin de la classe HomeView
+?>

@@ -22,8 +22,8 @@ class RegisterController {
                 $error = "Veuillez remplir tous les champs";
             } elseif ($password !== $confirmPassword) {
                 $error = "Les mots de passe ne correspondent pas";
-            } elseif (strlen($password) < 6) {
-                $error = "Le mot de passe doit contenir au moins 6 caractères";
+            } elseif (strlen($password) < 12) {
+                $error = "Le mot de passe doit contenir au moins 12 caractères";
             } else {
                 $model = new RegisterModel();
                 
@@ -39,9 +39,10 @@ class RegisterController {
                         $_SESSION['user_email'] = $email;
                         $_SESSION['user_name'] = $firstName . ' ' . $lastName;
                         $_SESSION['is_admin'] = 0;
+                        $_SESSION['logged'] = true;
                         
-                        // Redirect to profile
-                        header('Location: /CarShare/index.php?action=profile');
+                        // Redirect to home page
+                        header('Location: /CarShare/index.php?action=home');
                         exit();
                     } else {
                         $error = "Une erreur est survenue lors de l'inscription";

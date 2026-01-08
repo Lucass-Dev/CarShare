@@ -23,9 +23,10 @@ class ProfileController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['update_profile'])) {
                 $data = [
-                    'first_name' => $_POST['first_name'] ?? '',
-                    'last_name' => $_POST['last_name'] ?? '',
-                    'email' => $_POST['email'] ?? ''
+                    'first_name' => trim($_POST['first_name'] ?? ''),
+                    'last_name' => trim($_POST['last_name'] ?? ''),
+                    'email' => trim($_POST['email'] ?? ''),
+                    'phone' => trim($_POST['phone'] ?? '')
                 ];
                 
                 if ($model->updateUserProfile($_SESSION['user_id'], $data)) {
@@ -38,9 +39,9 @@ class ProfileController {
                 }
             } elseif (isset($_POST['update_vehicle'])) {
                 $data = [
-                    'car_brand' => $_POST['car_brand'] ?? '',
-                    'car_model' => $_POST['car_model'] ?? '',
-                    'car_plate' => $_POST['car_plate'] ?? ''
+                    'car_brand' => trim($_POST['car_brand'] ?? ''),
+                    'car_model' => trim($_POST['car_model'] ?? ''),
+                    'car_plate' => strtoupper(trim($_POST['car_plate'] ?? ''))
                 ];
                 
                 if ($model->updateVehicle($_SESSION['user_id'], $data)) {

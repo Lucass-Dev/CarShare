@@ -24,4 +24,15 @@ class LoginModel {
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
+
+    public function updatePassword($userId, $newPassword) {
+        try {
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+            $stmt = $this->db->prepare("UPDATE users SET password_hash = ? WHERE id = ?");
+            return $stmt->execute([$hashedPassword, $userId]);
+        } catch (PDOException $e) {
+            error_log("Error updating password: " . $e->getMessage());
+            return false;
+        }
+    }
 }

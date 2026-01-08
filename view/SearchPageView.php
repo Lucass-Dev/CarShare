@@ -3,42 +3,44 @@
         public function display_search_bar($start_name, $start_id, $end_name, $end_id, $start_date, $start_hour, $requested_seats) {
             ?>
                 <div class="search-bar-container">
+                    <h2>Rechercher un trajet</h2>
+                    
                     <form id="search-form" method="GET" action="" class="search-form">
                         <input type="hidden" name="action" value="display_search" />
                         <input type="hidden" id="form_start_input" name="form_start_input" value="<?php echo ($start_id != null && $start_id != "") ? $start_id : ""?>">
                         <input type="hidden" id="form_end_input" name="form_end_input" value="<?php echo ($end_id != null && $end_id != "") ? $end_id : ""?>">
 
-                        <div class="field">
-                            <label for="start_place">Start place</label>
-                            <input type="text" id="start_place" placeholder="City or address" required value=<?php echo ($start_name != null && $start_name != "") ? $start_name : ""?>>
-
-                            <div id="start-suggestion-box">
-
+                        <div class="search-fields-row">
+                            <div class="field">
+                                <label for="start_place">Départ</label>
+                                <input type="text" id="start_place" placeholder="Ville de départ" required value="<?php echo ($start_name != null && $start_name != "") ? htmlspecialchars($start_name) : ""?>">
+                                <div id="start-suggestion-box" class="suggestion-box"></div>
                             </div>
-                        </div>
 
-                        <div class="field">
-                            <label for="end_place">End place</label>
-                            <input type="text" id="end_place" placeholder="City or address" value=<?php echo ($end_name != null && $end_name != "") ? $end_name : ""?>>
-                            <div id="end-suggestion-box">
-
+                            <div class="field">
+                                <label for="end_place">Arrivée</label>
+                                <input type="text" id="end_place" placeholder="Ville d'arrivée" value="<?php echo ($end_name != null && $end_name != "") ? htmlspecialchars($end_name) : ""?>">
+                                <div id="end-suggestion-box" class="suggestion-box"></div>
                             </div>
-                        </div>
 
-                        <div class="field date-fields">
-                            <label for="date">Date</label>
-                            <input type="date" id="date" name="date" required value=<?php echo ($start_date != null && $start_date != "") ? $start_date : ""?>>
-                            <label for="hour"></label>
-                            <input type="time" name="hour" id="hour" value="<?php echo ($start_hour != null && $start_hour != "") ? $start_hour : ""?>">
-                        </div>
+                            <div class="field">
+                                <label for="date">Date</label>
+                                <input type="date" id="date" name="date" required value="<?php echo ($start_date != null && $start_date != "") ? $start_date : ""?>">
+                            </div>
+                            
+                            <div class="field">
+                                <label for="hour">Heure</label>
+                                <input type="time" name="hour" id="hour" value="<?php echo ($start_hour != null && $start_hour != "") ? $start_hour : ""?>">
+                            </div>
 
-                        <div class="field">
-                            <label for="seats">Available seats</label>
-                            <input type="number" id="seats" name="seats" min="1" max="10" required value="<?php echo ($requested_seats != null && $requested_seats != "") ? $requested_seats : 1?>">
-                        </div>
+                            <div class="field">
+                                <label for="seats">Passagers</label>
+                                <input type="number" id="seats" name="seats" min="1" max="10" placeholder="Nombre" required value="<?php echo ($requested_seats != null && $requested_seats != "") ? $requested_seats : 1?>">
+                            </div>
 
-                        <div class="actions">
-                            <button type="submit">Search</button>
+                            <div class="actions">
+                                <button type="submit" class="search-btn">Rechercher</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -51,17 +53,61 @@
             <div class="search-result-container">
                 <?php
                 if (empty($carpoolings)) {
-                    echo "<p>Aucun résultat ne correspond à votre recherche.</p>";
+                    ?>
+                    <div class="no-results">
+                        <h3>Aucun trajet trouvé</h3>
+                        <p>Aucun résultat ne correspond à votre recherche.</p>
+                        <p>Essayez de modifier vos critères ou de rechercher à une autre date.</p>
+                    </div>
+                    <?php
                 } else {
+                    echo '<div class="results-header">';
+                    echo '<h2>' . count($carpoolings) . ' trajet' . (count($carpoolings) > 1 ? 's' : '') . ' disponible' . (count($carpoolings) > 1 ? 's' : '') . '</h2>';
+                    echo '</div>';
+                    
                     foreach ($carpoolings as $carpooling) {
+                        $providerName = htmlspecialchars($carpooling['provider_name']);
+                        $providerId = htmlspecialchars($carpooling['provider_id']);
                         ?>
                             <div class="search-result-card">
-                                <h3><?php echo htmlspecialchars($carpooling['start_name'] . " to " . $carpooling['end_name']); ?></h3>
-                                <div class="trip-info">
-                                    <p>Date: <?php echo htmlspecialchars($carpooling['start_date']); ?></p>
-                                    <p>Available Seats: <?php echo htmlspecialchars($carpooling['available_places']); ?></p>
-                                    <p>Voyage proposé par : <a href="&action=user_info"><?php echo htmlspecialchars($carpooling['provider_name'])?></a></p>
-                                    <a href="&action=carpooling_details">Voir plus ></a>
+                                <div class="card-left">
+                                    <div class="trip-route">
+                                        <div class="route-point start">
+                                            <span class="location"><?php echo htmlspecialchars($carpooling['start_name']); ?></span>
+                                        </div>
+                                        <div class="route-arrow">→</div>
+                                        <div class="route-point end">
+                                            <span class="location"><?php echo htmlspecialchars($carpooling['end_name']); ?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-middle">
+                                    <div class="trip-info">
+                                        <div class="info-item">
+                                            <span class="info-label">Date:</span>
+                                            <span><?php echo date('d/m/Y à H:i', strtotime($carpooling['start_date'])); ?></span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Places:</span>
+                                            <span><?php echo htmlspecialchars($carpooling['available_places']); ?> disponible<?php echo $carpooling['available_places'] > 1 ? 's' : ''; ?></span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Conducteur:</span>
+                                            <a href="index.php?action=user_profile&id=<?php echo $providerId; ?>" class="provider-link">
+                                                <?php echo $providerName; ?>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-right">
+                                    <div class="price">
+                                        <?php echo number_format($carpooling['price'], 2); ?> €
+                                    </div>
+                                    <a href="index.php?action=trip_details&id=<?php echo htmlspecialchars($carpooling['id']); ?>" class="details-btn">
+                                        Voir détails
+                                    </a>
                                 </div>
                             </div>
                         <?php

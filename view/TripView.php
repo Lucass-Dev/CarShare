@@ -350,16 +350,14 @@
 
             <form class="trip-form" method="POST" action="/CarShare/index.php?action=create_trip_submit" novalidate>
                 <div class="trip-form__row">
-                <div class="form__group">
-                    <label class="form__label" for="dep-city">Ville de départ <span class="form__required">*</span></label>
+                <div class="form__group form__group--small">
+                    <label class="form__label" for="dep-num">N° voie</label>
                     <input 
-                    id="dep-city" 
-                    name="dep-city"
+                    id="dep-num" 
+                    name="dep-num"
                     class="form__input" 
-                    placeholder="Ville (France)"
-                    value="<?= htmlspecialchars($formData['dep-city'] ?? '') ?>"
-                    list="locations-list"
-                    required
+                    placeholder="N° voie"
+                    value="<?= htmlspecialchars($formData['dep-num'] ?? '') ?>"
                     />
                 </div>
 
@@ -374,20 +372,23 @@
                     />
                 </div>
 
-                <div class="form__group form__group--small">
-                    <label class="form__label" for="dep-num">N° voie</label>
+                <div class="form__group">
+                    <label class="form__label" for="dep-city">Ville de départ <span class="form__required">*</span></label>
                     <input 
-                    id="dep-num" 
-                    name="dep-num"
-                    class="form__input" 
-                    placeholder="N° voie"
-                    value="<?= htmlspecialchars($formData['dep-num'] ?? '') ?>"
+                    id="dep-city" 
+                    name="dep-city"
+                    class="form__input city-autocomplete" 
+                    placeholder="Ville (France)"
+                    value="<?= htmlspecialchars($formData['dep-city'] ?? '') ?>"
+                    autocomplete="off"
+                    required
                     />
+                    <div class="autocomplete-dropdown" id="dep-city-dropdown"></div>
                 </div>
                 </div>
 
                 <div class="trip-form__row">
-                <div class="form__group">
+                <div class="form__group form__group--small">
                     <label class="form__label" for="arr-city">Ville d'arrivée <span class="form__required">*</span></label>
                     <input 
                     id="arr-city" 

@@ -12,42 +12,7 @@ main {
   padding-top: 8vh;
 }
 
-/* --- Header --- */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #e9f0ff;
-  padding: 10px 30px;
-  border-bottom: 2px solid #0a2b70;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: bold;
-  font-size: 20px;
-  color: #0a2b70;
-}
-
-.logo img {
-  width: 40px;
-  height: 40px;
-}
-
-.header-icons {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.search {
-  border: none;
-  background: none;
-  font-size: 22px;
-  outline: none;
-}
+/* --- Header styles are now in header.css --- */
 
 .profile-icon {
   background-color: #b6c8f0;
@@ -87,6 +52,27 @@ main {
   margin: 10px 0;
   border-radius: 5px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Password toggle button */
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 5px;
+  z-index: 10;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.password-toggle:hover {
+  opacity: 1;
 }
 
 .buttons {

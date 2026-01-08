@@ -50,6 +50,7 @@ class BookingModel {
     public function getBookingsByUser($userId) {
         $stmt = $this->db->prepare("
             SELECT b.*, c.*, 
+                   u.id as provider_id,
                    u.first_name as provider_first_name, u.last_name as provider_last_name,
                    l1.name as start_location, l2.name as end_location
             FROM bookings b

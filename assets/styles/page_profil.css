@@ -1,177 +1,328 @@
-/* ---- MAIN ---- */
-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 20px;
-    flex: 1;
-    background: #ffffff;
+/* Profile Container */
+.profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 24px 40px 24px;
+    min-height: 100vh;
+    background-color: #f6f8fa;
 }
 
-.card {
-    width: 100%;
-    max-width: 450px;
-    background: #fff;
-    padding: 30px 40px;
-    border-radius: 15px;
-    border: 2px solid #e0e6ed;
-    margin-bottom: 30px;
-    box-shadow: none;
-}
-
-.card h2 {
-    text-align: left;
-    margin-top: 0;
-    font-size: 26px;
-    margin-bottom: 25px;
-    color: #0a1535;
-    font-weight: 700;
-    border-bottom: 3px solid #7da2ff;
-    padding-bottom: 10px;
-}
-
-/* ---- FORM STRUCTURE ---- */
-.profile-form {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-fields {
-    margin-bottom: 25px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-label {
+/* Messages */
+.message-box {
+    padding: 16px;
+    border-radius: 6px;
+    margin-bottom: 24px;
     font-size: 14px;
-    font-weight: 600;
-    color: #444;
-    display: block;
-    margin-bottom: 5px;
+    border: 1px solid;
 }
 
-input {
+.message-success {
+    background-color: #dff6dd;
+    border-color: #28a745;
+    color: #0f5132;
+}
+
+.message-error {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+    color: #842029;
+}
+
+/* Profile Layout */
+.profile-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+}
+
+/* Sidebar */
+.profile-sidebar {
+    position: sticky;
+    top: 90px;
+    align-self: start;
+}
+
+.profile-avatar-container {
+    margin-bottom: 16px;
+}
+
+.profile-avatar {
     width: 100%;
-    padding: 12px 15px;
-    border-radius: 10px;
-    border: 2px solid #e0e6ed;
-    font-size: 15px;
-    font-family: "Inter", sans-serif;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    box-sizing: border-box;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #d0d7de;
 }
 
-input:focus {
-    outline: none;
-    border-color: #7da2ff;
-    box-shadow: 0 0 0 3px rgba(125, 162, 255, 0.1);
-}
-
-/* ---- BUTTONS ---- */
-.btn-group {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #e0e6ed;
-}
-
-.btn {
-    flex: 1;
-    max-width: 160px;
-    height: 45px;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-decoration: none;
+.profile-avatar-default {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
+    font-size: 72px;
+    font-weight: 600;
+}
+
+.profile-identity {
+    margin-bottom: 24px;
+}
+
+.profile-name {
+    font-size: 26px;
+    line-height: 1.25;
+    font-weight: 600;
+    color: #1f2328;
+    margin: 0 0 4px 0;
+}
+
+.profile-email {
+    font-size: 20px;
+    line-height: 1.5;
+    color: #57606a;
+    font-weight: 300;
+    margin: 0;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid;
+    text-decoration: none;
+    font-family: inherit;
+}
+
+.btn-logout-sidebar {
+    width: 100%;
+    background-color: #ffffff;
+    border-color: #d0d7de;
+    color: #24292f;
+}
+
+.btn-logout-sidebar:hover {
+    background-color: #f6f8fa;
+    border-color: #1f232826;
+}
+
+.btn-edit {
+    background-color: #ffffff;
+    border-color: #d0d7de;
+    color: #24292f;
+}
+
+.btn-edit:hover {
+    background-color: #f6f8fa;
+    border-color: #1f232826;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    background-color: #2da44e;
+    border-color: rgba(27, 31, 36, 0.15);
+    color: #ffffff;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    background-color: #2c974b;
 }
 
-.btn-danger {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+.btn-secondary {
+    background-color: #ffffff;
+    border-color: #d0d7de;
+    color: #24292f;
 }
 
-.btn-danger:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+.btn-secondary:hover {
+    background-color: #f6f8fa;
 }
 
-.btn:active {
-    transform: translateY(0);
+/* Profile Cards */
+.profile-card {
+    background-color: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    margin-bottom: 16px;
 }
 
-/* RESPONSIVE */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-bottom: 1px solid #d0d7de;
+}
+
+.card-header h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2328;
+    margin: 0;
+}
+
+.card-body {
+    padding: 16px;
+}
+
+.card-footer {
+    padding: 16px;
+    background-color: #f6f8fa;
+    border-top: 1px solid #d0d7de;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+/* Info Grid */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.info-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.info-field.full-width {
+    grid-column: 1 / -1;
+}
+
+.info-field label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2328;
+}
+
+.info-display {
+    padding: 10px 14px;
+    background-color: #ffffff;
+    border: 1.5px solid #d0d7de;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #1f2328;
+    min-height: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: border-color 0.2s;
+}
+
+.text-muted {
+    color: #57606a;
+    font-style: italic;
+}
+
+.form-input {
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1f2328;
+    background-color: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus {
+    border-color: #0969da;
+    box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);
+}
+
+.license-plate {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-    main {
-        padding: 20px 15px;
+    .profile-container {
+        padding: 90px 16px 24px 16px;
     }
 
-    .card {
-        max-width: 100%;
-        padding: 20px 25px;
+    .profile-layout {
+        grid-template-columns: 1fr;
+        gap: 16px;
     }
 
-    .card h2 {
-        font-size: 22px;
+    .profile-sidebar {
+        position: static;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        background-color: #ffffff;
+        border: 1px solid #d0d7de;
+        border-radius: 6px;
     }
 
-    .btn-group {
+    .profile-avatar-container {
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+    }
+
+    .profile-avatar-default {
+        font-size: 32px;
+    }
+
+    .profile-identity {
+        margin-bottom: 0;
+        flex: 1;
+    }
+
+    .profile-name {
+        font-size: 20px;
+    }
+
+    .profile-email {
+        font-size: 16px;
+    }
+
+    .btn-logout-sidebar {
+        display: none;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card-footer {
         flex-direction: column;
-        gap: 10px;
     }
 
     .btn {
-        max-width: 100%;
         width: 100%;
     }
 }
 
 @media (max-width: 480px) {
-    main {
-        padding: 15px 10px;
+    .profile-container {
+        padding: 80px 12px 20px 12px;
     }
 
-    .card {
-        padding: 15px 20px;
+    .card-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
     }
 
-    .card h2 {
-        font-size: 20px;
-        margin-bottom: 20px;
-    }
-
-    label {
-        font-size: 13px;
-    }
-
-    input {
-        padding: 10px 12px;
-        font-size: 14px;
-    }
-
-    .btn {
-        height: 42px;
-        font-size: 15px;
+    .btn-edit {
+        width: 100%;
     }
 }

@@ -32,7 +32,8 @@
             $db = Database::getDb();
 
             $sql =
-                "SELECT l2.name as start_name, l1.name as end_name, c.start_date, available_places , u.first_name as provider_name
+                "SELECT c.id, l2.name as start_name, l1.name as end_name, c.start_date, c.price, available_places, 
+                        u.id as provider_id, u.first_name as provider_name
                         FROM `carpoolings` c
                         INNER JOIN `location` l2 on (c.start_id = l2.id)
                         INNER JOIN `location` l1 on (c.end_id = l1.id)
@@ -98,6 +99,15 @@
                 $stResult = $result['name']." (".$result['postal_code'].")";
             }
             return $stResult;
+        }
+
+        public function searchCities($query) : array {
+            $db = Database::getDb();
+            $stmt = $db->prepare("SELECT id, CONCAT(name, ' (', postal_code, ')') as name FROM `location` WHERE name LIKE :query LIMIT 10");
+            $searchTerm = $query . '%';
+            $stmt->bindParam(':query', $searchTerm, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     }
     

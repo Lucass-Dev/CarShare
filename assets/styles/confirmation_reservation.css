@@ -1,15 +1,5 @@
 /* Réservation confirmée - confirmation_reservation.css */
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #fff;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-/* MAIN */
 main {
     background-color: white;
     min-height: 80vh;
@@ -17,8 +7,6 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 8vh;
-    flex: 1;
 }
 
 .title {
@@ -45,7 +33,6 @@ main {
     color: #051220;
 }
 
-/* CARD */
 .card {
     width: 80%;
     max-width: 900px;
@@ -78,6 +65,48 @@ main {
     color: white;
     border: none;
     border-radius: 25px;
+    padding: 10px 22px;
+    cursor: pointer;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card {
+        width: 90%;
+        padding: 30px 20px;
+    }
+    
+    .title h1 {
+        font-size: 28px;
+    }
+    
+    .row {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        width: 95%;
+        padding: 20px 15px;
+    }
+    
+    .title {
+        flex-direction: column;
+    }
+    
+    .title h1 {
+        font-size: 24px;
+    }
+    
+    .row {
+        font-size: 15px;
+    }
+}
     padding: 10px 22px;
     cursor: pointer;
     font-size: 13px;

@@ -2,54 +2,62 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-$isLoggedIn = isset($_SESSION['user_id']);
+$isLoggedIn = isset($_SESSION['logged']) && $_SESSION['logged'];
 $userName = $isLoggedIn ? ($_SESSION['user_name'] ?? 'Utilisateur') : '';
+$userId = $_SESSION['user_id'] ?? null;
 ?>
 <header>
     <div class="logo">
-<<<<<<< Updated upstream
-        <a href="/CarShare/index.php?action=home">
-            <img 
-                src="/CarShare/assets/img/carshare.png" 
-                alt="CarShare Logo"
-                class="logo-img"
-            >
-=======
         <a href="index.php" class="home-link">
             <img src="./assets/img/carshare.png" alt="CarShare Logo">
-            
->>>>>>> Stashed changes
         </a>
     </div>
 
+    <!-- Navigation Links -->
+    <nav class="header-nav">
+        <a href="index.php?action=search" class="nav-link">Voyager</a>
+        <a href="index.php?action=offers" class="nav-link">Offres</a>
+    </nav>
+
+    <!-- Compact Search Bar -->
+    <div class="header-search">
+        <input type="text" 
+               id="global-search" 
+               placeholder="Rechercher un utilisateur..." 
+               autocomplete="off">
+        <button type="button" class="search-toggle">
+            <span class="search-icon">🔍</span>
+        </button>
+        <div class="search-results" id="search-results"></div>
+    </div>
+
     <div class="header-icons">
-<<<<<<< Updated upstream
-        <a href="/CarShare/index.php?action=search" title="Rechercher">🔍</a>
-        <?php if ($isLoggedIn): ?>
-            <a href="/CarShare/index.php?action=profile" title="Mon profil">👤 <?= htmlspecialchars($userName) ?></a>
-        <?php else: ?>
-            <a href="/CarShare/index.php?action=login" title="Connexion">👤</a>
-        <?php endif; ?>
-=======
-        <a href="?controller=trip&action=search" title="Rechercher" class="icon">🔍</a>
         <div class="dropdown">
-            <a href="?controller=<?php echo isset($_SESSION["logged"])  && $_SESSION["logged"] ? "profile":"login"?>" class="upp">
-                <img src="./assets/img/avatar.jpg" alt="Ma photo de profile" class="icon">
-            </a>
-            <?php
-                if (isset($_SESSION['logged']) && $_SESSION['logged'] !=='') {
-                    ?>
-                    <ul class="hidden">
-                        <li><a href="?action=profile">Profile</a></li>
-                        <li><a href="?action=history">Historique</a></li>
-                        <li><a href="?action=mp">Messages</a></li>
-                        <li><a href="?action=disconnect">Se déconnecter</a></li>
-                    </ul>
-                    <?php
-                }
-            ?>
+            <button class="dropdown-toggle upp" type="button">
+                <img src="./assets/img/avatar.jpg" alt="Photo de profil" class="icon">
+            </button>
+            <?php if ($isLoggedIn): ?>
+                <ul class="dropdown-menu">
+                    <li class="dropdown-header"><?= htmlspecialchars($userName) ?></li>
+                    <li><a href="?action=profile">Mon profil</a></li>
+                    <li><a href="?action=history">Historique</a></li>
+                    <li><a href="?action=messaging">Messages</a></li>
+                    <li class="dropdown-divider"></li>
+                    <li><a href="?action=create_trip">Publier un trajet</a></li>
+                    <li class="dropdown-divider"></li>
+                    <li><a href="?action=disconnect">Se déconnecter</a></li>
+                </ul>
+            <?php else: ?>
+                <ul class="dropdown-menu">
+                    <li><a href="?action=login">Se connecter</a></li>
+                    <li><a href="?action=register">S'inscrire</a></li>
+                </ul>
+            <?php endif; ?>
         </div>
-        
->>>>>>> Stashed changes
     </div>
 </header>
+
+<!-- Load global search script -->
+<script src="/CarShare/assets/js/global-search.js"></script>
+<!-- Load header dropdown script -->
+<script src="/CarShare/assets/js/header-dropdown.js"></script>

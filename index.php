@@ -28,188 +28,71 @@ $action = $_GET['action'] ?? 'home';
     
     <link rel="stylesheet" href="/CarShare/assets/styles/header.css">
     <link rel="stylesheet" href="/CarShare/assets/styles/footer.css">
+    <link rel="stylesheet" href="/CarShare/assets/styles/index.css">
     <link rel="stylesheet" href="/CarShare/assets/styles/home.css">
     <link rel="stylesheet" href="/CarShare/assets/styles/searchPage.css">
+    <link rel="stylesheet" href="/CarShare/assets/styles/form-enhancements.css">
+    <link rel="stylesheet" href="/CarShare/assets/styles/global-enhancements.css">
+    <link rel="stylesheet" href="/CarShare/assets/styles/autocomplete.css">
     
     <?php
-<<<<<<< Updated upstream
     // Load page-specific CSS based on action
     $pageCss = [
-        'create_trip' => 'create-trip.css',
+        'create_trip' => ['create-trip.css', 'city-autocomplete.css'],
         'rating' => 'rating.css',
         'signalement' => 'report-user.css',
         'login' => 'conn.css',
-        'register' => 'inscr.css',
-        'trip_details' => 'create-trip.css'
+        'forgot_password' => 'conn.css',
+        'register' => ['inscr.css', 'password-validator.css'],
+        'trip_details' => 'trip_infos.css',
+        'payment' => 'trip_payment.css',
+        'booking_confirmation' => 'confirmation_reservation.css',
+        'history' => ['history.css', 'modal-system.css'],
+        'profile' => 'page_profil.css',
+        'user_profile' => ['user-profile.css', 'modal-system.css'],
+        'legal' => 'legal.css',
+        'cgu' => 'legal.css',
+        'cgv' => 'legal.css',
+        'faq' => 'FAQ.css',
+        'search' => ['search-enhancements.css', 'city-autocomplete.css'],
+        'display_search' => ['search-enhancements.css', 'city-autocomplete.css'],
+        'home' => ['search-enhancements.css', 'city-autocomplete.css'],
+        'offers' => 'offers.css'
     ];
     
     if (isset($pageCss[$action])) {
-        echo '<link rel="stylesheet" href="/CarShare/assets/styles/' . $pageCss[$action] . '">';
-    }
-=======
-        // Routage avec support de ?controller=... et ?action=...
-        $controllerParam = $_GET["controller"] ?? null;
-        $actionParam = $_GET["action"] ?? null;
-        
-        // Si controller est défini, on route selon controller + action
-        if ($controllerParam) {
-            switch ($controllerParam) {
-                case "booking":
-                    $controller = new BookingController();
-                    if ($actionParam === "history") {
-                        $controller->history();
-                    } else {
-                        http_response_code(404);
-                        echo "Page non trouvée";
-                    }
-                    break;
-                case "trip":
-                    $controller = new TripController();
-                    $controller->render();
-                    break;
-                case "user":
-                    $controller = new UserController();
-                    $controller->index();
-                    break;
-                case "login":
-                    $controller = new LoginController();
-                    $controller->render();
-                    break;
-                case "register":
-                    $controller = new RegisterController();
-                    $controller->render();
-                    break;
-                case "mp":
-                    $controller = new MPController();
-                    $controller->render();
-                    break;
-                case "profile":
-                    $controller = new ProfileController();
-                    $controller->render();
-                    break;
-                default:
-                    http_response_code(404);
-                    echo "Page non trouvée";
-                    break;
-            }
-        } else {
-            // Fallback sur l'ancien système ?action=...
-            $controller = $actionParam ?? "home";
-
-        switch ($controller) {
-            case "home":
-                $controller = new HomeController();
-                $controller->render();
-                break;
-            case "user":
-                $controller = new UserController();
-                $controller->index();
-                break;
-            case "login":
-                $controller = new LoginController();
-                $controller->render();
-                break;
-            case "register":
-                $controller = new RegisterController();
-                $controller->render();
-                break;
-            case "profile":
-                $controller = new ProfileController();
-                $controller->render();
-                break;
-            case "trip":
-                $controller = new TripController();
-                $controller->render();
-                break;
-            case "admin":
-                $controller = new AdminController();
-                $controller->index();
-                break;
-            case "faq":
-                $controller = new FAQController();
-                $controller->index();
-                break;
-            case "cgu":
-                $controller = new CGUController();
-                $controller->index();
-                break;
-            case "legal":
-                $controller = new LegalController();
-                $controller->index();
-                break;
-            case "disconnect":
-                session_unset();
-                session_destroy();
-                header("Location: index.php");
-                break;
-            case "mp":
-                $controller = new MPController();
-                $controller->render();
-                break;
-            case "create_trip":
-                $controller = new TripFormController();
-                $controller->render();
-                break;
-            case "create_trip_submit":
-                $controller = new TripFormController();
-                $controller->submit();
-                break;
-            // --- Nouvelles routes sans impacter l'existant ---
-            case "history":
-                $controller = new BookingController();
-                $controller->history();
-                break;
-            case "rating":
-                $controller = new RatingController();
-                // Méthode d'affichage du formulaire
-                if (method_exists($controller, 'render')) {
-                    $controller->render();
-                } else if (method_exists($controller, 'index')) {
-                    $controller->index();
-                }
-                break;
-            case "rating_submit":
-                $controller = new RatingController();
-                $controller->submit();
-                break;
-            case "rating_get_carpoolings":
-                $controller = new RatingController();
-                // API JSON pour récupérer les trajets d'un utilisateur
-                if (method_exists($controller, 'getCarpoolings')) {
-                    $controller->getCarpoolings();
-                } else if (method_exists($controller, 'getUserCarpoolings')) {
-                    $controller->getUserCarpoolings();
-                }
-                break;
-            case "signalement":
-                $controller = new SignalementController();
-                if (method_exists($controller, 'render')) {
-                    $controller->render();
-                } else if (method_exists($controller, 'index')) {
-                    $controller->index();
-                }
-                break;
-            case "signalement_submit":
-                $controller = new SignalementController();
-                $controller->submit();
-                break;
-            case "signalement_get_carpoolings":
-                $controller = new SignalementController();
-                if (method_exists($controller, 'getCarpoolings')) {
-                    $controller->getCarpoolings();
-                } else if (method_exists($controller, 'getUserCarpoolings')) {
-                    $controller->getUserCarpoolings();
-                }
-                break;
-            default:
-                http_response_code(404);
-                echo "Page non trouvée";
-                break;
-            }
+        $css = is_array($pageCss[$action]) ? $pageCss[$action] : [$pageCss[$action]];
+        foreach ($css as $file) {
+            echo '<link rel="stylesheet" href="/CarShare/assets/styles/' . $file . '">';
         }
-
-
->>>>>>> Stashed changes
+    }
+    ?>
+    
+    <!-- Core JavaScript -->
+    <script src="/CarShare/assets/js/form-enhancements.js" defer></script>
+    <script src="/CarShare/assets/js/global-enhancements.js" defer></script>
+    
+    <?php
+    // Load page-specific JavaScript based on action
+    $pageJs = [
+        'register' => ['password-validator.js', 'register.js'],
+        'login' => ['login.js'],
+        'create_trip' => ['city-autocomplete-enhanced.js', 'create-trip.js'],
+        'rating' => ['rating.js', 'rating-form.js'],
+        'signalement' => ['signalement.js', 'signalement-form.js'],
+        'search' => ['city-autocomplete-enhanced.js', 'search-enhancements.js'],
+        'display_search' => ['city-autocomplete-enhanced.js', 'search-enhancements.js'],
+        'home' => ['city-autocomplete-enhanced.js', 'search-enhancements.js', 'global-search.js'],
+        'history' => ['rating-report-modals.js'],
+        'user_profile' => ['rating-report-modals.js']
+    ];
+    
+    if (isset($pageJs[$action])) {
+        $js = is_array($pageJs[$action]) ? $pageJs[$action] : [$pageJs[$action]];
+        foreach ($js as $file) {
+            echo '<script src="/CarShare/assets/js/' . $file . '" defer></script>';
+        }
+    }
     ?>
 </head>
 
@@ -242,9 +125,19 @@ switch ($action) {
         (new SearchPageController())->render();
         break;
 
+    case "offers":
+        require_once __DIR__ . "/controller/OffersController.php";
+        (new OffersController())->render();
+        break;
+
     case "login":
         require_once __DIR__ . "/controller/LoginController.php";
         (new LoginController())->render();
+        break;
+
+    case "forgot_password":
+        require_once __DIR__ . "/controller/ForgotPasswordController.php";
+        (new ForgotPasswordController())->render();
         break;
 
     case "register":
@@ -260,6 +153,14 @@ switch ($action) {
     case "logout":
         require_once __DIR__ . "/controller/ProfileController.php";
         (new ProfileController())->logout();
+        break;
+
+    case "disconnect":
+        session_start();
+        session_unset();
+        session_destroy();
+        header('Location: /CarShare/index.php?action=home');
+        exit();
         break;
 
     case "create_trip":
@@ -297,6 +198,24 @@ switch ($action) {
         (new FAQController())->render();
         break;
 
+    case "cgu":
+        require_once __DIR__ . "/controller/CGUController.php";
+        require_once __DIR__ . "/view/CGUView.php";
+        (new CGUController())->index();
+        break;
+
+    case "legal":
+        require_once __DIR__ . "/controller/LegalController.php";
+        require_once __DIR__ . "/view/LegalView.php";
+        (new LegalController())->index();
+        break;
+
+    case "cgv":
+        require_once __DIR__ . "/controller/CGVController.php";
+        require_once __DIR__ . "/view/CGVView.php";
+        (new CGVController())->index();
+        break;
+
     case "rating":
         require_once __DIR__ . "/controller/RatingController.php";
         (new RatingController())->render();
@@ -327,6 +246,31 @@ switch ($action) {
         (new RatingController())->getCarpoolings();
         break;
 
+    case "user_profile":
+        require_once __DIR__ . "/controller/UserProfileController.php";
+        (new UserProfileController())->viewProfile();
+        break;
+
+    case "messaging":
+        require_once __DIR__ . "/controller/MessagingController.php";
+        (new MessagingController())->index();
+        break;
+
+    case "messaging_conversation":
+        require_once __DIR__ . "/controller/MessagingController.php";
+        (new MessagingController())->conversation();
+        break;
+
+    case "send_message":
+        require_once __DIR__ . "/controller/MessagingController.php";
+        (new MessagingController())->sendMessage();
+        break;
+
+    case "get_new_messages":
+        require_once __DIR__ . "/controller/MessagingController.php";
+        (new MessagingController())->getNewMessages();
+        break;
+    
     default:
         http_response_code(404);
         echo "<p>Page non trouvée</p>";

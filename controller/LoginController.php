@@ -22,6 +22,7 @@ class LoginController {
                     $_SESSION['user_email'] = $user['email'];
                     $_SESSION['user_name'] = $user['first_name'] . ' ' . $user['last_name'];
                     $_SESSION['is_admin'] = $user['is_admin'];
+                    $_SESSION['logged'] = true;
                     
                     // Redirect based on role
                     if ($user['is_admin']) {

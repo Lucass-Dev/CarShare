@@ -31,12 +31,16 @@ class RegisterModel {
         }
     }
 
-<<<<<<< Updated upstream
     public function emailExists($email) {
         $stmt = $this->db->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->execute([$email]);
         return $stmt->fetch() !== false;
-=======
+    }
+
+    public function user_exists($email) {
+        return $this->emailExists($email);
+    }
+
     public function send_form($values): array {
         $str = "INSERT INTO users(first_name, last_name, email, password_hash, is_admin, is_verified_user, car_brand, car_model, car_plate, car_is_verified, created_at, global_rating)
                 VALUES (:first_name, :last_name, :mail, :password_hash, 0, 0, NULL, NULL, NULL, 0, NOW(), 5)";
@@ -63,6 +67,5 @@ class RegisterModel {
         } catch (\Throwable $th) {
             return ["message" => $th->getMessage(), "success" => false];
         }
->>>>>>> Stashed changes
     }
 }

@@ -18,76 +18,21 @@
   margin: 0 auto;
 }
 
-<<<<<<< Updated upstream
-/* Header (shared) */
-.header {
-  background: var(--blue-50);
-  border-bottom: 3px solid #2a6db0;
-  padding: 14px 0;
-  position: sticky;
-  top: 0;
-  z-index: 30;
-}
-.header__inner {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-.logo {
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-.logo__text {
-  font-weight:700;
-  color:#1f3b64;
-  font-size:20px;
-}
-.header__actions { display:flex; gap:8px; align-items:center; }
-.header__btn--icon {
-  width:36px; height:36px;
-  display:flex; align-items:center; justify-content:center;
-  background:rgba(111,159,230,0.12);
-}
-.header--transparent { background: transparent; border-bottom:0; margin-top:8px; }
-
-
-.hero {
-  min-height:520px;
-  background-image: url('../images/bg-road.jpg');
-  background-size:cover;
-  background-position:center;
-}
-
-
-/* Footer (shared) */
-.footer {
-  background: var(--blue-50);
-  border-top:1px solid var(--border);
-  padding:18px 0;
-  margin-top:48px;
-}
-.footer__inner {
-  display:flex;
-  justify-content:space-between;
-  gap:8px;
-  font-size:13px;
-  color:var(--muted);
-}
-
-=======
->>>>>>> Stashed changes
 /* Hero & form (create-trip) */
 .page--create .hero {
-  min-height:520px;
+  min-height: auto;
   background-image: url('../images/bg-road.jpg');
   background-size:cover;
   background-position:center;
   position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding: 40px 20px 40px 20px;
+  padding: 20px 20px;
+  pointer-events: none;
+}
+
+/* Remove any blocking overlay */
+.page--create .hero::before,
+.page--create .hero::after {
+  display: none !important;
 }
 
 /* RESPONSIVE */
@@ -154,16 +99,14 @@
   width:min(900px, 95%);
   max-width: 900px;
   background: linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.92));
-  padding:36px 44px;
-<<<<<<< Updated upstream
-  border-radius:6px;
-  box-shadow: var /*(--shadow)*/ none;
-=======
+  padding: 20px 30px;
   border-radius:12px;
   box-shadow: var(--shadow);
->>>>>>> Stashed changes
   text-align:center;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
 }
 
 /*.hero__title {
@@ -174,40 +117,39 @@
 }*/
 
 .hero__title {
-  font-size:34px;
+  font-size: 24px;
   color:var(--text);
-  /* text-shadow:0 2px 8px rgba(0,0,0,0.25); */
   text-shadow: none;
-  margin-bottom:22px;
+  margin-bottom: 12px;
 }
 
 
 /* Trip form grid */
-.trip-form { display:flex; flex-direction:column; gap:14px; align-items:stretch; }
+.trip-form { display:flex; flex-direction:column; gap:8px; align-items:stretch; }
 .trip-form__row {
   display:flex;
-  gap:18px;
+  gap:12px;
   align-items:flex-end;
-  margin-bottom:6px;
+  margin-bottom:3px;
 }  
 .trip-form__row--compact { align-items:center; }
 .trip-form__row--options { align-items:flex-start; justify-content:space-between; margin-top:8px; }
 .form__group { flex:1; display:flex; flex-direction:column; text-align:left; }
-.form__group--small { flex: 0 0 180px; }
-.form__label { font-size:13px; color:var(--muted); margin-bottom:6px; text-align:left; }
+.form__group--small { flex: 0 0 150px; }
+.form__label { font-size:12px; color:var(--muted); margin-bottom:3px; text-align:left; }
 .form__input {
-  padding:10px 12px;
+  padding: 8px 10px;
   border-radius:6px;
   border:1px solid var(--border);
   background:var(--white);
-  font-size:14px;
+  font-size:13px;
 }
-.form__required { color:#d9534f; margin-left:6px; font-weight:600; }
+.form__required { color:#d9534f; margin-left:4px; font-weight:600; }
 
 /* Options & actions */
-.options { border:1px solid var(--border); padding:10px; border-radius:6px; width:160px; background:rgba(255,255,255,0.9);}
-.options__title { font-size:13px; color:var(--muted); margin-bottom:8px; }
-.options__item { display:block; font-size:14px; color:var(--text); margin-bottom:6px; }
+.options { border:1px solid var(--border); padding:8px; border-radius:6px; width:160px; background:rgba(255,255,255,0.9);}
+.options__title { font-size:12px; color:var(--muted); margin-bottom:6px; }
+.options__item { display:block; font-size:13px; color:var(--text); margin-bottom:4px; }
 
 /* Publish button area aligns to right like in reference */
 .trip-form__actions { 
@@ -215,24 +157,25 @@
   align-items:center; 
   justify-content:center; 
   width:100%; 
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .btn {
   border:1px solid var(--blue-500);
   background:transparent;
   color:var(--blue-500);
-  padding:10px 18px;
+  padding: 8px 16px;
   border-radius:8px;
   cursor:pointer;
   font-weight:600;
+  font-size: 14px;
 }
 .btn--primary {
   background:var(--accent);
   color:#fff;
   border-color:var(--accent);
 }
-.btn--pill { padding:10px 28px; border-radius:22px; }
+.btn--pill { padding: 8px 24px; border-radius:20px; }
 
 /* Responsive tweaks */
 @media (max-width:900px){
