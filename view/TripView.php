@@ -465,27 +465,28 @@
                 </div>
 
                 <div class="trip-form__row trip-form__row--options">
-                <fieldset class="options">
-                    <legend class="options__title">Options</legend>
-                    
-                    <div class="form__group form__group--small">
-                    <label class="form__label" for="places">Nombre de place(s) <span class="form__required">*</span></label>
-                    <select id="places" name="places" class="form__input" required>
-                        <option value="0">0</option>
-                        <?php for ($i = 1; $i <= 10; $i++): ?>
-                        <option value="<?= $i ?>" <?= (isset($formData['places']) && $formData['places'] == $i) ? 'selected' : '' ?>>
-                            <?= $i ?>
-                        </option>
-                        <?php endfor; ?>
-                    </select>
+                    <fieldset class="options">
+                        <legend class="options__title">Options</legend>
+                        
+                        <div class="form__group form__group--small">
+                            <label class="form__label" for="places">Nombre de place(s) <span class="form__required">*</span></label>
+                            <select id="places" name="places" class="form__input" required>
+                                <option value="0">0</option>
+                                <?php for ($i = 1; $i <= 10; $i++): ?>
+                                <option value="<?= $i ?>" <?= (isset($formData['places']) && $formData['places'] == $i) ? 'selected' : '' ?>>
+                                    <?= $i ?>
+                                </option>
+                                <?php endfor; ?>
+                            </select>
+                        </div>
+
+                        <label class="options__item"><input type="checkbox" name="animals" <?= isset($formData['animals']) ? 'checked' : '' ?>> Animaux</label>
+                        <label class="options__item"><input type="checkbox" name="smoking" <?= isset($formData['smoking']) ? 'checked' : '' ?>> Fumeur</label>
+                    </fieldset>
+
+                    <div class="trip-form__actions trip-form__actions--side">
+                        <button type="submit" class="btn btn--primary btn--pill">Publier</button>
                     </div>
-
-                    <label class="options__item"><input type="checkbox" name="animals" <?= isset($formData['animals']) ? 'checked' : '' ?>> Animaux</label>
-                    <label class="options__item"><input type="checkbox" name="smoking" <?= isset($formData['smoking']) ? 'checked' : '' ?>> Fumeur</label>
-                </fieldset>
-
-                <div class="trip-form__actions">
-                    <button type="submit" class="btn btn--primary btn--pill">Publier</button>
                 </div>
                 </div>
             </form>

@@ -16,10 +16,13 @@ class RegisterController {
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
             $confirmPassword = $_POST['confirm_password'] ?? '';
+            $acceptedTerms = isset($_POST['accept_terms']);
 
             // Validation
             if (!$firstName || !$lastName || !$email || !$password || !$confirmPassword) {
                 $error = "Veuillez remplir tous les champs";
+            } elseif (!$acceptedTerms) {
+                $error = "Vous devez accepter les CGU, les CGV et les Mentions légales pour créer un compte";
             } elseif ($password !== $confirmPassword) {
                 $error = "Les mots de passe ne correspondent pas";
             } elseif (strlen($password) < 12) {

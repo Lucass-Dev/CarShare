@@ -242,3 +242,37 @@ input:invalid:not(:placeholder-shown):not(:focus) {
         max-width: calc(100% - 20px);
     }
 }
+
+/* Compact legal consent blocks (CGU/CGV/Mentions légales) */
+.legal-consent {
+    font-size: 13px;
+    color: #4b5563;
+    line-height: 1.5;
+}
+
+.legal-consent > label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.legal-consent input[type="checkbox"] {
+    margin: 0;
+}
+
+.legal-links {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #4b5563;
+}
+
+.legal-links a {
+    color: #0d6efd;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.legal-links a:hover {
+    text-decoration: underline;
+}

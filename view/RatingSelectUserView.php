@@ -14,6 +14,10 @@
         <p style="margin:12px 0; padding:10px; border-radius:8px; background:#ffe8e8; color:#c00;">
           ❌ Erreur lors de l'enregistrement
         </p>
+      <?php elseif ($error === 'no_trip'): ?>
+        <p style="margin:12px 0; padding:10px; border-radius:8px; background:#ffe8e8; color:#c00;">
+          ❌ Vous ne pouvez pas noter cet utilisateur car vous n'avez pas encore voyagé avec lui
+        </p>
       <?php endif; ?>
 
       <div class="rating__card">

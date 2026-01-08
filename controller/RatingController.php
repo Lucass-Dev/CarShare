@@ -107,6 +107,21 @@ class RatingController
             exit;
         }
 
+        // If no carpooling_id was provided (e.g. rating from user profile),
+        // try to infer the most recent shared trip between the two users.
+        if ($carpoolingId === null) {
+            $inferredCarpoolingId = $this->model->findLatestCarpoolingBetweenUsers($userId, $_SESSION['user_id']);
+
+            if ($inferredCarpoolingId !== null) {
+                $carpoolingId = $inferredCarpoolingId;
+            } else {
+                // No shared trip found – cannot attach rating to a concrete carpooling
+                $redirectUrl = '/CarShare/index.php?action=rating&user_id=' . $userId . '&error=no_trip';
+                header('Location: ' . $redirectUrl);
+                exit;
+            }
+        }
+
         // Save rating - carpooling_id is now optional
         $ratingData = [
             'rater_id' => $_SESSION['user_id'],

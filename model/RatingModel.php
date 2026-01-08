@@ -64,7 +64,7 @@ class RatingModel
             ]);
 
             // Update user's global rating
-            if ($result) {
+            if ($result && !empty($rating['carpooling_id'])) {
                 $this->updateUserGlobalRating($rating['carpooling_id']);
             }
 
@@ -73,6 +73,31 @@ class RatingModel
             error_log("Error saving rating: " . $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Find the most recent carpooling between a provider (rated user)
+     * and a booker (current logged-in user)
+     */
+    public function findLatestCarpoolingBetweenUsers(int $providerId, int $bookerId): ?int
+    {
+        $stmt = $this->db->prepare("
+            SELECT c.id
+            FROM bookings b
+            JOIN carpoolings c ON b.carpooling_id = c.id
+            WHERE b.booker_id = :booker_id
+              AND c.provider_id = :provider_id
+            ORDER BY c.start_date DESC
+            LIMIT 1
+        ");
+
+        $stmt->execute([
+            ':booker_id' => $bookerId,
+            ':provider_id' => $providerId
+        ]);
+
+        $result = $stmt->fetchColumn();
+        return $result !== false ? (int)$result : null;
     }
 
     /**

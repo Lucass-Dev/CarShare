@@ -335,6 +335,7 @@
             if ($_GET['error'] === 'user_not_found') $errorMsg = 'Utilisateur non trouvé';
             elseif ($_GET['error'] === 'carpooling_not_found') $errorMsg = 'Trajet non trouvé';
             elseif ($_GET['error'] === 'save_failed') $errorMsg = 'Erreur lors de l\'enregistrement';
+            elseif ($_GET['error'] === 'no_trip') $errorMsg = 'Vous ne pouvez pas noter cet utilisateur car vous n\'avez pas encore voyagé avec lui';
             elseif ($_GET['error'] === 'self_rating') $errorMsg = 'Vous ne pouvez pas vous évaluer vous-même';
             ?>
             <div class="alert alert-error">

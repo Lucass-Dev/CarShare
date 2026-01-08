@@ -47,6 +47,19 @@
         </div>
       </div>
 
+      <p class="legal-consent" style="margin:12px 0;">
+        <label>
+          <input type="checkbox" name="accept_terms" value="1" required>
+          <span>
+            J'accepte les conditions CarShare pour cette réservation (
+            <a href="/CarShare/index.php?action=cgv" target="_blank">CGV</a>,
+            <a href="/CarShare/index.php?action=cgu" target="_blank">CGU</a>,
+            <a href="/CarShare/index.php?action=legal" target="_blank">Mentions légales</a>
+            )
+          </span>
+        </label>
+      </p>
+
       <button type="submit" class="btn-payer">Payer maintenant</button>
 
       <div class="details-resume">

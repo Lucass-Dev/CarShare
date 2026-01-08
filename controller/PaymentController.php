@@ -32,17 +32,23 @@ class PaymentController {
         $error = null;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // In real app, process payment here
-            // For now, we'll just create the booking
-            
-            $bookingModel = new BookingModel();
-            $bookingId = $bookingModel->createBooking($_SESSION['user_id'], $carpoolingId);
+            // In a real app, process payment here
+            // Before creating the booking, ensure legal terms are accepted
 
-            if ($bookingId) {
-                header('Location: /CarShare/index.php?action=booking_confirmation&booking_id=' . $bookingId);
-                exit();
+            $acceptedTerms = isset($_POST['accept_terms']);
+
+            if (!$acceptedTerms) {
+                $error = "Vous devez accepter les CGV, les CGU et les Mentions légales pour confirmer votre réservation";
             } else {
-                $error = "Impossible de créer la réservation. Le trajet est peut-être complet.";
+                $bookingModel = new BookingModel();
+                $bookingId = $bookingModel->createBooking($_SESSION['user_id'], $carpoolingId);
+
+                if ($bookingId) {
+                    header('Location: /CarShare/index.php?action=booking_confirmation&booking_id=' . $bookingId);
+                    exit();
+                } else {
+                    $error = "Impossible de créer la réservation. Le trajet est peut-être complet.";
+                }
             }
         }
 
