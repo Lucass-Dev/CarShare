@@ -57,6 +57,7 @@ $action = $_GET['action'] ?? 'home';
         'search' => ['search-enhancements.css', 'city-autocomplete.css'],
         'display_search' => ['search-enhancements.css', 'city-autocomplete.css'],
         'home' => ['search-enhancements.css', 'city-autocomplete.css'],
+        'user_search' => 'user-search.css',
         'offers' => 'offers.css'
     ];
     
@@ -123,6 +124,11 @@ switch ($action) {
     case "display_search":
         require_once __DIR__ . "/controller/SearchPageController.php";
         (new SearchPageController())->render();
+        break;
+
+    case "user_search":
+        require_once __DIR__ . "/controller/UserSearchController.php";
+        (new UserSearchController())->render();
         break;
 
     case "offers":

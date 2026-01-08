@@ -45,12 +45,27 @@ class GlobalSearch {
             }
         });
 
-        // Enter key to search page
+        // Enter key to user search page
         this.searchInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && this.currentQuery) {
-                window.location.href = `/CarShare/index.php?action=search&q=${encodeURIComponent(this.currentQuery)}`;
+            if (e.key === 'Enter') {
+                e.preventDefault(); // Prevent any form submission
+                const query = this.searchInput.value.trim();
+                if (query) {
+                    window.location.href = `/CarShare/index.php?action=user_search&q=${encodeURIComponent(query)}`;
+                }
             }
         });
+
+        // Search button click
+        const searchButton = document.querySelector('.search-toggle');
+        if (searchButton) {
+            searchButton.addEventListener('click', () => {
+                const query = this.searchInput.value.trim();
+                if (query) {
+                    window.location.href = `/CarShare/index.php?action=user_search&q=${encodeURIComponent(query)}`;
+                }
+            });
+        }
     }
 
     async performSearch(query) {

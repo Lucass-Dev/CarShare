@@ -389,15 +389,13 @@
 
                 <div class="trip-form__row">
                 <div class="form__group form__group--small">
-                    <label class="form__label" for="arr-city">Ville d'arrivée <span class="form__required">*</span></label>
+                    <label class="form__label" for="arr-num">N° voie</label>
                     <input 
-                    id="arr-city" 
-                    name="arr-city"
+                    id="arr-num" 
+                    name="arr-num"
                     class="form__input" 
-                    placeholder="Ville (France)"
-                    value="<?= htmlspecialchars($formData['arr-city'] ?? '') ?>"
-                    list="locations-list"
-                    required
+                    placeholder="N° voie"
+                    value="<?= htmlspecialchars($formData['arr-num'] ?? '') ?>"
                     />
                 </div>
 
@@ -412,15 +410,18 @@
                     />
                 </div>
 
-                <div class="form__group form__group--small">
-                    <label class="form__label" for="arr-num">N° voie</label>
+                <div class="form__group">
+                    <label class="form__label" for="arr-city">Ville d'arrivée <span class="form__required">*</span></label>
                     <input 
-                    id="arr-num" 
-                    name="arr-num"
-                    class="form__input" 
-                    placeholder="N° voie"
-                    value="<?= htmlspecialchars($formData['arr-num'] ?? '') ?>"
+                    id="arr-city" 
+                    name="arr-city"
+                    class="form__input city-autocomplete" 
+                    placeholder="Ville (France)"
+                    value="<?= htmlspecialchars($formData['arr-city'] ?? '') ?>"
+                    autocomplete="off"
+                    required
                     />
+                    <div class="autocomplete-dropdown" id="arr-city-dropdown"></div>
                 </div>
                 </div>
 

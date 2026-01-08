@@ -74,6 +74,7 @@
               id="arr-num" 
               name="arr-num"
               class="form__input" 
+              placeholder="N° voie"
               value="<?= htmlspecialchars($formData['arr-num'] ?? '') ?>"
             />
           </div>
