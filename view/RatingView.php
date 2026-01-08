@@ -352,7 +352,7 @@
                     <div class="user-stats">
                         <div class="user-stat">
                             <span>Note moyenne:</span>
-                            <strong><?= number_format($driver['avg'], 1) ?>/5</strong>
+                            <strong><?= is_numeric($driver['avg']) ? number_format($driver['avg'], 1) . '/5' : 'N/A' ?></strong>
                         </div>
                         <span>•</span>
                         <div class="user-stat">

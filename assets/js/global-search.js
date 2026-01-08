@@ -47,12 +47,9 @@ class GlobalSearch {
 
         // Enter key to user search page
         this.searchInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault(); // Prevent any form submission
+            if (e.key === 'Enter' && this.searchInput.value.trim()) {
                 const query = this.searchInput.value.trim();
-                if (query) {
-                    window.location.href = `/CarShare/index.php?action=user_search&q=${encodeURIComponent(query)}`;
-                }
+                window.location.href = `/CarShare/index.php?action=user_search&q=${encodeURIComponent(query)}`;
             }
         });
 

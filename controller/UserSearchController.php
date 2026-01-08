@@ -53,7 +53,7 @@ class UserSearchController
                 u.car_model,
                 COUNT(DISTINCT c.id) as trip_count
             FROM users u
-            LEFT JOIN carpooling c ON c.creator_user_id = u.id
+            LEFT JOIN carpoolings c ON c.provider_id = u.id
             WHERE CONCAT(u.first_name, ' ', u.last_name) LIKE ?
                OR u.first_name LIKE ?
                OR u.last_name LIKE ?

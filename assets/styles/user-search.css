@@ -145,7 +145,7 @@
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #2b4d9a 0%, #0969da 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -166,6 +166,9 @@
     font-weight: 600;
     color: #1f2328;
     margin: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
 }
 
 .user-meta {

@@ -68,18 +68,18 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2b4d9a 0%, #0969da 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            font-size: 30px;
             font-weight: 600;
             color: white;
             margin: 0 auto 12px;
         }
 
         .profile-name {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             color: #24292f;
             margin-bottom: 6px;

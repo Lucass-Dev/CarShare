@@ -41,6 +41,7 @@ $userId = $_SESSION['user_id'] ?? null;
                     <li class="dropdown-header"><?= htmlspecialchars($userName) ?></li>
                     <li><a href="?action=profile">Mon profil</a></li>
                     <li><a href="?action=history">Historique</a></li>
+                    <li><a href="?action=my_bookings">Mes réservations</a></li>
                     <li><a href="?action=messaging">Messages</a></li>
                     <li class="dropdown-divider"></li>
                     <li><a href="?action=create_trip">Publier un trajet</a></li>

@@ -16,16 +16,6 @@ $action = $_GET['action'] ?? 'home';
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <?php endif; ?>
     
-    <?php if ($action === 'profile'): ?>
-    <link rel="stylesheet" href="/CarShare/style.css">
-    <link rel="stylesheet" href="/CarShare/page profil.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <?php endif; ?>
-    
-    <?php if ($action === 'history'): ?>
-    <link rel="stylesheet" href="/CarShare/historique style.css">
-    <?php endif; ?>
-    
     <link rel="stylesheet" href="/CarShare/assets/styles/header.css">
     <link rel="stylesheet" href="/CarShare/assets/styles/footer.css">
     <link rel="stylesheet" href="/CarShare/assets/styles/index.css">
@@ -48,6 +38,7 @@ $action = $_GET['action'] ?? 'home';
         'payment' => 'trip_payment.css',
         'booking_confirmation' => 'confirmation_reservation.css',
         'history' => ['history.css', 'modal-system.css'],
+        'my_bookings' => 'history.css',
         'profile' => 'page_profil.css',
         'user_profile' => ['user-profile.css', 'modal-system.css'],
         'legal' => 'legal.css',
@@ -197,6 +188,11 @@ switch ($action) {
     case "history":
         require_once __DIR__ . "/controller/BookingController.php";
         (new BookingController())->history();
+        break;
+
+    case "my_bookings":
+        require_once __DIR__ . "/controller/BookingController.php";
+        (new BookingController())->myBookings();
         break;
 
     case "faq":
