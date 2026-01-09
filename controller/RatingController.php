@@ -85,13 +85,9 @@ class RatingController
         if ($userId === $_SESSION['user_id']) {
             $redirectUrl = '/CarShare/index.php?action=rating&user_id=' . $userId . '&error=self_rating';
             if ($carpoolingId) {
-<<<<<<< Updated upstream
-                $redirectUrl .= '&carpooling_id=' . $carpoolingId;
-=======
                 $redirectUrl = '/index.php?controller=trip&action=rating&trip_id=' . $carpoolingId . '&error=self_rating';
             } else {
                 $redirectUrl = '/index.php?action=rating&user_id=' . $userId . '&error=self_rating';
->>>>>>> Stashed changes
             }
             header('Location: ' . $redirectUrl);
             exit;
@@ -120,25 +116,17 @@ class RatingController
         if ($result) {
             $redirectUrl = '/CarShare/index.php?action=rating&user_id=' . $userId . '&success=1';
             if ($carpoolingId) {
-<<<<<<< Updated upstream
-                $redirectUrl .= '&carpooling_id=' . $carpoolingId;
-=======
                 $redirectUrl = '/index.php?controller=trip&action=rating&trip_id=' . $carpoolingId . '&success=1';
             } else {
                 $redirectUrl = '/index.php?action=rating&user_id=' . $userId . '&success=1';
->>>>>>> Stashed changes
             }
             header('Location: ' . $redirectUrl);
         } else {
             $redirectUrl = '/CarShare/index.php?action=rating&user_id=' . $userId . '&error=save_failed';
             if ($carpoolingId) {
-<<<<<<< Updated upstream
-                $redirectUrl .= '&carpooling_id=' . $carpoolingId;
-=======
                 $redirectUrl = '/index.php?controller=trip&action=rating&trip_id=' . $carpoolingId . '&error=save_failed';
             } else {
                 $redirectUrl = '/index.php?action=rating&user_id=' . $userId . '&error=save_failed';
->>>>>>> Stashed changes
             }
             header('Location: ' . $redirectUrl);
         }

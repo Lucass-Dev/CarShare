@@ -10,7 +10,7 @@ class TripController {
         switch ($action) {
             case 'search':
             case 'display_search':
-                $this->display_search();
+                $this->display_search($action);
                 break;
             case "publish":
                 TripView::display_publish_form();
@@ -32,10 +32,6 @@ class TripController {
 
                 TripView::display_rate_form();
                 break;
-<<<<<<< Updated upstream
-            default:
-                echo "404";
-=======
             case 'rating':
                 $this->display_rating();
                 break;
@@ -56,7 +52,6 @@ class TripController {
                 $carpooling = TripModel::getCarpoolingById($_GET['trip_id']);
                 print_r($_SESSION);
                 TripView::display_confirmation_page($carpooling);
->>>>>>> Stashed changes
                 break;
             default:
             echo "404";
@@ -77,7 +72,7 @@ class TripController {
             TripView::display_trip_infos($details);
         }
     }
-    private function display_search(){
+    private function display_search($action){
         $filters = array();
         $filters["pets_allowed"] = "";
         $filters["smoker_allowed"] = "";
@@ -115,8 +110,8 @@ class TripController {
 
         TripView::display_search_bar($start_name, $start_id,$end_name, $end_id,$requested_date, $requested_hour, $requested_seats);
 
-        ?> 
-            
+        if ($action == "display_search") {
+            ?>
             <div class="search-page-container">
                 <?php
                     TripView::display_search_filters();
@@ -166,7 +161,8 @@ class TripController {
                     }
                 ?>
             </div>
-        <?php
+            <?php
+        }
     }
 
 }

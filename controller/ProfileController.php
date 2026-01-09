@@ -56,8 +56,6 @@ class ProfileController {
                 break;
         }
 
-<<<<<<< Updated upstream
-=======
         require __DIR__ . "/../view/ProfileView.php";
     }
 
@@ -65,6 +63,5 @@ class ProfileController {
         session_destroy();
         header('Location: /index.php?action=home');
         exit();
->>>>>>> Stashed changes
     }
 }
