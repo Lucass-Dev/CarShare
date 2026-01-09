@@ -86,13 +86,9 @@ class SignalementController
         if ($userId === $_SESSION['user_id']) {
             $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&error=self_reporting';
             if ($carpoolingId) {
-<<<<<<< Updated upstream
-                $redirectUrl .= '&carpooling_id=' . $carpoolingId;
-=======
                 $redirectUrl = '/index.php?controller=trip&action=signalement&trip_id=' . $carpoolingId . '&error=self_reporting';
             } else {
                 $redirectUrl = '/index.php?controller=signalement&user_id=' . $userId . '&error=self_reporting';
->>>>>>> Stashed changes
             }
             header('Location: ' . $redirectUrl);
             exit;
@@ -101,13 +97,9 @@ class SignalementController
         if (empty($description)) {
             $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&error=empty_description';
             if ($carpoolingId) {
-<<<<<<< Updated upstream
-                $redirectUrl .= '&carpooling_id=' . $carpoolingId;
-=======
                 $redirectUrl = '/index.php?controller=trip&action=signalement&trip_id=' . $carpoolingId . '&error=empty_description';
             } else {
                 $redirectUrl = '/index.php?controller=signalement&user_id=' . $userId . '&error=empty_description';
->>>>>>> Stashed changes
             }
             header('Location: ' . $redirectUrl);
             exit;
@@ -116,13 +108,9 @@ class SignalementController
         if (empty($reason)) {
             $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&error=empty_reason';
             if ($carpoolingId) {
-<<<<<<< Updated upstream
-                $redirectUrl .= '&carpooling_id=' . $carpoolingId;
-=======
                 $redirectUrl = '/index.php?controller=trip&action=signalement&trip_id=' . $carpoolingId . '&error=empty_reason';
             } else {
                 $redirectUrl = '/index.php?controller=signalement&user_id=' . $userId . '&error=empty_reason';
->>>>>>> Stashed changes
             }
             header('Location: ' . $redirectUrl);
             exit;
@@ -161,25 +149,17 @@ class SignalementController
         if ($result) {
             $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&success=1';
             if ($carpoolingId) {
-<<<<<<< Updated upstream
-                $redirectUrl .= '&carpooling_id=' . $carpoolingId;
-=======
                 $redirectUrl = '/index.php?controller=trip&action=signalement&trip_id=' . $carpoolingId . '&success=1';
             } else {
                 $redirectUrl = '/index.php?controller=signalement&user_id=' . $userId . '&success=1';
->>>>>>> Stashed changes
             }
             header('Location: ' . $redirectUrl);
         } else {
             $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&error=save_failed';
             if ($carpoolingId) {
-<<<<<<< Updated upstream
-                $redirectUrl .= '&carpooling_id=' . $carpoolingId;
-=======
                 $redirectUrl = '/index.php?controller=trip&action=signalement&trip_id=' . $carpoolingId . '&error=save_failed';
             } else {
                 $redirectUrl = '/index.php?controller=signalement&user_id=' . $userId . '&error=save_failed';
->>>>>>> Stashed changes
             }
             header('Location: ' . $redirectUrl);
         }

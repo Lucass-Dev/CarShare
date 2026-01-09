@@ -42,12 +42,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <link href="./assets/styles/main.css" rel="stylesheet">
-<<<<<<< Updated upstream
-    <script src="./script/index.js"></script>
-=======
->>>>>>> Stashed changes
     <title>CarShare</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
 </head>
 <body>
     <?php
@@ -57,57 +54,6 @@
 ?>
 <main>
     <?php
-<<<<<<< Updated upstream
-        $controller = "home";
-
-        if(isset($_GET["controller"])){
-            $controller = $_GET["controller"];
-        }
-
-        switch ($controller) {
-            case "home":
-                $controller = new HomeController();
-                $controller->render();
-                break;
-            case "user":
-                $controller = new UserController();
-                $controller->index();
-                break;
-            case "login":
-                $controller = new LoginController();
-                $controller->render();
-                break;
-            case "register":
-                $controller = new RegisterController();
-                $controller->render();
-                break;
-            case "profile":
-                $controller = new ProfileController();
-                $controller->render();
-                break;
-            case "trip":
-                $controller = new TripController();
-                $controller->render();
-                break;
-            case "admin":
-                $controller = new AdminController();
-                $controller->index();
-                break;
-            case "faq":
-                $controller = new FAQController();
-                $controller->render();
-                break;
-            case "disconnect":
-                session_unset();
-                session_destroy();
-                header("Location: index.php");
-                break;
-            case "mp":
-                $controller = new MPController();
-                $controller->render();
-                break;
-            default:
-=======
     if (isset($_GET["controller"])) {
         $controller = $_GET["controller"] ;
     }else{
@@ -124,12 +70,9 @@
             if ($action === "history") {
                 $controller->history();
             } else {
->>>>>>> Stashed changes
                 http_response_code(404);
                 echo "Page non trouvée";
             }
-<<<<<<< Updated upstream
-=======
             break;
         case "home":
             $controller = new HomeController();
@@ -224,7 +167,6 @@
             break;
         
     }
->>>>>>> Stashed changes
 
 
     ?>
@@ -233,7 +175,5 @@
         include_once("./view/components/message_anchor.html");
         ?>
 </body>
-<script src="./script/searchPage.js"></script>
-<script src="./script/profile.js"></script>
-<script src="./script/create-trip.js"></script>
+<script src="./script/index.js" id="script" defer></script>
 </html>

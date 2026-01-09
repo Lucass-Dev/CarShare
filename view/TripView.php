@@ -97,113 +97,117 @@
         }
         public static function display_search_filters(){
             ?>
-            <div class="search-filters-container">
-                <div class="sort-by-filters">
-                    <h2>Trier par</h2>
+                <div class="search-filters-container">
+                    <div class="sort-by-filters">
+                        <h2>Trier par</h2>
 
-                    <input form="search-form" type="radio" id="sort_by_price_radio" name="sort_by" value="price" <?php if (isset($_GET['sort_by']) && $_GET['sort_by'] == "price") echo 'checked'; ?>>
-                    <label for="sort_by_price_radio">Prix</label><br>
-                    <input form="search-form" type="radio" id="sort_by_date" name="sort_by" value="date" <?php if (isset($_GET['sort_by']) && $_GET['sort_by'] == "date") echo 'checked'; ?>>
-                    <label for="sort_by_date">Date de départ</label><br>
-                    <input form="search-form" type="radio" id="sort_by_seats_radio" name="sort_by" value="seats" <?php if (isset($_GET['sort_by']) && $_GET['sort_by'] == "seats") echo 'checked'; ?>>
-                    <label for="sort_by_seats_radio">Places</label><br>
-                    <input form="search-form" type="radio" id="sort_by_note_radio" name="sort_by" value="rating" <?php if (isset($_GET['sort_by']) && $_GET['sort_by'] == "rating") echo 'checked'; ?>>
-                    <label for="sort_by_note_radio">Note</label><br>
-                    <div class="order-type-container">
-                        <h3>Ordre :</h3>
-                        <div class="order-type-inputs">
-                            <input form="search-form" type="radio" name="order_type" id="order_asc" value="asc" <?php if (isset($_GET['order_type']) && $_GET['order_type'] == "asc") echo 'checked'; ?>>
-                            <label for="order_asc">Le plus petit d'abord</label><br>
-                            <input form="search-form" type="radio" name="order_type" id="order_desc" value="desc" <?php if (isset($_GET['order_type']) && $_GET['order_type'] == "desc") echo 'checked'; ?>>
-                            <label for="order_desc">Le plus grand d'abord</label><br>
+                        <input form="search-form" class="sort-input" type="radio" id="sort_by_price_radio" name="sort_by" value="price" <?php if (isset($_GET['sort_by']) && $_GET['sort_by'] == "price") echo 'checked'; ?>>
+                        <label for="sort_by_price_radio">Prix</label><br>
+                        <input form="search-form" class="sort-input" type="radio" id="sort_by_date" name="sort_by" value="date" <?php if (isset($_GET['sort_by']) && $_GET['sort_by'] == "date") echo 'checked'; ?>>
+                        <label for="sort_by_date">Date de départ</label><br>
+                        <input form="search-form" class="sort-input" type="radio" id="sort_by_seats_radio" name="sort_by" value="seats" <?php if (isset($_GET['sort_by']) && $_GET['sort_by'] == "seats") echo 'checked'; ?>>
+                        <label for="sort_by_seats_radio">Places</label><br>
+                        <input form="search-form" class="sort-input" type="radio" id="sort_by_note_radio" name="sort_by" value="rating" <?php if (isset($_GET['sort_by']) && $_GET['sort_by'] == "rating") echo 'checked'; ?>>
+                        <label for="sort_by_note_radio">Note</label><br>
+                        <div class="order-type-container">
+                            <h3>Ordre :</h3>
+                            <div class="order-type-inputs">
+                                <input form="search-form" class="sort-input" type="radio" name="order_type" id="order_asc" value="asc" <?php if (isset($_GET['order_type']) && $_GET['order_type'] == "asc") echo 'checked'; ?>>
+                                <label for="order_asc">Le plus petit d'abord</label><br>
+                                <input form="search-form" class="sort-input" type="radio" name="order_type" id="order_desc" value="desc" <?php if (isset($_GET['order_type']) && $_GET['order_type'] == "desc") echo 'checked'; ?>>
+                                <label for="order_desc">Le plus grand d'abord</label><br>
+                            </div>
                         </div>
+                        <button class="remove-filters-btn" id="remove-sort-filters">Enlever les filtres</button>
+                    </div>
+
+                    <div class="date-filters">
+                        <h2>Horaires</h2>
+                        <svg viewBox="0 0 240 1" width="100%" height="15" style="padding-left: 2%;">
+                            <g fill="#444">
+                                <rect x="0" y="0" width="1" height="10" />
+                                <rect x="10" y="0" width="1" height="10" />
+                                <rect x="20" y="0" width="1" height="10" />
+                                <rect x="30" y="0" width="1" height="10" />
+                                <rect x="40" y="0" width="1" height="10" />
+                                <rect x="50" y="0" width="1" height="10" />
+                                <rect x="60" y="0" width="1" height="10" />
+                                <rect x="70" y="0" width="1" height="10" />
+                                <rect x="80" y="0" width="1" height="10" />
+                                <rect x="90" y="0" width="1" height="10" />
+                                <rect x="100" y="0" width="1" height="10" />
+                                <rect x="110" y="0" width="1" height="10" />
+                                <rect x="120" y="0" width="1" height="10" />
+                                <rect x="130" y="0" width="1" height="10" />
+                                <rect x="140" y="0" width="1" height="10" />
+                                <rect x="150" y="0" width="1" height="10" />
+                                <rect x="160" y="0" width="1" height="10" />
+                                <rect x="170" y="0" width="1" height="10" />
+                                <rect x="180" y="0" width="1" height="10" />
+                                <rect x="190" y="0" width="1" height="10" />
+                                <rect x="200" y="0" width="1" height="10" />
+                                <rect x="210" y="0" width="1" height="10" />
+                                <rect x="220" y="0" width="1" height="10" />
+                                <rect x="230" y="0" width="1" height="10" />
+                            </g>
+                        </svg>
+                        <input form="search-form" class="date-input" type="range" min="0" max="24" step="1" value="<?= isset($_GET['start_time_range_after']) ? htmlspecialchars($_GET['start_time_range_after']) : '0' ?>" id="start_time_range_after" name="start_time_range_after" >
+                        <label for="start_time_range_after">Partir plus tard</label>
+                        <br>
+                        <br>
+                        <svg viewBox="0 0 240 1" width="100%" height="15" style="padding-left: 2%;">
+                            <g fill="#444">
+                                <rect x="0" y="0" width="1" height="10" />
+                                <rect x="10" y="0" width="1" height="10" />
+                                <rect x="20" y="0" width="1" height="10" />
+                                <rect x="30" y="0" width="1" height="10" />
+                                <rect x="40" y="0" width="1" height="10" />
+                                <rect x="50" y="0" width="1" height="10" />
+                                <rect x="60" y="0" width="1" height="10" />
+                                <rect x="70" y="0" width="1" height="10" />
+                                <rect x="80" y="0" width="1" height="10" />
+                                <rect x="90" y="0" width="1" height="10" />
+                                <rect x="100" y="0" width="1" height="10" />
+                                <rect x="110" y="0" width="1" height="10" />
+                                <rect x="120" y="0" width="1" height="10" />
+                                <rect x="130" y="0" width="1" height="10" />
+                                <rect x="140" y="0" width="1" height="10" />
+                                <rect x="150" y="0" width="1" height="10" />
+                                <rect x="160" y="0" width="1" height="10" />
+                                <rect x="170" y="0" width="1" height="10" />
+                                <rect x="180" y="0" width="1" height="10" />
+                                <rect x="190" y="0" width="1" height="10" />
+                                <rect x="200" y="0" width="1" height="10" />
+                                <rect x="210" y="0" width="1" height="10" />
+                                <rect x="220" y="0" width="1" height="10" />
+                                <rect x="230" y="0" width="1" height="10" />
+                            </g>
+                        </svg>
+                        <div class="">
+                            <input form="search-form" class="date-input" type="range" min="0" max="24" step="1" value="<?= isset($_GET['start_time_range_before']) ? htmlspecialchars($_GET['start_time_range_before']) : '0' ?>" id="start_time_range_before" name="start_time_range_before" >
+                            <label for="start_time_range_before">Partir plus tôt</label>
+                        </div>
+                        <button class="remove-filters-btn" id="remove-date-filters">Enlever les filtres</button>
+                    </div>
+
+                    <div class="user-filters">
+                        <h2>Utilisateurs</h2>
+
+                        <input form="search-form" class="user-input" type="checkbox" id="user_verified_checkbox" name="is_verified_user" <?php if (isset($_GET['is_verified_user'])) echo 'checked'; ?>>
+                        <label for="user_verified_checkbox">Utilisateur vérifié</label><br>
+                    </div>
+
+                    <div class="contraintes-filters">
+                        <h2>Services</h2>
+                        <input form="search-form" class="constraints-input" type="checkbox" id="pets-chechbox" name="pets_allowed" <?php if (isset($_GET['pets_allowed'])) echo 'checked'; ?>>
+                        <label for="pets-chechbox">Animaux autorisés</label><br>
+                        <input form="search-form" class="constraints-input" type="checkbox" id="smoker-chechbox" name="smoker_allowed" <?php if (isset($_GET['smoker_allowed'])) echo 'checked'; ?>>
+                        <label for="smoker-chechbox">Fumeurs autorisés</label><br>
+                        <input form="search-form" class="constraints-input" type="checkbox" id="luggage-checkbox" name="luggage_allowed" <?php if (isset($_GET['luggage_allowed'])) echo 'checked'; ?>>
+                        <label for="luggage-checkbox">Bagages autorisés</label><br>
+                        <button class="remove-filters-btn" id="remove-constraints-filters">Enlever les filtres</button>
                     </div>
                 </div>
-
-                <div class="date-filters">
-                    <h2>Horaires</h2>
-                    <svg viewBox="0 0 240 1" width="100%" height="15" style="padding-left: 2%;">
-                        <g fill="#444">
-                            <rect x="0" y="0" width="1" height="10" />
-                            <rect x="10" y="0" width="1" height="10" />
-                            <rect x="20" y="0" width="1" height="10" />
-                            <rect x="30" y="0" width="1" height="10" />
-                            <rect x="40" y="0" width="1" height="10" />
-                            <rect x="50" y="0" width="1" height="10" />
-                            <rect x="60" y="0" width="1" height="10" />
-                            <rect x="70" y="0" width="1" height="10" />
-                            <rect x="80" y="0" width="1" height="10" />
-                            <rect x="90" y="0" width="1" height="10" />
-                            <rect x="100" y="0" width="1" height="10" />
-                            <rect x="110" y="0" width="1" height="10" />
-                            <rect x="120" y="0" width="1" height="10" />
-                            <rect x="130" y="0" width="1" height="10" />
-                            <rect x="140" y="0" width="1" height="10" />
-                            <rect x="150" y="0" width="1" height="10" />
-                            <rect x="160" y="0" width="1" height="10" />
-                            <rect x="170" y="0" width="1" height="10" />
-                            <rect x="180" y="0" width="1" height="10" />
-                            <rect x="190" y="0" width="1" height="10" />
-                            <rect x="200" y="0" width="1" height="10" />
-                            <rect x="210" y="0" width="1" height="10" />
-                            <rect x="220" y="0" width="1" height="10" />
-                            <rect x="230" y="0" width="1" height="10" />
-                        </g>
-                    </svg>
-                    <input form="search-form" type="range" min="0" max="24" step="1" value="<?= isset($_GET['start_time_range_after']) ? htmlspecialchars($_GET['start_time_range_after']) : '0' ?>" id="start_time_range_after" name="start_time_range_after" >
-                    <label for="start_time_range_after">Partir plus tard</label>
-                    <br>
-                    <br>
-                    <svg viewBox="0 0 240 1" width="100%" height="15" style="padding-left: 2%;">
-                        <g fill="#444">
-                            <rect x="0" y="0" width="1" height="10" />
-                            <rect x="10" y="0" width="1" height="10" />
-                            <rect x="20" y="0" width="1" height="10" />
-                            <rect x="30" y="0" width="1" height="10" />
-                            <rect x="40" y="0" width="1" height="10" />
-                            <rect x="50" y="0" width="1" height="10" />
-                            <rect x="60" y="0" width="1" height="10" />
-                            <rect x="70" y="0" width="1" height="10" />
-                            <rect x="80" y="0" width="1" height="10" />
-                            <rect x="90" y="0" width="1" height="10" />
-                            <rect x="100" y="0" width="1" height="10" />
-                            <rect x="110" y="0" width="1" height="10" />
-                            <rect x="120" y="0" width="1" height="10" />
-                            <rect x="130" y="0" width="1" height="10" />
-                            <rect x="140" y="0" width="1" height="10" />
-                            <rect x="150" y="0" width="1" height="10" />
-                            <rect x="160" y="0" width="1" height="10" />
-                            <rect x="170" y="0" width="1" height="10" />
-                            <rect x="180" y="0" width="1" height="10" />
-                            <rect x="190" y="0" width="1" height="10" />
-                            <rect x="200" y="0" width="1" height="10" />
-                            <rect x="210" y="0" width="1" height="10" />
-                            <rect x="220" y="0" width="1" height="10" />
-                            <rect x="230" y="0" width="1" height="10" />
-                        </g>
-                    </svg>
-                    <input form="search-form" type="range" min="0" max="24" step="1" value="<?= isset($_GET['start_time_range_before']) ? htmlspecialchars($_GET['start_time_range_before']) : '0' ?>" id="start_time_range_before" name="start_time_range_before" >
-                    <label for="start_time_range_before">Partir plus tôt</label>
-                </div>
-
-                <div class="user-filters">
-                    <h2>Utilisateurs</h2>
-
-                    <input form="search-form" type="checkbox" id="user_verified_checkbox" name="is_verified_user" <?php if (isset($_GET['is_verified_user'])) echo 'checked'; ?>>
-                    <label for="user_verified_checkbox">Utilisateur vérifié</label><br>
-                </div>
-
-                <div class="contraintes-filters">
-                    <h2>Services</h2>
-
-                    <input form="search-form" type="checkbox" id="pets-chechbox" name="pets_allowed" <?php if (isset($_GET['pets_allowed'])) echo 'checked'; ?>>
-                    <label for="pets-chechbox">Animaux autorisés</label><br>
-                    <input form="search-form" type="checkbox" id="smoker-chechbox" name="smoker_allowed" <?php if (isset($_GET['smoker_allowed'])) echo 'checked'; ?>>
-                    <label for="smoker-chechbox">Fumeurs autorisés</label><br>
-                    <input form="search-form" type="checkbox" id="luggage-checkbox" name="luggage_allowed" <?php if (isset($_GET['luggage_allowed'])) echo 'checked'; ?>>
-                    <label for="luggage-checkbox">Bagages autorisés</label><br>
-                </div>
-            </div>
             <?php
         }
 
