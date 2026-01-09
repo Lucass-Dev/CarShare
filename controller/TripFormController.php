@@ -63,6 +63,12 @@ class TripFormController
         $places = (int)($_POST['places'] ?? 0);
         $price = isset($_POST['price']) && $_POST['price'] !== '' ? floatval($_POST['price']) : null;
 
+        // Validate and sanitize streets using Model methods
+        $depStreet = TripFormModel::validateStreetName($depStreet, $errors, 'rue de départ');
+        $arrStreet = TripFormModel::validateStreetName($arrStreet, $errors, 'rue d\'arrivée');
+        $depNum = TripFormModel::validateStreetNumber($depNum, $errors, 'numéro de voie de départ');
+        $arrNum = TripFormModel::validateStreetNumber($arrNum, $errors, 'numéro de voie d\'arrivée');
+
         // Validation
         if (empty($depCity)) {
             $errors[] = "La ville de départ est obligatoire";
@@ -81,14 +87,6 @@ class TripFormController
         }
         if ($places < 1 || $places > 10) {
             $errors[] = "Le nombre de places doit être entre 1 et 10";
-        }
-        
-        // Validate street numbers if provided
-        if (!empty($depNum) && (!is_numeric($depNum) || intval($depNum) < 0)) {
-            $errors[] = "Le numéro de voie de départ doit être un nombre positif";
-        }
-        if (!empty($arrNum) && (!is_numeric($arrNum) || intval($arrNum) < 0)) {
-            $errors[] = "Le numéro de voie d'arrivée doit être un nombre positif";
         }
         
         // Validate price if provided

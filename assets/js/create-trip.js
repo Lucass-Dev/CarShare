@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const arrCity = document.getElementById('arr-city');
         const depNum = document.getElementById('dep-num');
         const arrNum = document.getElementById('arr-num');
+        const depStreet = document.getElementById('dep-street');
+        const arrStreet = document.getElementById('arr-street');
         const date = document.getElementById('date');
         const places = document.getElementById('places');
         const price = document.getElementById('price');
@@ -70,11 +72,43 @@ document.addEventListener('DOMContentLoaded', function() {
             markFieldAsValid(places);
         }
 
+        // Validate street names if provided
+        const invalidCharsRegex = /[\x00-\x1F\x7F<>{}\[\]\\]/;
+        
+        if (depStreet.value && depStreet.value.trim() !== '') {
+            if (invalidCharsRegex.test(depStreet.value)) {
+                errors.push('Le nom de rue de départ contient des caractères invalides');
+                markFieldAsInvalid(depStreet);
+            } else if (depStreet.value.length > 100) {
+                errors.push('Le nom de rue de départ est trop long (max 100 caractères)');
+                markFieldAsInvalid(depStreet);
+            } else {
+                markFieldAsValid(depStreet);
+            }
+        } else {
+            markFieldAsValid(depStreet);
+        }
+
+        if (arrStreet.value && arrStreet.value.trim() !== '') {
+            if (invalidCharsRegex.test(arrStreet.value)) {
+                errors.push('Le nom de rue d\'arrivée contient des caractères invalides');
+                markFieldAsInvalid(arrStreet);
+            } else if (arrStreet.value.length > 100) {
+                errors.push('Le nom de rue d\'arrivée est trop long (max 100 caractères)');
+                markFieldAsInvalid(arrStreet);
+            } else {
+                markFieldAsValid(arrStreet);
+            }
+        } else {
+            markFieldAsValid(arrStreet);
+        }
+
         // Validate street numbers if provided
         if (depNum.value && depNum.value.trim() !== '') {
-            const depNumValue = parseInt(depNum.value);
-            if (isNaN(depNumValue) || depNumValue < 0) {
-                errors.push('Le numéro de voie de départ doit être un nombre positif');
+            const cleanNum = depNum.value.replace(/[^\d]/g, '');
+            const depNumValue = parseInt(cleanNum);
+            if (isNaN(depNumValue) || depNumValue < 0 || depNumValue > 99999) {
+                errors.push('Le numéro de voie de départ doit être un nombre entre 0 et 99999');
                 markFieldAsInvalid(depNum);
             } else {
                 markFieldAsValid(depNum);
@@ -84,9 +118,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (arrNum.value && arrNum.value.trim() !== '') {
-            const arrNumValue = parseInt(arrNum.value);
-            if (isNaN(arrNumValue) || arrNumValue < 0) {
-                errors.push('Le numéro de voie d\'arrivée doit être un nombre positif');
+            const cleanNum = arrNum.value.replace(/[^\d]/g, '');
+            const arrNumValue = parseInt(cleanNum);
+            if (isNaN(arrNumValue) || arrNumValue < 0 || arrNumValue > 99999) {
+                errors.push('Le numéro de voie d\'arrivée doit être un nombre entre 0 et 99999');
                 markFieldAsInvalid(arrNum);
             } else {
                 markFieldAsValid(arrNum);
@@ -218,10 +253,60 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Number fields validation
+        // Street name validation (real-time)
+        const depStreet = document.getElementById('dep-street');
+        const arrStreet = document.getElementById('arr-street');
+        const invalidCharsRegex = /[\x00-\x1F\x7F<>{}\[\]\\]/;
+
+        if (depStreet) {
+            depStreet.addEventListener('input', function() {
+                if (this.value === '') {
+                    markFieldAsValid(this);
+                } else if (invalidCharsRegex.test(this.value)) {
+                    markFieldAsInvalid(this);
+                } else if (this.value.length > 100) {
+                    markFieldAsInvalid(this);
+                } else {
+                    markFieldAsValid(this);
+                }
+            });
+
+            depStreet.addEventListener('blur', function() {
+                if (this.value !== '' && (invalidCharsRegex.test(this.value) || this.value.length > 100)) {
+                    markFieldAsInvalid(this);
+                }
+            });
+        }
+
+        if (arrStreet) {
+            arrStreet.addEventListener('input', function() {
+                if (this.value === '') {
+                    markFieldAsValid(this);
+                } else if (invalidCharsRegex.test(this.value)) {
+                    markFieldAsInvalid(this);
+                } else if (this.value.length > 100) {
+                    markFieldAsInvalid(this);
+                } else {
+                    markFieldAsValid(this);
+                }
+            });
+
+            arrStreet.addEventListener('blur', function() {
+                if (this.value !== '' && (invalidCharsRegex.test(this.value) || this.value.length > 100)) {
+                    markFieldAsInvalid(this);
+                }
+            });
+        }
+
+        // Number fields validation (improved)
         if (depNum) {
             depNum.addEventListener('input', function() {
-                if (this.value === '' || (!isNaN(parseInt(this.value)) && parseInt(this.value) >= 0)) {
+                const cleanValue = this.value.replace(/[^\d]/g, '');
+                if (this.value === '') {
+                    markFieldAsValid(this);
+                } else if (cleanValue === '' || parseInt(cleanValue) < 0 || parseInt(cleanValue) > 99999) {
+                    markFieldAsInvalid(this);
+                } else {
                     markFieldAsValid(this);
                 }
             });
@@ -229,7 +314,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (arrNum) {
             arrNum.addEventListener('input', function() {
-                if (this.value === '' || (!isNaN(parseInt(this.value)) && parseInt(this.value) >= 0)) {
+                const cleanValue = this.value.replace(/[^\d]/g, '');
+                if (this.value === '') {
+                    markFieldAsValid(this);
+                } else if (cleanValue === '' || parseInt(cleanValue) < 0 || parseInt(cleanValue) > 99999) {
+                    markFieldAsInvalid(this);
+                } else {
                     markFieldAsValid(this);
                 }
             });
