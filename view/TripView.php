@@ -337,6 +337,7 @@
                 endif; 
                 ?>
 
+<<<<<<< Updated upstream
                 <form class="trip-form" method="POST" action="/CarShare/index.php?action=create_trip_submit" novalidate>
                     <div class="trip-form__row">
                     <div class="form__group">
@@ -350,6 +351,136 @@
                         list="locations-list"
                         required
                         />
+=======
+            <form class="trip-form" method="POST" action="/index.php?action=create_trip_submit" novalidate>
+                <div class="trip-form__row">
+                <div class="form__group">
+                    <label class="form__label" for="dep-city">Ville de départ <span class="form__required">*</span></label>
+                    <input 
+                    id="dep-city" 
+                    name="dep-city"
+                    class="form__input" 
+                    placeholder="Ville (France)"
+                    value="<?= htmlspecialchars($formData['dep-city'] ?? '') ?>"
+                    list="locations-list"
+                    required
+                    />
+                </div>
+
+                <div class="form__group">
+                    <label class="form__label" for="dep-street">Rue</label>
+                    <input 
+                    id="dep-street" 
+                    name="dep-street"
+                    class="form__input" 
+                    placeholder="Rue"
+                    value="<?= htmlspecialchars($formData['dep-street'] ?? '') ?>"
+                    />
+                </div>
+
+                <div class="form__group form__group--small">
+                    <label class="form__label" for="dep-num">N° voie</label>
+                    <input 
+                    id="dep-num" 
+                    name="dep-num"
+                    class="form__input" 
+                    placeholder="N° voie"
+                    value="<?= htmlspecialchars($formData['dep-num'] ?? '') ?>"
+                    />
+                </div>
+                </div>
+
+                <div class="trip-form__row">
+                <div class="form__group">
+                    <label class="form__label" for="arr-city">Ville d'arrivée <span class="form__required">*</span></label>
+                    <input 
+                    id="arr-city" 
+                    name="arr-city"
+                    class="form__input" 
+                    placeholder="Ville (France)"
+                    value="<?= htmlspecialchars($formData['arr-city'] ?? '') ?>"
+                    list="locations-list"
+                    required
+                    />
+                </div>
+
+                <div class="form__group">
+                    <label class="form__label" for="arr-street">Rue</label>
+                    <input 
+                    id="arr-street" 
+                    name="arr-street"
+                    class="form__input" 
+                    placeholder="Rue"
+                    value="<?= htmlspecialchars($formData['arr-street'] ?? '') ?>"
+                    />
+                </div>
+
+                <div class="form__group form__group--small">
+                    <label class="form__label" for="arr-num">N° voie</label>
+                    <input 
+                    id="arr-num" 
+                    name="arr-num"
+                    class="form__input" 
+                    placeholder="N° voie"
+                    value="<?= htmlspecialchars($formData['arr-num'] ?? '') ?>"
+                    />
+                </div>
+                </div>
+
+                <div class="trip-form__row trip-form__row--compact">
+                <div class="form__group form__group--small">
+                    <label class="form__label" for="date">Date <span class="form__required">*</span></label>
+                    <input 
+                    id="date" 
+                    name="date"
+                    class="form__input" 
+                    type="date"
+                    value="<?= htmlspecialchars($formData['date'] ?? '') ?>"
+                    required
+                    />
+                </div>
+
+                <div class="form__group form__group--small">
+                    <label class="form__label" for="time">Heure</label>
+                    <input 
+                    id="time" 
+                    name="time"
+                    class="form__input" 
+                    type="time"
+                    value="<?= htmlspecialchars($formData['time'] ?? '') ?>"
+                    />
+                </div>
+
+                <div class="form__group form__group--small">
+                    <label class="form__label" for="price">Prix (€)</label>
+                    <input 
+                    id="price" 
+                    name="price"
+                    class="form__input" 
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    placeholder="0.00"
+                    value="<?= htmlspecialchars($formData['price'] ?? '') ?>"
+                    />
+                </div>
+                </div>
+
+                <div class="trip-form__row trip-form__row--options">
+                <fieldset class="options">
+                    <legend class="options__title">Options</legend>
+                    
+                    <div class="form__group form__group--small">
+                    <label class="form__label" for="places">Nombre de place(s) <span class="form__required">*</span></label>
+                    <select id="places" name="places" class="form__input" required>
+                        <option value="0">0</option>
+                        <?php for ($i = 1; $i <= 10; $i++): ?>
+                        <option value="<?= $i ?>" <?= (isset($formData['places']) && $formData['places'] == $i) ? 'selected' : '' ?>>
+                            <?= $i ?>
+                        </option>
+                        <?php endfor; ?>
+                    </select>
+>>>>>>> Stashed changes
                     </div>
 
                     <div class="form__group">
@@ -689,6 +820,20 @@
                 </section>
 
             <script src="/CarShare/assets/js/signalement-form.js"></script>
+            <?php
+        }
+
+        public static function display_confirmation_page($carpooling) {
+            ?>
+            <link rel="stylesheet" href="./assets/styles/confirmation.css">
+            <section class="confirmation-section">
+                <div class="confirmation-card">
+                    <h1>✅ Trajet réservé avec succès !</h1>
+                    <p>Merci d'avoir choisi CarShare. Votre réservation a été confirmée.</p>
+                    <span>Votre trajet : <?php echo $carpooling['start_name'] ?> → <?php echo $carpooling['end_name'] ?></span>
+                    <a href="?controller=trip&action=display_search" class="btn-back">Retour à la recherche de trajets</a>
+                </div>
+            </section>
             <?php
         }
     }

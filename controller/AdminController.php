@@ -4,13 +4,10 @@ require_once __DIR__ . "/../model/AdminModel.php";
 class AdminController {
     
     public function render() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
         
         // Check if user is logged in and is admin
         if (!isset($_SESSION['user_id']) || !$_SESSION['is_admin']) {
-            header('Location: /CarShare/index.php?action=login');
+            header('Location: /index.php?action=login');
             exit();
         }
 

@@ -6,7 +6,7 @@ class ProfileController {
         
         // Check if user is logged in
         if (!isset($_SESSION['user_id'])) {
-            header('Location: /CarShare/index.php?action=login');
+            header('Location: /index.php?action=login');
             exit();
         }
 
@@ -56,5 +56,15 @@ class ProfileController {
                 break;
         }
 
+<<<<<<< Updated upstream
+=======
+        require __DIR__ . "/../view/ProfileView.php";
+    }
+
+    public function logout() {
+        session_destroy();
+        header('Location: /index.php?action=home');
+        exit();
+>>>>>>> Stashed changes
     }
 }

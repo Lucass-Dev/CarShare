@@ -12,7 +12,11 @@ class Database {
             );
             Database::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
+<<<<<<< Updated upstream
     return self::$db;
+=======
+        return self::$db;
+>>>>>>> Stashed changes
     }
 
     public static function getDb(){

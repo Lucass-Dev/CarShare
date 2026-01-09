@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Réservation confirmée - CarShare</title>
-    <link href="/CarShare/assets/styles/header.css" rel="stylesheet">
-    <link href="/CarShare/assets/styles/footer.css" rel="stylesheet">
+    <link href="/assets/styles/header.css" rel="stylesheet">
+    <link href="/assets/styles/footer.css" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -104,12 +104,12 @@
 
         <div class="row">
             <span>Vous pouvez retrouver votre trajet dans votre historique</span>
-            <a href="/CarShare/index.php?action=history" class="btn">Voir mon historique</a>
+            <a href="/index.php?action=history" class="btn">Voir mon historique</a>
         </div>
 
         <div class="row">
             <span>Retour à la page d'accueil</span>
-            <a href="/CarShare/index.php?action=home" class="btn">Accueil</a>
+            <a href="/index.php?action=home" class="btn">Accueil</a>
         </div>
     </div>
 

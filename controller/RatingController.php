@@ -12,13 +12,10 @@ class RatingController
 
     public function render(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
         
         // Check if user is logged in
         if (!isset($_SESSION['user_id'])) {
-            header('Location: /CarShare/index.php?action=login');
+            header('Location: /index.php?action=login');
             exit;
         }
 
@@ -38,7 +35,7 @@ class RatingController
         $user = $this->model->getUserById($userId);
 
         if (!$user) {
-            header('Location: /CarShare/index.php?action=rating&error=user_not_found');
+            header('Location: /index.php?action=rating&error=user_not_found');
             exit;
         }
 
@@ -60,10 +57,7 @@ class RatingController
 
     public function submit(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
+        
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405);
             echo "Méthode non autorisée";
@@ -72,7 +66,7 @@ class RatingController
 
         // Check if user is logged in
         if (!isset($_SESSION['user_id'])) {
-            header('Location: /CarShare/index.php?action=login');
+            header('Location: /index.php?action=login');
             exit;
         }
 
@@ -83,7 +77,7 @@ class RatingController
 
         // Validation
         if (!$userId) {
-            header('Location: /CarShare/index.php?action=rating&error=missing_data');
+            header('Location: /index.php?action=rating&error=missing_data');
             exit;
         }
 
@@ -91,7 +85,13 @@ class RatingController
         if ($userId === $_SESSION['user_id']) {
             $redirectUrl = '/CarShare/index.php?action=rating&user_id=' . $userId . '&error=self_rating';
             if ($carpoolingId) {
+<<<<<<< Updated upstream
                 $redirectUrl .= '&carpooling_id=' . $carpoolingId;
+=======
+                $redirectUrl = '/index.php?controller=trip&action=rating&trip_id=' . $carpoolingId . '&error=self_rating';
+            } else {
+                $redirectUrl = '/index.php?action=rating&user_id=' . $userId . '&error=self_rating';
+>>>>>>> Stashed changes
             }
             header('Location: ' . $redirectUrl);
             exit;
@@ -103,7 +103,7 @@ class RatingController
         // Verify user exists
         $user = $this->model->getUserById($userId);
         if (!$user) {
-            header('Location: /CarShare/index.php?action=rating&error=user_not_found');
+            header('Location: /index.php?action=rating&error=user_not_found');
             exit;
         }
 
@@ -120,13 +120,25 @@ class RatingController
         if ($result) {
             $redirectUrl = '/CarShare/index.php?action=rating&user_id=' . $userId . '&success=1';
             if ($carpoolingId) {
+<<<<<<< Updated upstream
                 $redirectUrl .= '&carpooling_id=' . $carpoolingId;
+=======
+                $redirectUrl = '/index.php?controller=trip&action=rating&trip_id=' . $carpoolingId . '&success=1';
+            } else {
+                $redirectUrl = '/index.php?action=rating&user_id=' . $userId . '&success=1';
+>>>>>>> Stashed changes
             }
             header('Location: ' . $redirectUrl);
         } else {
             $redirectUrl = '/CarShare/index.php?action=rating&user_id=' . $userId . '&error=save_failed';
             if ($carpoolingId) {
+<<<<<<< Updated upstream
                 $redirectUrl .= '&carpooling_id=' . $carpoolingId;
+=======
+                $redirectUrl = '/index.php?controller=trip&action=rating&trip_id=' . $carpoolingId . '&error=save_failed';
+            } else {
+                $redirectUrl = '/index.php?action=rating&user_id=' . $userId . '&error=save_failed';
+>>>>>>> Stashed changes
             }
             header('Location: ' . $redirectUrl);
         }
@@ -135,10 +147,7 @@ class RatingController
 
     public function getCarpoolings(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
+        
         if (!isset($_SESSION['user_id'])) {
             http_response_code(401);
             echo json_encode(['error' => 'Not authenticated']);

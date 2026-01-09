@@ -18,9 +18,9 @@ $action = $_GET['action'] ?? 'view';
     <title>CarShare - Signalement</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="/CarShare/assets/styles/header.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/footer.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/report-user.css">
+    <link rel="stylesheet" href="/assets/styles/header.css">
+    <link rel="stylesheet" href="/assets/styles/footer.css">
+    <link rel="stylesheet" href="/assets/styles/report-user.css">
 </head>
 
 <body>

@@ -19,6 +19,7 @@ class TripController {
                 $this->display_trip_details();
                 break;
             case 'payment':
+                print_r($_GET);
                 $this->display_trip_payment();
                 break;
             case "report":
@@ -31,9 +32,35 @@ class TripController {
 
                 TripView::display_rate_form();
                 break;
+<<<<<<< Updated upstream
             default:
                 echo "404";
+=======
+            case 'rating':
+                $this->display_rating();
                 break;
+            case 'signalement':
+                $this->display_signalement();
+                break;
+            case 'rating_submit':
+                // Redirection vers RatingController pour le submit
+                $ratingController = new RatingController();
+                $ratingController->submit();
+                break;
+            case 'signalement_submit':
+                // Redirection vers SignalementController pour le submit
+                $signalementController = new SignalementController();
+                $signalementController->submit();
+                break;
+            case 'confirmation':
+                $carpooling = TripModel::getCarpoolingById($_GET['trip_id']);
+                print_r($_SESSION);
+                TripView::display_confirmation_page($carpooling);
+>>>>>>> Stashed changes
+                break;
+            default:
+            echo "404";
+            break;
         }
     }
     private function display_trip_payment(){

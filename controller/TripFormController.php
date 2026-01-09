@@ -12,13 +12,10 @@ class TripFormController
 
     public function render(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
         
         // Check if user is logged in
         if (!isset($_SESSION['user_id'])) {
-            header('Location: /CarShare/index.php?action=login');
+            header('Location: /index.php?action=login');
             exit;
         }
 
@@ -31,10 +28,7 @@ class TripFormController
 
     public function submit(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
+        
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405);
             echo "Méthode non autorisée";
@@ -43,7 +37,7 @@ class TripFormController
 
         // Check if user is logged in
         if (!isset($_SESSION['user_id'])) {
-            header('Location: /CarShare/index.php?action=login');
+            header('Location: /index.php?action=login');
             exit;
         }
 
@@ -111,7 +105,7 @@ class TripFormController
         if (!empty($errors)) {
             $_SESSION['trip_form_errors'] = $errors;
             $_SESSION['trip_form_data'] = $_POST;
-            header('Location: /CarShare/index.php?action=create_trip&error=1');
+            header('Location: /index.php?action=create_trip&error=1');
             exit;
         }
 
@@ -135,11 +129,11 @@ class TripFormController
         if ($result) {
             unset($_SESSION['trip_form_errors']);
             unset($_SESSION['trip_form_data']);
-            header('Location: /CarShare/index.php?action=create_trip&success=1');
+            header('Location: /index.php?action=create_trip&success=1');
         } else {
             $_SESSION['trip_form_errors'] = ["Erreur lors de la création du trajet"];
             $_SESSION['trip_form_data'] = $_POST;
-            header('Location: /CarShare/index.php?action=create_trip&error=1');
+            header('Location: /index.php?action=create_trip&error=1');
         }
         exit;
     }

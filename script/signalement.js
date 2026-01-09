@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Fetch carpoolings for this user
-        fetch('/CarShare/index.php?action=signalement_get_carpoolings&user_id=' + userId)
+        fetch('/index.php?controller=signalement_get_carpoolings&user_id=' + userId)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const carpoolingId = carpoolingSelect.value;
         
         if (userId && carpoolingId) {
-            window.location.href = '/CarShare/index.php?action=signalement&user_id=' + userId + '&carpooling_id=' + carpoolingId;
+            window.location.href = '/index.php?controller=signalement&user_id=' + userId + '&carpooling_id=' + carpoolingId;
         }
     });
 });
