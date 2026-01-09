@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FAQ - CarShare</title>
-  <link href="/CarShare/assets/styles/header.css" rel="stylesheet">
-  <link href="/CarShare/assets/styles/footer.css" rel="stylesheet">
+  <link href="/assets/styles/header.css" rel="stylesheet">
+  <link href="/assets/styles/footer.css" rel="stylesheet">
   <style>
     body {
       font-family: "Inter", Arial, sans-serif;

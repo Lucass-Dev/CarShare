@@ -71,7 +71,9 @@
 
                 </div>
             </section>
+
             <?php
+            include_once("./view/components/footer.php");
         }
     }
 ?>

@@ -12,13 +12,10 @@ class SignalementController
 
     public function render(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
         
         // Check if user is logged in
         if (!isset($_SESSION['user_id'])) {
-            header('Location: /CarShare/index.php?action=login');
+            header('Location: /index.php?controller=login');
             exit;
         }
 
@@ -38,7 +35,7 @@ class SignalementController
         $user = $this->model->getUserById($userId);
         
         if (!$user) {
-            header('Location: /CarShare/index.php?action=signalement&error=user_not_found');
+            header('Location: /index.php?controller=signalement&error=user_not_found');
             exit;
         }
 
@@ -62,10 +59,7 @@ class SignalementController
 
     public function submit(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
+        
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405);
             return;
@@ -73,7 +67,7 @@ class SignalementController
 
         // Check if user is logged in
         if (!isset($_SESSION['user_id'])) {
-            header('Location: /CarShare/index.php?action=login');
+            header('Location: /index.php?controller=login');
             exit;
         }
 
@@ -84,7 +78,7 @@ class SignalementController
 
         // Validation
         if (!$userId) {
-            header('Location: /CarShare/index.php?action=signalement&error=missing_data');
+            header('Location: /index.php?controller=signalement&error=missing_data');
             exit;
         }
 
@@ -92,7 +86,13 @@ class SignalementController
         if ($userId === $_SESSION['user_id']) {
             $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&error=self_reporting';
             if ($carpoolingId) {
+<<<<<<< Updated upstream
                 $redirectUrl .= '&carpooling_id=' . $carpoolingId;
+=======
+                $redirectUrl = '/index.php?controller=trip&action=signalement&trip_id=' . $carpoolingId . '&error=self_reporting';
+            } else {
+                $redirectUrl = '/index.php?controller=signalement&user_id=' . $userId . '&error=self_reporting';
+>>>>>>> Stashed changes
             }
             header('Location: ' . $redirectUrl);
             exit;
@@ -101,7 +101,13 @@ class SignalementController
         if (empty($description)) {
             $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&error=empty_description';
             if ($carpoolingId) {
+<<<<<<< Updated upstream
                 $redirectUrl .= '&carpooling_id=' . $carpoolingId;
+=======
+                $redirectUrl = '/index.php?controller=trip&action=signalement&trip_id=' . $carpoolingId . '&error=empty_description';
+            } else {
+                $redirectUrl = '/index.php?controller=signalement&user_id=' . $userId . '&error=empty_description';
+>>>>>>> Stashed changes
             }
             header('Location: ' . $redirectUrl);
             exit;
@@ -110,7 +116,13 @@ class SignalementController
         if (empty($reason)) {
             $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&error=empty_reason';
             if ($carpoolingId) {
+<<<<<<< Updated upstream
                 $redirectUrl .= '&carpooling_id=' . $carpoolingId;
+=======
+                $redirectUrl = '/index.php?controller=trip&action=signalement&trip_id=' . $carpoolingId . '&error=empty_reason';
+            } else {
+                $redirectUrl = '/index.php?controller=signalement&user_id=' . $userId . '&error=empty_reason';
+>>>>>>> Stashed changes
             }
             header('Location: ' . $redirectUrl);
             exit;
@@ -119,7 +131,7 @@ class SignalementController
         // Verify user exists
         $user = $this->model->getUserById($userId);
         if (!$user) {
-            header('Location: /CarShare/index.php?action=signalement&error=user_not_found');
+            header('Location: /index.php?controller=signalement&error=user_not_found');
             exit;
         }
 
@@ -149,13 +161,25 @@ class SignalementController
         if ($result) {
             $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&success=1';
             if ($carpoolingId) {
+<<<<<<< Updated upstream
                 $redirectUrl .= '&carpooling_id=' . $carpoolingId;
+=======
+                $redirectUrl = '/index.php?controller=trip&action=signalement&trip_id=' . $carpoolingId . '&success=1';
+            } else {
+                $redirectUrl = '/index.php?controller=signalement&user_id=' . $userId . '&success=1';
+>>>>>>> Stashed changes
             }
             header('Location: ' . $redirectUrl);
         } else {
             $redirectUrl = '/CarShare/index.php?action=signalement&user_id=' . $userId . '&error=save_failed';
             if ($carpoolingId) {
+<<<<<<< Updated upstream
                 $redirectUrl .= '&carpooling_id=' . $carpoolingId;
+=======
+                $redirectUrl = '/index.php?controller=trip&action=signalement&trip_id=' . $carpoolingId . '&error=save_failed';
+            } else {
+                $redirectUrl = '/index.php?controller=signalement&user_id=' . $userId . '&error=save_failed';
+>>>>>>> Stashed changes
             }
             header('Location: ' . $redirectUrl);
         }
@@ -164,10 +188,7 @@ class SignalementController
 
     public function getCarpoolings(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
+        
         if (!isset($_SESSION['user_id'])) {
             http_response_code(401);
             echo json_encode(['error' => 'Not authenticated']);

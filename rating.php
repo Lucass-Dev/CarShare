@@ -19,9 +19,9 @@ $action = $_GET['action'] ?? 'view';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="/CarShare/assets/styles/header.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/footer.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/rating.css">
+    <link rel="stylesheet" href="/assets/styles/header.css">
+    <link rel="stylesheet" href="/assets/styles/footer.css">
+    <link rel="stylesheet" href="/assets/styles/rating.css">
 </head>
 
 <body>

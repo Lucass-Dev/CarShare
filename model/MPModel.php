@@ -21,11 +21,10 @@
                         FROM private_message GROUP BY id_conv
                         ) pm_last ON pm_last.id_conv = p.id_conv
                     AND pm_last.last_send_at = p.send_at
-                    INNER JOIN users u ON u.id = (CASE WHEN c.user1_id=:user_id THEN c.user2_id ELSE c.user1_id END)
-                    WHERE c.user1_id=:user_id
-                    OR c.user2_id=:user_id";
+                    INNER JOIN users u ON u.id = (CASE WHEN c.user1_id=:user_id1 THEN c.user2_id ELSE c.user1_id END)
+                    WHERE :user_id2 IN (c.user1_id, c.user2_id)";
             $stmt = Database::getDb()->prepare($str);
-            $stmt->execute([":user_id"=> $user_id]);
+            $stmt->execute([":user_id1"=> $user_id, ":user_id2"=>$user_id]);
             $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
             if($res){
                 foreach($res as $key => $value){
@@ -37,11 +36,12 @@
 
         public static function getDiscussion($user_id, $conversation_id): array{
             $return = [];
-            $str = "SELECT * FROM conversations WHERE id=:conv_id AND (user1_id=:user_id OR user2_id=:user_id)";
+            $str = "SELECT * FROM conversations WHERE id=:conv_id AND (user1_id=:user_id1 OR user2_id=:user_id2)";
             
             $stmt = Database::getDb()->prepare($str);
             $stmt->execute([
-                ":user_id"=> $user_id,
+                ":user_id1"=> $user_id,
+                ":user_id2"=> $user_id,
                 ":conv_id"=> $conversation_id
                 ]);
             $res = $stmt->fetchAll(PDO::FETCH_ASSOC);

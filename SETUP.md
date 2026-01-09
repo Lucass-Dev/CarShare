@@ -101,8 +101,8 @@ Le projet suit l'architecture MVC (Modèle-Vue-Contrôleur) :
 ## Utilisation
 
 ### Accès à l'Application
-- URL principale : `http://localhost/CarShare/index.php`
-- Page d'accueil : `http://localhost/CarShare/index.php?action=home`
+- URL principale : `http://localhost/index.php`
+- Page d'accueil : `http://localhost/index.php?action=home`
 
 ### Routes Principales
 | Action | URL | Description |
@@ -129,9 +129,9 @@ Le projet suit l'architecture MVC (Modèle-Vue-Contrôleur) :
 ### Accès Direct aux Pages
 
 En plus de l'accès via `index.php`, les pages principales peuvent être accédées directement :
-- **Notation** : `http://localhost/CarShare/rating.php` ou `rating.php?action=view`
-- **Signalement** : `http://localhost/CarShare/signalement.php` ou `signalement.php?action=view`
-- **Créer un trajet** : `http://localhost/CarShare/create-trip.php` ou `create-trip.php?action=view`
+- **Notation** : `http://localhost/rating.php` ou `rating.php?action=view`
+- **Signalement** : `http://localhost/signalement.php` ou `signalement.php?action=view`
+- **Créer un trajet** : `http://localhost/create-trip.php` ou `create-trip.php?action=view`
 
 ## Base de Données
 

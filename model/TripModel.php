@@ -119,8 +119,8 @@ class TripModel {
         $db = Database::getDb();
         $stmt = $db->prepare("SELECT c.id as trip_id, l1.name as start_name, l2.name as end_name, c.start_date, c.available_places , c.luggage_allowed, c.pets_allowed, c.smoker_allowed, u.first_name as provider_name, u.id as provider_id, c.price, c.provider_id, u.global_rating, u.profile_picture_path
                     FROM `carpoolings` c
-                    INNER JOIN `location` l2 on (c.start_id = l2.id)
-                    INNER JOIN `location` l1 on (c.end_id = l1.id)
+                    INNER JOIN `location` l1 on (c.start_id = l1.id)
+                    INNER JOIN `location` l2 on (c.end_id = l2.id)
                     INNER JOIN `users` u on (c.provider_id = u.id)
                     WHERE c.id = :trip_id;");
         $stmt->bindParam(":trip_id", $trip_id, PDO::PARAM_INT);
@@ -148,5 +148,13 @@ class TripModel {
         }
         return $stResult;
     }
+
+    // $query = "SELECT * FROM users WHERE id=:id";
+    // $db = Database::getDb();
+    //$stmt = $db->prepare($query);
+    //$stmt->bindParam(":id", $user_id, PDO::PARAM_INT);
+    // $stmt->execute();
+    // $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    // return !empty($result);
 }
 ?>

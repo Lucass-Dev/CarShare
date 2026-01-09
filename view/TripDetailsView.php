@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Détails du trajet - CarShare</title>
-  <link href="/CarShare/assets/styles/header.css" rel="stylesheet">
-  <link href="/CarShare/assets/styles/footer.css" rel="stylesheet">
+  <link href="/assets/styles/header.css" rel="stylesheet">
+  <link href="/assets/styles/footer.css" rel="stylesheet">
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -123,7 +123,7 @@
 
   <div class="card">
     <div class="left">
-      <img src="/CarShare/assets/img/avatar.jpg" alt="Photo du conducteur">
+      <img src="/assets/img/avatar.jpg" alt="Photo du conducteur">
       <p><strong><?= htmlspecialchars($carpooling['first_name']) ?></strong><br>
       <?= $carpooling['global_rating'] ? round($carpooling['global_rating'], 1) : 'N/A' ?>⭐</p>
     </div>
@@ -150,7 +150,7 @@
         <div>
           <span class="price"><?= number_format($carpooling['price'], 2) ?> € TTC</span><br>
           <br>
-          <a class="btn-reserver" href="/CarShare/index.php?action=payment&carpooling_id=<?= $carpooling['id'] ?>">Réserver</a>
+          <a class="btn-reserver" href="/index.php?action=payment&carpooling_id=<?= $carpooling['id'] ?>">Réserver</a>
         </div>
       </div>
     </div>

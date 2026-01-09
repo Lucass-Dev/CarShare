@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Paiement - CarShare</title>
-  <link href="/CarShare/assets/styles/header.css" rel="stylesheet">
-  <link href="/CarShare/assets/styles/footer.css" rel="stylesheet">
+  <link href="/assets/styles/header.css" rel="stylesheet">
+  <link href="/assets/styles/footer.css" rel="stylesheet">
 
   <style>
     body {
@@ -131,7 +131,7 @@
       </div>
     </div>
 
-    <form class="payment-form" method="POST" action="/CarShare/index.php?action=payment&carpooling_id=<?= $carpooling['id'] ?>">
+    <form class="payment-form" method="POST" action="/index.php?action=payment&carpooling_id=<?= $carpooling['id'] ?>">
       <div class="section-title">Informations de paiement</div>
 
       <div>

@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (selectedUserId) {
             // No carpooling_id required, just redirect with user_id
-            window.location.href = '/CarShare/index.php?action=rating&user_id=' + selectedUserId;
+            window.location.href = '/index.php?action=rating&user_id=' + selectedUserId;
         }
     });
 });

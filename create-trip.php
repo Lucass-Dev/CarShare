@@ -18,9 +18,9 @@ $action = $_GET['action'] ?? 'view';
     <title>CarShare - Créer un trajet</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="/CarShare/assets/styles/header.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/footer.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/create-trip.css">
+    <link rel="stylesheet" href="/assets/styles/header.css">
+    <link rel="stylesheet" href="/assets/styles/footer.css">
+    <link rel="stylesheet" href="/assets/styles/create-trip.css">
 </head>
 
 <body class="page page--create">
