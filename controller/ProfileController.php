@@ -55,8 +55,6 @@ class ProfileController {
                 # code...
                 break;
         }
-
-        require __DIR__ . "/../view/ProfileView.php";
     }
 
     public function logout() {

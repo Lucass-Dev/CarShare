@@ -3,15 +3,14 @@
 
 .hero {
     position: relative;
-    height: 450px;
-    background-image: url('voiture.gif'); /* Remplacez par le GIF */
+    height: 60vh;
+    background-image: url('../img/index_bg.gif');
     background-size: cover;
     background-position: center;
     display: flex;
     align-items: center;
 }
 
-/* --- Formulaire de recherche --- */
 .search-container {
     background-color: #fff;
     padding: 2rem;

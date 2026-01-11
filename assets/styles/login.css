@@ -1,40 +1,39 @@
-.gender-options{
-    display: flex;
-    flex-direction: row;
+.gender-options {
+  display: flex;
+  gap: 1rem;
 }
 
 .login-box {
   margin: auto;
   max-width: 600px;
-  border-radius: 15px;
+  border-radius: var(--border-radius-lg);
   padding: 40px 50px;
-  background: #fff;
-  border: 1px solid #e1e1e1;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-light);
   text-align: center;
-  font-family: "Inter", sans-serif;
-  align-items: center;
+  font-family: var(--font-family);
 }
 
 .login-box h2 {
   margin-bottom: 25px;
   font-size: 28px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-color);
 }
 
 .login-box input {
   width: 100%;
   padding: 12px 14px;
   margin: 12px 0;
-  border-radius: 10px;
-  border: 1px solid #ccc;
+  border-radius: var(--border-radius-small);
+  border: 1px solid var(--border-color);
   font-size: 16px;
-  transition: 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .login-box input:focus {
-  border-color: #a3b8ec;
+  border-color: var(--primary-color);
   box-shadow: 0 0 8px rgba(163, 184, 236, 0.4);
   outline: none;
 }
@@ -44,43 +43,46 @@
   justify-content: space-between;
   margin-top: 20px;
   align-items: center;
+  gap: 1rem;
 }
 
 button {
   border: none;
-  border-radius: 25px;
+  border-radius: var(--btn-radius);
   padding: 10px 20px;
   cursor: pointer;
   font-size: 15px;
-  transition: 0.2s;
-  
+  transition: background 0.2s, transform 0.1s;
 }
 
 .primary {
-  background-color: #a3b8ec;
-  color: #000;
+  background-color: var(--primary-color);
+  color: #fff;
 }
 
 .primary:hover {
-  background-color: #93a9e0;
+  background-color: var(--primary-color-dark);
 }
 
 .secondary {
   text-decoration: none;
-  color: #000;
-  color: #333;
-  margin-left: 0.5rem;
+  color: var(--text-secondary);
+  display: inline-flex;
   align-items: center;
 }
 
 .secondary:hover {
-  background-color: #b8c8ed;
+  background-color: var(--bg-light);
 }
 
-.error-message{
-  color: red;
+.error-message {
+  color: var(--danger-color);
+  font-size: 14px;
+  margin-top: 4px;
 }
 
-.success{
-  color: green;
+.success {
+  color: var(--success-color);
+  font-size: 14px;
+  margin-top: 4px;
 }

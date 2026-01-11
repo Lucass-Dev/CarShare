@@ -7,37 +7,35 @@ let end_suggestion_box = document.getElementById('end-suggestion-box');
 let form_start_input = document .getElementById('form_start_input');
 let form_end_input = document .getElementById('form_end_input');
 
-let remove_sort_filters = document.getElementById("remove-sort-filters");
-let remove_date_filters = document.getElementById("remove-date-filters");
-let remove_constraints_filters = document.getElementById("remove-constraints-filters");
+if (params.get("action") == "display_search") {
+    let remove_sort_filters = document.getElementById("remove-sort-filters");
+    let remove_date_filters = document.getElementById("remove-date-filters");
+    let remove_constraints_filters = document.getElementById("remove-constraints-filters");
 
-remove_sort_filters.addEventListener('click', function(){
-    const sorts_filters = document.getElementsByClassName("sort-input");
-    for (let index = 0; index < sorts_filters.length; index++) {
-        const element = sorts_filters[index];
-        element.checked = 0
-    }
-})
+    remove_sort_filters.addEventListener('click', function(){
+        const sorts_filters = document.getElementsByClassName("sort-input");
+        for (let index = 0; index < sorts_filters.length; index++) {
+            const element = sorts_filters[index];
+            element.checked = 0
+        }
+    })
 
-remove_date_filters.addEventListener('click', function(){
-    const sorts_filters = document.getElementsByClassName("date-input");
-    for (let index = 0; index < sorts_filters.length; index++) {
-        const element = sorts_filters[index];
-        element.value = 0
-    }
-})
+    remove_date_filters.addEventListener('click', function(){
+        const sorts_filters = document.getElementsByClassName("date-input");
+        for (let index = 0; index < sorts_filters.length; index++) {
+            const element = sorts_filters[index];
+            element.value = 0
+        }
+    })
 
-remove_constraints_filters.addEventListener('click', function(){
-    const sorts_filters = document.getElementsByClassName("constraints-input");
-    for (let index = 0; index < sorts_filters.length; index++) {
-        const element = sorts_filters[index];
-        element.checked = 0
-    }
-})
-
-
-
-
+    remove_constraints_filters.addEventListener('click', function(){
+        const sorts_filters = document.getElementsByClassName("constraints-input");
+        for (let index = 0; index < sorts_filters.length; index++) {
+            const element = sorts_filters[index];
+            element.checked = 0
+        }
+    })
+}
 
 start_suggestion_box.addEventListener('click', function(e) {
     if (e.target && e.target.classList.contains('suggestion-item')) {
@@ -57,7 +55,7 @@ start_input.onkeydown = function(event) {
     if ((key == 8 || key == 46) && start_input.value.length <= 5) {
         form_start_input.value = ""
         start_input.value = ""
-        
+        start_suggestion_box.innerHTML = ""
     }
 }
 
@@ -79,7 +77,7 @@ end_input.onkeydown = function(event) {
     if ((key == 8 || key == 46) && end_input.value.length <= 5) {
         end_input.value = ""
         form_end_input.value = ""
-        
+        end_suggestion_box.innerHTML = ""
     }
 }
 

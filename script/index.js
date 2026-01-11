@@ -19,13 +19,16 @@ function loadScript(name){
 
 const params = new URLSearchParams(window.location.search);
 switch (params.get("controller")) {
+    case "home":
     case "trip":
         switch (params.get("action")) {
             case "display_search":
             case "search":
+            case "publish" :
                 loadScript("searchPage");
                 break;
             default:
+                loadScript("searchPage");
                 break;
         }
         break;
