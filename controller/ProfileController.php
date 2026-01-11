@@ -3,23 +3,48 @@
 class ProfileController {
     
     public function render() {
-        
-        // Check if user is logged in
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /index.php?action=login');
-            exit();
-        }
+       $action = $_GET['action'] ?? 'login';
 
-        $action = "show";
-        if (isset($_GET["action"])) {
-            $action = $_GET["action"];
-        }
-        
-        
+    if (isset($_SESSION['user_id'])) {
 
+        if ($action === 'login' || $action === 'register') {
+            header('Location: index.php?controller=profile&action=show');
+            exit;
+        }
         $user = UserModel::getUserById($_SESSION['user_id']);
+    }
+
+        
+        
+        
+        
+
+        
 
         switch ($action) {
+            case "login": 
+                ProfileView::displayLogin();
+                if (sizeof($_POST) > 0) {
+                    UserModel::send_login_form($_POST);
+                }
+                break;
+            case "register":
+                
+                if (sizeof($_POST) > 0) {
+                    $checkForm = UserModel::check_form_values($_POST);
+                    if ($checkForm["success"]) {
+                        $result = UserModel::send_register_form($_POST);
+                        ProfileView::displayRegister($result["message"], $result["success"]);
+                    }else{
+                        ProfileView::displayRegister($checkForm["message"], $checkForm["success"]);
+                    }
+                }else{
+                    ProfileView::displayRegister("", true);
+                }
+                break;
+            case "disconnect":
+                $this->logout();
+                break;
             case 'history':
                 $history = UserModel::getUserHistory($user->id);
                 ProfileView::displayHistory($history);
@@ -59,7 +84,8 @@ class ProfileController {
 
     public function logout() {
         session_destroy();
-        header('Location: /index.php?action=home');
+        $_SESSION = [];
+        header('Location: /index.php?controller=home');
         exit();
     }
 }

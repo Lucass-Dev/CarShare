@@ -11,16 +11,21 @@
     <div class="header-icons">
         <a href="?controller=trip&action=search" title="Rechercher" class="icon">🔍</a>
         <div class="dropdown">
-            <a href="?controller=<?php echo isset($_SESSION["logged"])  && $_SESSION["logged"] ? "profile":"login"?>" class="upp">
-                <img src="../../assets/upp/<?php echo $profilePicturePath && $profilePicturePath != '' ? $profilePicturePath : 'default_pp.svg'?>" alt="Ma photo de profile" class="icon">
+            <a href="/index.php?controller=profile&action=login" class="upp">
+                <?php
+                    if (!file_exists("../../assets/upp/".$profilePicturePath)) {
+                        $profilePicturePath = 'avatar.jpg';
+                    }
+                ?>
+                <img src="../../assets/upp/<?php echo $profilePicturePath?>" alt="Ma photo de profile" class="icon">
             </a>
             <?php
                 if (isset($_SESSION['logged']) && $_SESSION['logged'] !=='') {
                     ?>
                     <ul class="hidden">
                         <li><a href="?controller=profile&action=show">Profile</a></li>
-                        <li><a href="?controller=mp">Messages</a></li>
-                        <li><a href="?controller=disconnect">Se déconnecter</a></li>
+                        <li><a href="?controller=profile&action=mp">Messages</a></li>
+                        <li><a href="?controller=profile&action=disconnect">Se déconnecter</a></li>
                     </ul>
                     <?php
                 }
