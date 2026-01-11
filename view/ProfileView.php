@@ -179,4 +179,48 @@ class ProfileView{
 </div>
 <?php
     }
+
+    static function displayLogin(){
+         ?>
+        <div class="login-box">
+            <h2>Se connecter</h2>
+            <form controller="?controller=profile" method="POST">
+                <input name="email" type="email" placeholder="Email" required />
+                <input name="password" type="password" placeholder="Mot de passe" required />
+                <div class="buttons">
+                <a class="secondary" href="?controller=profile&action=register">Pas de compte ?</a>
+                <button type="submit" class="primary">Se connecter</button>
+                </div>
+            </form>
+        </div>
+        <?php
+    }
+
+    static function displayRegister($message, $success){
+         ?>
+            
+            <form controller="./?controller=profile&action=register" method="POST" class="register-box">
+                <h2>S'inscrire</h2>    
+                <input type="text" placeholder="Nom" name="first_name" required value="<?php echo (!$success ? $_POST["first_name"] : "") ?>"/>
+                <input type="text" placeholder="Prénom" name="last_name" required value="<?php echo (!$success ? $_POST["last_name"] : "") ?>"/>
+                <input type="email" placeholder="Email" name="mail" required value="<?php echo (!$success ? $_POST["mail"] : "") ?>"/>
+                <input type="date" placeholder="Date de naissance" name="birthdate" required value="<?php echo (!$success ? $_POST["birthdate"] : "") ?>"/>
+                <input type="password" placeholder="Mot de passe" name="pass" required />
+                <input type="password" placeholder="Confirmation" name="confirm_pass" required />
+                <div class="buttons">
+                    <a class="secondary" href="?controller=profile&action=login">Déjà un compte ?</a>
+                    <button type="submit" class="primary" id="register-button">S'inscrire</button>
+                </div>
+                <?php ProfileView::display_result_message($message, $success); ?>
+            </form>
+        <?php
+    }
+
+    static public function display_result_message($message, $success){
+        ?>
+        <div class="error-message <?php echo $success == "true" ? "success" : "error" ?>">
+            <p><?php echo $message;?></p>
+        </div>
+        <?php
+    }
 }

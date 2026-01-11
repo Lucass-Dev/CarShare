@@ -41,7 +41,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-    <link href="./assets/styles/main.css" rel="stylesheet">
+    <link href="./assets/styles/header.css" rel="stylesheet">
+    <link href="./assets/styles/footer.css" rel="stylesheet">
+    <link href="./assets/styles/index.css" rel="stylesheet">
+    <link href="./assets/styles/message_anchor.css" rel="stylesheet">
+
+    <link rel="stylesheet" id="dynamic-css">
     <title>CarShare</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -65,18 +70,6 @@
             $controller = new HomeController();
             $controller->render();
             break;
-        case "user":
-            $controller = new UserController();
-            $controller->index();
-            break;
-        case "login":
-            $controller = new LoginController();
-            $controller->render();
-            break;
-        case "register":
-            $controller = new RegisterController();
-            $controller->render();
-            break;
         case "profile":
             $controller = new ProfileController();
             $controller->render();
@@ -88,61 +81,6 @@
         case "admin":
             $controller = new AdminController();
             $controller->index();
-            break;
-        case "faq":
-            $controller = new FAQController();
-            $controller->index();
-            break;
-        case "disconnect":
-            session_unset();
-            session_destroy();
-            header("Location: index.php");
-            break;
-        case "mp":
-            $controller = new MPController();
-            $controller->render();
-            break;
-        case "rating":
-            $controller = new RatingController();
-            // Méthode d'affichage du formulaire
-            if (method_exists($controller, 'render')) {
-                $controller->render();
-            } else if (method_exists($controller, 'index')) {
-                $controller->index();
-            }
-            break;
-        case "rating_submit":
-            $controller = new RatingController();
-            $controller->submit();
-            break;
-        case "rating_get_carpoolings":
-            $controller = new RatingController();
-            // API JSON pour récupérer les trajets d'un utilisateur
-            if (method_exists($controller, 'getCarpoolings')) {
-                $controller->getCarpoolings();
-            } else if (method_exists($controller, 'getUserCarpoolings')) {
-                $controller->getUserCarpoolings();
-            }
-            break;
-        case "signalement":
-            $controller = new SignalementController();
-            if (method_exists($controller, 'render')) {
-                $controller->render();
-            } else if (method_exists($controller, 'index')) {
-                $controller->index();
-            }
-            break;
-        case "signalement_submit":
-            $controller = new SignalementController();
-            $controller->submit();
-            break;
-        case "signalement_get_carpoolings":
-            $controller = new SignalementController();
-            if (method_exists($controller, 'getCarpoolings')) {
-                $controller->getCarpoolings();
-            } else if (method_exists($controller, 'getUserCarpoolings')) {
-                $controller->getUserCarpoolings();
-            }
             break;
         default:
             http_response_code(404);

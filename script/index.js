@@ -1,5 +1,4 @@
 function loadScript(name){
-    // remove previous dynamic script if present
     const prev = document.getElementById('dynamic-script');
     if(prev) prev.remove();
 
@@ -7,31 +6,32 @@ function loadScript(name){
     s.src = `./script/${name}.js`;
     s.defer = true;
     s.id = 'dynamic-script';
-    s.onload = () => {
-        // utile pour debug (ou init après chargement)
-        console.log(`[loader] ${name}.js loaded`);
-    };
     s.onerror = (e) => {
         console.error(`[loader] failed to load ${name}.js`, e);
     };
     document.head.appendChild(s);
 }
 
-const params = new URLSearchParams(window.location.search);
-switch (params.get("controller")) {
-    case "home":
-    case "trip":
-        switch (params.get("action")) {
-            case "display_search":
-            case "search":
-            case "publish" :
-                loadScript("searchPage");
-                break;
-            default:
-                loadScript("searchPage");
-                break;
-        }
-        break;
-    default:
-        break;
+function loadCSS(name){
+    const prev = document.getElementById('dynamic-css');
+    if (prev) prev.remove();
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = `./assets/styles/${name}.css`;
+    link.id = 'dynamic-css';
+
+    link.onload = () => {
+        console.log(`[loader] ${name}.css loaded`);
+    };
+
+    link.onerror = (e) => {
+        console.error(`[loader] failed to load ${name}.css`, e);
+    };
+
+    document.head.appendChild(link);
 }
+
+const params = new URLSearchParams(window.location.search);
+loadScript(params.get("controller"));
+loadCSS(params.get("controller"));
