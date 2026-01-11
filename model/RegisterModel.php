@@ -1,32 +1,54 @@
 <?php
-require_once __DIR__ . '/Database.php';
 
 class RegisterModel {
     
     public function check_form_values($values) {
-        if (!isset($values["first_name"]) || $values["first_name"] == "") {
-            return false;
-        }
-        if (!isset($values["last_name"]) || $values["last_name"] == "") {
-            return false;
-        }
-        if (!isset($values["mail"]) || $values["mail"] == "") {
-            return false;
-        }
-        if (!isset($values["birthdate"]) || $values["birthdate"] == "") {
-            return false;
-        }
-        if (!isset($values["pass"]) || $values["pass"] == "") {
-            return false;
-        }
-        if (!isset($values["confirm_pass"]) || $values["confirm_pass"] == "") {
-            return false;
-        }
-        if (!isset($values["sexe"]) || $values["sexe"] == "") {
-            return false;
+        $return = array();
+        $return["success"] = false;
+        $return["message"] = "";
+
+        if (!isset($values["first_name"]) || trim($values["first_name"]) === "") {
+            $return["message"] = "Veuillez renseigner votre prénom";
+            return $return;
         }
 
-        return true;
+        if (!isset($values["last_name"]) || trim($values["last_name"]) === "") {
+            $return["message"] = "Veuillez renseigner votre nom";
+            return $return;
+        }
+
+        if (!isset($values["mail"]) || trim($values["mail"]) === "") {
+            $return["message"] = "Veuillez renseigner votre e‑mail";
+            return $return;
+        }
+
+        if (!filter_var($values["mail"], FILTER_VALIDATE_EMAIL)) {
+            $return["message"] = "Veuillez renseigner un e‑mail valide";
+            return $return;
+        }
+
+        if (!isset($values["birthdate"]) || trim($values["birthdate"]) === "") {
+            $return["message"] = "Veuillez renseigner votre date de naissance";
+            return $return;
+        }
+
+        if (!isset($values["pass"]) || $values["pass"] === "") {
+            $return["message"] = "Veuillez renseigner un mot de passe";
+            return $return;
+        }
+
+        if (!isset($values["confirm_pass"]) || $values["confirm_pass"] === "") {
+            $return["message"] = "Veuillez confirmer votre mot de passe";
+            return $return;
+        }
+
+        if ($values["pass"] !== $values["confirm_pass"]) {
+            $return["message"] = "Les mots de passe ne correspondent pas";
+            return $return;
+        }
+
+        $return["success"] = true;
+        return $return;
     }
 
     private function user_exists($mail): bool{

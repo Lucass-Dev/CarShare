@@ -60,20 +60,7 @@
         $controller = "home";
     }
 
-     if (isset($_GET["action"])) {
-        $action = $_GET["action"];
-    }
-
     switch ($controller) {
-        case "booking":
-            $controller = new BookingController();
-            if ($action === "history") {
-                $controller->history();
-            } else {
-                http_response_code(404);
-                echo "Page non trouvée";
-            }
-            break;
         case "home":
             $controller = new HomeController();
             $controller->render();
@@ -92,7 +79,7 @@
             break;
         case "profile":
             $controller = new ProfileController();
-            $controller->index();
+            $controller->render();
             break;
         case "trip":
             $controller = new TripController();
@@ -114,10 +101,6 @@
         case "mp":
             $controller = new MPController();
             $controller->render();
-            break;
-        case "history":
-            $controller = new BookingController();
-            $controller->history();
             break;
         case "rating":
             $controller = new RatingController();

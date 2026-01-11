@@ -1,6 +1,4 @@
 <?php
-    include(__DIR__."/../model/RegisterModel.php");
-    include(__DIR__."/../view/RegisterView.php");
 class RegisterController {
     private $registerModel;
     private $registerView;
@@ -15,10 +13,14 @@ class RegisterController {
         <?php
         $this->registerView->display_form();
         if (sizeof($_POST) > 0) {
-            if ($this->registerModel->check_form_values($_POST)) {
+            echo "je suis ici";
+            $checkForm = $this->registerModel->check_form_values($_POST);
+            if ($checkForm["success"]) {
                 $result = $this->registerModel->send_form($_POST);
                 $this->registerView->display_result_message($result["message"], $result["success"]);
-                //header("Location: index.php?controller=login");
+                header("Location: index.php?controller=login");
+            }else{
+                $this->registerView->display_result_message($checkForm["message"], $checkForm["success"]);
             }
         }
 

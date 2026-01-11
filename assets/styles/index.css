@@ -1,205 +1,215 @@
+:root {
+  --primary-color: #4a90e2;
+  --primary-color-dark: #3a78c9;
+  --accent-color: #10b981;
+  --danger-color: #ef4444;
+  --bg-color: #f7f9fb;
+  --card-bg: #ffffff;
+  --text-color: #111827;
+  --text-secondary: #6b7280;
+  --border-color: #e2e8f0;
+  --shadow-light: 0 6px 20px rgba(0,0,0,0.07);
+  --shadow-medium: 0 8px 24px rgba(35,60,90,0.08);
+  --border-radius-small: 8px;
+  --border-radius: 12px;
+  --border-radius-large: 16px;
+  --border-radius-xl: 20px;
+  --btn-radius: 16px;
+  --transition-fast: 0.15s ease;
+  --font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+main{
+  padding-top: 4%;
+}
+
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  font-family: var(--font-family);
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #ffffff;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+h1,h2,h3,h4,h5,h6 {
+  margin: 0;
+  font-weight: 600;
+}
+
+p,span,label {
+  color: var(--text-color);
 }
 
 a {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: inherit;
 }
 
-main {
-    padding-top: 8vh;
-    min-height: 88vh;
+button {
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-family);
+  transition: all var(--transition-fast);
 }
 
-
-.hero {
-    height: 420px;
-    background: url("../img/index_bg.gif") center/cover no-repeat;
-    display: flex;
-    align-items: center;
+button:hover {
+  opacity: 0.95;
 }
 
-/* --- Formulaire de recherche --- */
-.search-container {
-    background-color: #fff;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-    margin-left: 5%; 
+input, textarea, select {
+  font-family: var(--font-family);
+  border-radius: var(--border-radius-small);
+  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+  font-size: 14px;
+  outline: none;
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
-.search-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr; 
-    gap: 1rem;
+input:focus, textarea:focus, select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(74,144,226,0.2);
 }
 
-.search-form input[type="text"] {
-    padding: 0.8rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    transition: border-color 0.3s ease;
+.card, .register-box, .login-box, .payment-card, .error-card, .publish-card,
+.rating__card, .report-container, .profile-card, .col {
+  background: var(--card-bg);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-medium);
+  padding: 20px;
 }
 
-.search-form input[type="text"]:focus {
-    outline: none;
-    border-color: #a9b2ff;
+.btn, .btn-home, .btn-reserver, .btn-payer, .primary, .remove-filters-btn, .btn-submit, .small-btn {
+  border-radius: var(--btn-radius);
+  padding: 10px 25px;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  display: inline-block;
 }
 
-.search-form input:nth-child(1),
-.search-form input:nth-child(2) {
-    grid-column: 1 / -1; 
+.btn-home, .btn-payer, .primary, .small-btn {
+  background-color: var(--primary-color);
+  color: #fff;
 }
 
-.search-form input:nth-child(3) {
-    grid-column: 1 / 2;
+.btn-home:hover, .btn-payer:hover, .primary:hover, .small-btn:hover {
+  background-color: var(--primary-color-dark);
 }
 
-.search-form input:nth-child(4) {
-    grid-column: 2 / 3;
+.success {
+  color: var(--accent-color);
 }
 
-.search-button {
-    grid-column: 1 / -1; 
-    background-color: #a9b2ff; 
-    color: #fff;
-    border: none;
-    padding: 0.9rem;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.error, .form-error {
+  color: var(--danger-color);
 }
 
-.search-button:hover {
-    background-color: #8f9bff;
+.flex {
+  display: flex;
 }
 
-/* --- Section Avis --- */
-.reviews-section {
-    background-color: #f9f8ff; 
-    padding: 3rem 2rem;
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    flex-wrap: wrap; 
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.review-card {
-    background-color: #fff;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    width: 100%;
-    max-width: 260px;
+.flex-col {
+  display: flex;
+  flex-direction: column;
 }
 
-.review-card h4 {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #555;
+.flex-row {
+  display: flex;
+  flex-direction: row;
 }
 
-.review-card h3 {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #d9534f; 
-    margin-top: 0.25rem;
+.gap-sm {
+  gap: 8px;
 }
 
-.review-card .review-source {
-    font-size: 0.8rem;
-    color: #777;
-    margin: 0.5rem 0;
+.gap {
+  gap: 12px;
 }
 
-.review-card .stars {
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
+.gap-md {
+  gap: 16px;
 }
 
-.review-card .stars .fa-star:first-child {
-    color: #00b67a;
+.gap-lg {
+  gap: 24px;
 }
 
-.review-card .stars .fa-star:not(:first-child) {
-    color: #e0e0e0; 
+.text-center {
+  text-align: center;
 }
 
-.trustpilot-logo {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #333;
+.text-right {
+  text-align: right;
 }
 
-.trustpilot-logo .fa-star {
-    color: #00b67a;
-    margin-right: 4px;
+.round-img {
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-
-.features-section {
-    display: flex;
-    align-items: center;
-    gap: 3rem;
-    padding: 4rem 3rem;
-    max-width: 1200px;
-    margin: 0 auto;
+.shadow-light {
+  box-shadow: var(--shadow-light);
 }
 
-.feature-text {
-    flex: 1; 
+.shadow-medium {
+  box-shadow: var(--shadow-medium);
 }
 
-.feature-text h2 {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
+.border {
+  border: 1px solid var(--border-color);
 }
 
-.feature-text p {
-    font-size: 1.1rem;
-    color: #555;
-    line-height: 1.7;
+.border-radius-small {
+  border-radius: var(--border-radius-small);
 }
 
-.feature-image {
-    flex: 1; 
+.border-radius {
+  border-radius: var(--border-radius);
 }
 
-.feature-image img {
-    width: 100%;
-    height: auto;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+.border-radius-large {
+  border-radius: var(--border-radius-large);
 }
 
+.border-radius-xl {
+  border-radius: var(--border-radius-xl);
+}
 
-@media (max-width: 768px) {
-    .hero {
-        height: 350px;
-    }
+input.small, .textarea.small {
+  padding: 6px 8px;
+  font-size: 13px;
+}
 
-    .search-container {
-        margin: 0 auto; 
-        max-width: 90%;
-    }
+textarea {
+  resize: vertical;
+}
 
-    .features-section {
-        flex-direction: column-reverse; 
-        padding: 2rem 1.5rem;
-        gap: 2rem;
-    }
+a:hover {
+  text-decoration: underline;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .flex-lg-col {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .card, .register-box, .login-box, .payment-card, .error-card, .publish-card {
+    padding: 15px;
+  }
 }

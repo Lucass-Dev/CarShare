@@ -52,22 +52,3 @@ input {
     border: 1px solid #ccc;
     font-size: 15px;
 }
-
-/* ---- BUTTON ---- */
-.btn {
-    width: 120px;
-    height: 40px;
-    background: #7da2ff;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    font-size: 15px;
-    cursor: pointer;
-    display: block;
-    margin: 15px auto 0;
-    transition: 0.2s;
-}
-
-.btn:hover {
-    background: #5d88ff;
-}

@@ -2,43 +2,70 @@
     class TripView{
         public static function display_trip_infos($details){
             ?>
-            <div>
-                <h2>Détails du trajet</h2>
+            <div class="trajet-wrapper">
+
+                <h2 class="section-title">Détails du trajet</h2>
 
                 <div class="trajet-info">
-                    <div>
-                    <h2><?php echo $details["start_name"]?> → <?php echo $details["end_name"]?></h2>
-                    <span><?php echo $details["start_date"]?></span>
+                    <div class="trajet-header">
+                        <h3><?php echo $details["start_name"] ?> → <?php echo $details["end_name"] ?></h3>
+                        <span><?php echo $details["start_date"] ?></span>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="left">
-                    <img src="<?php echo UPP_BASE_PATH.$details["profile_picture_path"]?>" alt="Photo du conducteur">
-                    <a href="?controller=user&uid=<?php echo $details["provider_id"]?>"><strong><?php echo $details["provider_name"]?></strong></a>
-                    <span><?php echo $details["global_rating"]?> ⭐</span>
+                        <img src="<?php echo UPP_BASE_PATH . $details["profile_picture_path"] ?>"
+                            alt="Photo du conducteur">
+
+                        <a class="driver-name"
+                            href="?controller=user&uid=<?php echo $details["provider_id"] ?>">
+                            <?php echo $details["provider_name"] ?>
+                        </a>
+
+                        <span class="rating">
+                            <?php echo $details["global_rating"] ?> ⭐
+                        </span>
                     </div>
+
 
                     <div class="right">
-                    <table>
-                        <tr><td><strong>Départ</strong></td><td>Lieu : <?php echo $details["start_name"]?></td><td>Date : <?php echo explode(" ", $details["start_date"])[0]?></td><td>Heure : <?php echo explode(" ", $details["start_date"])[1]?></td></tr>
-                        <tr><td><strong>Arrivée</strong></td><td>Lieu : <?php echo $details["end_name"]?></td><td>Date : Insérer calcul</td><td>Heure : Insérer calcul</td></tr>
-                    </table>
 
-                    <div class="details-bottom">
-                        <div>
-                        <?php echo $details["luggage_allowed"] ? "<p>Bagages autorisés</p>" : ""?>
-                        <?php echo $details["smoker_allowed"] ? "<p>Fumeurs autorisés</p>" : ""?>
-                        <?php echo $details["pets_allowed"] ? "<p>Animaux autorisés</p>" : ""?>
-                        </div>
-                        <div>
-                        <span class="price"><?php echo $details["price"]?> € TTC</span><br>
-                        <br>
-                        <a class="btn-reserver" href="?controller=trip&action=payment&trip_id=<?php echo $details["trip_id"]?>">Réserver</a>
+                        <table class="trip-table">
+                            <tr>
+                                <td>Départ</td>
+                                <td><?php echo $details["start_name"] ?></td>
+                                <td><?php echo explode(" ", $details["start_date"])[0] ?></td>
+                                <td><?php echo explode(" ", $details["start_date"])[1] ?></td>
+                            </tr>
+                            <tr>
+                                <td>Arrivée</td>
+                                <td><?php echo $details["end_name"] ?></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </table>
+
+                        <div class="details-bottom">
+
+                            <div class="options">
+                            <?php echo $details["luggage_allowed"] ? "<span>🧳 Bagages</span>" : "" ?>
+                            <?php echo $details["smoker_allowed"]  ? "<span>🚬 Fumeurs</span>" : "" ?>
+                            <?php echo $details["pets_allowed"]    ? "<span>🐾 Animaux</span>" : "" ?>
+                            </div>
+
+                            <div class="action">
+                                <span class="price">
+                                    <?php echo $details["price"] ?> €
+                                </span>
+
+                                <a class="btn-reserver"
+                                    href="?controller=trip&action=payment&trip_id=<?php echo $details["trip_id"] ?>">
+                                    Réserver
+                                </a>
+                            </div>
                         </div>
                     </div>
-                    </div>
-                </div>
                 </div>
             <?php
         }
@@ -312,317 +339,101 @@
             <?php
         }
 
-        public static function display_publish_form(){
+        public static function display_publish_form($success){
             ?>
-            <section class="create-page-container">
-                <div class="hero__overlay">
-                <h1 class="hero__title">Publier un nouveau trajet</h1>
+            <section class="create-trip-page">
+              <div class="create-trip">
+                <div class="publish-card publish-form">
+                  <div class="publish-header">
+                    <div>
+                      <h2 class="publish-title">Publier un nouveau trajet</h2>
+                      <div class="publish-sub">Remplissez les informations du trajet</div>
+                    </div>
+                  </div>
 
-                <div class="success-msg">
-                ✅ Trajet créé avec succès !
+                  <?php if($success): ?>
+                    <div class="form-success">Trajet publié avec succès.</div>
+                  <?php endif; ?>
+
+                  <form class="publish-form" method="POST" action="/index.php?controller=trip&action=publish" novalidate>
+                        <input type="hidden" id="form_start_input" name="form_start_input">
+                        <input type="hidden" id="form_end_input" name="form_end_input">
+                    <div class="form-grid cols-2">
+                        <div class="form-row">
+                            <label class="form-label" for="dep-city">Ville de départ <span class="form-hint">*</span></label>
+                            <input id="start_place" class="input" placeholder="Ville (France)" value="<?php echo htmlspecialchars($formData['dep-city'] ?? '') ?>" list="locations-list" required>
+                            <div id="start-suggestion-box"></div>
+                    </div>
+
+                      <div class="form-row">
+                        <label class="form-label" for="arr-city">Ville d'arrivée <span class="form-hint">*</span></label>
+                        <input id="end_place" class="input" placeholder="Ville (France)" required>
+                            <div id="end-suggestion-box"></div>
+                            </div>
+                    </div>
+
+                    <div class="form-grid cols-3">
+                      <div class="form-row">
+                        <label class="form-label" for="date">Date <span class="form-hint">*</span></label>
+                        <input id="date" name="date" class="input small" type="date" required>
+                      </div>
+
+                      <div class="form-row">
+                        <label class="form-label" for="time">Heure</label>
+                        <input id="time" name="time" class="input small" type="time" >
+                      </div>
+
+                      <div class="form-row">
+                        <label class="form-label" for="seats">Places disponibles</label>
+                        <input id="seats" name="seats" class="input small" type="number" min="1" max="10">
+                      </div>
+                    </div>
+
+                    <div class="form-row">
+                      <label class="form-label" for="price">Prix par passager (€)</label>
+                      <input id="price" name="price" class="input" type="number" step="0.5">
+                    </div>
+
+                    <div class="form-row">
+                      <label class="form-label">Services autorisés</label>
+                      <div class="inline-row" style="gap:12px; align-items:center;">
+                        <label class="toggle">
+                          <input type="checkbox" name="luggage_allowed" value="1" <?php echo !empty($formData['luggage_allowed']) ? 'checked' : '' ?>>
+                          <span class="help-inline">🧳 Bagages</span>
+                        </label>
+
+                        <label class="toggle">
+                          <input type="checkbox" name="smoker_allowed" value="1" <?php echo !empty($formData['smoker_allowed']) ? 'checked' : '' ?>>
+                          <span class="help-inline">🚬 Fumeurs</span>
+                        </label>
+
+                        <label class="toggle">
+                          <input type="checkbox" name="pets_allowed" value="1" <?php echo !empty($formData['pets_allowed']) ? 'checked' : '' ?>>
+                          <span class="help-inline">🐾 Animaux</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div class="form-actions">
+                      <input type="submit" class="btn btn-primary"/>
+                      <a href="/index.php?controller=profile&action=history" class="btn btn-secondary">Annuler</a>
+                    </div>
+                  </form>
                 </div>
 
-                <?php 
-                $errors = $_SESSION['trip_form_errors'] ?? [];
-                $formData = $_SESSION['trip_form_data'] ?? [];
-                if (!empty($errors)): 
-                ?>
-                    <div style="margin:20px 0; padding:15px; border-radius:8px; background:#f8d7da; color:#721c24;">
-                    <strong>Erreurs :</strong>
-                    <ul style="margin:10px 0 0 0; padding-left:20px;">
-                        <?php foreach ($errors as $err): ?>
-                        <li><?= htmlspecialchars($err) ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                    </div>
-                <?php 
-                    // Clear errors after displaying
-                    unset($_SESSION['trip_form_errors']);
-                endif; 
-                ?>
+                <aside class="publish-sidebar">
+                  <div class="publish-card map-preview">
+                    Aperçu de l'itinéraire
+                  </div>
 
-<<<<<<< Updated upstream
-                <form class="trip-form" method="POST" action="/CarShare/index.php?action=create_trip_submit" novalidate>
-                    <div class="trip-form__row">
-                    <div class="form__group">
-                        <label class="form__label" for="dep-city">Ville de départ <span class="form__required">*</span></label>
-                        <input 
-                        id="dep-city" 
-                        name="dep-city"
-                        class="form__input" 
-                        placeholder="Ville (France)"
-                        value="<?= htmlspecialchars($formData['dep-city'] ?? '') ?>"
-                        list="locations-list"
-                        required
-                        />
-=======
-            <form class="trip-form" method="POST" action="/index.php?action=create_trip_submit" novalidate>
-                <div class="trip-form__row">
-                <div class="form__group">
-                    <label class="form__label" for="dep-city">Ville de départ <span class="form__required">*</span></label>
-                    <input 
-                    id="dep-city" 
-                    name="dep-city"
-                    class="form__input" 
-                    placeholder="Ville (France)"
-                    value="<?= htmlspecialchars($formData['dep-city'] ?? '') ?>"
-                    list="locations-list"
-                    required
-                    />
-                </div>
-
-                <div class="form__group">
-                    <label class="form__label" for="dep-street">Rue</label>
-                    <input 
-                    id="dep-street" 
-                    name="dep-street"
-                    class="form__input" 
-                    placeholder="Rue"
-                    value="<?= htmlspecialchars($formData['dep-street'] ?? '') ?>"
-                    />
-                </div>
-
-                <div class="form__group form__group--small">
-                    <label class="form__label" for="dep-num">N° voie</label>
-                    <input 
-                    id="dep-num" 
-                    name="dep-num"
-                    class="form__input" 
-                    placeholder="N° voie"
-                    value="<?= htmlspecialchars($formData['dep-num'] ?? '') ?>"
-                    />
-                </div>
-                </div>
-
-                <div class="trip-form__row">
-                <div class="form__group">
-                    <label class="form__label" for="arr-city">Ville d'arrivée <span class="form__required">*</span></label>
-                    <input 
-                    id="arr-city" 
-                    name="arr-city"
-                    class="form__input" 
-                    placeholder="Ville (France)"
-                    value="<?= htmlspecialchars($formData['arr-city'] ?? '') ?>"
-                    list="locations-list"
-                    required
-                    />
-                </div>
-
-                <div class="form__group">
-                    <label class="form__label" for="arr-street">Rue</label>
-                    <input 
-                    id="arr-street" 
-                    name="arr-street"
-                    class="form__input" 
-                    placeholder="Rue"
-                    value="<?= htmlspecialchars($formData['arr-street'] ?? '') ?>"
-                    />
-                </div>
-
-                <div class="form__group form__group--small">
-                    <label class="form__label" for="arr-num">N° voie</label>
-                    <input 
-                    id="arr-num" 
-                    name="arr-num"
-                    class="form__input" 
-                    placeholder="N° voie"
-                    value="<?= htmlspecialchars($formData['arr-num'] ?? '') ?>"
-                    />
-                </div>
-                </div>
-
-                <div class="trip-form__row trip-form__row--compact">
-                <div class="form__group form__group--small">
-                    <label class="form__label" for="date">Date <span class="form__required">*</span></label>
-                    <input 
-                    id="date" 
-                    name="date"
-                    class="form__input" 
-                    type="date"
-                    value="<?= htmlspecialchars($formData['date'] ?? '') ?>"
-                    required
-                    />
-                </div>
-
-                <div class="form__group form__group--small">
-                    <label class="form__label" for="time">Heure</label>
-                    <input 
-                    id="time" 
-                    name="time"
-                    class="form__input" 
-                    type="time"
-                    value="<?= htmlspecialchars($formData['time'] ?? '') ?>"
-                    />
-                </div>
-
-                <div class="form__group form__group--small">
-                    <label class="form__label" for="price">Prix (€)</label>
-                    <input 
-                    id="price" 
-                    name="price"
-                    class="form__input" 
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    placeholder="0.00"
-                    value="<?= htmlspecialchars($formData['price'] ?? '') ?>"
-                    />
-                </div>
-                </div>
-
-                <div class="trip-form__row trip-form__row--options">
-                <fieldset class="options">
-                    <legend class="options__title">Options</legend>
-                    
-                    <div class="form__group form__group--small">
-                    <label class="form__label" for="places">Nombre de place(s) <span class="form__required">*</span></label>
-                    <select id="places" name="places" class="form__input" required>
-                        <option value="0">0</option>
-                        <?php for ($i = 1; $i <= 10; $i++): ?>
-                        <option value="<?= $i ?>" <?= (isset($formData['places']) && $formData['places'] == $i) ? 'selected' : '' ?>>
-                            <?= $i ?>
-                        </option>
-                        <?php endfor; ?>
-                    </select>
->>>>>>> Stashed changes
-                    </div>
-
-                    <div class="form__group">
-                        <label class="form__label" for="dep-street">Rue</label>
-                        <input 
-                        id="dep-street" 
-                        name="dep-street"
-                        class="form__input" 
-                        placeholder="Rue"
-                        value="<?= htmlspecialchars($formData['dep-street'] ?? '') ?>"
-                        />
-                    </div>
-
-                    <div class="form__group form__group--small">
-                        <label class="form__label" for="dep-num">N° voie</label>
-                        <input 
-                        id="dep-num" 
-                        name="dep-num"
-                        class="form__input" 
-                        placeholder="N° voie"
-                        value="<?= htmlspecialchars($formData['dep-num'] ?? '') ?>"
-                        />
-                    </div>
-                    </div>
-
-                    <div class="trip-form__row">
-                    <div class="form__group">
-                        <label class="form__label" for="arr-city">Ville d'arrivée <span class="form__required">*</span></label>
-                        <input 
-                        id="arr-city" 
-                        name="arr-city"
-                        class="form__input" 
-                        placeholder="Ville (France)"
-                        value="<?= htmlspecialchars($formData['arr-city'] ?? '') ?>"
-                        list="locations-list"
-                        required
-                        />
-                    </div>
-
-                    <div class="form__group">
-                        <label class="form__label" for="arr-street">Rue</label>
-                        <input 
-                        id="arr-street" 
-                        name="arr-street"
-                        class="form__input" 
-                        placeholder="Rue"
-                        value="<?= htmlspecialchars($formData['arr-street'] ?? '') ?>"
-                        />
-                    </div>
-
-                    <div class="form__group form__group--small">
-                        <label class="form__label" for="arr-num">N° voie</label>
-                        <input 
-                        id="arr-num" 
-                        name="arr-num"
-                        class="form__input" 
-                        placeholder="N° voie"
-                        value="<?= htmlspecialchars($formData['arr-num'] ?? '') ?>"
-                        />
-                    </div>
-                    </div>
-
-                    <div class="trip-form__row trip-form__row--compact">
-                    <div class="form__group form__group--small">
-                        <label class="form__label" for="date">Date <span class="form__required">*</span></label>
-                        <input 
-                        id="date" 
-                        name="date"
-                        class="form__input" 
-                        type="date"
-                        value="<?= htmlspecialchars($formData['date'] ?? '') ?>"
-                        required
-                        />
-                    </div>
-
-                    <div class="form__group form__group--small">
-                        <label class="form__label" for="time">Heure</label>
-                        <input 
-                        id="time" 
-                        name="time"
-                        class="form__input" 
-                        type="time"
-                        value="<?= htmlspecialchars($formData['time'] ?? '') ?>"
-                        />
-                    </div>
-
-                    <div class="form__group form__group--small">
-                        <label class="form__label" for="price">Prix (€)</label>
-                        <input 
-                        id="price" 
-                        name="price"
-                        class="form__input" 
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        placeholder="0.00"
-                        value="<?= htmlspecialchars($formData['price'] ?? '') ?>"
-                        />
-                    </div>
-                    </div>
-
-                    <div class="trip-form__row trip-form__row--options">
-                    <fieldset class="options">
-                        <legend class="options__title">Options</legend>
-                        
-                        <div class="form__group form__group--small">
-                        <label class="form__label" for="places">Nombre de place(s) <span class="form__required">*</span></label>
-                        <select id="places" name="places" class="form__input" required>
-                            <option value="0">0</option>
-                            <?php for ($i = 1; $i <= 10; $i++): ?>
-                            <option value="<?= $i ?>" <?= (isset($formData['places']) && $formData['places'] == $i) ? 'selected' : '' ?>>
-                                <?= $i ?>
-                            </option>
-                            <?php endfor; ?>
-                        </select>
-                        </div>
-
-                        <label class="options__item"><input type="checkbox" name="animals" <?= isset($formData['animals']) ? 'checked' : '' ?>> Animaux</label>
-                        <label class="options__item"><input type="checkbox" name="smoking" <?= isset($formData['smoking']) ? 'checked' : '' ?>> Fumeur</label>
-                    </fieldset>
-
-                    <div class="trip-form__actions">
-                        <button type="submit" class="btn btn--primary btn--pill">Publier</button>
-                    </div>
-                    </div>
-                </form>
-
-                <!-- Datalist for location autocomplete -->
-                <datalist id="locations-list">
-                    <?php foreach ($locations as $location): ?>
-                    <option value="<?= htmlspecialchars($location['name']) ?>">
-                        <?= htmlspecialchars($location['postal_code']) ?>
-                    </option>
-                    <?php endforeach; ?>
-                </datalist>
-                </div>
-            </section>  
-            <?php
+                  <div class="publish-card">
+                    <h3 class="publish-title" style="font-size:16px">Conseils</h3>
+                    <p class="form-hint">Vérifiez l'heure et le lieu de départ exacts. Indiquez si vous acceptez des bagages.</p>
+                  </div>
+                </aside>
+              </div>
+            </section>
+        <?php
         }
 
         public static function display_rate_form($trip_infos, $driver){

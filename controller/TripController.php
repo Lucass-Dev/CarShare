@@ -13,23 +13,42 @@ class TripController {
                 $this->display_search($action);
                 break;
             case "publish":
-                TripView::display_publish_form();
+                if (!isset($_SESSION['user_id'])) {
+                    header('Location: /index.php?action=login');
+                    exit();
+                }
+                $success = false;
+                if (sizeof($_POST) > 0) {
+                    $success = TripModel::createTrip($_POST);
+                }
+                TripView::display_publish_form($success);
                 break;
             case 'details':
                 $this->display_trip_details();
                 break;
             case 'payment':
+                if (!isset($_SESSION['user_id'])) {
+                    header('Location: /index.php?action=login');
+                    exit();
+                }
                 print_r($_GET);
                 $this->display_trip_payment();
                 break;
             case "report":
+                if (!isset($_SESSION['user_id'])) {
+                    header('Location: /index.php?action=login');
+                    exit();
+                }
                 TripView::display_report_form();
                 break;
             case "rate":
+                if (!isset($_SESSION['user_id'])) {
+                    header('Location: /index.php?action=login');
+                    exit();
+                }
                 $test = TripModel::getCarpoolingById($_GET['trip_id']);
                 $driver = UserModel::getUserById($test['provider_id']);
                 print_r($test, $driver);
-
                 TripView::display_rate_form();
                 break;
             case 'rating':

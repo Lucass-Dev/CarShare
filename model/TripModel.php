@@ -149,12 +149,33 @@ class TripModel {
         return $stResult;
     }
 
-    // $query = "SELECT * FROM users WHERE id=:id";
-    // $db = Database::getDb();
-    //$stmt = $db->prepare($query);
-    //$stmt->bindParam(":id", $user_id, PDO::PARAM_INT);
-    // $stmt->execute();
-    // $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    // return !empty($result);
+    public static function createTrip($values){
+        print_r($values);
+
+        $str = "INSERT INTO carpoolings(provider_id, start_date, price, available_places, status, start_id, end_id, pets_allowed, smoker_allowed, luggage_allowed)
+                VALUES (:provider_id, :start_date, :price, :available_places, :status, :start_id, :end_id, :pets_allowed, :smoker_allowed, :luggage_allowed)";
+        $start_date = $_POST["date"] . " " . $_POST["time"];
+        $stmt = Database::getDb()->prepare($str);
+
+        $result = $stmt->execute([
+            ":provider_id" => $_SESSION["user_id"],
+            ":start_date" => $start_date,
+            ":price" => $_POST["price"],
+            ":available_places" => $_POST["seats"],
+            ":status" => 0,
+            ":start_id" => $_POST["form_start_input"],
+            ":end_id" => $_POST["form_end_input"],
+            ":pets_allowed" => $_POST["pets_allowed"],
+            ":smoker_allowed" => $_POST["smoker_allowed"],
+            ":luggage_allowed" => $_POST["luggage_allowed"]
+        ]);
+
+        if ($result) {
+            $_POST = array();
+            return true;
+        }
+
+        return true;
+    }
 }
 ?>
