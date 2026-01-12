@@ -14,7 +14,7 @@ class TripController {
                 break;
             case "publish":
                 if (!isset($_SESSION['user_id'])) {
-                    header('Location: /index.php?action=login');
+                    header('Location: /index.php?controller=profile&action=login');
                     exit();
                 }
                 $success = false;
@@ -28,27 +28,26 @@ class TripController {
                 break;
             case 'payment':
                 if (!isset($_SESSION['user_id'])) {
-                    header('Location: /index.php?action=login');
+                    header('Location: /index.php?controller=profile&action=login');
                     exit();
                 }
-                print_r($_GET);
+                $trip = TripModel::getCarpoolingById($_GET["trip_id"]);
                 $this->display_trip_payment();
                 break;
             case "report":
                 if (!isset($_SESSION['user_id'])) {
-                    header('Location: /index.php?action=login');
+                    header('Location: /index.php?controller=profile&action=login');
                     exit();
                 }
                 TripView::display_report_form();
                 break;
             case "rate":
                 if (!isset($_SESSION['user_id'])) {
-                    header('Location: /index.php?action=login');
+                    header('Location: /index.php?controller=profile&action=login');
                     exit();
                 }
                 $test = TripModel::getCarpoolingById($_GET['trip_id']);
                 $driver = UserModel::getUserById($test['provider_id']);
-                print_r($test, $driver);
                 TripView::display_rate_form();
                 break;
             case 'rating':
@@ -69,8 +68,13 @@ class TripController {
                 break;
             case 'confirmation':
                 $carpooling = TripModel::getCarpoolingById($_GET['trip_id']);
-                print_r($_SESSION);
-                TripView::display_confirmation_page($carpooling);
+                if (isset($carpooling["trip_id"]) && !TripModel::hasAlreadyBooked($_SESSION["user_id"], $carpooling["trip_id"])) {
+                    $status = UserModel::book($carpooling, $_SESSION["user_id"]);
+                    TripView::display_confirmation_page($carpooling, $status);
+                }else {
+                    echo "trajet déjà réservé";
+                }
+                
                 break;
             default:
             echo "404";
