@@ -71,31 +71,49 @@ class TripView{
         <?php
     }
 
-    public static function display_trip_payment($details){
+    public static function display_trip_payment($trip){
         ?>
         <div class="payment-card">
             <div class="payment-info">
-            <div class="section-title">Récapitulatif du trajet</div>
+                <div class="section-title">Récapitulatif du trajet</div>
 
-            <table>
-                <tr><td><strong>Trajet :</strong></td><td>Paris → Marseille</td></tr>
-                <tr><td><strong>Date :</strong></td><td>24/10/2025</td></tr>
-                <tr><td><strong>Heure :</strong></td><td>8h00</td></tr>
-                <tr><td><strong>Conducteur :</strong></td><td>Noé (⭐ 4)</td></tr>
-            </table>
+                <table>
+                    <tr>
+                        <td><strong>Trajet :</strong></td>
+                        <td><?= htmlspecialchars($trip['start_name']) ?> → <?= htmlspecialchars($trip['end_name']) ?></td>
+                    </tr>
 
-            <div class="total-price">
-                Total : 15 € TTC
-            </div>
+                    <tr>
+                        <td><strong>Date :</strong></td>
+                        <td><?= date('d/m/Y', strtotime($trip['start_date'])) ?></td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Heure :</strong></td>
+                        <td><?= date('H\hi', strtotime($trip['start_date'])) ?></td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Conducteur :</strong></td>
+                        <td>
+                            <?= htmlspecialchars($trip['provider_name']) ?>
+                            (⭐ <?= $trip['global_rating'] ?>)
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="total-price">
+                    Total : <?= number_format($trip['price'], 2, ',', ' ') ?> € TTC
+                </div>
             </div>
 
             <div class="payment-form">
-            <div class="section-title">Informations de paiement</div>
+                <div class="section-title">Informations de paiement</div>
 
-            <div>
-                <label>Nom sur la carte</label>
-                <input type="text" placeholder="Ex : Marie Dupont">
-            </div>
+                <div>
+                    <label>Nom sur la carte</label>
+                    <input type="text" placeholder="Ex : Marie Dupont">
+                </div>
 
                 <div>
                     <label>Numéro de carte</label>
@@ -104,23 +122,25 @@ class TripView{
 
                 <div style="display:flex; gap:20px;">
                     <div style="flex:1;">
-                    <label>Expiration</label>
-                    <input type="text" placeholder="MM/AA">
+                        <label>Expiration</label>
+                        <input type="text" placeholder="MM/AA">
                     </div>
                     <div style="flex:1;">
-                    <label>CVV</label>
-                    <input type="text" placeholder="123">
+                        <label>CVV</label>
+                        <input type="text" placeholder="123">
                     </div>
                 </div>
 
-                <a class="btn-payer" href="./index.html">Payer maintenant</a>
+                <a class="btn-payer" href="index.php?controller=trip&action=confirmation&trip_id=<?= $trip['trip_id'] ?>">
+                    Payer maintenant
+                </a>
 
                 <div class="details-resume">
                     En cliquant sur "Payer maintenant", vous confirmez votre réservation.
                 </div>
-                </div>
-
             </div>
+        </div>
+
             <?php
         }
     public static function display_search_filters(){
@@ -639,7 +659,7 @@ class TripView{
         <?php
     }
 
-    public static function display_confirmation_page($carpooling) {
+    public static function display_confirmation_page($carpooling, $status) {
         ?>
         <link rel="stylesheet" href="./assets/styles/confirmation.css">
         <section class="confirmation-section">

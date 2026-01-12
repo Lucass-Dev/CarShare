@@ -150,7 +150,6 @@ class TripModel {
     }
 
     public static function createTrip($values){
-        print_r($values);
 
         $str = "INSERT INTO carpoolings(provider_id, start_date, price, available_places, status, start_id, end_id, pets_allowed, smoker_allowed, luggage_allowed)
                 VALUES (:provider_id, :start_date, :price, :available_places, :status, :start_id, :end_id, :pets_allowed, :smoker_allowed, :luggage_allowed)";
@@ -160,14 +159,14 @@ class TripModel {
         $result = $stmt->execute([
             ":provider_id" => $_SESSION["user_id"],
             ":start_date" => $start_date,
-            ":price" => $_POST["price"],
-            ":available_places" => $_POST["seats"],
+            ":price" => $values["price"],
+            ":available_places" => $values["seats"],
             ":status" => 0,
-            ":start_id" => $_POST["form_start_input"],
-            ":end_id" => $_POST["form_end_input"],
-            ":pets_allowed" => $_POST["pets_allowed"],
-            ":smoker_allowed" => $_POST["smoker_allowed"],
-            ":luggage_allowed" => $_POST["luggage_allowed"]
+            ":start_id" => $values["form_start_input"],
+            ":end_id" => $values["form_end_input"],
+            ":pets_allowed" => $values["pets_allowed"],
+            ":smoker_allowed" => $values["smoker_allowed"],
+            ":luggage_allowed" => $values["luggage_allowed"]
         ]);
 
         if ($result) {
@@ -176,6 +175,53 @@ class TripModel {
         }
 
         return true;
+    }
+
+    static public function hasAlreadyBooked(int $userId, int $carpoolingId): bool
+    {
+        $sql = "
+            SELECT 1
+            FROM bookings
+            WHERE booker_id = :user_id
+            AND carpooling_id = :carpooling_id
+            LIMIT 1
+        ";
+
+        $stmt = Database::getDb()->prepare($sql);
+        $stmt->execute([
+            ':user_id' => $userId,
+            ':carpooling_id' => $carpoolingId
+        ]);
+
+        return (bool) $stmt->fetchColumn();
+
+        
+    }
+    static function hasAvailablePlaces(int $carpoolingId): bool
+    {
+        $sql = "
+            SELECT 
+                c.available_places,
+                COUNT(b.id) AS booked_places
+            FROM carpoolings c
+            LEFT JOIN bookings b 
+                ON b.carpooling_id = c.id
+            WHERE c.id = :carpooling_id
+            GROUP BY c.available_places
+        ";
+
+        $stmt = Database::getDb()->prepare($sql);
+        $stmt->execute([
+            ':carpooling_id' => $carpoolingId
+        ]);
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$result) {
+            return false;
+        }
+
+        return (int)$result['booked_places'] < (int)$result['available_places'];
     }
 }
 ?>

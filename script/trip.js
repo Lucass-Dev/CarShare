@@ -7,6 +7,9 @@ let end_suggestion_box = document.getElementById('end-suggestion-box');
 let form_start_input = document .getElementById('form_start_input');
 let form_end_input = document .getElementById('form_end_input');
 
+var today = new Date().toISOString().split('T')[0];
+document.getElementById("date").setAttribute('min', today);
+
 if (params.get("action") == "display_search") {
     let remove_sort_filters = document.getElementById("remove-sort-filters");
     let remove_date_filters = document.getElementById("remove-date-filters");
