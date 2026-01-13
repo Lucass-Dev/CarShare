@@ -23,7 +23,7 @@ class TripModel {
             return $tolerance_date.":00";
 
     }
-    public static function getCarpooling($start_id, $end_id, $date, $hour, $seats, $filters) : array{
+    public static function getCarpooling($start_id, $end_id, $date, $hour, $seats, $filters, $user_id) : array{
         $results = "";
         $db = Database::getDb();
 
@@ -34,6 +34,9 @@ class TripModel {
                     INNER JOIN `location` l1 on (c.end_id = l1.id)
                     INNER JOIN `users` u on (c.provider_id = u.id)
                     WHERE :start_id = c.start_id";
+        if ($user_id != null) {
+            $sql.= " AND provider_id != :user_id";
+        }
         if (!empty($end_id)) {
             $sql .= " AND c.end_id = :end_id";
         }
@@ -99,6 +102,10 @@ class TripModel {
             ':start_date' => $start_date,
             ':seats' => $seats,
         ];
+
+        if ($user_id != null) {
+            $params[":user_id"] = $user_id;
+        }
 
         if($filters['start_time_range_before'] != 0){
             $params[':tolerance'] = $tolerance_date;

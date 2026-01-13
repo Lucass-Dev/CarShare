@@ -1,3 +1,4 @@
+let link = ""
 let start_input = document.getElementById('start_place');
 let start_suggestion_box = document.getElementById('start-suggestion-box');
 
@@ -6,6 +7,10 @@ let end_suggestion_box = document.getElementById('end-suggestion-box');
 
 let form_start_input = document .getElementById('form_start_input');
 let form_end_input = document .getElementById('form_end_input');
+
+let baselink = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyCST_1-YvBtvMCvCgX3qFb2KCsBoacIRa0&origin="
+let midlink = "+France&destination="
+let endlink = "&avoid=tolls|highways"
 
 var today = new Date().toISOString().split('T')[0];
 document.getElementById("date").setAttribute('min', today);
@@ -42,9 +47,16 @@ if (params.get("action") == "display_search") {
 
 start_suggestion_box.addEventListener('click', function(e) {
     if (e.target && e.target.classList.contains('suggestion-item')) {
+        console.log(e.target.id);
+        
         start_input.value = e.target.innerText;
         start_suggestion_box.innerHTML = '';
         form_start_input.value = e.target.id;
+        if (end_input.value != "") {
+            link = baselink+e.target.innerHTML.split('(')[0].trim()+midlink+end_input.value.split('(')[0].trim()+endlink
+            changeIframe()
+            
+        }
     }
 });
 
@@ -67,6 +79,12 @@ end_suggestion_box.addEventListener('click', function(e) {
         end_input.value = e.target.innerText;
         end_suggestion_box.innerHTML = '';
         form_end_input.value = e.target.id;
+        if (start_input.value != "") {
+            link = baselink+start_input.value.split('(')[0].trim()+midlink+e.target.innerHTML.split('(')[0].trim()+endlink
+            changeIframe()
+            
+        }
+        
     }
 });
 
@@ -101,4 +119,9 @@ async function fetchCities(input, box){
     }else{
         box.innerHTML = '';
     }
+}
+
+function changeIframe(){
+    let iframe = document.getElementById("map-preview-link");
+    iframe.src=link 
 }

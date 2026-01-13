@@ -14,7 +14,7 @@
             <a href="/index.php?controller=profile&action=login" class="upp">
                 <?php
                     if (!file_exists("../../assets/upp/".$profilePicturePath)) {
-                        $profilePicturePath = 'avatar.jpg';
+                        $profilePicturePath = 'default_pp.svg';
                     }
                 ?>
                 <img src="../../assets/upp/<?php echo $profilePicturePath?>" alt="Ma photo de profile" class="icon">
@@ -25,6 +25,7 @@
                     <ul class="hidden">
                         <li><a href="?controller=profile&action=show">Profile</a></li>
                         <li><a href="?controller=profile&action=mp">Messages</a></li>
+                        <li><a href="?controller=profile&action=history">Historique</a></li>
                         <li><a href="?controller=profile&action=disconnect">Se déconnecter</a></li>
                     </ul>
                     <?php
