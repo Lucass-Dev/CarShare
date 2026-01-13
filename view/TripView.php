@@ -15,7 +15,7 @@ class TripView{
 
             <div class="card">
                 <div class="left">
-                    <?php $profilePath = file_exists(UPP_BASE_PATH . $details["profile_picture_path"]) ? UPP_BASE_PATH . $details["profile_picture_path"] : "assets/images/default_profile.png"; ?>
+                    <?php $profilePath = file_exists(UPP_BASE_PATH . $details["profile_picture_path"]) ? UPP_BASE_PATH . $details["profile_picture_path"] : "assets/images/default_pp.svg"; ?>
                     <img src="<?php echo $profilePath ?>"
                         alt="Photo du conducteur">
 
@@ -272,7 +272,8 @@ class TripView{
                             <div class="trip-info">
                                 <div class="top">
                                     <div class="resume-card">
-                                        <img src="<?php echo UPP_BASE_PATH.$carpooling['profile_picture_path'] ?>" alt="user_photo">
+                                        <?php $profilePath = file_exists(UPP_BASE_PATH . $carpooling["profile_picture_path"]) ? UPP_BASE_PATH . $carpooling["profile_picture_path"] : "assets/images/default_pp.svg"; ?>
+                                        <img src="<?php echo $profilePath ?>" alt="user_photo">
                                         <div class="resume-card-details">
                                             <a href="&controller=user_info/<?php echo $carpooling['provider_id']; ?>">
                                                 <?php echo htmlspecialchars($carpooling['provider_name']); ?>
@@ -443,9 +444,9 @@ class TripView{
             </div>
 
             <aside class="publish-sidebar">
-                <div class="publish-card map-preview">
-                Aperçu de l'itinéraire
-                </div>
+                   <iframe class="publish-card map-preview" id="map-preview-link" src="">    
+                    </iframe>
+
 
                 <div class="publish-card">
                 <h3 class="publish-title" style="font-size:16px">Conseils</h3>

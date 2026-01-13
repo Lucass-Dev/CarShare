@@ -11,7 +11,9 @@
                     
                         <a class="resume" href="?controller=profile&action=mp&chat_with=<?php echo $resume["id_conv"] ?>">
                             <div class="mp-photo">
-                                <img src="./assets/upp/<?php echo $resume["profile_picture_path"]?>" alt="<?php echo $resume["first_name"]?>">
+                                    <?php $profilePath = file_exists(UPP_BASE_PATH . $resume["profile_picture_path"]) ? UPP_BASE_PATH . $resume["profile_picture_path"] : "assets/upp/default_pp.svg"; ?>
+
+                                <img src="<?php echo $profilePath?>" alt="<?php echo $resume["first_name"]?>">
                                 <span><?php echo $resume["first_name"]?></span>
                             </div>
                             <span><?php echo $resume["content"]?></span>

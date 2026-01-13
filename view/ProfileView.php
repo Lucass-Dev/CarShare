@@ -35,7 +35,8 @@ class ProfileView{
                     <?php foreach ($history["incoming_booker_history"] as $trip => $incoming_booker_infos): ?>
                         <div class="trajet-card">
                             <div class="left">
-                                <div class="avatar"><img src="<?php echo $incoming_booker_infos["profile_picture_path"]?>"/></div>
+                                <?php $profilePath = file_exists(UPP_BASE_PATH . $incoming_booker_infos["profile_picture_path"]) ? UPP_BASE_PATH . $incoming_booker_infos["profile_picture_path"] : "assets/upp/default_pp.svg"; ?>
+                                <div class="avatar"><img src="<?php echo $profilePath?>"/></div>
                                 <span class="nom"><?= htmlspecialchars($incoming_booker_infos['first_name']) ?></span>
                             </div>
                             <div class="middle">
@@ -77,7 +78,8 @@ class ProfileView{
                 <?php foreach ($history["booker_history"] as $trip => $bookingInfos): ?>
                     <div class="trajet-card">
                         <div class="left">
-                            <div class="avatar"><img src="<?php echo $bookingInfos['profile_picture_path']?>"/> </div>
+                            <?php $profilePath = file_exists(UPP_BASE_PATH . $bookingInfos["profile_picture_path"]) ? UPP_BASE_PATH . $bookingInfos["profile_picture_path"] : "assets/upp/default_pp.svg"; ?>
+                            <div class="avatar"><img src="<?php echo $profilePath?>"/> </div>
                             <span class="nom"><?= htmlspecialchars($bookingInfos['first_name']) ?></span>
                         </div>
                         <div class="middle">

@@ -32,7 +32,7 @@ class TripController {
                     exit();
                 }
                 $trip = TripModel::getCarpoolingById($_GET["trip_id"]);
-                $this->display_trip_payment();
+                $this->display_trip_payment($trip);
                 break;
             case "report":
                 if (!isset($_SESSION['user_id'])) {
@@ -179,7 +179,11 @@ class TripController {
                         if (isset($_GET["is_verified_user"]) && $_GET["is_verified_user"] != ""){
                             $filters['is_verified_user'] = $_GET["is_verified_user"];
                         }
-                        $carpoolings = TripModel::getCarpooling($start_id, $end_id, $requested_date, $requested_hour, $requested_seats, $filters);
+                        $uid = null;
+                        if (isset($_SESSION["user_id"])) {
+                            $uid = $_SESSION["user_id"];
+                        }
+                        $carpoolings = TripModel::getCarpooling($start_id, $end_id, $requested_date, $requested_hour, $requested_seats, $filters, $uid);
                         TripView::display_search_results($carpoolings);
                     }
                 ?>

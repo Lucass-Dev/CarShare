@@ -33,5 +33,11 @@ function loadCSS(name){
 }
 
 const params = new URLSearchParams(window.location.search);
-loadScript(params.get("controller"));
-loadCSS(params.get("controller"));
+
+if (params.get("controller") == null) {
+    loadCSS("home");
+    loadScript("trip");
+}else{
+    loadScript(params.get("controller"));
+    loadCSS(params.get("controller"));
+}

@@ -255,6 +255,7 @@ class UserModel{
     }
 
     static public function createDiscussion($uid1, $uid2){
+        echo "je crée une nouvelle";
         $str = "INSERT INTO conversations(user1_id, user2_id) VALUES (:uid1, :uid2)";
         $stmt = Database::getDb()->prepare($str);
         $result = $stmt->execute([
@@ -264,19 +265,27 @@ class UserModel{
     }
 
     static public function conversationExists($uid1, $uid2){
-        $str = "SELECT 1 FROM conversations WHERE user1_id IN (:uid1, :uid2) OR user2_id IN (:uid1, :uid2)";
+        $str = "
+            SELECT COUNT(*) 
+            FROM conversations 
+            WHERE user1_id IN (:uid1, :uid2)
+            AND user2_id IN (:uid1, :uid2)
+        ";
+
         $stmt = Database::getDb()->prepare($str);
-        $result = $stmt->execute([
+        $stmt->execute([
             ":uid1" => $uid1,
             ":uid2" => $uid2
         ]);
 
-        return $result == 1;
+        $count = $stmt->fetchColumn();
+
+        return $count > 0;
+
     }
 
     static public function book($tripInfos, $booker_id){
         if (TripModel::hasAvailablePlaces($tripInfos["trip_id"]) && !TripModel::hasAlreadyBooked($booker_id, $tripInfos["trip_id"])) {
-            echo "je peux réserver";
             UserModel::sendBookingMessage($tripInfos, $booker_id);
             $str = "INSERT INTO bookings(booker_id, carpooling_id) VALUES (:booker_id, :carpooling_id)";
             $stmt = Database::getDb()->prepare($str);
