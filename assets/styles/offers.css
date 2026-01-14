@@ -28,7 +28,9 @@
     border-radius: 12px;
     padding: 24px;
     margin-bottom: 32px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .filters-form {
@@ -53,13 +55,13 @@
 
 .filter-group input {
     padding: 10px 14px;
-    border: 1px solid #ddd;
+    border: 2px solid #e5e7eb;
     border-radius: 8px;
     font-size: 14px;
-    transition: all 0.2s;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Autocomplete Dropdown */
 .autocomplete-dropdown {
     position: absolute;
     top: 100%;
@@ -108,10 +110,15 @@
     margin-left: 8px;
 }
 
+.filter-group input:hover {
+    border-color: #d1d5db;
+}
+
 .filter-group input:focus {
     outline: none;
-    border-color: #2b4d9a;
-    box-shadow: 0 0 0 3px rgba(43, 77, 154, 0.1);
+    border-color: #a9b2ff;
+    box-shadow: 0 0 0 4px rgba(169, 178, 255, 0.12), 0 2px 8px rgba(169, 178, 255, 0.15);
+    transform: translateY(-1px);
 }
 
 .filter-actions {
@@ -134,15 +141,24 @@
 }
 
 .btn-filter {
-    background: #2b4d9a;
+    background: linear-gradient(135deg, #a9b2ff 0%, #8f9bff 100%);
     color: white;
     border: none;
+    padding: 11px 26px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 6px rgba(169, 178, 255, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 }
 
 .btn-filter:hover {
-    background: #1e3a7a;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(43, 77, 154, 0.2);
+    background: linear-gradient(135deg, #8f9bff 0%, #7a89ff 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(169, 178, 255, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
 }
 
 .btn-reset {
@@ -169,17 +185,17 @@
     grid-template-columns: 200px 1fr auto 120px;
     gap: 20px;
     align-items: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
     color: inherit;
-    border: 2px solid transparent;
 }
 
 .offer-card:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-    border-color: #2b4d9a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.06);
+    transform: translateY(-3px);
+    border-color: rgba(169, 178, 255, 0.3);
 }
 
 /* Driver Section */
@@ -318,6 +334,8 @@
     padding: 60px 20px;
     background: white;
     border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .no-offers p {
@@ -329,18 +347,19 @@
 .btn-create {
     display: inline-block;
     padding: 12px 24px;
-    background: #2b4d9a;
+    background: linear-gradient(135deg, #a9b2ff 0%, #8f9bff 100%);
     color: white;
     text-decoration: none;
     border-radius: 8px;
-    font-weight: 500;
-    transition: all 0.2s;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 6px rgba(169, 178, 255, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 }
 
 .btn-create:hover {
-    background: #1e3a7a;
+    background: linear-gradient(135deg, #8f9bff 0%, #7a89ff 100%);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(43, 77, 154, 0.2);
+    box-shadow: 0 4px 12px rgba(169, 178, 255, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
 }
 
 /* PAGINATION */
@@ -356,23 +375,26 @@
     padding: 8px 16px;
     border-radius: 8px;
     text-decoration: none;
-    color: #2b4d9a;
+    color: #4f46e5;
     background: white;
-    border: 1px solid #ddd;
+    border: 2px solid #e5e7eb;
     font-size: 14px;
     font-weight: 500;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .pagination-btn:hover, .pagination-page:hover {
-    background: #f0f4ff;
-    border-color: #2b4d9a;
+    background: linear-gradient(135deg, rgba(169, 178, 255, 0.1) 0%, rgba(143, 155, 255, 0.1) 100%);
+    border-color: #a9b2ff;
+    color: #7fa7f4;
+    transform: translateY(-1px);
 }
 
 .pagination-page.active {
-    background: #2b4d9a;
+    background: linear-gradient(135deg, #a9b2ff 0%, #8f9bff 100%);
     color: white;
-    border-color: #2b4d9a;
+    border-color: #a9b2ff;
+    box-shadow: 0 2px 6px rgba(169, 178, 255, 0.3);
 }
 
 .pagination-pages {

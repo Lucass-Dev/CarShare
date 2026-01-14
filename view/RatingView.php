@@ -511,7 +511,7 @@
             const comment = commentTextarea.value.trim();
             if (comment.length < 10) {
                 e.preventDefault();
-                alert('Votre commentaire doit contenir au moins 10 caractères.');
+                showNotification('Votre commentaire doit contenir au moins 10 caractères.', 'warning');
                 commentTextarea.focus();
             }
         });

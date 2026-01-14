@@ -1,0 +1,120 @@
+/* Import des styles de base pour les trajets */
+@import url('my-trips.css');
+
+/* Styles spécifiques pour la page d'historique */
+
+/* ==================== DRIVER INFO ==================== */
+.driver-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding: 14px;
+  background: var(--blue-50);
+  border-radius: var(--radius);
+}
+
+.driver-info--compact {
+  padding: 10px;
+  margin-bottom: 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+}
+
+.driver-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--blue-600) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(127,167,244,0.3);
+}
+
+.driver-avatar--small {
+  width: 36px;
+  height: 36px;
+}
+
+.driver-avatar::before {
+  content: '👤';
+  font-size: 24px;
+}
+
+.driver-avatar--small::before {
+  font-size: 18px;
+}
+
+.driver-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.driver-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-lighter);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.driver-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.driver-name:hover {
+  color: var(--accent-dark);
+}
+
+/* ==================== ACTIONS SPECIFIQUES ==================== */
+.rate-btn {
+  color: var(--warning);
+  border-color: var(--warning);
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.rate-btn:hover {
+  background: var(--warning);
+  color: var(--white);
+  border-color: var(--warning);
+}
+
+.report-btn {
+  color: var(--error);
+  border-color: var(--error);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.report-btn:hover {
+  background: var(--error);
+  color: var(--white);
+  border-color: var(--error);
+}
+
+/* ==================== RESPONSIVE ADJUSTMENTS ==================== */
+@media (max-width: 600px) {
+  .driver-info {
+    padding: 12px;
+  }
+  
+  .driver-avatar {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .driver-avatar::before {
+    font-size: 20px;
+  }
+  
+  .driver-name {
+    font-size: 15px;
+  }
+}

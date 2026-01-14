@@ -1,12 +1,40 @@
-<link rel="stylesheet" href="/CarShare/assets/styles/history-enhanced.css">
+<!-- Vue pour les trajets créés par l'utilisateur (conducteur) -->
+<link rel="stylesheet" href="/CarShare/assets/styles/my-trips.css">
 
 <div class="page-container">
     <div class="page-header">
-        <h1 class="page-title">Mes réservations</h1>
-        <p class="page-subtitle">Gérez vos trajets réservés en tant que passager</p>
+        <h1 class="page-title">Mes trajets proposés</h1>
+        <p class="page-subtitle">Gérez les trajets que vous proposez en tant que conducteur</p>
     </div>
 
-    <!-- Trajets à venir en tant que passager -->
+    <?php if (isset($_GET['success']) && $_GET['success'] === 'trip_updated'): ?>
+        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+            <svg style="width: 24px; height: 24px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 11 12 14 22 4"/>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+            <div>
+                <strong>Trajet modifié avec succès !</strong>
+                <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 14px;">Vos modifications ont été enregistrées.</p>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <?php if (isset($_GET['info']) && $_GET['info'] === 'no_changes'): ?>
+        <div style="background: linear-gradient(135deg, #7fa7f4 0%, #6f9fe6 100%); color: white; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(127, 167, 244, 0.3);">
+            <svg style="width: 24px; height: 24px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            <div>
+                <strong>Aucune modification détectée</strong>
+                <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 14px;">Vous n'avez apporté aucune modification au trajet.</p>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <!-- Trajets à venir -->
     <section class="trips-section">
         <div class="section-header">
             <h2 class="section-title">
@@ -16,14 +44,23 @@
                 </svg>
                 Trajets à venir
             </h2>
+            <a href="?action=create_trip" class="btn btn--primary btn--small">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                Proposer un trajet
+            </a>
+                Créer un trajet
+            </a>
         </div>
 
         <?php 
         $hasUpcoming = false;
-        foreach ($bookings as $booking): 
-            if (strtotime($booking['start_date']) > time()): 
+        foreach ($carpoolings as $trip): 
+            if (strtotime($trip['start_date']) > time()): 
                 $hasUpcoming = true;
-                $bookingTripId = $booking['trip_id'] ?? $booking['id'];
+                $tripId = $trip['trip_id'] ?? $trip['id'];
         ?>
             <div class="trip-card trip-card--upcoming">
                 <div class="trip-card__badge trip-card__badge--available">
@@ -35,16 +72,6 @@
                 </div>
                 
                 <div class="trip-card__main">
-                    <div class="driver-info">
-                        <div class="driver-avatar"></div>
-                        <div class="driver-details">
-                            <span class="driver-label">Conducteur</span>
-                            <a href="index.php?action=user_profile&id=<?= $booking['provider_id'] ?>" class="driver-name">
-                                <?= htmlspecialchars($booking['provider_first_name']) ?>
-                            </a>
-                        </div>
-                    </div>
-                    
                     <div class="trip-card__route">
                         <div class="location location--from">
                             <div class="location__icon">
@@ -55,7 +82,7 @@
                             </div>
                             <div class="location__text">
                                 <span class="location__label">Départ</span>
-                                <span class="location__name"><?= htmlspecialchars($booking['start_location']) ?></span>
+                                <span class="location__name"><?= htmlspecialchars($trip['start_location']) ?></span>
                             </div>
                         </div>
                         
@@ -75,7 +102,7 @@
                             </div>
                             <div class="location__text">
                                 <span class="location__label">Arrivée</span>
-                                <span class="location__name"><?= htmlspecialchars($booking['end_location']) ?></span>
+                                <span class="location__name"><?= htmlspecialchars($trip['end_location']) ?></span>
                             </div>
                         </div>
                     </div>
@@ -88,7 +115,7 @@
                                 <line x1="8" y1="2" x2="8" y2="6"/>
                                 <line x1="3" y1="10" x2="21" y2="10"/>
                             </svg>
-                            <span><?= date('d/m/Y', strtotime($booking['start_date'])) ?></span>
+                            <span><?= date('d/m/Y', strtotime($trip['start_date'])) ?></span>
                         </div>
                         
                         <div class="detail-item">
@@ -96,13 +123,34 @@
                                 <circle cx="12" cy="12" r="10"/>
                                 <polyline points="12 6 12 12 16 14"/>
                             </svg>
-                            <span><?= date('H:i', strtotime($booking['start_date'])) ?></span>
+                            <span><?= date('H:i', strtotime($trip['start_date'])) ?></span>
                         </div>
+                        
+                        <div class="detail-item">
+                            <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            <span><?= $trip['available_places'] ?> place(s)</span>
+                        </div>
+                        
+                        <?php if (isset($trip['price']) && $trip['price'] > 0): ?>
+                        <div class="detail-item detail-item--price">
+                            <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 6h-3a7 7 0 1 0 0 12h3"/>
+                                <line x1="8" y1="10" x2="16" y2="10"/>
+                                <line x1="8" y1="14" x2="16" y2="14"/>
+                            </svg>
+                            <span class="price-value"><?= number_format($trip['price'], 2) ?> €</span>
+                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
                 
                 <div class="trip-card__actions">
-                    <a href="index.php?action=trip_details&id=<?= $bookingTripId ?>" class="btn btn--secondary btn--small">
+                    <a href="index.php?action=trip_details&id=<?= $tripId ?>" class="btn btn--secondary btn--small">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"/>
                             <line x1="12" y1="16" x2="12" y2="12"/>
@@ -110,6 +158,13 @@
                         </svg>
                         Détails
                     </a>
+                    <button class="btn btn--outline btn--small" onclick="editTrip(<?= $tripId ?>)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        Modifier
+                    </button>
                 </div>
             </div>
         <?php 
@@ -124,14 +179,14 @@
                     <line x1="15" y1="9" x2="9" y2="15"/>
                     <line x1="9" y1="9" x2="15" y2="15"/>
                 </svg>
-                <h3 class="empty-state__title">Aucune réservation à venir</h3>
-                <p class="empty-state__text">Vous n'avez pas encore de trajet réservé.</p>
-                <a href="?action=search" class="btn btn--primary">
+                <h3 class="empty-state__title">Aucun trajet à venir</h3>
+                <p class="empty-state__text">Vous n'avez pas encore proposé de trajet futur.</p>
+                <a href="?action=create_trip" class="btn btn--primary">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="m21 21-4.35-4.35"/>
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
-                    Rechercher un trajet
+                    Proposer mon premier trajet
                 </a>
             </div>
         <?php endif; ?>
@@ -150,10 +205,10 @@
 
         <?php 
         $hasPast = false;
-        foreach ($bookings as $booking): 
-            if (strtotime($booking['start_date']) <= time()): 
+        foreach ($carpoolings as $trip): 
+            if (strtotime($trip['start_date']) <= time()): 
                 $hasPast = true;
-                $bookingTripId = $booking['trip_id'] ?? $booking['id'];
+                $tripId = $trip['trip_id'] ?? $trip['id'];
                 $isExpired = true;
         ?>
             <div class="trip-card trip-card--past trip-card--expired">
@@ -167,20 +222,13 @@
                 </div>
                 
                 <div class="trip-card__main">
-                    <div class="driver-info driver-info--compact">
-                        <div class="driver-avatar driver-avatar--small"></div>
-                        <a href="index.php?action=user_profile&id=<?= $booking['provider_id'] ?>" class="driver-name">
-                            <?= htmlspecialchars($booking['provider_first_name']) ?>
-                        </a>
-                    </div>
-                    
                     <div class="trip-card__route trip-card__route--compact">
                         <div class="location location--compact">
-                            <span class="location__name"><?= htmlspecialchars($booking['start_location']) ?></span>
+                            <span class="location__name"><?= htmlspecialchars($trip['start_location']) ?></span>
                         </div>
                         <div class="trip-card__arrow">→</div>
                         <div class="location location--compact">
-                            <span class="location__name"><?= htmlspecialchars($booking['end_location']) ?></span>
+                            <span class="location__name"><?= htmlspecialchars($trip['end_location']) ?></span>
                         </div>
                     </div>
                     
@@ -192,37 +240,23 @@
                                 <line x1="8" y1="2" x2="8" y2="6"/>
                                 <line x1="3" y1="10" x2="21" y2="10"/>
                             </svg>
-                            <span><?= date('d/m/Y', strtotime($booking['start_date'])) ?></span>
+                            <span><?= date('d/m/Y', strtotime($trip['start_date'])) ?></span>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            <span><?= date('H:i', strtotime($trip['start_date'])) ?></span>
                         </div>
                     </div>
                 </div>
                 
                 <div class="trip-card__actions">
-                    <button class="btn btn--secondary btn--small rate-btn" 
-                            data-action="rate-user" 
-                            data-user-id="<?= $booking['provider_id'] ?>" 
-                            data-user-name="<?= htmlspecialchars($booking['provider_first_name']) ?>" 
-                            title="Noter ce conducteur">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                        </svg>
-                        Noter
-                    </button>
-                    <button class="btn btn--outline btn--small report-btn" 
-                            data-action="report-user" 
-                            data-user-id="<?= $booking['provider_id'] ?>" 
-                            data-user-name="<?= htmlspecialchars($booking['provider_first_name']) ?>" 
-                            title="Signaler un problème">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                            <line x1="12" y1="9" x2="12" y2="13"/>
-                            <line x1="12" y1="17" x2="12.01" y2="17"/>
-                     span class="btn btn--ghost btn--small btn--disabled" disabled>
+                    <span class="btn btn--ghost btn--small btn--disabled" disabled>
                         Détails non accessibles
-                    </spanutton>
-                    <a href="?action=trip_details&id=<?= $booking['trip_id'] ?>" class="btn btn--ghost btn--small">
-                        Détails
-                    </a>
+                    </span>
                 </div>
             </div>
         <?php 
@@ -238,4 +272,8 @@
     </section>
 </div>
 
-<script src="/CarShare/assets/js/rating-report-modals.js"></script>
+<script>
+function editTrip(tripId) {
+    window.location.href = 'index.php?action=edit_trip&id=' + tripId;
+}
+</script>

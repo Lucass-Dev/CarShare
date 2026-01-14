@@ -181,4 +181,4 @@
     </div>
   </section>
 
-<script src="/CarShare/assets/js/create-trip.js"></script>
+<script src="/CarShare/assets/js/create-trip-enhanced.js"></script>

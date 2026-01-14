@@ -111,32 +111,11 @@ function initTooltips() {
 function initCardHoverEffects() {
     document.querySelectorAll('.card, .trip-card, .trajet-card').forEach(card => {
         card.addEventListener('mouseenter', function(e) {
-            this.style.transform = 'translateY(-8px)';
             this.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.15)';
         });
         
         card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
             this.style.boxShadow = '';
-        });
-        
-        // Parallax effect on mouse move
-        card.addEventListener('mousemove', function(e) {
-            const rect = this.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const rotateX = (y - centerY) / 20;
-            const rotateY = (centerX - x) / 20;
-            
-            this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
         });
     });
 }

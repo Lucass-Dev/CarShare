@@ -56,4 +56,23 @@ class BookingController {
 
         require __DIR__ . "/../view/MyBookingsView.php";
     }
+    
+    /**
+     * Display user's created trips (as driver)
+     */
+    public function myTrips() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /CarShare/index.php?action=login');
+            exit();
+        }
+
+        $model = new BookingModel();
+        $carpoolings = $model->getCarpoolingsByProvider($_SESSION['user_id']);
+
+        require __DIR__ . "/../view/MyTripsView.php";
+    }
 }

@@ -1,0 +1,315 @@
+/**
+ * Design Improvements - Respect de la charte graphique bleu/violet
+ * Améliore la cohérence visuelle, les animations et les micro-interactions
+ */
+
+/* ==================== ANIMATIONS GLOBALES ==================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+}
+
+/* ==================== AMÉLIORATION DES CARTES ==================== */
+.card,
+.trip-card,
+.review-card,
+.profile-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.card:hover,
+.trip-card:hover,
+.review-card:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* ==================== AMÉLIORATION DES BOUTONS GLOBAUX ==================== */
+button,
+.btn,
+input[type="submit"],
+input[type="button"] {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:active,
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* ==================== AMÉLIORATION DES INPUTS ==================== */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+textarea,
+select {
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  transform: translateY(-1px);
+}
+
+/* ==================== SCROLLBAR MODERNE ==================== */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f3f5;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #a9b2ff 0%, #8f9bff 100%);
+  border-radius: 10px;
+  border: 2px solid #f1f3f5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #8f9bff 0%, #7a89ff 100%);
+}
+
+/* ==================== SÉLECTION DE TEXTE ==================== */
+::selection {
+  background: linear-gradient(135deg, rgba(169, 178, 255, 0.3) 0%, rgba(143, 155, 255, 0.3) 100%);
+  color: #1f2937;
+}
+
+/* ==================== AMÉLIORATION DES LIENS ==================== */
+a {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+a:not(.btn):not(.nav-link):hover {
+  opacity: 0.8;
+}
+
+/* ==================== LOADING STATES ==================== */
+.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(169, 178, 255, 0.2) 50%, transparent 100%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* ==================== FOCUS VISIBLE AMÉLIORÉ ==================== */
+*:focus-visible {
+  outline: 3px solid rgba(169, 178, 255, 0.5);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+button:focus-visible,
+.btn:focus-visible {
+  outline-offset: 4px;
+}
+
+/* ==================== BADGES ET PILLS MODERNES ==================== */
+.badge,
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(10px);
+  animation: fadeInUp 0.4s ease-out;
+}
+
+/* ==================== TOOLTIPS MODERNES ==================== */
+[data-tooltip] {
+  position: relative;
+  cursor: help;
+}
+
+[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+[data-tooltip]::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #1f2937;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after {
+  opacity: 1;
+}
+
+/* ==================== EMPTY STATES AMÉLIORÉS ==================== */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.empty-state__icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  color: #a9b2ff;
+  opacity: 0.6;
+  animation: pulse-subtle 3s infinite;
+}
+
+.empty-state__title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 12px;
+}
+
+.empty-state__text {
+  font-size: 16px;
+  color: #6b7280;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+/* ==================== SECTION HEADERS AMÉLIORÉS ==================== */
+.section-header {
+  position: relative;
+  padding-bottom: 16px;
+  margin-bottom: 28px;
+}
+
+.section-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #a9b2ff 0%, #8f9bff 100%);
+  border-radius: 3px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+  letter-spacing: -0.5px;
+}
+
+/* ==================== DIVIDERS MODERNES ==================== */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(169, 178, 255, 0.3) 50%, transparent 100%);
+  margin: 24px 0;
+}
+
+/* ==================== ANIMATIONS D'ENTRÉE POUR LES LISTES ==================== */
+.trip-card:nth-child(1) { animation-delay: 0s; }
+.trip-card:nth-child(2) { animation-delay: 0.1s; }
+.trip-card:nth-child(3) { animation-delay: 0.2s; }
+.trip-card:nth-child(4) { animation-delay: 0.3s; }
+.trip-card:nth-child(5) { animation-delay: 0.4s; }
+
+.review-card:nth-child(1) { animation-delay: 0s; }
+.review-card:nth-child(2) { animation-delay: 0.15s; }
+.review-card:nth-child(3) { animation-delay: 0.3s; }
+
+/* ==================== RESPONSIVE IMPROVEMENTS ==================== */
+@media (max-width: 768px) {
+  .card:hover,
+  .trip-card:hover,
+  .review-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  [data-tooltip]::before {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+}
+
+/* ==================== DARK MODE PREPARATION ==================== */
+@media (prefers-color-scheme: dark) {
+  /* Les variables peuvent être ajustées ici pour un futur mode sombre */
+}

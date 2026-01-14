@@ -397,11 +397,11 @@
                     messageInput.style.height = 'auto';
                     addMessageToChat(currentUserId, content, result.timestamp, true);
                 } else {
-                    alert('Erreur lors de l\'envoi du message');
+                    showNotification('Erreur lors de l\'envoi du message', 'error');
                 }
             } catch (error) {
                 console.error('Erreur:', error);
-                alert('Erreur lors de l\'envoi du message');
+                showNotification('Erreur lors de l\'envoi du message', 'error');
             }
 
             sendButton.disabled = false;

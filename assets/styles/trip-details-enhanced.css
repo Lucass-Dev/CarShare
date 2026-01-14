@@ -1,0 +1,478 @@
+:root {
+  --blue-50: #eef4ff;
+  --blue-100: #e3eeff;
+  --blue-500: #6f9fe6;
+  --blue-600: #5a8dd4;
+  --accent: #7fa7f4;
+  --accent-dark: #5b8de8;
+  --text: #1f2a37;
+  --text-light: #6b7280;
+  --text-lighter: #9ca3af;
+  --white: #ffffff;
+  --bg-page: #f9fafb;
+  --bg-card: #ffffff;
+  --border: #e5e7eb;
+  --border-hover: #d1d5db;
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  --shadow: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+  --shadow-xl: 0 20px 40px rgba(0,0,0,0.12);
+  --radius: 8px;
+  --radius-lg: 12px;
+  --transition: all 0.2s ease;
+}
+
+/* ==================== LAYOUT ==================== */
+.trip-details-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background: var(--bg-page);
+  min-height: 100vh;
+}
+
+/* ==================== HEADER ==================== */
+.trip-details-header {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--blue-600) 100%);
+  color: var(--white);
+  padding: 32px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 32px;
+}
+
+.trip-route {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.trip-route__city {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.trip-route__arrow {
+  font-size: 24px;
+  opacity: 0.8;
+}
+
+.trip-date {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  opacity: 0.95;
+}
+
+.trip-date svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ==================== MAIN CONTENT ==================== */
+.trip-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+/* ==================== DRIVER CARD ==================== */
+.driver-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--border);
+  transition: var(--transition);
+}
+
+.driver-card:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent);
+}
+
+.driver-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid var(--border);
+}
+
+.driver-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--accent);
+  box-shadow: 0 4px 12px rgba(127,167,244,0.3);
+}
+
+.driver-info h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px 0;
+}
+
+.driver-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  color: var(--warning);
+  font-weight: 600;
+}
+
+.driver-rating svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.driver-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 16px;
+  background: var(--bg-page);
+  border-radius: var(--radius);
+}
+
+.stat-value {
+  display: block;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== TRIP INFO CARD ==================== */
+.trip-info-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--border);
+}
+
+.trip-info-section {
+  margin-bottom: 28px;
+}
+
+.trip-info-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-title svg {
+  width: 20px;
+  height: 20px;
+  color: var(--accent);
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.info-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.info-value--highlight {
+  font-size: 18px;
+  color: var(--accent);
+}
+
+/* ==================== LOCATION DETAILS ==================== */
+.location-details {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.location-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: var(--bg-page);
+  border-radius: var(--radius);
+  border-left: 4px solid;
+}
+
+.location-item--start {
+  border-left-color: var(--success);
+}
+
+.location-item--end {
+  border-left-color: var(--error);
+}
+
+.location-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--white);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.location-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.location-item--start .location-icon {
+  color: var(--success);
+}
+
+.location-item--end .location-icon {
+  color: var(--error);
+}
+
+.location-content h4 {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-lighter);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 6px 0;
+}
+
+.location-content p {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+/* ==================== OPTIONS ==================== */
+.trip-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.option-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--blue-50);
+  color: var(--accent-dark);
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.option-badge svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ==================== ACTION BUTTONS ==================== */
+.trip-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.btn-reserve {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--blue-600) 100%);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius);
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-reserve:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-reserve svg {
+  width: 20px;
+  height: 20px;
+}
+
+.btn-contact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 24px;
+  background: var(--white);
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-contact:hover {
+  background: var(--blue-50);
+}
+
+.btn-contact svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ==================== PRICE HIGHLIGHT ==================== */
+.price-section {
+  background: linear-gradient(135deg, var(--blue-50) 0%, var(--white) 100%);
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  margin-top: 24px;
+  border: 2px solid var(--accent);
+}
+
+.price-label {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-bottom: 8px;
+}
+
+.price-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.price-note {
+  font-size: 13px;
+  color: var(--text-lighter);
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 900px) {
+  .trip-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .driver-card {
+    order: -1;
+  }
+
+  .trip-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .trip-details-container {
+    padding: 24px 16px;
+  }
+
+  .trip-details-header {
+    padding: 24px;
+  }
+
+  .trip-route {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .trip-route__city {
+    font-size: 22px;
+  }
+
+  .trip-route__arrow {
+    transform: rotate(90deg);
+  }
+
+  .driver-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .driver-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .price-value {
+    font-size: 28px;
+  }
+}
+
+/* ==================== PRINT ==================== */
+@media print {
+  .trip-actions {
+    display: none;
+  }
+
+  .trip-details-container {
+    padding: 0;
+  }
+
+  .trip-details-header,
+  .driver-card,
+  .trip-info-card {
+    box-shadow: none;
+    border: 1px solid var(--border);
+  }
+}

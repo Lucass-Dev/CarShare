@@ -185,8 +185,8 @@ class FormEnhancer {
 
 // Auto-init on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize form enhancements
-    const forms = document.querySelectorAll('form:not(.no-enhance)');
+    // Initialize form enhancements (skip forms with .no-enhance or .custom-validation)
+    const forms = document.querySelectorAll('form:not(.no-enhance):not(.custom-validation)');
     forms.forEach(form => new FormEnhancer(form));
 
     // Add smooth scroll to anchors

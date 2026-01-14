@@ -15,8 +15,9 @@ $userId = $_SESSION['user_id'] ?? null;
 
     <!-- Navigation Links -->
     <nav class="header-nav">
-        <a href="index.php?action=search" class="nav-link">Voyager</a>
-        <a href="index.php?action=offers" class="nav-link">Offres</a>
+        <a href="index.php?action=search" class="nav-link">Trouver un trajet</a>
+        <a href="index.php?action=create_trip" class="nav-link">Proposer un trajet</a>
+        <a href="index.php?action=contact" class="nav-link">Contact</a>
     </nav>
 
     <!-- Compact Search Bar -->
@@ -40,11 +41,25 @@ $userId = $_SESSION['user_id'] ?? null;
                 <ul class="dropdown-menu">
                     <li class="dropdown-header"><?= htmlspecialchars($userName) ?></li>
                     <li><a href="?action=profile">Mon profil</a></li>
-                    <li><a href="?action=history">Historique</a></li>
-                    <li><a href="?action=my_bookings">Mes réservations</a></li>
-                    <li><a href="?action=messaging">Messages</a></li>
                     <li class="dropdown-divider"></li>
-                    <li><a href="?action=create_trip">Publier un trajet</a></li>
+                    <li><a href="?action=my_trips">
+                        <svg style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                        Mes trajets proposés
+                    </a></li>
+                    <li><a href="?action=history">
+                        <svg style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                        Mes réservations
+                    </a></li>
+                    <li><a href="?action=messaging">
+                        <svg style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                        </svg>
+                        Messages
+                    </a></li>
                     <li class="dropdown-divider"></li>
                     <li><a href="?action=disconnect">Se déconnecter</a></li>
                 </ul>

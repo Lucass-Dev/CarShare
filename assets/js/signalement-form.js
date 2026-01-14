@@ -31,7 +31,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // If there are errors, prevent submission
         if (errors.length > 0) {
             e.preventDefault();
-            alert('Erreurs de validation:\n\n' + errors.join('\n'));
+            if (window.notificationManager) {
+                window.notificationManager.showMultiple(errors, 'error');
+            } else {
+                showNotification('Erreurs de validation:\n\n' + errors.join('\n'), 'error', 8000);
+            }
         }
     });
 

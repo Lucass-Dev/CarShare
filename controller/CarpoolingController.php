@@ -78,6 +78,6 @@ class CarpoolingController {
             exit();
         }
 
-        require __DIR__ . "/../view/TripDetailsView.php";
+        require __DIR__ . "/../view/TripDetailsViewEnhanced.php";
     }
 }

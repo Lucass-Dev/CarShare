@@ -2,7 +2,7 @@
     class TripView{
         public static function display_trip_infos($details){
             ?>
-            <link rel="stylesheet" href="./assets/styles/trip_infos.css">
+            <!-- L'ancien CSS trip_infos.css n'est plus utilisé, remplacé par trip-details-enhanced.css -->
             <div>
                 <h2>Détails du trajet</h2>
 
@@ -314,18 +314,22 @@
 
         public static function display_publish_form(){
             ?>
-            <link rel="stylesheet" href="./assets/styles/create-trip.css">
+            <link rel="stylesheet" href="./assets/styles/create-trip-enhanced.css">
             <?php 
             $success = isset($_GET['success']) && $_GET['success'] == 1;
             $hasError = isset($_GET['error']) && $_GET['error'] == 1;
             ?>
             <section class="hero">
             <div class="hero__overlay">
-            <h1 class="hero__title">Publier un nouveau trajet</h1>
+            <h1 class="hero__title">Proposer un nouveau trajet</h1>
 
             <?php if ($success): ?>
-                <div style="margin:20px 0; padding:15px; border-radius:8px; background:#d4edda; color:#155724; text-align:center; font-weight:600;">
-                ✅ Trajet créé avec succès !
+                <div class="server-message server-message--success">
+                    <div class="server-message__icon">✅</div>
+                    <div class="server-message__content">
+                        <strong>Trajet créé avec succès !</strong>
+                        Votre trajet est maintenant visible par les autres utilisateurs.
+                    </div>
                 </div>
             <?php endif; ?>
 
@@ -334,13 +338,16 @@
             $formData = $_SESSION['trip_form_data'] ?? [];
             if (!empty($errors)): 
             ?>
-                <div style="margin:20px 0; padding:15px; border-radius:8px; background:#f8d7da; color:#721c24;">
-                <strong>Erreurs :</strong>
-                <ul style="margin:10px 0 0 0; padding-left:20px;">
-                    <?php foreach ($errors as $err): ?>
-                    <li><?= htmlspecialchars($err) ?></li>
-                    <?php endforeach; ?>
-                </ul>
+                <div class="server-message server-message--error">
+                    <div class="server-message__icon">⚠️</div>
+                    <div class="server-message__content">
+                        <strong>Veuillez corriger les erreurs suivantes :</strong>
+                        <ul>
+                            <?php foreach ($errors as $err): ?>
+                                <li><?= htmlspecialchars($err) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
                 </div>
             <?php 
                 // Clear errors after displaying
@@ -485,7 +492,7 @@
                     </fieldset>
 
                     <div class="trip-form__actions trip-form__actions--side">
-                        <button type="submit" class="btn btn--primary btn--pill">Publier</button>
+                        <button type="submit" class="btn btn--primary btn--pill">Proposer ce trajet</button>
                     </div>
                 </div>
                 </div>
@@ -501,7 +508,234 @@
             </datalist>
             </div>
         </section>
-        <script src="./assets/js/create-trip.js"></script>
+        <script src="./assets/js/create-trip-enhanced.js"></script>
+            <?php
+        }
+
+        /**
+         * Display the edit trip form with pre-filled data
+         */
+        public static function display_edit_form($trip){
+            ?>
+            <link rel="stylesheet" href="./assets/styles/create-trip-enhanced.css">
+            <?php 
+            $success = isset($_GET['success']) && $_GET['success'] == 1;
+            $hasError = isset($_GET['error']) && $_GET['error'] == 1;
+            
+            // Parse the trip date/time
+            $startDateTime = new DateTime($trip['start_date']);
+            $tripDate = $startDateTime->format('Y-m-d');
+            $tripTime = $startDateTime->format('H:i');
+            
+            // Get form data from session or use trip data
+            $errors = $_SESSION['trip_form_errors'] ?? [];
+            $formData = $_SESSION['trip_form_data'] ?? [];
+            
+            // Use trip data as defaults if no form data
+            $depCity = $formData['dep-city'] ?? $trip['start_location_name'];
+            $arrCity = $formData['arr-city'] ?? $trip['end_location_name'];
+            $date = $formData['date'] ?? $tripDate;
+            $time = $formData['time'] ?? $tripTime;
+            $price = $formData['price'] ?? $trip['price'];
+            $places = $formData['places'] ?? $trip['available_places'];
+            ?>
+            <section class="hero">
+            <div class="hero__overlay">
+            <h1 class="hero__title">Modifier mon trajet</h1>
+
+            <?php if ($success): ?>
+                <div class="server-message server-message--success">
+                    <div class="server-message__icon">✅</div>
+                    <div class="server-message__content">
+                        <strong>Trajet modifié avec succès !</strong>
+                        Les modifications ont été enregistrées.
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <?php 
+            if (!empty($errors)): 
+            ?>
+                <div class="server-message server-message--error">
+                    <div class="server-message__icon">⚠️</div>
+                    <div class="server-message__content">
+                        <strong>Veuillez corriger les erreurs suivantes :</strong>
+                        <ul>
+                            <?php foreach ($errors as $err): ?>
+                                <li><?= htmlspecialchars($err) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+            <?php 
+                // Clear errors after displaying
+                unset($_SESSION['trip_form_errors']);
+            endif; 
+            ?>
+
+            <form class="trip-form" method="POST" action="/CarShare/index.php?action=edit_trip_submit" novalidate>
+                <input type="hidden" name="trip_id" value="<?= htmlspecialchars($trip['id']) ?>">
+                
+                <div class="trip-form__row">
+                <div class="form__group form__group--small">
+                    <label class="form__label" for="dep-num">N° voie</label>
+                    <input 
+                    id="dep-num" 
+                    name="dep-num"
+                    class="form__input" 
+                    placeholder="N° voie"
+                    value="<?= htmlspecialchars($formData['dep-num'] ?? '') ?>"
+                    />
+                </div>
+
+                <div class="form__group">
+                    <label class="form__label" for="dep-street">Rue</label>
+                    <input 
+                    id="dep-street" 
+                    name="dep-street"
+                    class="form__input" 
+                    placeholder="Rue"
+                    value="<?= htmlspecialchars($formData['dep-street'] ?? '') ?>"
+                    />
+                </div>
+
+                <div class="form__group">
+                    <label class="form__label" for="dep-city">Ville de départ <span class="form__required">*</span></label>
+                    <input 
+                    id="dep-city" 
+                    name="dep-city"
+                    class="form__input city-autocomplete" 
+                    placeholder="Ville (France)"
+                    value="<?= htmlspecialchars($depCity) ?>"
+                    autocomplete="off"
+                    required
+                    />
+                    <div class="autocomplete-dropdown" id="dep-city-dropdown"></div>
+                </div>
+                </div>
+
+                <div class="trip-form__row">
+                <div class="form__group form__group--small">
+                    <label class="form__label" for="arr-num">N° voie</label>
+                    <input 
+                    id="arr-num" 
+                    name="arr-num"
+                    class="form__input" 
+                    placeholder="N° voie"
+                    value="<?= htmlspecialchars($formData['arr-num'] ?? '') ?>"
+                    />
+                </div>
+
+                <div class="form__group">
+                    <label class="form__label" for="arr-street">Rue</label>
+                    <input 
+                    id="arr-street" 
+                    name="arr-street"
+                    class="form__input" 
+                    placeholder="Rue"
+                    value="<?= htmlspecialchars($formData['arr-street'] ?? '') ?>"
+                    />
+                </div>
+
+                <div class="form__group">
+                    <label class="form__label" for="arr-city">Ville d'arrivée <span class="form__required">*</span></label>
+                    <input 
+                    id="arr-city" 
+                    name="arr-city"
+                    class="form__input city-autocomplete" 
+                    placeholder="Ville (France)"
+                    value="<?= htmlspecialchars($arrCity) ?>"
+                    autocomplete="off"
+                    required
+                    />
+                    <div class="autocomplete-dropdown" id="arr-city-dropdown"></div>
+                </div>
+                </div>
+
+                <div class="trip-form__row trip-form__row--compact">
+                <div class="form__group form__group--small">
+                    <label class="form__label" for="date">Date <span class="form__required">*</span></label>
+                    <input 
+                    id="date" 
+                    name="date"
+                    class="form__input" 
+                    type="date"
+                    value="<?= htmlspecialchars($date) ?>"
+                    required
+                    />
+                </div>
+
+                <div class="form__group form__group--small">
+                    <label class="form__label" for="time">Heure</label>
+                    <input 
+                    id="time" 
+                    name="time"
+                    class="form__input" 
+                    type="time"
+                    value="<?= htmlspecialchars($time) ?>"
+                    />
+                </div>
+
+                <div class="form__group form__group--small">
+                    <label class="form__label" for="price">Prix (€)</label>
+                    <input 
+                    id="price" 
+                    name="price"
+                    class="form__input" 
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    placeholder="0.00"
+                    value="<?= htmlspecialchars($price ?? '') ?>"
+                    />
+                </div>
+                </div>
+
+                <div class="trip-form__row trip-form__row--options">
+                    <fieldset class="options">
+                        <legend class="options__title">Options</legend>
+                        
+                        <div class="form__group form__group--small">
+                            <label class="form__label" for="places">Nombre de place(s) <span class="form__required">*</span></label>
+                            <select id="places" name="places" class="form__input" required>
+                                <option value="0">0</option>
+                                <?php for ($i = 1; $i <= 10; $i++): ?>
+                                <option value="<?= $i ?>" <?= ($places == $i) ? 'selected' : '' ?>>
+                                    <?= $i ?>
+                                </option>
+                                <?php endfor; ?>
+                            </select>
+                        </div>
+
+                        <label class="options__item"><input type="checkbox" name="animals" <?= isset($formData['animals']) ? 'checked' : '' ?>> Animaux</label>
+                        <label class="options__item"><input type="checkbox" name="smoking" <?= isset($formData['smoking']) ? 'checked' : '' ?>> Fumeur</label>
+                    </fieldset>
+
+                    <div class="trip-form__actions trip-form__actions--side">
+                        <a href="?action=my_trips" class="btn btn--outline btn--pill" style="text-decoration: none;">Annuler</a>
+                        <button type="submit" class="btn btn--primary btn--pill">Enregistrer les modifications</button>
+                    </div>
+                </div>
+                </div>
+            </form>
+
+            <!-- Datalist for location autocomplete -->
+            <datalist id="locations-list">
+                <?php 
+                // Fetch locations for autocomplete
+                require_once __DIR__ . '/../model/TripFormModel.php';
+                $model = new TripFormModel();
+                $locations = $model->getAllLocations();
+                foreach ($locations as $location): 
+                ?>
+                <option value="<?= htmlspecialchars($location['name']) ?>">
+                    <?= htmlspecialchars($location['postal_code']) ?>
+                </option>
+                <?php endforeach; ?>
+            </datalist>
+            </div>
+        </section>
+        <script src="./assets/js/create-trip-enhanced.js"></script>
             <?php
         }
 

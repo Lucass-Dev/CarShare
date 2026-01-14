@@ -1,6 +1,20 @@
 <?php
+// Start output buffering to allow header redirects after content output
+ob_start();
+
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+
+// Handle disconnect before any output
+if (isset($_GET['action']) && $_GET['action'] === 'disconnect') {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    session_unset();
+    session_destroy();
+    header('Location: /CarShare/index.php?action=home');
+    exit();
+}
 
 $action = $_GET['action'] ?? 'home';
 ?>
@@ -24,27 +38,31 @@ $action = $_GET['action'] ?? 'home';
     <link rel="stylesheet" href="/CarShare/assets/styles/form-enhancements.css">
     <link rel="stylesheet" href="/CarShare/assets/styles/global-enhancements.css">
     <link rel="stylesheet" href="/CarShare/assets/styles/autocomplete.css">
+    <link rel="stylesheet" href="/CarShare/assets/styles/design-improvements.css">
     
     <?php
     // Load page-specific CSS based on action
     $pageCss = [
-        'create_trip' => ['create-trip.css', 'city-autocomplete.css'],
+        'create_trip' => ['create-trip-enhanced.css', 'city-autocomplete.css'],
+        'edit_trip' => ['create-trip-enhanced.css', 'city-autocomplete.css'],
         'rating' => 'rating.css',
         'signalement' => 'report-user.css',
         'login' => 'conn.css',
         'forgot_password' => 'conn.css',
         'register' => ['inscr.css', 'password-validator.css'],
-        'trip_details' => 'trip_infos.css',
+        'trip_details' => 'trip-details-enhanced.css',
         'payment' => 'trip_payment.css',
         'booking_confirmation' => 'confirmation_reservation.css',
-        'history' => ['history.css', 'modal-system.css'],
+        'history' => ['history-enhanced.css', 'modal-system.css'],
         'my_bookings' => 'history.css',
+        'my_trips' => 'my-trips.css',
         'profile' => 'page_profil.css',
         'user_profile' => ['user-profile.css', 'modal-system.css'],
         'legal' => 'legal.css',
         'cgu' => 'legal.css',
         'cgv' => 'legal.css',
         'faq' => 'FAQ.css',
+        'contact' => 'contact.css',
         'search' => ['search-enhancements.css', 'city-autocomplete.css'],
         'display_search' => ['search-enhancements.css', 'city-autocomplete.css'],
         'home' => ['search-enhancements.css', 'city-autocomplete.css'],
@@ -62,6 +80,7 @@ $action = $_GET['action'] ?? 'home';
     
     <!-- Core JavaScript -->
     <script src="/CarShare/assets/js/form-enhancements.js" defer></script>
+    <script src="/CarShare/assets/js/notification-system.js" defer></script>
     <script src="/CarShare/assets/js/global-enhancements.js" defer></script>
     
     <?php
@@ -69,7 +88,8 @@ $action = $_GET['action'] ?? 'home';
     $pageJs = [
         'register' => ['password-validator.js', 'register.js'],
         'login' => ['login.js'],
-        'create_trip' => ['city-autocomplete-enhanced.js', 'create-trip.js'],
+        'create_trip' => ['city-autocomplete-enhanced.js', 'create-trip-enhanced.js'],
+        'edit_trip' => ['city-autocomplete-enhanced.js', 'create-trip-enhanced.js'],
         'rating' => ['rating.js', 'rating-form.js'],
         'signalement' => ['signalement.js', 'signalement-form.js'],
         'search' => ['city-autocomplete-enhanced.js', 'search-enhancements.js'],
@@ -88,7 +108,7 @@ $action = $_GET['action'] ?? 'home';
     ?>
 </head>
 
-<body<?= ($action === 'create_trip' || $action === 'trip_details') ? ' class="page page--create"' : '' ?>>
+<body<?= ($action === 'create_trip' || $action === 'edit_trip' || $action === 'trip_details') ? ' class="page page--create"' : '' ?>>
 
 <?php
 // Routes that don't need header/footer wrapper
@@ -153,11 +173,7 @@ switch ($action) {
         break;
 
     case "disconnect":
-        session_start();
-        session_unset();
-        session_destroy();
-        header('Location: /CarShare/index.php?action=home');
-        exit();
+        // Already handled at the top of the file to avoid headers already sent error
         break;
 
     case "create_trip":
@@ -168,6 +184,16 @@ switch ($action) {
     case "create_trip_submit":
         require_once __DIR__ . "/controller/TripFormController.php";
         (new TripFormController())->submit();
+        break;
+
+    case "edit_trip":
+        require_once __DIR__ . "/controller/TripFormController.php";
+        (new TripFormController())->renderEdit();
+        break;
+
+    case "edit_trip_submit":
+        require_once __DIR__ . "/controller/TripFormController.php";
+        (new TripFormController())->submitEdit();
         break;
 
     case "trip_details":
@@ -194,10 +220,25 @@ switch ($action) {
         require_once __DIR__ . "/controller/BookingController.php";
         (new BookingController())->myBookings();
         break;
+    
+    case "my_trips":
+        require_once __DIR__ . "/controller/BookingController.php";
+        (new BookingController())->myTrips();
+        break;
 
     case "faq":
         require_once __DIR__ . "/controller/FAQController.php";
         (new FAQController())->render();
+        break;
+
+    case "contact":
+        require_once __DIR__ . "/controller/ContactController.php";
+        (new ContactController())->render();
+        break;
+
+    case "contact_submit":
+        require_once __DIR__ . "/controller/ContactController.php";
+        (new ContactController())->submit();
         break;
 
     case "cgu":
@@ -285,3 +326,7 @@ switch ($action) {
 
 </body>
 </html>
+<?php
+// Flush output buffer
+ob_end_flush();
+?>

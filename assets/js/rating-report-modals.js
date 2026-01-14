@@ -197,7 +197,7 @@ class RatingReportSystem {
             const safety = modal.querySelector('[data-criterion="safety"]').getAttribute('data-rating');
 
             if (globalRating === '0') {
-                alert('Veuillez sélectionner une note');
+                showNotification('Veuillez sélectionner une note', 'warning');
                 return;
             }
 
@@ -229,7 +229,7 @@ class RatingReportSystem {
                     throw new Error(result.message || 'Erreur');
                 }
             } catch (error) {
-                alert('Erreur lors de l\'envoi: ' + error.message);
+                showNotification('Erreur lors de l\'envoi: ' + error.message, 'error');
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Envoyer la note';
             }
@@ -269,7 +269,7 @@ class RatingReportSystem {
                     throw new Error(result.message || 'Erreur');
                 }
             } catch (error) {
-                alert('Erreur lors de l\'envoi: ' + error.message);
+                showNotification('Erreur lors de l\'envoi: ' + error.message, 'error');
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Envoyer le signalement';
             }

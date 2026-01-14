@@ -99,4 +99,67 @@ class TripFormModel
         
         return $number;
     }
+
+    /**
+     * Get a trip by ID with location details
+     */
+    public function getTripById(int $tripId): ?array
+    {
+        try {
+            $stmt = $this->db->prepare("
+                SELECT 
+                    c.id,
+                    c.provider_id,
+                    c.start_date,
+                    c.price,
+                    c.available_places,
+                    c.status,
+                    l1.id as start_location_id,
+                    l1.name as start_location_name,
+                    l2.id as end_location_id,
+                    l2.name as end_location_name
+                FROM carpoolings c
+                JOIN location l1 ON c.start_id = l1.id
+                JOIN location l2 ON c.end_id = l2.id
+                WHERE c.id = :id
+            ");
+            $stmt->execute([':id' => $tripId]);
+            $result = $stmt->fetch();
+            return $result ?: null;
+        } catch (PDOException $e) {
+            error_log("Error fetching trip: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Update an existing carpooling trip
+     */
+    public function updateTrip(int $tripId, array $data): bool
+    {
+        try {
+            $stmt = $this->db->prepare("
+                UPDATE carpoolings 
+                SET start_date = :start_date,
+                    price = :price,
+                    available_places = :available_places,
+                    start_id = :start_id,
+                    end_id = :end_id
+                WHERE id = :id AND provider_id = :provider_id
+            ");
+            
+            return $stmt->execute([
+                ':id' => $tripId,
+                ':provider_id' => $data['provider_id'],
+                ':start_date' => $data['start_date'],
+                ':price' => $data['price'] ?? null,
+                ':available_places' => $data['available_places'],
+                ':start_id' => $data['start_id'],
+                ':end_id' => $data['end_id']
+            ]);
+        } catch (PDOException $e) {
+            error_log("Error updating trip: " . $e->getMessage());
+            return false;
+        }
+    }
 }

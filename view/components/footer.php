@@ -5,6 +5,7 @@
         <div><a href="index.php?action=cgv">CGV</a></div>
         <div><a href="index.php?action=legal">Informations légales</a></div>
         <div><a href="index.php?action=faq">FAQ</a></div>
+        <div><a href="index.php?action=contact">Contact</a></div>
         <div>Tous droits réservés</div>
     </div>
 </footer>
