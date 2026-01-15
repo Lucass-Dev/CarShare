@@ -39,6 +39,7 @@ $action = $_GET['action'] ?? 'home';
     <link rel="stylesheet" href="/CarShare/assets/styles/global-enhancements.css">
     <link rel="stylesheet" href="/CarShare/assets/styles/autocomplete.css">
     <link rel="stylesheet" href="/CarShare/assets/styles/design-improvements.css">
+    <link rel="stylesheet" href="/CarShare/assets/styles/custom-dialogs.css">
     
     <?php
     // Load page-specific CSS based on action
@@ -79,6 +80,8 @@ $action = $_GET['action'] ?? 'home';
     ?>
     
     <!-- Core JavaScript -->
+    <script src="/CarShare/assets/js/fix-copy-paste.js"></script>
+    <script src="/CarShare/assets/js/custom-dialogs.js"></script>
     <script src="/CarShare/assets/js/form-enhancements.js" defer></script>
     <script src="/CarShare/assets/js/notification-system.js" defer></script>
     <script src="/CarShare/assets/js/global-enhancements.js" defer></script>
@@ -194,6 +197,11 @@ switch ($action) {
     case "edit_trip_submit":
         require_once __DIR__ . "/controller/TripFormController.php";
         (new TripFormController())->submitEdit();
+        break;
+
+    case "delete_trip":
+        require_once __DIR__ . "/controller/TripFormController.php";
+        (new TripFormController())->deleteTrip();
         break;
 
     case "trip_details":

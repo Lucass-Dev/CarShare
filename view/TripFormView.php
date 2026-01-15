@@ -138,9 +138,11 @@
               type="number"
               step="0.01"
               min="0"
-              placeholder="0.00"
+              max="250"
+              placeholder="0.00 - 250.00"
               value="<?= htmlspecialchars($formData['price'] ?? '') ?>"
             />
+            <small style="color: #6b7280; font-size: 12px; margin-top: 4px; display: block;">Maximum: 250€ (participation aux frais)</small>
           </div>
         </div>
 

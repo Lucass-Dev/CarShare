@@ -112,11 +112,17 @@
         </div>
     </footer>
 
+    <!-- Custom Dialogs CSS -->
+    <link rel="stylesheet" href="../assets/styles/custom-dialogs.css">
+    
+    <!-- Custom Dialogs JS -->
+    <script src="../assets/js/custom-dialogs.js"></script>
+    
     <!-- Alerte de confirmation -->
     <script>
-        document.getElementById('report-form').addEventListener('submit', function (e) {
+        document.getElementById('report-form').addEventListener('submit', async function (e) {
             e.preventDefault();
-            alert("Merci, votre signalement a bien été transmis à l'équipe CarShare.");
+            await showSuccess("Merci, votre signalement a bien été transmis à l'équipe CarShare.");
             this.reset();
         });
     </script>

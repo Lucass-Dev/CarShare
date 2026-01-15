@@ -48,6 +48,11 @@ class CityAutocomplete {
     handleInput(e) {
         const value = this.input.value.trim();
         
+        // Remove the selectedFromList flag when user types manually
+        if (this.input.dataset.selectedFromList) {
+            delete this.input.dataset.selectedFromList;
+        }
+        
         // Clear previous timer
         clearTimeout(this.debounceTimer);
         
@@ -121,14 +126,29 @@ class CityAutocomplete {
     }
     
     selectCity(city) {
+        // Update value and metadata first
         this.input.value = city.name;
         this.input.dataset.cityId = city.id;
         this.input.dataset.cityName = city.name;
         this.input.dataset.postalCode = city.postal_code;
+        this.input.dataset.selectedFromList = 'true';
+        
+        // Remove any error styling
+        this.input.classList.remove('field--invalid');
+        const errorMsg = this.input.parentElement.querySelector('.field-error');
+        if (errorMsg) errorMsg.remove();
+        
+        // Mark as valid immediately
+        this.input.classList.add('field--valid');
+        
         this.close();
         
-        // Trigger change event
-        this.input.dispatchEvent(new Event('change'));
+        // Trigger validation events after value and flag are set
+        // Use requestAnimationFrame to ensure DOM is updated
+        requestAnimationFrame(() => {
+            this.input.dispatchEvent(new Event('input', { bubbles: true }));
+            this.input.dispatchEvent(new Event('change', { bubbles: true }));
+        });
     }
     
     handleKeydown(e) {

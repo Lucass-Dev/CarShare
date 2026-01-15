@@ -150,8 +150,8 @@ class TripFormController
         if ($price !== null) {
             if ($price < 0) {
                 $errors[] = "Le prix doit être un nombre positif";
-            } elseif ($price > 9999.99) {
-                $errors[] = "Le prix ne peut pas dépasser 9999.99 €";
+            } elseif ($price > 250) {
+                $errors[] = "Le prix ne peut pas dépasser 250 € (participation aux frais de trajet)";
             }
         }
 
@@ -350,8 +350,8 @@ class TripFormController
         if ($price !== null) {
             if ($price < 0) {
                 $errors[] = "Le prix doit être un nombre positif";
-            } elseif ($price > 9999.99) {
-                $errors[] = "Le prix ne peut pas dépasser 9999.99 €";
+            } elseif ($price > 250) {
+                $errors[] = "Le prix ne peut pas dépasser 250 € (participation aux frais de trajet)";
             }
         }
 
@@ -416,6 +416,66 @@ class TripFormController
             $_SESSION['trip_form_errors'] = ["Erreur lors de la modification du trajet"];
             $_SESSION['trip_form_data'] = $_POST;
             header('Location: /CarShare/index.php?action=edit_trip&id=' . $tripId . '&error=1');
+        }
+        exit;
+    }
+    
+    /**
+     * Delete a trip (cancel/remove)
+     */
+    public function deleteTrip(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Check if user is logged in
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /CarShare/index.php?action=login');
+            exit;
+        }
+
+        // Check if request is POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /CarShare/index.php?action=my_trips&error=invalid_request');
+            exit;
+        }
+
+        $tripId = $_POST['trip_id'] ?? null;
+
+        if (!$tripId || !is_numeric($tripId)) {
+            header('Location: /CarShare/index.php?action=my_trips&error=invalid_trip');
+            exit;
+        }
+
+        // Get trip details to verify ownership
+        $trip = $this->model->getTripById($tripId);
+        
+        if (!$trip) {
+            header('Location: /CarShare/index.php?action=my_trips&error=trip_not_found');
+            exit;
+        }
+
+        // Verify the user is the trip owner
+        if ($trip['provider_id'] != $_SESSION['user_id']) {
+            header('Location: /CarShare/index.php?action=my_trips&error=unauthorized');
+            exit;
+        }
+
+        // Check if trip is in the past (optional - you can still allow deletion)
+        // Uncomment if you want to prevent deletion of past trips
+        // if (strtotime($trip['start_date']) < time()) {
+        //     header('Location: /CarShare/index.php?action=my_trips&error=past_trip_cannot_delete');
+        //     exit;
+        // }
+
+        // Delete the trip (cascade will handle bookings and messages)
+        $result = $this->model->deleteTrip($tripId);
+
+        if ($result) {
+            header('Location: /CarShare/index.php?action=my_trips&success=trip_deleted');
+        } else {
+            header('Location: /CarShare/index.php?action=my_trips&error=delete_failed');
         }
         exit;
     }

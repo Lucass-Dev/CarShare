@@ -20,6 +20,44 @@
         </div>
     <?php endif; ?>
 
+    <?php if (isset($_GET['success']) && $_GET['success'] === 'trip_deleted'): ?>
+        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+            <svg style="width: 24px; height: 24px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 11 12 14 22 4"/>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+            <div>
+                <strong>Trajet supprimé avec succès !</strong>
+                <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 14px;">Le trajet et toutes les réservations associées ont été supprimés.</p>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <?php if (isset($_GET['error'])): ?>
+        <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">
+            <svg style="width: 24px; height: 24px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="15" y1="9" x2="9" y2="15"/>
+                <line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+            <div>
+                <strong>Erreur</strong>
+                <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 14px;">
+                    <?php
+                    $errorMessages = [
+                        'invalid_trip' => 'Trajet invalide.',
+                        'unauthorized' => 'Vous n\'êtes pas autorisé à effectuer cette action.',
+                        'delete_failed' => 'Impossible de supprimer le trajet. Veuillez réessayer.',
+                        'trip_not_found' => 'Trajet introuvable.',
+                        'invalid_request' => 'Requête invalide.'
+                    ];
+                    echo $errorMessages[$_GET['error']] ?? 'Une erreur est survenue.';
+                    ?>
+                </p>
+            </div>
+        </div>
+    <?php endif; ?>
+
     <?php if (isset($_GET['info']) && $_GET['info'] === 'no_changes'): ?>
         <div style="background: linear-gradient(135deg, #7fa7f4 0%, #6f9fe6 100%); color: white; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(127, 167, 244, 0.3);">
             <svg style="width: 24px; height: 24px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -165,6 +203,15 @@
                         </svg>
                         Modifier
                     </button>
+                    <button class="btn btn--danger btn--small" onclick="confirmDeleteTrip(<?= $tripId ?>)" data-confirm="Êtes-vous sûr de vouloir supprimer ce trajet ? Cette action est irréversible.">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            <line x1="10" y1="11" x2="10" y2="17"/>
+                            <line x1="14" y1="11" x2="14" y2="17"/>
+                        </svg>
+                        Supprimer
+                    </button>
                 </div>
             </div>
         <?php 
@@ -275,5 +322,34 @@
 <script>
 function editTrip(tripId) {
     window.location.href = 'index.php?action=edit_trip&id=' + tripId;
+}
+
+async function confirmDeleteTrip(tripId) {
+    const confirmed = await customConfirm(
+        'Cette action est irréversible et supprimera :\n- Le trajet\n- Toutes les réservations associées\n- Les messages liés au trajet',
+        {
+            title: 'Êtes-vous sûr de vouloir supprimer ce trajet ?',
+            icon: '🗑️',
+            confirmText: 'Supprimer',
+            confirmClass: 'btn-danger',
+            cancelText: 'Annuler'
+        }
+    );
+    
+    if (confirmed) {
+        // Create a form to submit DELETE request
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'index.php?action=delete_trip';
+        
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'trip_id';
+        input.value = tripId;
+        
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
 }
 </script>

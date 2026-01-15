@@ -162,4 +162,19 @@ class TripFormModel
             return false;
         }
     }
+    
+    /**
+     * Delete a trip by ID
+     * Note: Database should have CASCADE DELETE for related bookings and messages
+     */
+    public function deleteTrip(int $tripId): bool
+    {
+        try {
+            $stmt = $this->db->prepare("DELETE FROM carpoolings WHERE id = :id");
+            return $stmt->execute([':id' => $tripId]);
+        } catch (PDOException $e) {
+            error_log("Error deleting trip: " . $e->getMessage());
+            return false;
+        }
+    }
 }

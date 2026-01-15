@@ -1,0 +1,307 @@
+/**
+ * Custom Dialog Styles - Modern Modal System
+ * Replaces native browser dialogs with beautiful custom modals
+ */
+
+/* Modal Overlay */
+.custom-dialog-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.custom-dialog-modal--active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Backdrop */
+.custom-dialog-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(17, 24, 39, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Modal Container */
+.custom-dialog-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 480px;
+    box-shadow: 
+        0 0 0 1px rgba(0, 0, 0, 0.05),
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.custom-dialog-modal--active .custom-dialog-container {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Content */
+.custom-dialog-content {
+    padding: 32px 24px 24px;
+    text-align: center;
+}
+
+.custom-dialog-icon {
+    font-size: 56px;
+    line-height: 1;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+.custom-dialog-title {
+    margin: 0 0 12px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -0.02em;
+}
+
+.custom-dialog-message {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #4b5563;
+}
+
+.custom-dialog-message br {
+    margin: 4px 0;
+    display: block;
+    content: "";
+}
+
+/* Prompt Input */
+.custom-prompt-input {
+    width: 100%;
+    margin-top: 16px;
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+}
+
+.custom-prompt-input:focus {
+    outline: none;
+    border-color: #7fa7f4;
+    box-shadow: 0 0 0 3px rgba(127, 167, 244, 0.1);
+}
+
+/* Actions */
+.custom-dialog-actions {
+    display: flex;
+    gap: 12px;
+    padding: 20px 24px 24px;
+    background: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+}
+
+.custom-dialog-btn {
+    flex: 1;
+    padding: 12px 24px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
+    letter-spacing: -0.01em;
+}
+
+.custom-dialog-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(127, 167, 244, 0.2);
+}
+
+.custom-dialog-btn:active {
+    transform: translateY(1px);
+}
+
+/* Primary Button */
+.btn-primary {
+    background: linear-gradient(135deg, #7fa7f4 0%, #6f9fe6 100%);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 2px 8px rgba(127, 167, 244, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #6f9fe6 0%, #5b8de8 100%);
+    box-shadow: 0 4px 12px rgba(127, 167, 244, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Confirm Button */
+.btn-confirm {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.btn-confirm:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Danger Button */
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Cancel Button */
+.btn-cancel {
+    background: white;
+    color: #4b5563;
+    border-color: #d1d5db;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.btn-cancel:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+    color: #1f2937;
+    transform: translateY(-2px);
+}
+
+/* Type-specific styling */
+.custom-dialog-modal--success .custom-dialog-icon {
+    color: #10b981;
+}
+
+.custom-dialog-modal--error .custom-dialog-icon {
+    color: #ef4444;
+}
+
+.custom-dialog-modal--warning .custom-dialog-icon {
+    color: #f59e0b;
+}
+
+.custom-dialog-modal--info .custom-dialog-icon {
+    color: #3b82f6;
+}
+
+/* Mobile Responsive */
+@media (max-width: 640px) {
+    .custom-dialog-container {
+        width: 95%;
+        max-width: none;
+        border-radius: 12px;
+    }
+    
+    .custom-dialog-content {
+        padding: 24px 20px 20px;
+    }
+    
+    .custom-dialog-icon {
+        font-size: 48px;
+    }
+    
+    .custom-dialog-title {
+        font-size: 18px;
+    }
+    
+    .custom-dialog-message {
+        font-size: 14px;
+    }
+    
+    .custom-dialog-actions {
+        flex-direction: column;
+        gap: 10px;
+        padding: 16px 20px 20px;
+    }
+    
+    .custom-dialog-btn {
+        padding: 14px 24px;
+    }
+}
+
+/* Animation for entrance */
+@keyframes dialogFadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -48%) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+    .custom-dialog-container {
+        background: #1f2937;
+        box-shadow: 
+            0 0 0 1px rgba(255, 255, 255, 0.05),
+            0 20px 25px -5px rgba(0, 0, 0, 0.3),
+            0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    }
+    
+    .custom-dialog-title {
+        color: #f9fafb;
+    }
+    
+    .custom-dialog-message {
+        color: #d1d5db;
+    }
+    
+    .custom-dialog-actions {
+        background: #111827;
+        border-top-color: #374151;
+    }
+    
+    .btn-cancel {
+        background: #374151;
+        color: #d1d5db;
+        border-color: #4b5563;
+    }
+    
+    .btn-cancel:hover {
+        background: #4b5563;
+        color: #f9fafb;
+    }
+    
+    .custom-prompt-input {
+        background: #374151;
+        border-color: #4b5563;
+        color: #f9fafb;
+    }
+    
+    .custom-prompt-input:focus {
+        border-color: #7fa7f4;
+        background: #374151;
+    }
+}

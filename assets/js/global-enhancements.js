@@ -27,63 +27,42 @@ function initSmoothScrolling() {
     });
 }
 
-// Modern confirm dialogs
+// Modern confirm dialogs - Using custom dialog system
 function initConfirmDialogs() {
     document.querySelectorAll('[data-confirm]').forEach(element => {
-        element.addEventListener('click', function(e) {
-            const message = this.getAttribute('data-confirm');
-            
+        element.addEventListener('click', async function(e) {
             e.preventDefault();
             
-            // Create modern modal
-            const modal = createConfirmModal(message, () => {
+            const message = this.getAttribute('data-confirm');
+            const title = this.getAttribute('data-confirm-title') || 'Confirmation';
+            const confirmText = this.getAttribute('data-confirm-text') || 'Confirmer';
+            const cancelText = this.getAttribute('data-cancel-text') || 'Annuler';
+            const isDanger = this.classList.contains('btn--danger') || this.getAttribute('data-danger') === 'true';
+            
+            const confirmed = await window.customConfirm(message, {
+                title: title,
+                confirmText: confirmText,
+                cancelText: cancelText,
+                confirmClass: isDanger ? 'btn-danger' : 'btn-confirm',
+                icon: isDanger ? '⚠️' : 'ℹ️'
+            });
+            
+            if (confirmed) {
                 // User confirmed
                 if (this.tagName === 'A') {
                     window.location.href = this.href;
                 } else if (this.tagName === 'BUTTON' && this.form) {
                     this.form.submit();
+                } else if (this.hasAttribute('data-action')) {
+                    // Execute custom action
+                    const action = this.getAttribute('data-action');
+                    if (typeof window[action] === 'function') {
+                        window[action]();
+                    }
                 }
-            });
-            
-            document.body.appendChild(modal);
-            setTimeout(() => modal.classList.add('show'), 10);
+            }
         });
     });
-}
-
-function createConfirmModal(message, onConfirm) {
-    const modal = document.createElement('div');
-    modal.className = 'modern-modal';
-    modal.innerHTML = `
-        <div class="modal-backdrop"></div>
-        <div class="modal-content">
-            <div class="modal-icon">⚠️</div>
-            <h3>Confirmation</h3>
-            <p>${message}</p>
-            <div class="modal-actions">
-                <button class="btn-cancel">Annuler</button>
-                <button class="btn-confirm">Confirmer</button>
-            </div>
-        </div>
-    `;
-    
-    modal.querySelector('.btn-cancel').addEventListener('click', () => {
-        modal.classList.remove('show');
-        setTimeout(() => modal.remove(), 300);
-    });
-    
-    modal.querySelector('.btn-confirm').addEventListener('click', () => {
-        modal.classList.remove('show');
-        setTimeout(() => modal.remove(), 300);
-        onConfirm();
-    });
-    
-    modal.querySelector('.modal-backdrop').addEventListener('click', () => {
-        modal.classList.remove('show');
-        setTimeout(() => modal.remove(), 300);
-    });
-    
-    return modal;
 }
 
 // Modern tooltips

@@ -152,13 +152,18 @@ class SecureValidator {
         return threats;
     }
     
-    static validateCity(value, fieldName = 'ville') {
+    static validateCity(value, fieldName = 'ville', inputElement = null) {
         const sanitized = this.sanitizeInput(value);
         const errors = [];
         
         if (!sanitized) {
             errors.push(`La ${fieldName} est obligatoire`);
             return { valid: false, errors, value: sanitized };
+        }
+        
+        // Si la ville a été sélectionnée depuis la liste, elle est automatiquement valide
+        if (inputElement && inputElement.dataset.selectedFromList === 'true') {
+            return { valid: true, errors: [], value: sanitized };
         }
         
         const threats = this.detectSecurityThreats(sanitized);
@@ -171,8 +176,8 @@ class SecureValidator {
             errors.push(`La ${fieldName} est trop longue (maximum ${SecurityConfig.maxLengths.city} caractères)`);
         }
         
-        // Validation: lettres, espaces, tirets, apostrophes uniquement
-        if (!/^[a-zA-ZÀ-ÿ\s\-']+$/.test(sanitized)) {
+        // Validation: lettres, espaces, tirets, apostrophes, chiffres (pour Saint-Ouen-93, etc.)
+        if (!/^[a-zA-Z0-9À-ÿ\s\-']+$/.test(sanitized)) {
             errors.push(`La ${fieldName} ne doit contenir que des lettres, espaces, tirets et apostrophes`);
         }
         
@@ -330,8 +335,8 @@ class SecureValidator {
         
         if (price < 0) {
             errors.push('Le prix ne peut pas être négatif');
-        } else if (price > 9999.99) {
-            errors.push('Le prix ne peut pas dépasser 9999.99 €');
+        } else if (price > 250) {
+            errors.push('Le prix ne peut pas dépasser 250 € (participation aux frais)');
         }
         
         // Vérifier le format (max 2 décimales)
@@ -420,8 +425,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Validation de tous les champs
         const validations = {
-            depCity: SecureValidator.validateCity(fields.depCity.value, 'ville de départ'),
-            arrCity: SecureValidator.validateCity(fields.arrCity.value, 'ville d\'arrivée'),
+            depCity: SecureValidator.validateCity(fields.depCity.value, 'ville de départ', fields.depCity),
+            arrCity: SecureValidator.validateCity(fields.arrCity.value, 'ville d\'arrivée', fields.arrCity),
             depStreet: SecureValidator.validateStreet(fields.depStreet.value, 'rue de départ'),
             arrStreet: SecureValidator.validateStreet(fields.arrStreet.value, 'rue d\'arrivée'),
             depNum: SecureValidator.validateStreetNumber(fields.depNum.value, 'numéro de départ'),
@@ -488,38 +493,72 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function setupRealtimeValidation(fields, notificationManager) {
     // Ville de départ
-    fields.depCity.addEventListener('input', function() {
+    const validateDepCity = function() {
         if (this.value.trim()) {
-            const result = SecureValidator.validateCity(this.value, 'ville de départ');
+            // Si sélectionné depuis la liste, toujours valide
+            if (this.dataset.selectedFromList === 'true') {
+                FieldStyler.markAsValid(this);
+                return;
+            }
+            
+            const result = SecureValidator.validateCity(this.value, 'ville de départ', this);
             if (result.valid) {
                 FieldStyler.markAsValid(this);
+            } else {
+                FieldStyler.markAsInvalid(this, result.errors[0]);
             }
         } else {
             FieldStyler.markAsNeutral(this);
         }
-    });
+    };
+    
+    fields.depCity.addEventListener('input', validateDepCity);
+    fields.depCity.addEventListener('change', validateDepCity);
     
     fields.depCity.addEventListener('blur', function() {
-        const result = SecureValidator.validateCity(this.value, 'ville de départ');
+        // Si sélectionné depuis la liste, toujours valide
+        if (this.dataset.selectedFromList === 'true') {
+            FieldStyler.markAsValid(this);
+            return;
+        }
+        
+        const result = SecureValidator.validateCity(this.value, 'ville de départ', this);
         if (!result.valid && this.value.trim()) {
             FieldStyler.markAsInvalid(this, result.errors[0]);
         }
     });
     
     // Ville d'arrivée
-    fields.arrCity.addEventListener('input', function() {
+    const validateArrCity = function() {
         if (this.value.trim()) {
-            const result = SecureValidator.validateCity(this.value, 'ville d\'arrivée');
+            // Si sélectionné depuis la liste, toujours valide
+            if (this.dataset.selectedFromList === 'true') {
+                FieldStyler.markAsValid(this);
+                return;
+            }
+            
+            const result = SecureValidator.validateCity(this.value, 'ville d\'arrivée', this);
             if (result.valid) {
                 FieldStyler.markAsValid(this);
+            } else {
+                FieldStyler.markAsInvalid(this, result.errors[0]);
             }
         } else {
             FieldStyler.markAsNeutral(this);
         }
-    });
+    };
+    
+    fields.arrCity.addEventListener('input', validateArrCity);
+    fields.arrCity.addEventListener('change', validateArrCity);
     
     fields.arrCity.addEventListener('blur', function() {
-        const result = SecureValidator.validateCity(this.value, 'ville d\'arrivée');
+        // Si sélectionné depuis la liste, toujours valide
+        if (this.dataset.selectedFromList === 'true') {
+            FieldStyler.markAsValid(this);
+            return;
+        }
+        
+        const result = SecureValidator.validateCity(this.value, 'ville d\'arrivée', this);
         if (!result.valid && this.value.trim()) {
             FieldStyler.markAsInvalid(this, result.errors[0]);
         }

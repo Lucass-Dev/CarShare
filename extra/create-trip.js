@@ -146,7 +146,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // If there are errors, prevent submission and show them
         if (errors.length > 0) {
             e.preventDefault();
-            alert('Erreurs de validation:\n\n' + errors.join('\n'));
+            if (typeof showError === 'function') {
+                showError('Erreurs de validation:\n\n' + errors.join('\n'));
+            } else {
+                alert('Erreurs de validation:\n\n' + errors.join('\n'));
+            }
         }
     });
 
