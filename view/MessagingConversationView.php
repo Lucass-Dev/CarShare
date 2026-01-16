@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conversation avec <?= htmlspecialchars($conversationInfo['other_user_name']) ?></title>
+    <link rel="stylesheet" href="./assets/styles/footer.css">
     <style>
         * {
             margin: 0;

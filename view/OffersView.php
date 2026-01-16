@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toutes les offres - CarShare</title>
+    <link rel="stylesheet" href="./assets/styles/footer.css">
 </head>
 <body>
     <div class="offers-page">

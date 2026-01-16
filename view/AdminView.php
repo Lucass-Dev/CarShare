@@ -6,6 +6,7 @@
     <title>Dashboard Admin - CarShare</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="/CarShare/assets/styles/AdminView.css">
+    <link rel="stylesheet" href="./assets/styles/footer.css">
 </head>
 <body>
 
@@ -138,6 +139,8 @@
         </section>
 
     </main>
+
+    <?php require_once __DIR__ . '/components/footer.php'; ?>
 
 </body>
 </html>
