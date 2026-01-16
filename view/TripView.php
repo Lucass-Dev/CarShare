@@ -662,13 +662,186 @@ class TripView{
 
     public static function display_confirmation_page($carpooling, $status) {
         ?>
-        <link rel="stylesheet" href="./assets/styles/confirmation.css">
+        <style>
+            .confirmation-section {
+                min-height: 80vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 40px 20px;
+                background: #ffffff;
+                font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            }
+
+            .confirmation-card {
+                background: #ffffff;
+                border-radius: 16px;
+                box-shadow: 0 10px 40px rgba(74, 144, 226, 0.12);
+                padding: 48px 40px;
+                max-width: 600px;
+                width: 100%;
+                text-align: center;
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .confirmation-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 6px;
+                background: linear-gradient(90deg, #4a90e2 0%, #0b78d1 100%);
+            }
+
+            .confirmation-card:hover {
+                box-shadow: 0 15px 50px rgba(74, 144, 226, 0.18);
+                transform: translateY(-4px);
+            }
+
+            .confirmation-card h1 {
+                color: #0b78d1;
+                font-size: 32px;
+                font-weight: 700;
+                margin: 0 0 20px 0;
+                line-height: 1.3;
+            }
+
+            .confirmation-card h1 br {
+                display: none;
+            }
+
+
+
+            .confirmation-card p {
+                color: #6b7280;
+                font-size: 18px;
+                line-height: 1.6;
+                margin: 0 0 28px 0;
+            }
+
+            .confirmation-card span {
+                display: inline-block;
+                background: #c4ddf8;
+                color: #0b78d1;
+                padding: 14px 24px;
+                border-radius: 10px;
+                font-size: 16px;
+                font-weight: 600;
+                margin-bottom: 32px;
+                border: 2px solid rgba(74, 144, 226, 0.2);
+            }
+
+            .confirmation-actions {
+                display: flex;
+                gap: 16px;
+                justify-content: center;
+                flex-wrap: wrap;
+                margin-top: 8px;
+            }
+
+            .btn-back, .btn-message {
+                display: inline-block;
+                padding: 16px 32px;
+                border-radius: 10px;
+                text-decoration: none;
+                font-size: 16px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .btn-back {
+                background: #ffffff;
+                color: #4a90e2;
+                border: 2px solid #4a90e2;
+                box-shadow: 0 4px 12px rgba(74, 144, 226, 0.15);
+            }
+
+            .btn-message {
+                background: #ffffff;
+                color: #4a90e2;
+                border: 2px solid #4a90e2;
+                box-shadow: 0 4px 12px rgba(74, 144, 226, 0.15);
+            }
+
+            .btn-back::before, .btn-message::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.2);
+                transition: left 0.5s ease;
+            }
+
+            .btn-back:hover::before, .btn-message:hover::before {
+                left: 100%;
+            }
+
+            .btn-back:hover {
+                background: #0b78d1;
+                box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+                transform: translateY(-2px);
+            }
+
+            .btn-message:hover {
+                background: #4a90e2;
+                color: white;
+                box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+                transform: translateY(-2px);
+            }
+
+            .btn-back:active, .btn-message:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
+            }
+
+
+
+            @media (max-width: 640px) {
+                .confirmation-card {
+                    padding: 36px 24px;
+                }
+
+                .confirmation-card h1 {
+                    font-size: 26px;
+                }
+
+                .confirmation-card p {
+                    font-size: 16px;
+                }
+
+                .confirmation-card span {
+                    font-size: 14px;
+                    padding: 12px 20px;
+                }
+
+                .confirmation-actions {
+                    flex-direction: column;
+                    gap: 12px;
+                }
+
+                .btn-back, .btn-message {
+                    padding: 14px 28px;
+                    font-size: 15px;
+                    width: 100%;
+                }
+            }
+        </style>
         <section class="confirmation-section">
             <div class="confirmation-card">
                 <h1>✅ Trajet réservé avec succès !</h1>
-                <p>Merci d'avoir choisi CarShare. Votre réservation a été confirmée.</p>
+                <p>Merci d'avoir choisi CarShare. <br> Un récapitulatif de votre trajet a été envoyé dans votre messagerie CarShare.</p>
                 <span>Votre trajet : <?php echo $carpooling['start_name'] ?> → <?php echo $carpooling['end_name'] ?></span>
-                <a href="?controller=trip&action=display_search" class="btn-back">Retour à la recherche de trajets</a>
+                <div class="confirmation-actions">
+                    <a href="?controller=profile&action=mp" class="btn-message">Voir mes messages</a>
+                    <a href="?controller=trip&action=search" class="btn-back">Retour à la recherche</a>
+                </div>
             </div>
         </section>
         <?php

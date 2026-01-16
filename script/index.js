@@ -13,6 +13,7 @@ function loadScript(name){
 }
 
 function loadCSS(name){
+    console.log(name)
     const prev = document.getElementById('dynamic-css');
     if (prev) prev.remove();
 
