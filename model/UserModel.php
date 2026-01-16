@@ -23,7 +23,7 @@ class UserModel{
     static public function getUserHistory($user_id){
 
         //History as provider
-        $providerQuery = "SELECT l1.name AS start_location, l2.name AS end_location, carpoolings.start_date FROM carpoolings INNER JOIN location l1 ON l1.id=carpoolings.start_id INNER JOIN location l2 ON l2.id=end_id WHERE provider_id = :id AND status=:status";
+        $providerQuery = "SELECT l1.name AS start_location, l2.name AS end_location, carpoolings.start_date, carpoolings.id as trip_id FROM carpoolings INNER JOIN location l1 ON l1.id=carpoolings.start_id INNER JOIN location l2 ON l2.id=end_id WHERE provider_id = :id AND status=:status";
         $stmt = Database::getDb()->prepare($providerQuery);
         $stmt->execute([
             ":id"=> $user_id,
@@ -32,7 +32,7 @@ class UserModel{
         $result["provider_history"] = $stmt->fetchAll();
         
         //History as passenger
-        $passengerQuery = "SELECT l1.name AS start_location, l2.name AS end_location, carpoolings.start_date, users.* FROM carpoolings INNER JOIN bookings ON bookings.carpooling_id=carpoolings.id INNER JOIN location l1 ON l1.id=carpoolings.start_id INNER JOIN location l2 ON l2.id=end_id INNER JOIN users ON users.id=carpoolings.provider_id WHERE bookings.booker_id=:id AND carpoolings.status=:status";
+        $passengerQuery = "SELECT l1.name AS start_location, l2.name AS end_location, carpoolings.start_date, users.*, carpoolings.id as trip_id FROM carpoolings INNER JOIN bookings ON bookings.carpooling_id=carpoolings.id INNER JOIN location l1 ON l1.id=carpoolings.start_id INNER JOIN location l2 ON l2.id=end_id INNER JOIN users ON users.id=carpoolings.provider_id WHERE bookings.booker_id=:id AND carpoolings.status=:status";
         $stmt = Database::getDb()->prepare($passengerQuery);
         $stmt->execute([
             ":id"=> $user_id,

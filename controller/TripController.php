@@ -39,7 +39,9 @@ class TripController {
                     header('Location: /index.php?controller=profile&action=login');
                     exit();
                 }
-                TripView::display_report_form();
+                $details = TripModel::getCarpoolingById($_GET["trip_id"]);
+                $userData = UserModel::getUserById($details["provider_id"]);
+                TripView::display_report_form($userData, false);
                 break;
             case "rate":
                 if (!isset($_SESSION['user_id'])) {
@@ -53,18 +55,16 @@ class TripController {
             case 'rating':
                 $this->display_rating();
                 break;
-            case 'signalement':
-                $this->display_signalement();
-                break;
             case 'rating_submit':
-                // Redirection vers RatingController pour le submit
                 $ratingController = new RatingController();
                 $ratingController->submit();
                 break;
             case 'signalement_submit':
-                // Redirection vers SignalementController pour le submit
-                $signalementController = new SignalementController();
-                $signalementController->submit();
+                $result = TripModel::submit_trip_report($_POST);
+                TripView::display_report_form(null, $result);
+                break;
+            case 'report_details':
+                $report = TripModel::getReportById();
                 break;
             case 'confirmation':
                 $carpooling = TripModel::getCarpoolingById($_GET['trip_id']);
@@ -77,7 +77,7 @@ class TripController {
                 
                 break;
             default:
-            echo "404";
+                require __DIR__."/../view/components/404.html";
             break;
         }
     }
@@ -92,7 +92,7 @@ class TripController {
         if (isset($_GET['trip_id']) && !empty($_GET['trip_id'])){
             $details = [];
             $details = TripModel::getCarpoolingById($_GET['trip_id']);
-            TripView::display_trip_infos($details);
+            TripView::display_trip_infos($details, TripModel::hasAlreadyBooked($_SESSION["user_id"], $details["trip_id"]), true);
         }
     }
     private function display_search($action){

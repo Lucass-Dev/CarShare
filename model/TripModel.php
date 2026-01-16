@@ -124,7 +124,7 @@ class TripModel {
     public static function getCarpoolingById($trip_id) : array{
         $result = array();
         $db = Database::getDb();
-        $stmt = $db->prepare("SELECT c.id as trip_id, l1.name as start_name, l2.name as end_name, c.start_date, c.available_places , c.luggage_allowed, c.pets_allowed, c.smoker_allowed, u.first_name as provider_name, u.id as provider_id, c.price, c.provider_id, u.global_rating, u.profile_picture_path
+        $stmt = $db->prepare("SELECT c.id as trip_id, c.status, l1.name as start_name, l1.id as start_id, l2.name as end_name, l2.id as end_id, c.start_date, c.available_places , c.luggage_allowed, c.pets_allowed, c.smoker_allowed, u.first_name as provider_name, u.id as provider_id, c.price, c.provider_id, u.global_rating, u.profile_picture_path
                     FROM `carpoolings` c
                     INNER JOIN `location` l1 on (c.start_id = l1.id)
                     INNER JOIN `location` l2 on (c.end_id = l2.id)
@@ -229,6 +229,49 @@ class TripModel {
         }
 
         return (int)$result['booked_places'] < (int)$result['available_places'];
+    }
+    
+    static function submit_trip_report($array){
+        // expected keys: user_id, carpooling_id, reason, description
+        $db = Database::getDb();
+
+        $reporterId = isset($array['user_id']) ? intval($array['user_id']) : null;
+        $carpoolingId = isset($array['carpooling_id']) ? intval($array['carpooling_id']) : null;
+        $reason = isset($array['reason']) ? trim($array['reason']) : null;
+        $description = isset($array['description']) ? trim($array['description']) : null;
+
+        if ($reporterId === null || $carpoolingId === null) {
+            return false;
+        }
+        if ($reason === null || $reason === '') {
+            return false;
+        }
+        if ($description === null || $description === '') {
+            return false;
+        }
+
+        $sql = "INSERT INTO report (reporter_id, carpooling_id, reason, content, is_in_progress, is_treated, created_at, closed_at)
+                VALUES (:reporter_id, :carpooling_id, :reason, :content, :is_in_progress, :is_treated, NOW(), '0001-01-01 00:00:00')";
+
+        try {
+            $stmt = $db->prepare($sql);
+            $ok = $stmt->execute([
+                ':reporter_id' => $reporterId,
+                ':carpooling_id' => $carpoolingId,
+                ':reason' => $reason,
+                ':content' => $description,
+                ':is_in_progress' => 0,
+                ':is_treated' => 0
+            ]);
+
+            if (!$ok) {
+                return false;
+            }
+
+            return true;
+        } catch (\Throwable $th) {
+            echo $th->getMessage();
+        }
     }
 }
 ?>

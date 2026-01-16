@@ -1,6 +1,6 @@
 <?php
 class TripView{
-    public static function display_trip_infos($details){
+    public static function display_trip_infos($details, $reserved, $reported){
         ?>
         <div class="trajet-wrapper">
 
@@ -15,6 +15,10 @@ class TripView{
 
             <div class="card">
                 <div class="left">
+                    <input type="text" hidden value="<?php echo $details["start_name"]?>" id="start_place">
+                    <input type="text" hidden value="<?php echo $details["end_name"]?>" id="end_place">
+
+
                     <?php $profilePath = file_exists(UPP_BASE_PATH . $details["profile_picture_path"]) ? UPP_BASE_PATH . $details["profile_picture_path"] : "assets/images/default_pp.svg"; ?>
                     <img src="<?php echo $profilePath ?>"
                         alt="Photo du conducteur">
@@ -60,15 +64,42 @@ class TripView{
                                 <?php echo $details["price"] ?> €
                             </span>
 
-                            <a class="btn-reserver"
-                                href="?controller=trip&action=payment&trip_id=<?php echo $details["trip_id"] ?>">
-                                Réserver
-                            </a>
+                            <?php
+                                if ($details["status"] == "0" && !$reserved) {
+                                    ?>
+                                        <a class="btn-reserver"
+                                            href="?controller=trip&action=payment&trip_id=<?php echo $details["trip_id"] ?>">
+                                            Réserver
+                                        </a>
+                                    <?php
+                                }else if($_SESSION["user_id"] !== $details["provider_id"] && !$reported){
+                                    ?>
+                                    <a class="btn-signaler"
+                                        href="?controller=trip&action=report&trip_id=<?php echo $details["trip_id"] ?>">
+                                        Signaler
+                                    </a>
+                                    <?php
+                                }else if ($reported == true) {
+                                    ?>
+                                    <a class="btn-signaler"">
+                                        Trajet signalé
+                                    </a>
+                                    <?php
+                                }
+
+                            ?>
                         </div>
                     </div>
                 </div>
+                
             </div>
         <?php
+        if ($details["status"] == "0") {
+            ?>
+            <iframe class="publish-card map-preview-details" id="map-preview-link" src="" style="margin-left: auto;margin-right: auto;">    
+            </iframe>
+            <?php
+        }
     }
 
     public static function display_trip_payment($trip){
@@ -561,7 +592,21 @@ class TripView{
         <?php
     }
 
-    public static function display_report_form() {
+    public static function display_report_form($userData, $result) {
+        ?>
+        <?php
+        if ($result && $userData == null) {
+            ?>
+            <div class="success-message-container">
+                <div class="success-message-card">
+                    <div class="success-icon">✅</div>
+                    <h2 class="success-title">Signalement envoyé</h2>
+                    <p class="success-text">Merci ! Votre signalement a été reçu par l'équipe CarShare. Nous l'examinons dans les plus brefs délais.</p>
+                    <a href="?controller=trip&action=search" class="btn btn-primary">Retour à la recherche</a>
+                </div>
+            </div>
+        <?php
+        } else {
         ?>
         <section class="report-main">
             <section class="report-container">
@@ -589,35 +634,31 @@ class TripView{
                 <!-- Résumé du profil -->
                 <div class="profile-card">
                     <div class="profile-avatar" aria-hidden="true">
-                        <span><?= strtoupper(substr($userData['name'], 0, 1)) ?></span>
+                        <span><?php echo $userData->first_name ?></span>
                     </div>
 
                     <div class="profile-info">
                         <div class="profile-line">
                             <span class="label">Utilisateur :</span>
-                            <span class="value"><?= htmlspecialchars($userData['name']) ?></span>
+                            <span class="value"><?= htmlspecialchars($userData->first_name) ?></span>
                         </div>
                         <div class="profile-line">
                             <span class="label">Note moyenne :</span>
-                            <span class="value"><?= htmlspecialchars($userData['avg']) ?></span>
+                            <span class="value"><?= htmlspecialchars($userData->global_rating) ?></span>
                         </div>
                         <div class="profile-line">
                             <span class="label">Avis reçus :</span>
-                            <span class="value"><?= htmlspecialchars($userData['reviews']) ?></span>
                         </div>
                         <div class="profile-line">
                             <span class="label">Nombre de trajets :</span>
-                            <span class="value"><?= htmlspecialchars($userData['count']) ?></span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Formulaire -->
-                <form method="POST" action="/CarShare/index.php?action=signalement_submit" class="report-form">
-                    <input type="hidden" name="user_id" value="<?= htmlspecialchars($userData['id']) ?>">
-                    <?php if (!empty($userData['carpooling_id'])): ?>
-                    <input type="hidden" name="carpooling_id" value="<?= htmlspecialchars($userData['carpooling_id']) ?>">
-                    <?php endif; ?>
+                <form method="POST" action="/index.php?controller=trip&action=signalement_submit" class="report-form">
+                    <input type="hidden" name="user_id" value="<?= $userData->id ?>">
+                    <input type="hidden" name="carpooling_id" value="<?= $_GET['trip_id']?>">
 
                     <div class="form-row">
                         <label for="reason" class="form-label">Motif du signalement</label>
@@ -658,6 +699,7 @@ class TripView{
 
         <script src="/CarShare/assets/js/signalement-form.js"></script>
         <?php
+        }
     }
 
     public static function display_confirmation_page($carpooling, $status) {

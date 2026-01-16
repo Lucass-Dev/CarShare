@@ -18,8 +18,9 @@ class ProfileView{
                                 <span class="fleche">→</span>
                                 <span><?= htmlspecialchars($incoming_provider_infos['end_location']) ?></span>
                             </div>
-                            <div class="right">
+                            <div class="right history-link">
                                 <small>Le <?= date('d/m/Y', strtotime($incoming_provider_infos['start_date'])) ?> à <?= date('H:i', strtotime($incoming_provider_infos['start_date'])) ?></small>
+                                <a href="index.php?controller=trip&action=details&trip_id=<?php echo $incoming_provider_infos["trip_id"]?>">Voir plus ></a>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -33,6 +34,7 @@ class ProfileView{
                     <p>Aucune réservation</p>
                 <?php else: ?>
                     <?php foreach ($history["incoming_booker_history"] as $trip => $incoming_booker_infos): ?>
+                        
                         <div class="trajet-card">
                             <div class="left">
                                 <?php $profilePath = file_exists(UPP_BASE_PATH . $incoming_booker_infos["profile_picture_path"]) ? UPP_BASE_PATH . $incoming_booker_infos["profile_picture_path"] : "assets/upp/default_pp.svg"; ?>
@@ -44,8 +46,9 @@ class ProfileView{
                                 <span class="fleche">→</span>
                                 <span><?= htmlspecialchars($incoming_booker_infos['end_location']) ?></span>
                             </div>
-                            <div class="right">
+                            <div class="right history-link">
                                 <small>Le <?= date('d/m/Y', strtotime($incoming_booker_infos['start_date'])) ?> à <?= date('H:i', strtotime($incoming_booker_infos['start_date'])) ?></small>
+                                <a href="index.php?controller=trip&action=details&trip_id=<?php echo $incoming_booker_infos["trip_id"]?>">Voir plus ></a>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -66,8 +69,9 @@ class ProfileView{
                             <span class="fleche">→</span>
                             <span><?= htmlspecialchars($tripInfos['end_location']) ?></span>
                         </div>
-                        <div class="right">
+                        <div class="right history-link">
                             <small>Le <?= date('d/m/Y', strtotime($tripInfos['start_date'])) ?></small>
+                            <a href="index.php?controller=trip&action=details&trip_id=<?php echo $tripInfos["trip_id"]?>">Voir plus ></a>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -87,8 +91,9 @@ class ProfileView{
                             <span class="fleche">→</span>
                             <span><?= htmlspecialchars($bookingInfos['end_location']) ?></span>
                         </div>
-                        <div class="right">
+                        <div class="right history-link">
                             <small>Le <?= date('d/m/Y', strtotime($bookingInfos['start_date'])) ?></small>
+                            <a href="index.php?controller=trip&action=details&trip_id=<?php echo $bookingInfos["trip_id"]?>">Voir plus ></a>
                         </div>
                     </div>
                 <?php endforeach; ?>
