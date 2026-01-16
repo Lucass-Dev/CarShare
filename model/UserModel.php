@@ -203,13 +203,11 @@ class UserModel{
         }
         $convId = UserModel::getConvId($tripInfos["provider_id"], $booker_id);
         $content = sprintf(
-    "Bonjour\n\n" .
-            "Votre réservation a bien été prise en compte pour le trajet suivant :\n\n" .
-            "Trajet : %s → %s\n" .
-            "Date : %s à %s\n" .
-            "Prix : %.2f €\n\n" .
-            "Je vous recontacterai si besoin avant le départ.\n" .
-            "À bientôt !",
+    "Bonjour<br><br>" .
+            "Votre réservation a bien été prise en compte pour le trajet suivant :<br><br>" .
+            "Trajet : %s → %s<br>" .
+            "Date : %s à %s<br>" .
+            "Prix : %.2f €<br><br>",
 
             $tripInfos['start_name'],
             $tripInfos['end_name'],
@@ -217,7 +215,6 @@ class UserModel{
             date('H:i', strtotime($tripInfos['start_date'])),
             $tripInfos['price']
         );
-        echo $content."<br>";
         UserModel::sendMessage($tripInfos["provider_id"], $convId, $content);
 
     }
