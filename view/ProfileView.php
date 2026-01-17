@@ -70,12 +70,6 @@
                                 <div class="info-display" data-field="email"><?= htmlspecialchars($user['email'] ?? '') ?></div>
                                 <input type="email" name="email" class="form-input" value="<?= htmlspecialchars($user['email'] ?? '') ?>" required style="display: none;">
                             </div>
-
-                            <div class="info-field full-width">
-                                <label>Téléphone</label>
-                                <div class="info-display" data-field="phone"><?= !empty($user['phone']) ? htmlspecialchars($user['phone']) : '<span class="text-muted">Non renseigné</span>' ?></div>
-                                <input type="tel" name="phone" class="form-input" value="<?= htmlspecialchars($user['phone'] ?? '') ?>" style="display: none;">
-                            </div>
                         </div>
                     </div>
 

@@ -3,7 +3,7 @@ class Database {
     private static $db = null;
 
     
-    private static $dbName   = 'covoiturage';
+    private static $dbName   = 'carshare';
     private static $host     = 'localhost';
     private static $user     = 'root';
     private static $password = ''; 

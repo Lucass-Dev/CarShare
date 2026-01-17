@@ -25,8 +25,7 @@ class ProfileController {
                 $data = [
                     'first_name' => trim($_POST['first_name'] ?? ''),
                     'last_name' => trim($_POST['last_name'] ?? ''),
-                    'email' => trim($_POST['email'] ?? ''),
-                    'phone' => trim($_POST['phone'] ?? '')
+                    'email' => trim($_POST['email'] ?? '')
                 ];
                 
                 if ($model->updateUserProfile($_SESSION['user_id'], $data)) {

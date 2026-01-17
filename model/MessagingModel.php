@@ -60,7 +60,6 @@ class MessagingModel {
         $stmt = $this->db->prepare("
             SELECT 
                 c.id,
-                c.updated_at,
                 CASE 
                     WHEN c.user1_id = ? THEN c.user2_id 
                     ELSE c.user1_id 
@@ -69,16 +68,15 @@ class MessagingModel {
                     WHEN c.user1_id = ? THEN CONCAT(u2.first_name, ' ', u2.last_name)
                     ELSE CONCAT(u1.first_name, ' ', u1.last_name)
                 END as other_user_name,
-                (SELECT content FROM messages WHERE conversation_id = c.id ORDER BY created_at DESC LIMIT 1) as last_message,
-                (SELECT created_at FROM messages WHERE conversation_id = c.id ORDER BY created_at DESC LIMIT 1) as last_message_time,
-                (SELECT COUNT(*) FROM messages WHERE conversation_id = c.id AND receiver_id = ? AND is_read = 0) as unread_count
+                (SELECT content FROM private_message WHERE id_conv = c.id ORDER BY send_at DESC LIMIT 1) as last_message,
+                (SELECT send_at FROM private_message WHERE id_conv = c.id ORDER BY send_at DESC LIMIT 1) as last_message_time
             FROM conversations c
             JOIN users u1 ON c.user1_id = u1.id
             JOIN users u2 ON c.user2_id = u2.id
             WHERE c.user1_id = ? OR c.user2_id = ?
-            ORDER BY c.updated_at DESC
+            ORDER BY (SELECT MAX(send_at) FROM private_message WHERE id_conv = c.id) DESC
         ");
-        $stmt->execute([$userId, $userId, $userId, $userId, $userId]);
+        $stmt->execute([$userId, $userId, $userId, $userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -101,15 +99,13 @@ class MessagingModel {
             SELECT 
                 m.id,
                 m.sender_id,
-                m.receiver_id,
                 m.content,
-                m.is_read,
-                m.created_at,
+                m.send_at as created_at,
                 CONCAT(u.first_name, ' ', u.last_name) as sender_name
-            FROM messages m
+            FROM private_message m
             JOIN users u ON m.sender_id = u.id
-            WHERE m.conversation_id = ?
-            ORDER BY m.created_at ASC
+            WHERE m.id_conv = ?
+            ORDER BY m.send_at ASC
             LIMIT ?
         ");
         $stmt->execute([$conversationId, $limit]);
@@ -120,28 +116,18 @@ class MessagingModel {
      * Send a message
      */
     public function sendMessage($conversationId, $senderId, $receiverId, $content) {
-        // Simple encryption: base64 encode (in production use proper encryption)
-        $encryptedContent = base64_encode($content);
-
         $stmt = $this->db->prepare("
-            INSERT INTO messages (conversation_id, sender_id, receiver_id, content, encrypted_content) 
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO private_message (id_conv, sender_id, content, send_at) 
+            VALUES (?, ?, ?, NOW())
         ");
         
         $result = $stmt->execute([
             $conversationId, 
             $senderId, 
-            $receiverId, 
-            $content, 
-            $encryptedContent
+            $content
         ]);
 
         if ($result) {
-            // Update conversation timestamp
-            $updateStmt = $this->db->prepare("
-                UPDATE conversations SET updated_at = NOW() WHERE id = ?
-            ");
-            $updateStmt->execute([$conversationId]);
             return $this->db->lastInsertId();
         }
 
@@ -149,29 +135,21 @@ class MessagingModel {
     }
 
     /**
-     * Mark messages as read
+     * Mark messages as read (not implemented in this database structure)
      */
     public function markMessagesAsRead($conversationId, $userId) {
-        $stmt = $this->db->prepare("
-            UPDATE messages 
-            SET is_read = 1 
-            WHERE conversation_id = ? AND receiver_id = ? AND is_read = 0
-        ");
-        return $stmt->execute([$conversationId, $userId]);
+        // La table private_message n'a pas de colonne is_read
+        // Cette fonctionnalité nécessiterait une modification de la structure de la base de données
+        return true;
     }
 
     /**
-     * Get unread message count for user
+     * Get unread message count for user (not implemented in this database structure)
      */
     public function getUnreadCount($userId) {
-        $stmt = $this->db->prepare("
-            SELECT COUNT(*) as count 
-            FROM messages 
-            WHERE receiver_id = ? AND is_read = 0
-        ");
-        $stmt->execute([$userId]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['count'] ?? 0;
+        // La table private_message n'a pas de colonne is_read
+        // Cette fonctionnalité nécessiterait une modification de la structure de la base de données
+        return 0;
     }
 
     /**

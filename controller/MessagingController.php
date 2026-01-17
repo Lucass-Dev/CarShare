@@ -114,23 +114,16 @@ class MessagingController {
             SELECT 
                 m.id,
                 m.sender_id,
-                m.receiver_id,
                 m.content,
-                m.is_read,
-                m.created_at,
+                m.send_at as created_at,
                 CONCAT(u.first_name, ' ', u.last_name) as sender_name
-            FROM messages m
+            FROM private_message m
             JOIN users u ON m.sender_id = u.id
-            WHERE m.conversation_id = ? AND m.id > ?
-            ORDER BY m.created_at ASC
+            WHERE m.id_conv = ? AND m.id > ?
+            ORDER BY m.send_at ASC
         ");
         $stmt->execute([$conversationId, $lastMessageId]);
         $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // Mark new messages as read
-        if (count($messages) > 0) {
-            $this->model->markMessagesAsRead($conversationId, $userId);
-        }
 
         echo json_encode([
             'success' => true,

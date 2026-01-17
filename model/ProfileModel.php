@@ -17,7 +17,7 @@ class ProfileModel {
     public function updateUserProfile($userId, $data) {
         $stmt = $this->db->prepare("
             UPDATE users 
-            SET first_name = ?, last_name = ?, email = ?, phone = ?
+            SET first_name = ?, last_name = ?, email = ?
             WHERE id = ?
         ");
         
@@ -26,7 +26,6 @@ class ProfileModel {
                 $data['first_name'],
                 $data['last_name'],
                 $data['email'],
-                $data['phone'] ?? null,
                 $userId
             ]);
             return true;

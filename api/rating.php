@@ -23,68 +23,65 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $data = json_decode(file_get_contents('php://input'), true);
 
-$userId = $data['user_id'] ?? null;
+$carpoolingId = $data['carpooling_id'] ?? null;
 $rating = $data['rating'] ?? null;
-$comment = $data['comment'] ?? '';
-$punctuality = $data['punctuality'] ?? null;
-$friendliness = $data['friendliness'] ?? null;
-$safety = $data['safety'] ?? null;
+$comment = $data['content'] ?? '';
 
 // Validation
-if (!$userId || !$rating || $rating < 1 || $rating > 5) {
+if (!$carpoolingId || !$rating || $rating < 1 || $rating > 5) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Données invalides']);
-    exit;
-}
-
-// Can't rate yourself
-if ($userId == $_SESSION['user_id']) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Vous ne pouvez pas vous noter vous-même']);
     exit;
 }
 
 try {
     $db = Database::getDb();
     
-    // Check if already rated this user
+    // Check if already rated this carpooling
     $checkStmt = $db->prepare("
         SELECT id FROM ratings 
-        WHERE evaluator_id = ? AND evaluated_id = ?
+        WHERE rater_id = ? AND carpooling_id = ?
     ");
-    $checkStmt->execute([$_SESSION['user_id'], $userId]);
+    $checkStmt->execute([$_SESSION['user_id'], $carpoolingId]);
     
     if ($checkStmt->fetch()) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'Vous avez déjà noté cet utilisateur']);
+        echo json_encode(['success' => false, 'message' => 'Vous avez déjà noté ce trajet']);
         exit;
     }
     
     // Insert rating
     $stmt = $db->prepare("
-        INSERT INTO ratings (evaluator_id, evaluated_id, rating, comment, punctuality, friendliness, safety, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
+        INSERT INTO ratings (rater_id, carpooling_id, rating, content)
+        VALUES (?, ?, ?, ?)
     ");
     
     $stmt->execute([
         $_SESSION['user_id'],
-        $userId,
+        $carpoolingId,
         $rating,
-        $comment,
-        $punctuality,
-        $friendliness,
-        $safety
+        $comment
     ]);
     
-    // Update user's global rating
-    $updateStmt = $db->prepare("
-        UPDATE users 
-        SET global_rating = (
-            SELECT AVG(rating) FROM ratings WHERE evaluated_id = ?
-        )
-        WHERE id = ?
-    ");
-    $updateStmt->execute([$userId, $userId]);
+    // Update provider's global rating
+    // Get the provider of this carpooling
+    $providerStmt = $db->prepare("SELECT provider_id FROM carpoolings WHERE id = ?");
+    $providerStmt->execute([$carpoolingId]);
+    $provider = $providerStmt->fetch();
+    
+    if ($provider) {
+        $updateStmt = $db->prepare("
+            UPDATE users 
+            SET global_rating = (
+                SELECT AVG(r.rating) 
+                FROM ratings r
+                JOIN carpoolings c ON r.carpooling_id = c.id
+                WHERE c.provider_id = ?
+            )
+            WHERE id = ?
+        ");
+        $updateStmt->execute([$provider['provider_id'], $provider['provider_id']]);
+    }
     
     echo json_encode(['success' => true, 'message' => 'Note enregistrée avec succès']);
     

@@ -46,15 +46,16 @@ try {
     
     // Insert report
     $stmt = $db->prepare("
-        INSERT INTO signalements (reporter_id, reported_id, reason, description, status, created_at)
-        VALUES (?, ?, ?, ?, 'pending', NOW())
+        INSERT INTO report (reporter_id, content, is_in_progress, is_treated)
+        VALUES (?, ?, 1, 0)
     ");
+    
+    // Combine reason and description into content
+    $content = "Raison: " . $reason . "\n\nDescription: " . $description;
     
     $stmt->execute([
         $_SESSION['user_id'],
-        $userId,
-        $reason,
-        $description
+        $content
     ]);
     
     echo json_encode(['success' => true, 'message' => 'Signalement envoyé à l\'équipe de modération']);
