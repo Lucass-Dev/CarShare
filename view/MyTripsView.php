@@ -72,6 +72,64 @@
         </div>
     <?php endif; ?>
 
+    <!-- Barre de filtres et tri -->
+    <div class="filters-bar">
+        <form method="GET" action="" class="filters-form">
+            <input type="hidden" name="action" value="my_trips">
+            
+            <div class="filter-group">
+                <div class="search-input-wrapper">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    <input 
+                        type="text" 
+                        name="search" 
+                        class="search-input" 
+                        placeholder="Rechercher une ville..." 
+                        value="<?= htmlspecialchars($search ?? '') ?>"
+                    >
+                    <?php if (!empty($search)): ?>
+                        <a href="?action=my_trips" class="clear-search" title="Effacer la recherche">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Trier par</label>
+                <select name="sort" class="filter-select" onchange="this.form.submit()">
+                    <option value="date" <?= ($sortBy ?? 'date') === 'date' ? 'selected' : '' ?>>Date</option>
+                    <option value="price" <?= ($sortBy ?? 'date') === 'price' ? 'selected' : '' ?>>Prix</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Ordre</label>
+                <select name="order" class="filter-select" onchange="this.form.submit()">
+                    <option value="desc" <?= ($sortOrder ?? 'desc') === 'desc' ? 'selected' : '' ?>>
+                        <?= ($sortBy ?? 'date') === 'price' ? 'Plus cher' : 'Plus récent' ?>
+                    </option>
+                    <option value="asc" <?= ($sortOrder ?? 'desc') === 'asc' ? 'selected' : '' ?>>
+                        <?= ($sortBy ?? 'date') === 'price' ? 'Moins cher' : 'Plus ancien' ?>
+                    </option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn--secondary btn--small" style="display: none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                </svg>
+                Filtrer
+            </button>
+        </form>
+    </div>
+
     <!-- Trajets à venir -->
     <section class="trips-section">
         <div class="section-header">
@@ -81,6 +139,20 @@
                     <polyline points="12 6 12 12 16 14"/>
                 </svg>
                 Trajets à venir
+                <?php 
+                $upcomingCount = 0;
+                foreach ($carpoolings as $trip) {
+                    if (strtotime($trip['start_date']) > time()) {
+                        $upcomingCount++;
+                    }
+                }
+                if ($upcomingCount > 0 || !empty($search)): 
+                ?>
+                    <span class="count-badge"><?= $upcomingCount ?></span>
+                <?php endif; ?>
+                <?php if (!empty($search)): ?>
+                    <span class="search-indicator">pour "<?= htmlspecialchars($search) ?>"</span>
+                <?php endif; ?>
             </h2>
             <a href="?action=create_trip" class="btn btn--primary btn--small">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -88,8 +160,6 @@
                     <line x1="5" y1="12" x2="19" y2="12"/>
                 </svg>
                 Proposer un trajet
-            </a>
-                Créer un trajet
             </a>
         </div>
 
@@ -222,12 +292,33 @@
         ?>
             <div class="empty-state">
                 <svg class="empty-state__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="15" y1="9" x2="9" y2="15"/>
-                    <line x1="9" y1="9" x2="15" y2="15"/>
+                    <?php if (!empty($search)): ?>
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                        <line x1="11" y1="8" x2="11" y2="14"/>
+                        <line x1="8" y1="11" x2="14" y2="11"/>
+                    <?php else: ?>
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="15" y1="9" x2="9" y2="15"/>
+                        <line x1="9" y1="9" x2="15" y2="15"/>
+                    <?php endif; ?>
                 </svg>
-                <h3 class="empty-state__title">Aucun trajet à venir</h3>
-                <p class="empty-state__text">Vous n'avez pas encore proposé de trajet futur.</p>
+                <h3 class="empty-state__title">
+                    <?php if (!empty($search)): ?>
+                        Aucun trajet trouvé
+                    <?php else: ?>
+                        Aucun trajet à venir
+                    <?php endif; ?>
+                </h3>
+                <p class="empty-state__text">
+                    <?php if (!empty($search)): ?>
+                        Aucun trajet ne correspond à votre recherche "<?= htmlspecialchars($search) ?>".
+                        <br>Essayez avec une autre ville ou <a href="?action=my_trips" style="color: var(--accent); text-decoration: underline;">réinitialisez les filtres</a>.
+                    <?php else: ?>
+                        Vous n'avez pas encore proposé de trajet futur.
+                    <?php endif; ?>
+                </p>
+                <?php if (empty($search)): ?>
                 <a href="?action=create_trip" class="btn btn--primary">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"/>
@@ -235,6 +326,7 @@
                     </svg>
                     Proposer mon premier trajet
                 </a>
+                <?php endif; ?>
             </div>
         <?php endif; ?>
     </section>
@@ -247,6 +339,17 @@
                     <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
                 </svg>
                 Trajets terminés
+                <?php 
+                $pastCount = 0;
+                foreach ($carpoolings as $trip) {
+                    if (strtotime($trip['start_date']) <= time()) {
+                        $pastCount++;
+                    }
+                }
+                if ($pastCount > 0): 
+                ?>
+                    <span class="count-badge" style="background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);"><?= $pastCount ?></span>
+                <?php endif; ?>
             </h2>
         </div>
 
@@ -320,6 +423,47 @@
 </div>
 
 <script>
+// Auto-submit form when search input changes (with debounce)
+let searchTimeout;
+const searchInput = document.querySelector('.search-input');
+if (searchInput) {
+    searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        // Add loading indicator
+        const wrapper = this.closest('.search-input-wrapper');
+        const icon = wrapper.querySelector('.search-icon');
+        
+        searchTimeout = setTimeout(() => {
+            // Show loading
+            if (icon) {
+                icon.style.opacity = '0.5';
+            }
+            this.form.submit();
+        }, 800); // Wait 800ms after user stops typing
+    });
+}
+
+// Update order select label based on sort type
+const sortSelect = document.querySelector('select[name="sort"]');
+const orderSelect = document.querySelector('select[name="order"]');
+
+if (sortSelect && orderSelect) {
+    sortSelect.addEventListener('change', function() {
+        updateOrderLabels(this.value, orderSelect);
+    });
+}
+
+function updateOrderLabels(sortType, orderSelect) {
+    const options = orderSelect.options;
+    if (sortType === 'price') {
+        options[0].text = 'Plus cher';
+        options[1].text = 'Moins cher';
+    } else {
+        options[0].text = 'Plus récent';
+        options[1].text = 'Plus ancien';
+    }
+}
+
 function editTrip(tripId) {
     window.location.href = 'index.php?action=edit_trip&id=' + tripId;
 }

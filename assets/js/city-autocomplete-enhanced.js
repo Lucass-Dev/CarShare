@@ -47,12 +47,18 @@ class CityAutocomplete {
     
     handleInput(e) {
         const value = this.input.value.trim();
-        
-        // Remove the selectedFromList flag when user types manually
-        if (this.input.dataset.selectedFromList) {
+        const isTrustedInput = e && e.type === 'input' && e.isTrusted !== false;
+
+        // Remove the flag uniquement lors d'une saisie utilisateur réelle
+        if (isTrustedInput && this.input.dataset.selectedFromList) {
             delete this.input.dataset.selectedFromList;
         }
-        
+
+        // Ignorer les événements input déclenchés programmatiquement (ex: restauration)
+        if (e && e.type === 'input' && e.isTrusted === false) {
+            return;
+        }
+
         // Clear previous timer
         clearTimeout(this.debounceTimer);
         

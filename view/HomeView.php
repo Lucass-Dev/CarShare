@@ -3,6 +3,25 @@
         public static function render($topUsers = []){
             ?>
             <link rel="stylesheet" href="./assets/styles/home.css">
+            
+            <?php if (isset($_GET['account_deleted'])): ?>
+            <div style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+                <div style="background: linear-gradient(135deg, #fee 0%, #fdd 100%); color: #721c24; padding: 1.5rem; border-radius: 12px; border-left: 5px solid #e74c3c; box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);">
+                    <strong style="font-size: 1.1rem;">✓ Compte supprimé</strong>
+                    <p style="margin: 0.5rem 0 0 0;">Votre compte et toutes vos données ont été définitivement supprimés. Un email de confirmation vous a été envoyé.</p>
+                </div>
+            </div>
+            <?php endif; ?>
+            
+            <?php if (isset($_GET['registration_complete'])): ?>
+            <div style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+                <div style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #065f46; padding: 1.5rem; border-radius: 12px; border-left: 5px solid #10b981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">
+                    <strong style="font-size: 1.1rem;">🎉 Bienvenue sur CarShare !</strong>
+                    <p style="margin: 0.5rem 0 0 0;">Votre compte est maintenant actif. Vous pouvez publier des trajets ou rechercher un covoiturage.</p>
+                </div>
+            </div>
+            <?php endif; ?>
+            
             <section class="hero">
     <div class="search-container">
         <h2>Rechercher un trajet</h2>

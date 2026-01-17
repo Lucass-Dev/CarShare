@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Sécurité - CarShare</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #3065ad; }
+        h2 { color: #333; margin-top: 30px; }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-left: 4px solid #3065ad;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        input.field--valid {
+            border-color: #10b981 !important;
+            background: #f0fdf4 !important;
+        }
+        input.field--invalid {
+            border-color: #ef4444 !important;
+            background: #fef2f2 !important;
+        }
+        .field__error {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .test-info {
+            background: #e0f2fe;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        .test-result {
+            background: #10b981;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .test-result.fail {
+            background: #ef4444;
+        }
+        button {
+            background: #3065ad;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #2752a0;
+        }
+        .attack-list {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .attack-list li {
+            margin: 5px 0;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🛡️ Test de Sécurité - CarShare</h1>
+        <p>Cette page teste le nouveau système de sécurité renforcé. Essayez d'entrer des caractères dangereux !</p>
+
+        <!-- Test 1: Numéro de rue -->
+        <div class="test-section">
+            <h2>Test 1: Numéro de Rue (PAS de décimaux ni backslash)</h2>
+            <div class="test-info">
+                <strong>Autorisé :</strong> 10, 10bis, 10B, 10-12<br>
+                <strong>BLOQUÉ :</strong> 10.5, 10\, 10/, <script>
+            </div>
+            <label>Essayez de taper : <code>10.5</code> ou <code>10\test</code> ou <code>&lt;script&gt;</code></label>
+            <input type="text" id="street-num" placeholder="Tapez un numéro de rue...">
+            <div id="street-num-result"></div>
+        </div>
+
+        <!-- Test 2: Nom de rue -->
+        <div class="test-section">
+            <h2>Test 2: Nom de Rue (PAS de backslash ni chevrons)</h2>
+            <div class="test-info">
+                <strong>Autorisé :</strong> Rue de la République, Avenue des Champs-Élysées<br>
+                <strong>BLOQUÉ :</strong> Rue\test, Rue&lt;script&gt;, Rue{test}
+            </div>
+            <label>Essayez de taper : <code>Rue\danger</code> ou <code>Rue&lt;script&gt;alert('XSS')&lt;/script&gt;</code></label>
+            <input type="text" id="street-name" placeholder="Tapez un nom de rue...">
+            <div id="street-name-result"></div>
+        </div>
+
+        <!-- Test 3: Ville -->
+        <div class="test-section">
+            <h2>Test 3: Nom de Ville (Lettres UNIQUEMENT)</h2>
+            <div class="test-info">
+                <strong>Autorisé :</strong> Paris, Saint-Denis, L'Haÿ-les-Roses<br>
+                <strong>BLOQUÉ :</strong> Paris123, Paris\, Paris&lt;
+            </div>
+            <label>Essayez de taper : <code>Paris123</code> ou <code>Paris\test</code></label>
+            <input type="text" id="city-name" placeholder="Tapez un nom de ville...">
+            <div id="city-name-result"></div>
+        </div>
+
+        <!-- Test 4: Prix -->
+        <div class="test-section">
+            <h2>Test 4: Prix (0-250€, max 2 décimales)</h2>
+            <div class="test-info">
+                <strong>Autorisé :</strong> 15, 15.5, 15.50<br>
+                <strong>BLOQUÉ :</strong> -5, 1000, 15.999, abc
+            </div>
+            <label>Essayez de taper : <code>1000</code> ou <code>15.999</code> ou <code>-5</code></label>
+            <input type="text" id="price" placeholder="Tapez un prix...">
+            <div id="price-result"></div>
+        </div>
+
+        <!-- Test 5: Textarea -->
+        <div class="test-section">
+            <h2>Test 5: Message (PAS de chevrons ni backslash)</h2>
+            <div class="test-info">
+                <strong>BLOQUÉ :</strong> &lt;script&gt;, {code}, [test], backslash\
+            </div>
+            <label>Essayez de taper : <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code></label>
+            <textarea id="message" rows="4" placeholder="Tapez un message..."></textarea>
+            <div id="message-result"></div>
+        </div>
+
+        <!-- Liste des attaques testées -->
+        <div class="attack-list">
+            <h2>🚨 Attaques Testées Automatiquement</h2>
+            <ul>
+                <li><strong>XSS:</strong> &lt;script&gt;alert('XSS')&lt;/script&gt;</li>
+                <li><strong>SQL Injection:</strong> ' OR '1'='1'; DROP TABLE users;--</li>
+                <li><strong>Hex Encoding:</strong> \x3cscript\x3e</li>
+                <li><strong>Unicode Exploit:</strong> \u003cscript\u003e</li>
+                <li><strong>Backslash:</strong> C:\Windows\System32</li>
+                <li><strong>Chevrons:</strong> &lt;iframe src="evil.com"&gt;</li>
+                <li><strong>Accolades:</strong> {evil: 'code'}</li>
+            </ul>
+        </div>
+
+        <button onclick="runSecurityTests()">🔍 Lancer Tests Automatiques</button>
+        <div id="auto-test-results"></div>
+    </div>
+
+    <script src="/CarShare/assets/js/security-validator.js"></script>
+    <script>
+        // Configuration des champs
+        document.addEventListener('DOMContentLoaded', function() {
+            // Numéro de rue
+            const streetNum = document.getElementById('street-num');
+            SecurityValidator.setupInputFiltering(streetNum, {
+                allowedPattern: /[0-9a-zA-Z\s\-]/,
+                maxLength: 10,
+                blockDangerous: true
+            });
+
+            streetNum.addEventListener('input', function() {
+                const result = SecurityValidator.validateStreetNumber(this.value);
+                showResult('street-num-result', result);
+            });
+
+            // Nom de rue
+            const streetName = document.getElementById('street-name');
+            SecurityValidator.setupInputFiltering(streetName, {
+                allowedPattern: /[a-zA-Z0-9À-ÿ\s\-'.,/]/,
+                maxLength: 150,
+                blockDangerous: true
+            });
+
+            streetName.addEventListener('input', function() {
+                const result = SecurityValidator.validateStreetName(this.value);
+                showResult('street-name-result', result);
+            });
+
+            // Ville
+            const cityName = document.getElementById('city-name');
+            SecurityValidator.setupInputFiltering(cityName, {
+                allowedPattern: /[a-zA-ZÀ-ÿ\s\-']/,
+                maxLength: 100,
+                blockDangerous: true
+            });
+
+            cityName.addEventListener('input', function() {
+                const result = SecurityValidator.validateCityName(this.value);
+                showResult('city-name-result', result);
+            });
+
+            // Prix
+            const price = document.getElementById('price');
+            SecurityValidator.setupInputFiltering(price, {
+                allowedPattern: /[0-9.]/,
+                maxLength: 6,
+                blockDangerous: true
+            });
+
+            price.addEventListener('input', function() {
+                const result = SecurityValidator.validatePrice(this.value);
+                showResult('price-result', result);
+            });
+
+            // Message
+            const message = document.getElementById('message');
+            SecurityValidator.setupInputFiltering(message, {
+                allowedPattern: /[a-zA-Z0-9À-ÿ\s\-'.,!?;:()"]/,
+                maxLength: 1000,
+                blockDangerous: true
+            });
+
+            message.addEventListener('input', function() {
+                const result = SecurityValidator.validateTextarea(this.value, 10, 1000);
+                showResult('message-result', result);
+            });
+        });
+
+        function showResult(elementId, result) {
+            const div = document.getElementById(elementId);
+            if (result.valid) {
+                div.innerHTML = '<div class="test-result">✅ Valide !</div>';
+            } else if (result.error) {
+                div.innerHTML = `<div class="test-result fail">❌ ${result.error}</div>`;
+            }
+        }
+
+        function runSecurityTests() {
+            const attacks = [
+                { name: 'XSS Script Tag', value: '<script>alert("XSS")</script>', field: 'street-name' },
+                { name: 'SQL Injection', value: "' OR '1'='1", field: 'street-name' },
+                { name: 'Backslash Injection', value: 'C:\\Windows\\System32', field: 'street-name' },
+                { name: 'Hex Encoding', value: '\\x3cscript\\x3e', field: 'street-name' },
+                { name: 'Decimal in Number', value: '10.5', field: 'street-num' },
+                { name: 'Slash in Number', value: '10/', field: 'street-num' },
+                { name: 'Digits in City', value: 'Paris123', field: 'city-name' },
+                { name: 'Negative Price', value: '-5', field: 'price' },
+                { name: 'Excessive Price', value: '1000', field: 'price' }
+            ];
+
+            let resultsHTML = '<h3>Résultats des Tests :</h3>';
+            let passed = 0;
+            let failed = 0;
+
+            attacks.forEach(attack => {
+                const threats = SecurityValidator.detectThreats(attack.value);
+                let result;
+                
+                switch(attack.field) {
+                    case 'street-num':
+                        result = SecurityValidator.validateStreetNumber(attack.value);
+                        break;
+                    case 'street-name':
+                        result = SecurityValidator.validateStreetName(attack.value);
+                        break;
+                    case 'city-name':
+                        result = SecurityValidator.validateCityName(attack.value);
+                        break;
+                    case 'price':
+                        result = SecurityValidator.validatePrice(attack.value);
+                        break;
+                }
+
+                if (!result.valid || threats.length > 0) {
+                    passed++;
+                    resultsHTML += `<div class="test-result">✅ <strong>${attack.name}</strong> : BLOQUÉ</div>`;
+                } else {
+                    failed++;
+                    resultsHTML += `<div class="test-result fail">❌ <strong>${attack.name}</strong> : PASSÉ (FAILLE!)</div>`;
+                }
+            });
+
+            resultsHTML += `<h3>Score: ${passed}/${attacks.length} attaques bloquées</h3>`;
+            document.getElementById('auto-test-results').innerHTML = resultsHTML;
+        }
+    </script>
+</body>
+</html>

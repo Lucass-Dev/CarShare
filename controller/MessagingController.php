@@ -8,7 +8,8 @@ class MessagingController {
     public function __construct() {
         // Check if user is logged in
         if (!isset($_SESSION['logged']) || !$_SESSION['logged']) {
-            header('Location: index.php?action=login');
+            $returnUrl = urlencode($_SERVER['REQUEST_URI']);
+            header('Location: index.php?action=login&return_url=' . $returnUrl);
             exit;
         }
 

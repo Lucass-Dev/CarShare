@@ -65,17 +65,38 @@ class BookingModel {
         return $stmt->fetchAll();
     }
 
-    public function getCarpoolingsByProvider($providerId) {
-        $stmt = $this->db->prepare("
+    public function getCarpoolingsByProvider($providerId, $search = '', $sortBy = 'date', $sortOrder = 'desc') {
+        $sql = "
             SELECT c.*, 
                    l1.name as start_location, l2.name as end_location
             FROM carpoolings c
             LEFT JOIN location l1 ON c.start_id = l1.id
             LEFT JOIN location l2 ON c.end_id = l2.id
-            WHERE c.provider_id = ?
-            ORDER BY c.start_date DESC
-        ");
-        $stmt->execute([$providerId]);
+            WHERE c.provider_id = ?";
+        
+        $params = [$providerId];
+        
+        // Add search filter if provided
+        if (!empty($search)) {
+            $sql .= " AND (l1.name LIKE ? OR l2.name LIKE ?)";
+            $searchTerm = '%' . $search . '%';
+            $params[] = $searchTerm;
+            $params[] = $searchTerm;
+        }
+        
+        // Add sorting
+        switch ($sortBy) {
+            case 'price':
+                $sql .= " ORDER BY c.price " . ($sortOrder === 'asc' ? 'ASC' : 'DESC');
+                break;
+            case 'date':
+            default:
+                $sql .= " ORDER BY c.start_date " . ($sortOrder === 'asc' ? 'ASC' : 'DESC');
+                break;
+        }
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
         return $stmt->fetchAll();
     }
 }

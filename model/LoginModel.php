@@ -24,6 +24,12 @@ class LoginModel {
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
+    
+    public function getUserByEmail($email) {
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->execute([strtolower(trim($email))]);
+        return $stmt->fetch();
+    }
 
     public function updatePassword($userId, $newPassword) {
         try {

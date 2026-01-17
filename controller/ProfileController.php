@@ -1,5 +1,8 @@
 <?php
 require_once __DIR__ . "/../model/ProfileModel.php";
+require_once __DIR__ . "/../model/EmailService.php";
+require_once __DIR__ . "/../model/TokenManager.php";
+require_once __DIR__ . "/../model/Config.php";
 
 class ProfileController {
     
@@ -109,8 +112,8 @@ class ProfileController {
         
         // Check if user is logged in
         if (!isset($_SESSION['user_id'])) {
-            header('Location: /CarShare/index.php?action=login');
-            exit();
+            $returnUrl = urlencode($_SERVER['REQUEST_URI']);
+            Config::redirect('login', ['return_url' => $returnUrl]);
         }
 
         $model = new ProfileModel();
@@ -178,8 +181,6 @@ class ProfileController {
                 }
             } elseif (isset($_POST['update_password'])) {
                 $currentPassword = $_POST['current_password'] ?? '';
-                $newPassword = $_POST['new_password'] ?? '';
-                $confirmNewPassword = $_POST['confirm_new_password'] ?? '';
                 
                 // Validate current password
                 if (empty($currentPassword)) {
@@ -188,34 +189,47 @@ class ProfileController {
                     // Verify current password
                     if (!password_verify($currentPassword, $user['password_hash'])) {
                         $error = "Le mot de passe actuel est incorrect";
-                    } elseif (empty($newPassword)) {
-                        $error = "Le nouveau mot de passe est requis";
-                    } elseif (strlen($newPassword) < 12) {
-                        $error = "Le nouveau mot de passe doit contenir au moins 12 caractères";
-                    } elseif (strlen($newPassword) > 128) {
-                        $error = "Le nouveau mot de passe est trop long";
                     } else {
-                        // Check password complexity
-                        $hasUppercase = preg_match('/[A-Z]/', $newPassword);
-                        $hasLowercase = preg_match('/[a-z]/', $newPassword);
-                        $hasNumber = preg_match('/[0-9]/', $newPassword);
-                        $hasSpecial = preg_match('/[^A-Za-z0-9]/', $newPassword);
+                        // Generate reset token and send email
+                        $tokenManager = new TokenManager();
+                        $token = $tokenManager->generateToken('password_reset', $_SESSION['user_id'], $user['email'], 3600); // 1h
                         
-                        if (!$hasUppercase || !$hasLowercase || !$hasNumber || !$hasSpecial) {
-                            $error = "Le nouveau mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial";
-                        } elseif ($newPassword !== $confirmNewPassword) {
-                            $error = "Les nouveaux mots de passe ne correspondent pas";
-                        } elseif ($currentPassword === $newPassword) {
-                            $error = "Le nouveau mot de passe doit être différent de l'ancien";
+                        $emailService = new EmailService();
+                        $fullName = $user['first_name'] . ' ' . $user['last_name'];
+                        $emailSent = $emailService->sendPasswordResetEmail($user['email'], $fullName, $token);
+                        
+                        if ($emailSent) {
+                            $success = "Un email de confirmation a été envoyé à votre adresse. Cliquez sur le lien pour définir votre nouveau mot de passe.";
                         } else {
-                            // Update password
-                            if ($model->updatePassword($_SESSION['user_id'], $newPassword)) {
-                                $success = "Mot de passe modifié avec succès";
-                                $user = $model->getUserProfile($_SESSION['user_id']);
-                            } else {
-                                $error = "Erreur lors de la modification du mot de passe";
-                            }
+                            $error = "Erreur lors de l'envoi de l'email de confirmation";
                         }
+                    }
+                }
+            } elseif (isset($_POST['delete_account'])) {
+                $confirmPassword = $_POST['confirm_password'] ?? '';
+                $confirmText = $_POST['confirm_text'] ?? '';
+                
+                // Validate confirmations
+                if (empty($confirmPassword)) {
+                    $error = "Le mot de passe est requis pour supprimer le compte";
+                } elseif (!password_verify($confirmPassword, $user['password_hash'])) {
+                    $error = "Le mot de passe est incorrect";
+                } elseif (strtoupper(trim($confirmText)) !== 'SUPPRIMER') {
+                    $error = "Veuillez taper 'SUPPRIMER' pour confirmer";
+                } else {
+                    // Delete account
+                    if ($model->deleteAccount($_SESSION['user_id'])) {
+                        // Send confirmation email
+                        $emailService = new EmailService();
+                        $fullName = $user['first_name'] . ' ' . $user['last_name'];
+                        $emailService->sendAccountDeletionConfirmation($user['email'], $fullName);
+                        
+                        // Destroy session and redirect
+                        session_destroy();
+                        Config::redirect('home', ['account_deleted' => '1']);
+                        exit;
+                    } else {
+                        $error = "Erreur lors de la suppression du compte. Veuillez contacter le support.";
                     }
                 }
             }
@@ -229,7 +243,6 @@ class ProfileController {
             session_start();
         }
         session_destroy();
-        header('Location: /CarShare/index.php?action=home');
-        exit();
+        Config::redirect('home');
     }
 }

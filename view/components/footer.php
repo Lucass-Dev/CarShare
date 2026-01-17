@@ -26,7 +26,7 @@
             <h3>En savoir plus</h3>
             <ul>
                 <li><a href="index.php?action=daily_carshare">Covoiturage au quotidien</a></li>
-                <li><a href="#" onclick="alert('Page en construction'); return false;">Blog de voyage</a></li>
+                <li><a href="#" data-coming-soon="Notre blog arrive très bientôt">Blog de voyage</a></li>
             </ul>
             <div class="footer-contact">
                 <a href="mailto:carshare.cov@gmail.com" class="footer-email">

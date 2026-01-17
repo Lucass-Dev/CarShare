@@ -36,6 +36,12 @@ class RegisterModel {
         $stmt->execute([$email]);
         return $stmt->fetch() !== false;
     }
+    
+    public function getUserById($id) {
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch();
+    }
 
     public function user_exists($email) {
         return $this->emailExists($email);

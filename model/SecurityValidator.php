@@ -126,8 +126,26 @@ class SecurityValidator {
     }
     
     /**
-     * Valide un nom de rue - STRICT
-     * Pas de backslash, chevrons, accolades
+     * Types de voies valides en France
+     */
+    private static $validStreetTypes = [
+        'rue', 'avenue', 'boulevard', 'place', 'impasse', 'allée', 'chemin', 
+        'route', 'voie', 'cours', 'quai', 'passage', 'square', 'esplanade',
+        'promenade', 'montée', 'descente', 'côte', 'rampe', 'sente', 'sentier',
+        'traverse', 'venelle', 'ruelle', 'cour', 'mail', 'parvis', 'galerie',
+        'pont', 'port', 'porte', 'cité', 'résidence', 'lotissement', 'hameau',
+        'lieu-dit', 'zone', 'parc', 'jardin', 'villa', 'enclos', 'clos',
+        'allées', 'av', 'bd', 'pl', 'imp', 'ch', 'rte', 'sq', 'esp'
+    ];
+
+    /**
+     * Valide un nom de rue - FORMAT FRANÇAIS STRICT
+     * Formats acceptés:
+     * - "Rue de la République"
+     * - "Avenue des Champs-Élysées"
+     * - "Boulevard Victor Hugo"
+     * - "12 Rue du Commerce" (avec numéro)
+     * - "Rue du 8 Mai 1945" (avec date)
      */
     public static function validateStreetName($value, &$errors = [], $fieldName = 'rue') {
         $sanitized = self::sanitizeInput($value);
@@ -140,18 +158,60 @@ class SecurityValidator {
         // Détecter menaces
         self::detectThreats($sanitized, $errors, $fieldName);
         
-        // Bloquer caractères dangereux
+        // Bloquer caractères dangereux de base
         if (preg_match('/[<>{}[\]\\\\|`]/', $sanitized)) {
-            $errors[] = "La {$fieldName} ne peut pas contenir de caractères spéciaux dangereux";
+            $errors[] = "La {$fieldName} contient des caractères interdits";
             return $sanitized;
         }
         
-        // Format: lettres, chiffres, espaces, tirets, apostrophes, points, virgules, slash
-        if (!preg_match('/^[a-zA-Z0-9À-ÿ\s\-\'.,\/]+$/u', $sanitized)) {
-            $errors[] = "La {$fieldName} contient des caractères non autorisés";
+        // Format: lettres, chiffres, espaces, tirets, apostrophes, points, virgules, slashes
+        if (!preg_match('/^[a-zA-Z0-9À-ÿ\s\-\',.\/]+$/u', $sanitized)) {
+            $errors[] = "La {$fieldName} contient des caractères non valides";
             return $sanitized;
         }
         
+        // VALIDATION MINIMALE : Une rue doit contenir au moins 2 lettres consécutives
+        // Bloque: "/1000", "12345", "....", "///"
+        // Accepte: "Rue 123", "12 Rue", "Avenue A"
+        if (!preg_match('/[a-zA-ZÀ-ÿ]{2,}/u', $sanitized)) {
+            $errors[] = "La {$fieldName} doit contenir au moins 2 lettres consécutives";
+            return $sanitized;
+        }
+        
+        // Bloquer séquences de chiffres trop longues (> 5)
+        // Bloque: "123456", "Rue 1234567" mais accepte "Rue 12345", "75001"
+        if (preg_match('/\d{6,}/', $sanitized)) {
+            $errors[] = "La {$fieldName} contient une séquence de chiffres trop longue (max 5)";
+            return $sanitized;
+        }
+        
+        // Bloquer répétitions excessives du même caractère (> 3 fois)
+        // Bloque: "aaaa", "1111", "....", "----"
+        if (preg_match('/(.)\\1{3,}/', $sanitized)) {
+            $errors[] = "La {$fieldName} contient une répétition excessive de caractères";
+            return $sanitized;
+        }
+        
+        // Bloquer alternance trop fréquente chiffres/lettres (indicateur de gibberish)
+        // Bloque: "a1b2c3d4", "r5t6y7u8", "fhbih8"
+        $letterDigitSwitches = preg_match_all('/[a-zA-Z]\d|\d[a-zA-Z]/', $sanitized);
+        if ($letterDigitSwitches > 3) {
+            $errors[] = "La {$fieldName} a un format invalide (trop d'alternances lettres/chiffres)";
+            return $sanitized;
+        }
+        
+        // Vérifier présence de voyelles (au moins 20% des lettres)
+        // Bloque: "fhbih8", "grtpl", "xyz123"
+        preg_match_all('/[a-zA-ZÀ-ÿ]/u', $sanitized, $lettersMatch);
+        preg_match_all('/[aeiouyàâäéèêëïîôùûüÿœæAEIOUYÀÂÄÉÈÊËÏÎÔÙÛÜŸŒÆ]/ui', $sanitized, $vowelsMatch);
+        $letterCount = count($lettersMatch[0]);
+        $vowelCount = count($vowelsMatch[0]);
+        if ($letterCount > 4 && $vowelCount / $letterCount < 0.2) {
+            $errors[] = "La {$fieldName} a un format invalide (pas assez de voyelles)";
+            return $sanitized;
+        }
+        
+        // Vérifier longueur
         if (strlen($sanitized) > 150) {
             $errors[] = "Le nom de {$fieldName} est trop long (maximum 150 caractères)";
         }

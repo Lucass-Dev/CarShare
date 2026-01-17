@@ -12,16 +12,121 @@ class RegistrationFormHandler {
         this.lastNameInput = this.form.querySelector('input[name="last_name"]');
 
         this.emailCheckTimeout = null;
+        
+        // Reset button state on page load (in case of server error reload)
+        this.resetSubmitButton();
+        
         this.init();
     }
 
+    resetSubmitButton() {
+        const submitBtn = this.form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'S\'inscrire';
+        }
+    }
+
     init() {
+        this.addRealTimeNameValidation();
         this.addRealTimeEmailValidation();
         this.addEmailConfirmationValidation();
         this.addPasswordStrengthIndicator();
         this.addSecurityValidation();
-        this.preventDoubleSubmit();
         this.addFormValidation();
+    }
+
+    // Real-time name validation (first name and last name)
+    addRealTimeNameValidation() {
+        // Validate first name
+        if (this.firstNameInput) {
+            const firstNameIndicator = document.createElement('div');
+            firstNameIndicator.className = 'name-validation-indicator';
+            this.firstNameInput.parentNode.insertBefore(firstNameIndicator, this.firstNameInput.nextSibling);
+
+            this.firstNameInput.addEventListener('input', (e) => {
+                const firstName = e.target.value.trim();
+                
+                if (firstName.length === 0) {
+                    firstNameIndicator.className = 'name-validation-indicator invalid';
+                    firstNameIndicator.innerHTML = '<span class="icon">✗</span> Le prénom est obligatoire';
+                    this.firstNameInput.classList.add('input-error');
+                    return;
+                }
+
+                if (firstName.length < 2) {
+                    firstNameIndicator.className = 'name-validation-indicator invalid';
+                    firstNameIndicator.innerHTML = '<span class="icon">✗</span> Au moins 2 caractères';
+                    this.firstNameInput.classList.add('input-error');
+                    return;
+                }
+
+                if (!/^[a-zA-ZÀ-ÿ\s'-]+$/.test(firstName)) {
+                    firstNameIndicator.className = 'name-validation-indicator invalid';
+                    firstNameIndicator.innerHTML = '<span class="icon">✗</span> Lettres uniquement';
+                    this.firstNameInput.classList.add('input-error');
+                    return;
+                }
+
+                firstNameIndicator.className = 'name-validation-indicator valid';
+                firstNameIndicator.innerHTML = '<span class="icon">✓</span> Prénom valide';
+                this.firstNameInput.classList.remove('input-error');
+            });
+
+            this.firstNameInput.addEventListener('blur', (e) => {
+                const firstName = e.target.value.trim();
+                if (firstName.length === 0) {
+                    firstNameIndicator.className = 'name-validation-indicator invalid';
+                    firstNameIndicator.innerHTML = '<span class="icon">✗</span> Le prénom est obligatoire';
+                    this.firstNameInput.classList.add('input-error');
+                }
+            });
+        }
+
+        // Validate last name
+        if (this.lastNameInput) {
+            const lastNameIndicator = document.createElement('div');
+            lastNameIndicator.className = 'name-validation-indicator';
+            this.lastNameInput.parentNode.insertBefore(lastNameIndicator, this.lastNameInput.nextSibling);
+
+            this.lastNameInput.addEventListener('input', (e) => {
+                const lastName = e.target.value.trim();
+                
+                if (lastName.length === 0) {
+                    lastNameIndicator.className = 'name-validation-indicator invalid';
+                    lastNameIndicator.innerHTML = '<span class="icon">✗</span> Le nom est obligatoire';
+                    this.lastNameInput.classList.add('input-error');
+                    return;
+                }
+
+                if (lastName.length < 2) {
+                    lastNameIndicator.className = 'name-validation-indicator invalid';
+                    lastNameIndicator.innerHTML = '<span class="icon">✗</span> Au moins 2 caractères';
+                    this.lastNameInput.classList.add('input-error');
+                    return;
+                }
+
+                if (!/^[a-zA-ZÀ-ÿ\s'-]+$/.test(lastName)) {
+                    lastNameIndicator.className = 'name-validation-indicator invalid';
+                    lastNameIndicator.innerHTML = '<span class="icon">✗</span> Lettres uniquement';
+                    this.lastNameInput.classList.add('input-error');
+                    return;
+                }
+
+                lastNameIndicator.className = 'name-validation-indicator valid';
+                lastNameIndicator.innerHTML = '<span class="icon">✓</span> Nom valide';
+                this.lastNameInput.classList.remove('input-error');
+            });
+
+            this.lastNameInput.addEventListener('blur', (e) => {
+                const lastName = e.target.value.trim();
+                if (lastName.length === 0) {
+                    lastNameIndicator.className = 'name-validation-indicator invalid';
+                    lastNameIndicator.innerHTML = '<span class="icon">✗</span> Le nom est obligatoire';
+                    this.lastNameInput.classList.add('input-error');
+                }
+            });
+        }
     }
 
     // Real-time email availability check
@@ -252,11 +357,21 @@ class RegistrationFormHandler {
             const errors = [];
 
             // Validate first name and last name
-            if (this.firstNameInput && !this.validateName(this.firstNameInput.value)) {
-                errors.push('Le prénom est invalide');
+            if (this.firstNameInput) {
+                const firstName = this.firstNameInput.value.trim();
+                if (firstName.length === 0) {
+                    errors.push('Le prénom est obligatoire');
+                } else if (!this.validateName(firstName)) {
+                    errors.push('Le prénom est invalide (2-50 caractères, lettres uniquement)');
+                }
             }
-            if (this.lastNameInput && !this.validateName(this.lastNameInput.value)) {
-                errors.push('Le nom est invalide');
+            if (this.lastNameInput) {
+                const lastName = this.lastNameInput.value.trim();
+                if (lastName.length === 0) {
+                    errors.push('Le nom est obligatoire');
+                } else if (!this.validateName(lastName)) {
+                    errors.push('Le nom est invalide (2-50 caractères, lettres uniquement)');
+                }
             }
 
             // Validate emails
@@ -288,10 +403,23 @@ class RegistrationFormHandler {
                 this.displayErrors(errors);
                 return false;
             }
+
+            // If validation passes, show loading state
+            const submitBtn = this.form.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Inscription en cours...';
+            }
+
+            // Allow form to submit normally to server
         });
     }
 
     validateName(name) {
+        // Check if empty
+        if (!name || name.trim().length === 0) {
+            return false;
+        }
         // Only letters, hyphens, spaces, and apostrophes
         const namePattern = /^[a-zA-ZÀ-ÿ\s'-]{2,50}$/;
         return namePattern.test(name.trim());
@@ -329,22 +457,6 @@ class RegistrationFormHandler {
 
         this.form.insertBefore(errorDiv, this.form.firstChild);
         errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    preventDoubleSubmit() {
-        this.form.addEventListener('submit', (e) => {
-            if (this.form.classList.contains('submitting')) {
-                e.preventDefault();
-                return false;
-            }
-            this.form.classList.add('submitting');
-            
-            const submitBtn = this.form.querySelector('button[type="submit"]');
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Inscription en cours...';
-            }
-        });
     }
 }
 

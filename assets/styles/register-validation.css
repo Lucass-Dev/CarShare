@@ -1,5 +1,32 @@
 /* Registration Form Enhanced Styles */
 
+/* Name validation indicator */
+.name-validation-indicator {
+    margin-top: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.name-validation-indicator.valid {
+    background: #d4edda;
+    color: #155724;
+}
+
+.name-validation-indicator.invalid {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.name-validation-indicator .icon {
+    font-weight: bold;
+    font-size: 16px;
+}
+
 /* Email validation indicator */
 .email-validation-indicator,
 .email-confirm-indicator {

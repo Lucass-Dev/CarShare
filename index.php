@@ -40,6 +40,7 @@ $action = $_GET['action'] ?? 'home';
     <link rel="stylesheet" href="/CarShare/assets/styles/autocomplete.css">
     <link rel="stylesheet" href="/CarShare/assets/styles/design-improvements.css">
     <link rel="stylesheet" href="/CarShare/assets/styles/custom-dialogs.css">
+    <link rel="stylesheet" href="/CarShare/assets/styles/notification-system.css">
     
     <?php
     // Load page-specific CSS based on action
@@ -85,6 +86,7 @@ $action = $_GET['action'] ?? 'home';
     <script src="/CarShare/assets/js/custom-dialogs.js"></script>
     <script src="/CarShare/assets/js/form-enhancements.js" defer></script>
     <script src="/CarShare/assets/js/notification-system.js" defer></script>
+    <script src="/CarShare/assets/js/validation-message-hub.js" defer></script>
     <script src="/CarShare/assets/js/global-enhancements.js" defer></script>
     
     <?php
@@ -258,6 +260,21 @@ switch ($action) {
     case "contact_submit":
         require_once __DIR__ . "/controller/ContactController.php";
         (new ContactController())->submit();
+        break;
+    
+    case "registration_pending":
+        require_once __DIR__ . "/controller/EmailValidationController.php";
+        (new EmailValidationController())->pending();
+        break;
+    
+    case "validate_email":
+        require_once __DIR__ . "/controller/EmailValidationController.php";
+        (new EmailValidationController())->validate();
+        break;
+    
+    case "reset_password":
+        require_once __DIR__ . "/controller/ForgotPasswordController.php";
+        (new ForgotPasswordController())->resetPassword();
         break;
 
     case "cgu":

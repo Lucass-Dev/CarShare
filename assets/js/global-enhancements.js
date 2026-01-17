@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTooltips();
     initCardHoverEffects();
     initBackToTop();
+    initComingSoonNotices();
 });
 
 // Smooth scrolling for all anchor links
@@ -119,6 +120,23 @@ function initBackToTop() {
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
+        });
+    });
+}
+
+// Coming soon notices
+function initComingSoonNotices() {
+    document.querySelectorAll('[data-coming-soon]').forEach(element => {
+        element.addEventListener('click', (event) => {
+            event.preventDefault();
+            const message = element.getAttribute('data-coming-soon') || 'Fonctionnalité bientôt disponible.';
+            if (window.notificationManager && typeof window.notificationManager.show === 'function') {
+                window.notificationManager.show(message, 'info', 5000);
+            } else if (typeof window.showNotification === 'function') {
+                window.showNotification(message, 'info', 5000);
+            } else {
+                console.info(message);
+            }
         });
     });
 }

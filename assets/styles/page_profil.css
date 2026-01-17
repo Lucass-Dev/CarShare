@@ -584,3 +584,80 @@
     align-items: center;
     gap: 8px;
 }
+
+/* Danger Zone Styles */
+.danger-card {
+    border: 2px solid #e74c3c;
+    background: #fff;
+}
+
+.danger-card .card-header {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    border-radius: 6px 6px 0 0;
+}
+
+.danger-warning {
+    display: flex;
+    align-items: flex-start;
+    padding: 16px;
+    background: #fee;
+    border: 2px solid #e74c3c;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.danger-warning h3 {
+    margin: 0 0 8px 0;
+    color: #e74c3c;
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.danger-warning h3:hover {
+    color: #c0392b;
+}
+
+.danger-warning p {
+    margin: 0;
+    color: #721c24;
+    line-height: 1.5;
+}
+
+.danger-warning strong {
+    color: #c0392b;
+}
+
+.delete-fields {
+    margin-top: 20px;
+}
+
+.card-footer-danger {
+    display: flex;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid #d0d7de;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.btn-danger:active {
+    transform: translateY(0);
+}

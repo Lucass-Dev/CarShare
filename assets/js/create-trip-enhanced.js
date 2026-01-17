@@ -161,9 +161,14 @@ class SecureValidator {
             return { valid: false, errors, value: sanitized };
         }
         
-        // Si la ville a été sélectionnée depuis la liste, elle est automatiquement valide
-        if (inputElement && inputElement.dataset.selectedFromList === 'true') {
-            return { valid: true, errors: [], value: sanitized };
+        // Si un champ est fourni, obliger la sélection via la liste officielle
+        if (inputElement) {
+            // Accepter si sélectionné via liste OU si pré-rempli par le serveur (initial load)
+            if (inputElement.dataset.selectedFromList === 'true' || inputElement.dataset.serverProvided === 'true') {
+                return { valid: true, errors: [], value: sanitized };
+            }
+            errors.push(`Veuillez sélectionner la ${fieldName} dans la liste proposée`);
+            return { valid: false, errors, value: sanitized };
         }
         
         const threats = this.detectSecurityThreats(sanitized);
@@ -204,9 +209,37 @@ class SecureValidator {
             errors.push(`La ${fieldName} est trop longue (maximum ${SecurityConfig.maxLengths.street} caractères)`);
         }
         
-        // Validation plus permissive pour les rues
+        // Validation format de base
         if (!/^[a-zA-Z0-9À-ÿ\s\-',./]+$/.test(sanitized)) {
             errors.push(`La ${fieldName} contient des caractères non autorisés`);
+        }
+        
+        // VALIDATION MINIMALE : Au moins 2 lettres consécutives
+        if (!/[a-zA-ZÀ-ÿ]{2,}/.test(sanitized)) {
+            errors.push(`La ${fieldName} doit contenir au moins 2 lettres consécutives`);
+        }
+        
+        // Bloquer séquences de chiffres trop longues (> 5)
+        if (/\d{6,}/.test(sanitized)) {
+            errors.push(`La ${fieldName} contient une séquence de chiffres trop longue (max 5 chiffres consécutifs)`);
+        }
+        
+        // Bloquer répétitions excessives du même caractère (> 3 fois)
+        if (/(.)\1{3,}/.test(sanitized)) {
+            errors.push(`La ${fieldName} contient une répétition excessive de caractères`);
+        }
+        
+        // Bloquer alternance trop fréquente chiffres/lettres
+        const letterDigitSwitches = (sanitized.match(/[a-zA-Z]\d|\d[a-zA-Z]/g) || []).length;
+        if (letterDigitSwitches > 3) {
+            errors.push(`La ${fieldName} a un format invalide (trop d'alternances lettres/chiffres)`);
+        }
+        
+        // Vérifier présence de voyelles (au moins 20% des lettres)
+        const letters = sanitized.match(/[a-zA-ZÀ-ÿ]/g) || [];
+        const vowels = sanitized.match(/[aeiouyàâäéèêëïîôùûüÿœæAEIOUYÀÂÄÉÈÊËÏÎÔÙÛÜŸŒÆ]/g) || [];
+        if (letters.length > 4 && vowels.length / letters.length < 0.2) {
+            errors.push(`La ${fieldName} a un format invalide (pas assez de voyelles)`);
         }
         
         return { valid: errors.length === 0, errors, value: sanitized };
@@ -259,6 +292,7 @@ class SecureValidator {
         }
         
         const selectedDate = new Date(value);
+        selectedDate.setHours(0, 0, 0, 0);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         
@@ -282,7 +316,7 @@ class SecureValidator {
         return { valid: errors.length === 0, errors, value };
     }
     
-    static validateTime(value) {
+    static validateTime(value, dateValue = null) {
         // Heure optionnelle
         if (!value) {
             return { valid: true, errors: [], value };
@@ -293,6 +327,33 @@ class SecureValidator {
         
         if (!timeRegex.test(value)) {
             errors.push('Format d\'heure invalide (HH:MM attendu)');
+            return { valid: false, errors, value };
+        }
+        
+        // Si une date est fournie, vérifier que date+heure n'est pas dans le passé
+        if (dateValue) {
+            const selectedDate = new Date(dateValue);
+            selectedDate.setHours(0, 0, 0, 0);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            // Si la date est dans le passé, l'heure est invalide aussi
+            if (selectedDate < today) {
+                errors.push('La date sélectionnée est dans le passé');
+                return { valid: false, errors, value };
+            }
+            
+            // Si c'est aujourd'hui, vérifier que l'heure n'est pas passée
+            if (selectedDate.getTime() === today.getTime()) {
+                const [hours, minutes] = value.split(':').map(Number);
+                const selectedDateTime = new Date();
+                selectedDateTime.setHours(hours, minutes, 0, 0);
+                const now = new Date();
+                
+                if (selectedDateTime < now) {
+                    errors.push('L\'heure doit être dans le futur pour aujourd\'hui');
+                }
+            }
         }
         
         return { valid: errors.length === 0, errors, value };
@@ -409,21 +470,21 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
         
-        // Rues - bloquer backslash et chevrons
+        // Rues - avec points, virgules, slashes autorisés
         const streets = form.querySelectorAll('#dep-street, #arr-street');
         streets.forEach(input => {
             SecurityValidator.setupInputFiltering(input, {
-                allowedPattern: /[a-zA-Z0-9À-ÿ\s\-'.,/]/,  // Pas de backslash ni <>{}[]
+                allowedPattern: /[a-zA-Z0-9À-ÿ\s\-'.,\/]/,  // Lettres, chiffres, espaces, tirets, apostrophes, points, virgules, slashes
                 maxLength: 150,
                 blockDangerous: true
             });
         });
         
-        // Villes - seulement lettres
+        // Villes - lettres et chiffres (pour codes postaux)
         const cities = form.querySelectorAll('#dep-city, #arr-city');
         cities.forEach(input => {
             SecurityValidator.setupInputFiltering(input, {
-                allowedPattern: /[a-zA-ZÀ-ÿ\s\-']/,  // Lettres uniquement, pas de chiffres
+                allowedPattern: /[a-zA-Z0-9À-ÿ\s\-']/,  // Lettres et chiffres (codes postaux)
                 maxLength: 100,
                 blockDangerous: true
             });
@@ -458,6 +519,14 @@ document.addEventListener('DOMContentLoaded', function() {
         price: document.getElementById('price')
     };
     
+    // Marquer les villes pré-remplies par le serveur comme valides
+    [fields.depCity, fields.arrCity].forEach(cityField => {
+        if (cityField && cityField.value.trim()) {
+            cityField.dataset.serverProvided = 'true';
+            cityField.dataset.initialValue = cityField.value;
+        }
+    });
+    
     // Validation en temps réel pour chaque champ
     setupRealtimeValidation(fields, notificationManager);
     
@@ -475,7 +544,7 @@ document.addEventListener('DOMContentLoaded', function() {
             depNum: SecureValidator.validateStreetNumber(fields.depNum.value, 'numéro de départ'),
             arrNum: SecureValidator.validateStreetNumber(fields.arrNum.value, 'numéro d\'arrivée'),
             date: SecureValidator.validateDate(fields.date.value),
-            time: SecureValidator.validateTime(fields.time.value),
+            time: SecureValidator.validateTime(fields.time.value, fields.date.value),
             places: SecureValidator.validatePlaces(fields.places.value),
             price: SecureValidator.validatePrice(fields.price.value)
         };
@@ -535,12 +604,52 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function setupRealtimeValidation(fields, notificationManager) {
+    const enforceDistinctCities = (showErrors = true) => {
+        if (!fields.depCity || !fields.arrCity) return true;
+        const depValue = (fields.depCity.value || '').trim();
+        const arrValue = (fields.arrCity.value || '').trim();
+
+        if (depValue && arrValue && depValue.toLowerCase() === arrValue.toLowerCase()) {
+            if (showErrors) {
+                FieldStyler.markAsInvalid(fields.depCity, 'Les villes de départ et d\'arrivée doivent être différentes');
+                fields.depCity.dataset.duplicateCityError = 'true';
+                FieldStyler.markAsInvalid(fields.arrCity);
+                fields.arrCity.dataset.duplicateCityError = 'true';
+            }
+            return false;
+        }
+
+        [fields.depCity, fields.arrCity].forEach((field, index) => {
+            if (!field || !field.dataset.duplicateCityError) return;
+            delete field.dataset.duplicateCityError;
+            const label = index === 0 ? 'ville de départ' : 'ville d\'arrivée';
+            const result = SecureValidator.validateCity(field.value, label, field);
+            if (result.valid) {
+                if (field.dataset.selectedFromList === 'true') {
+                    FieldStyler.markAsValid(field);
+                }
+            } else if (field.value.trim()) {
+                FieldStyler.markAsInvalid(field, result.errors[0]);
+            } else {
+                FieldStyler.markAsNeutral(field);
+            }
+        });
+
+        return true;
+    };
+    
     // Ville de départ
-    const validateDepCity = function() {
+    const validateDepCity = function(event) {
+        // Retirer le flag server-provided si l'utilisateur modifie manuellement
+        if (event && event.isTrusted && this.dataset.initialValue && this.value !== this.dataset.initialValue) {
+            delete this.dataset.serverProvided;
+        }
+        
         if (this.value.trim()) {
             // Si sélectionné depuis la liste, toujours valide
-            if (this.dataset.selectedFromList === 'true') {
+            if (this.dataset.selectedFromList === 'true' || this.dataset.serverProvided === 'true') {
                 FieldStyler.markAsValid(this);
+                enforceDistinctCities();
                 return;
             }
             
@@ -553,6 +662,7 @@ function setupRealtimeValidation(fields, notificationManager) {
         } else {
             FieldStyler.markAsNeutral(this);
         }
+        enforceDistinctCities();
     };
     
     fields.depCity.addEventListener('input', validateDepCity);
@@ -569,14 +679,21 @@ function setupRealtimeValidation(fields, notificationManager) {
         if (!result.valid && this.value.trim()) {
             FieldStyler.markAsInvalid(this, result.errors[0]);
         }
+        enforceDistinctCities();
     });
     
     // Ville d'arrivée
-    const validateArrCity = function() {
+    const validateArrCity = function(event) {
+        // Retirer le flag server-provided si l'utilisateur modifie manuellement
+        if (event && event.isTrusted && this.dataset.initialValue && this.value !== this.dataset.initialValue) {
+            delete this.dataset.serverProvided;
+        }
+        
         if (this.value.trim()) {
             // Si sélectionné depuis la liste, toujours valide
-            if (this.dataset.selectedFromList === 'true') {
+            if (this.dataset.selectedFromList === 'true' || this.dataset.serverProvided === 'true') {
                 FieldStyler.markAsValid(this);
+                enforceDistinctCities();
                 return;
             }
             
@@ -589,6 +706,7 @@ function setupRealtimeValidation(fields, notificationManager) {
         } else {
             FieldStyler.markAsNeutral(this);
         }
+        enforceDistinctCities();
     };
     
     fields.arrCity.addEventListener('input', validateArrCity);
@@ -605,13 +723,7 @@ function setupRealtimeValidation(fields, notificationManager) {
         if (!result.valid && this.value.trim()) {
             FieldStyler.markAsInvalid(this, result.errors[0]);
         }
-        
-        // Vérifier si les deux villes sont identiques
-        if (fields.depCity.value.trim() && this.value.trim() &&
-            fields.depCity.value.trim().toLowerCase() === this.value.trim().toLowerCase()) {
-            FieldStyler.markAsInvalid(this, 'Les villes doivent être différentes');
-            FieldStyler.markAsInvalid(fields.depCity);
-        }
+        enforceDistinctCities();
     });
     
     // Rues
@@ -705,6 +817,34 @@ function setupRealtimeValidation(fields, notificationManager) {
     });
     
     // Date
+    fields.date.addEventListener('input', function() {
+        if (this.value) {
+            const result = SecureValidator.validateDate(this.value);
+            if (!result.valid) {
+                FieldStyler.markAsInvalid(this, result.errors[0]);
+            } else {
+                FieldStyler.markAsValid(this);
+            }
+            // Revalider l'heure si elle existe
+            if (fields.time && fields.time.value) {
+                const timeResult = SecureValidator.validateTime(fields.time.value, this.value);
+                if (!timeResult.valid) {
+                    FieldStyler.markAsInvalid(fields.time, timeResult.errors[0]);
+                } else {
+                    FieldStyler.markAsValid(fields.time);
+                }
+            } else if (fields.time && !fields.time.value && result.valid) {
+                // Si pas d'heure mais date valide, remettre le champ heure en neutre
+                FieldStyler.markAsNeutral(fields.time);
+            }
+        } else {
+            FieldStyler.markAsNeutral(this);
+            if (fields.time) {
+                FieldStyler.markAsNeutral(fields.time);
+            }
+        }
+    });
+    
     fields.date.addEventListener('change', function() {
         const result = SecureValidator.validateDate(this.value);
         if (!result.valid) {
@@ -712,12 +852,33 @@ function setupRealtimeValidation(fields, notificationManager) {
         } else {
             FieldStyler.markAsValid(this);
         }
+        // Revalider l'heure si elle existe
+        if (fields.time && fields.time.value) {
+            const timeResult = SecureValidator.validateTime(fields.time.value, this.value);
+            if (!timeResult.valid) {
+                FieldStyler.markAsInvalid(fields.time, timeResult.errors[0]);
+            } else {
+                FieldStyler.markAsValid(fields.time);
+            }
+        } else if (fields.time && !fields.time.value && result.valid) {
+            FieldStyler.markAsNeutral(fields.time);
+        }
+    });
+    
+    fields.date.addEventListener('blur', function() {
+        if (this.value) {
+            const result = SecureValidator.validateDate(this.value);
+            if (!result.valid) {
+                FieldStyler.markAsInvalid(this, result.errors[0]);
+            }
+        }
     });
     
     // Heure
     fields.time.addEventListener('input', function() {
         if (this.value) {
-            const result = SecureValidator.validateTime(this.value);
+            const dateValue = fields.date ? fields.date.value : null;
+            const result = SecureValidator.validateTime(this.value, dateValue);
             if (!result.valid) {
                 FieldStyler.markAsInvalid(this, result.errors[0]);
             } else {
@@ -730,11 +891,22 @@ function setupRealtimeValidation(fields, notificationManager) {
     
     fields.time.addEventListener('change', function() {
         if (this.value) {
-            const result = SecureValidator.validateTime(this.value);
+            const dateValue = fields.date ? fields.date.value : null;
+            const result = SecureValidator.validateTime(this.value, dateValue);
             if (!result.valid) {
                 FieldStyler.markAsInvalid(this, result.errors[0]);
             } else {
                 FieldStyler.markAsValid(this);
+            }
+        }
+    });
+    
+    fields.time.addEventListener('blur', function() {
+        if (this.value) {
+            const dateValue = fields.date ? fields.date.value : null;
+            const result = SecureValidator.validateTime(this.value, dateValue);
+            if (!result.valid) {
+                FieldStyler.markAsInvalid(this, result.errors[0]);
             }
         }
     });
@@ -782,6 +954,15 @@ function setupRealtimeValidation(fields, notificationManager) {
             FieldStyler.markAsNeutral(this);
         }
     });
+    
+    fields.price.addEventListener('blur', function() {
+        if (this.value) {
+            const result = SecureValidator.validatePrice(this.value);
+            if (!result.valid) {
+                FieldStyler.markAsInvalid(this, result.errors[0]);
+            }
+        }
+    });
 }
 
 // ==================== STEP NAVIGATION ====================
@@ -805,7 +986,8 @@ class StepNavigator {
     }
     
     init() {
-        // Initialiser l'affichage
+        // Initialiser l'affichage - forcer l'affichage de l'étape 1
+        this.currentStep = 1;
         this.showStep(this.currentStep);
         
         // Événements des boutons
@@ -823,6 +1005,10 @@ class StepNavigator {
             });
         }
         
+        // Surveiller les modifications pour (dés)activer les boutons en direct
+        this.form.addEventListener('input', () => this.updateNavigationState(), true);
+        this.form.addEventListener('change', () => this.updateNavigationState(), true);
+
         // Cliquer sur les indicateurs d'étape
         this.progressSteps.forEach((step) => {
             step.addEventListener('click', () => {
@@ -832,6 +1018,9 @@ class StepNavigator {
                 }
             });
         });
+        
+        // Validation initiale après restauration de données persistantes
+        setTimeout(() => this.updateNavigationState(), 100);
     }
     
     showStep(stepNum) {
@@ -839,10 +1028,10 @@ class StepNavigator {
         this.sections.forEach(section => {
             const sectionStep = parseInt(section.dataset.section);
             if (sectionStep === stepNum) {
-                section.style.display = 'block';
+                section.style.cssText = 'display: block !important;';
                 section.classList.add('active');
             } else {
-                section.style.display = 'none';
+                section.style.cssText = 'display: none !important;';
                 section.classList.remove('active');
             }
         });
@@ -887,9 +1076,12 @@ class StepNavigator {
         
         // Scroll vers le haut du formulaire
         this.form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Mettre à jour l'état des boutons après toute transition
+        this.updateNavigationState();
     }
-    
-    validateCurrentStep() {
+
+    validateCurrentStep(showErrors = true) {
         const fieldsToValidate = this.getFieldsForStep(this.currentStep);
         let isValid = true;
         let firstInvalidField = null;
@@ -913,7 +1105,9 @@ class StepNavigator {
                     result = SecureValidator.validateDate(field.value);
                     break;
                 case 'time':
-                    result = SecureValidator.validateTime(field.value);
+                    const dateField = document.getElementById('date');
+                    const dateValue = dateField ? dateField.value : null;
+                    result = SecureValidator.validateTime(field.value, dateValue);
                     break;
                 case 'places':
                     result = SecureValidator.validatePlaces(field.value);
@@ -927,12 +1121,17 @@ class StepNavigator {
             
             if (!result.valid) {
                 isValid = false;
-                FieldStyler.markAsInvalid(field, result.errors[0]);
-                if (!firstInvalidField) {
-                    firstInvalidField = field;
+                if (showErrors) {
+                    FieldStyler.markAsInvalid(field, result.errors[0]);
+                    if (!firstInvalidField) {
+                        firstInvalidField = field;
+                    }
                 }
-            } else if (field.value.trim() || fieldInfo.required) {
-                FieldStyler.markAsValid(field);
+            } else if (showErrors) {
+                const value = typeof field.value === 'string' ? field.value.trim() : '';
+                if (value || fieldInfo.required) {
+                    FieldStyler.markAsValid(field);
+                }
             }
         });
         
@@ -944,19 +1143,35 @@ class StepNavigator {
             if (depCity && arrCity && depCity.value.trim() && arrCity.value.trim()) {
                 if (depCity.value.trim().toLowerCase() === arrCity.value.trim().toLowerCase()) {
                     isValid = false;
-                    FieldStyler.markAsInvalid(depCity, 'Les villes de départ et d\'arrivée doivent être différentes');
-                    FieldStyler.markAsInvalid(arrCity);
-                    firstInvalidField = depCity;
+                    if (showErrors) {
+                        FieldStyler.markAsInvalid(depCity, 'Les villes de départ et d\'arrivée doivent être différentes');
+                        FieldStyler.markAsInvalid(arrCity);
+                        firstInvalidField = depCity;
+                    }
                 }
             }
         }
         
-        if (!isValid && firstInvalidField) {
+        if (!isValid && firstInvalidField && showErrors) {
             firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
             firstInvalidField.focus();
         }
         
         return isValid;
+    }
+
+    updateNavigationState() {
+        const stepIsValid = this.validateCurrentStep(false);
+
+        if (this.btnNext) {
+            const shouldDisableNext = this.currentStep >= this.totalSteps || !stepIsValid;
+            this.btnNext.disabled = shouldDisableNext;
+        }
+        
+        if (this.btnSubmit) {
+            const shouldDisableSubmit = this.currentStep !== this.totalSteps || !stepIsValid;
+            this.btnSubmit.disabled = shouldDisableSubmit;
+        }
     }
     
     getFieldsForStep(stepNum) {
@@ -973,12 +1188,13 @@ class StepNavigator {
             case 2:
                 return [
                     { id: 'date', type: 'date', label: 'date', required: true },
-                    { id: 'time', type: 'time', label: 'heure', required: true },
-                    { id: 'price', type: 'price', label: 'prix', required: false },
-                    { id: 'places', type: 'places', label: 'places', required: true }
+                    { id: 'time', type: 'time', label: 'heure', required: false },
+                    { id: 'price', type: 'price', label: 'prix', required: false }
                 ];
             case 3:
-                return []; // Options sont des checkboxes, pas de validation requise
+                return [
+                    { id: 'places', type: 'places', label: 'places', required: true }
+                ];
             default:
                 return [];
         }
@@ -1014,7 +1230,7 @@ class StepNavigator {
 
 // Initialiser la navigation par étapes après le chargement
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('.trip-form');
+    const form = document.querySelector('.trip-form-modern');
     if (form && form.querySelector('.btn-next')) {
         // Initialiser le navigateur d'étapes
         window.stepNavigator = new StepNavigator(form);

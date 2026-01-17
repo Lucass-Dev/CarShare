@@ -41,7 +41,7 @@ class CGVView {
                     <p>Pour chaque réservation confirmée, Hextech perçoit des frais de service (ex: 10% TTC du montant du trajet ou un forfait fixe par place) pour assurer le fonctionnement de la plateforme.</p>
                     
                     <h3>Paiement</h3>
-                    <p>Le règlement s'effectue par carte bancaire (Visa, Mastercard, CB) via le prestataire sécurisé Stripe/Mangopay. Les fonds sont conservés jusqu'à la réalisation effective du trajet.</p>
+                    <p><strong>Mode académique:</strong> Cette plateforme fonctionne en mode test à des fins de démonstration. Aucun paiement réel n'est effectué lors d'une réservation. Dans une version en production, le règlement s'effectuerait par carte bancaire via un prestataire de paiement sécurisé.</p>
                 </div>
 
                 <div class="legal-section">

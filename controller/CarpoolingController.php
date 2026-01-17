@@ -10,7 +10,8 @@ class CarpoolingController {
         
         // Check if user is logged in
         if (!isset($_SESSION['user_id'])) {
-            header('Location: /CarShare/index.php?action=login');
+            $returnUrl = urlencode($_SERVER['REQUEST_URI']);
+            header('Location: /CarShare/index.php?action=login&return_url=' . $returnUrl);
             exit();
         }
 

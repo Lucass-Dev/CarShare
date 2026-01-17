@@ -1,5 +1,8 @@
 <?php
 require_once __DIR__ . "/../model/RegisterModel.php";
+require_once __DIR__ . "/../model/EmailService.php";
+require_once __DIR__ . "/../model/TokenManager.php";
+require_once __DIR__ . "/../model/Config.php";
 
 class RegisterController {
     
@@ -222,17 +225,24 @@ class RegisterController {
                     );
                     
                     if ($userId) {
-                        $success = true;
-                        // Auto login after registration
-                        $_SESSION['user_id'] = $userId;
-                        $_SESSION['user_email'] = $email;
-                        $_SESSION['user_name'] = $firstNameValidation['value'] . ' ' . $lastNameValidation['value'];
-                        $_SESSION['is_admin'] = 0;
-                        $_SESSION['logged'] = true;
+                        // Generate email validation token
+                        $tokenManager = new TokenManager();
+                        $token = $tokenManager->generateToken('email_validation', $userId, $email, 86400); // 24h
                         
-                        // Redirect to home page
-                        header('Location: /CarShare/index.php?action=home');
-                        exit();
+                        // Send confirmation email
+                        $emailService = new EmailService();
+                        $fullName = $firstNameValidation['value'] . ' ' . $lastNameValidation['value'];
+                        $emailSent = $emailService->sendRegistrationConfirmation($email, $fullName, $token);
+                        
+                        if ($emailSent) {
+                            $success = true;
+                            $_SESSION['pending_email'] = $email;
+                            // Redirect to confirmation page
+                            Config::redirect('registration_pending');
+                        } else {
+                            error_log("Échec envoi email de confirmation pour user ID: $userId");
+                            $error = "Inscription créée mais l'email de confirmation n'a pas pu être envoyé. Contactez le support.";
+                        }
                     } else {
                         $error = "Une erreur est survenue lors de l'inscription";
                     }

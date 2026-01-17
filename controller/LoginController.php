@@ -24,8 +24,13 @@ class LoginController {
                     $_SESSION['is_admin'] = $user['is_admin'];
                     $_SESSION['logged'] = true;
                     
-                    // Redirect based on role
-                    if ($user['is_admin']) {
+                    // Check for return URL
+                    $returnUrl = $_POST['return_url'] ?? $_GET['return_url'] ?? null;
+                    
+                    // Redirect based on priority: return_url > admin > profile
+                    if ($returnUrl && !empty($returnUrl)) {
+                        header('Location: ' . $returnUrl);
+                    } elseif ($user['is_admin']) {
                         header('Location: /CarShare/index.php?action=admin');
                     } else {
                         header('Location: /CarShare/index.php?action=profile');

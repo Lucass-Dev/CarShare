@@ -13,12 +13,13 @@ class OffersModel {
     /**
      * Get all offers with filters and pagination
      */
-    public function getAllOffers($filters = [], $limit = 10, $offset = 0) {
+    public function getAllOffers($search = '', $sortBy = 'date', $sortOrder = 'asc', $dateFilter = '', $priceMax = '', $placesMin = '', $limit = 10, $offset = 0, $currentUserId = null) {
         $sql = "SELECT 
                     c.id,
                     c.start_date,
                     c.price,
                     c.available_places,
+                    c.provider_id,
                     u.id as driver_id,
                     u.first_name,
                     u.last_name,
@@ -32,41 +33,52 @@ class OffersModel {
                 INNER JOIN users u ON c.provider_id = u.id
                 LEFT JOIN location l1 ON c.start_id = l1.id
                 LEFT JOIN location l2 ON c.end_id = l2.id
-                WHERE DATE(c.start_date) >= CURDATE()
+                WHERE c.start_date >= NOW()
                 AND c.available_places > 0
                 AND c.status = 1";
 
         $params = [];
 
-        // Apply filters
-        if (!empty($filters['ville_depart'])) {
-            $sql .= " AND l1.name LIKE ?";
-            $params[] = '%' . $filters['ville_depart'] . '%';
+        // Apply search filter
+        if (!empty($search)) {
+            $sql .= " AND (l1.name LIKE ? OR l2.name LIKE ?)";
+            $searchTerm = '%' . $search . '%';
+            $params[] = $searchTerm;
+            $params[] = $searchTerm;
         }
 
-        if (!empty($filters['ville_arrivee'])) {
-            $sql .= " AND l2.name LIKE ?";
-            $params[] = '%' . $filters['ville_arrivee'] . '%';
-        }
-
-        if (!empty($filters['date_depart'])) {
+        // Apply date filter
+        if (!empty($dateFilter)) {
             $sql .= " AND DATE(c.start_date) = ?";
-            $params[] = $filters['date_depart'];
+            $params[] = $dateFilter;
         }
 
-        if (!empty($filters['prix_max'])) {
+        // Apply price filter
+        if (!empty($priceMax)) {
             $sql .= " AND c.price <= ?";
-            $params[] = $filters['prix_max'];
+            $params[] = $priceMax;
         }
 
-        if (!empty($filters['places_min'])) {
+        // Apply places filter
+        if (!empty($placesMin)) {
             $sql .= " AND c.available_places >= ?";
-            $params[] = $filters['places_min'];
+            $params[] = $placesMin;
         }
 
-        $sql .= " GROUP BY c.id, u.id, u.first_name, u.last_name, u.global_rating, l1.name, l2.name
-                  ORDER BY c.start_date ASC
-                  LIMIT ? OFFSET ?";
+        $sql .= " GROUP BY c.id, u.id, u.first_name, u.last_name, u.global_rating, l1.name, l2.name";
+        
+        // Add sorting
+        switch ($sortBy) {
+            case 'price':
+                $sql .= " ORDER BY c.price " . ($sortOrder === 'asc' ? 'ASC' : 'DESC');
+                break;
+            case 'date':
+            default:
+                $sql .= " ORDER BY c.start_date " . ($sortOrder === 'asc' ? 'ASC' : 'DESC');
+                break;
+        }
+
+        $sql .= " LIMIT ? OFFSET ?";
 
         $params[] = $limit;
         $params[] = $offset;
@@ -79,42 +91,39 @@ class OffersModel {
     /**
      * Count total offers with filters
      */
-    public function countOffers($filters = []) {
+    public function countOffers($search = '', $dateFilter = '', $priceMax = '', $placesMin = '') {
         $sql = "SELECT COUNT(DISTINCT c.id) as total
                 FROM carpoolings c
                 INNER JOIN users u ON c.provider_id = u.id
                 LEFT JOIN location l1 ON c.start_id = l1.id
                 LEFT JOIN location l2 ON c.end_id = l2.id
-                WHERE DATE(c.start_date) >= CURDATE()
+                WHERE c.start_date >= NOW()
                 AND c.available_places > 0
                 AND c.status = 1";
 
         $params = [];
 
         // Apply same filters
-        if (!empty($filters['ville_depart'])) {
-            $sql .= " AND l1.name LIKE ?";
-            $params[] = '%' . $filters['ville_depart'] . '%';
+        if (!empty($search)) {
+            $sql .= " AND (l1.name LIKE ? OR l2.name LIKE ?)";
+            $searchTerm = '%' . $search . '%';
+            $params[] = $searchTerm;
+            $params[] = $searchTerm;
         }
 
-        if (!empty($filters['ville_arrivee'])) {
-            $sql .= " AND l2.name LIKE ?";
-            $params[] = '%' . $filters['ville_arrivee'] . '%';
-        }
-
-        if (!empty($filters['date_depart'])) {
+        if (!empty($dateFilter)) {
             $sql .= " AND DATE(c.start_date) = ?";
-            $params[] = $filters['date_depart'];
+            $params[] = $dateFilter;
         }
 
-        if (!empty($filters['prix_max'])) {
+        if (!empty($priceMax)) {
             $sql .= " AND c.price <= ?";
-            $params[] = $filters['prix_max'];
+            $params[] = $priceMax;
         }
 
-        if (!empty($filters['places_min'])) {
+        if (!empty($placesMin)) {
             $sql .= " AND c.available_places >= ?";
-            $params[] = $filters['places_min'];
+            $params[] = $placesMin;
         }
 
         $stmt = $this->db->prepare($sql);
@@ -130,7 +139,7 @@ class OffersModel {
         $sql = "SELECT DISTINCT l.name as city 
                 FROM location l
                 INNER JOIN carpoolings c ON (l.id = c.start_id OR l.id = c.end_id)
-                WHERE DATE(c.start_date) >= CURDATE()
+                WHERE c.start_date >= NOW()
                 ORDER BY l.name";
         
         $stmt = $this->db->query($sql);

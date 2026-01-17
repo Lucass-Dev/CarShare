@@ -229,6 +229,42 @@
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Global form error states */
+.input-global-error {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+.field-error-global {
+    font-size: 13px;
+    color: #ef4444;
+    margin-top: 6px;
+    line-height: 1.4;
+    display: none;
+    animation: fieldErrorSlide 0.2s ease;
+}
+
+.field-error-global::before {
+    content: '! ';
+    font-size: 12px;
+    margin-right: 4px;
+}
+
+.field-error-global--visible {
+    display: block;
+}
+
+@keyframes fieldErrorSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .modal-content {

@@ -24,42 +24,64 @@
 
 /* FILTERS */
 .offers-filters {
-    background: white;
-    border-radius: 12px;
-    padding: 24px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+    border-radius: 16px;
+    padding: 28px;
     margin-bottom: 32px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.04);
-    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(43, 77, 154, 0.08), 0 4px 16px rgba(169, 178, 255, 0.12);
+    border: 2px solid rgba(169, 178, 255, 0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.offers-filters:hover {
+    box-shadow: 0 4px 12px rgba(43, 77, 154, 0.12), 0 8px 24px rgba(169, 178, 255, 0.18);
+    border-color: rgba(169, 178, 255, 0.25);
 }
 
 .filters-form {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 16px;
+    gap: 18px;
     align-items: end;
 }
 
 .filter-group {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     position: relative;
 }
 
 .filter-group label {
-    font-size: 13px;
-    color: #444;
-    font-weight: 500;
+    font-size: 12px;
+    color: #2b4d9a;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.filter-group input {
-    padding: 10px 14px;
+.filter-group input,
+.filter-group select {
+    padding: 12px 16px;
     border: 2px solid #e5e7eb;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 14px;
     font-weight: 500;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+    cursor: pointer;
+    color: #1a1a1a;
+}
+
+.filter-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232b4d9a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
 .autocomplete-dropdown {
@@ -110,65 +132,90 @@
     margin-left: 8px;
 }
 
-.filter-group input:hover {
-    border-color: #d1d5db;
+.filter-group input:hover,
+.filter-group select:hover {
+    border-color: #a9b2ff;
+    background: #fafbff;
 }
 
-.filter-group input:focus {
+.filter-group input:focus,
+.filter-group select:focus {
     outline: none;
-    border-color: #a9b2ff;
-    box-shadow: 0 0 0 4px rgba(169, 178, 255, 0.12), 0 2px 8px rgba(169, 178, 255, 0.15);
+    border-color: #7fa7f4;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(127, 167, 244, 0.15), 0 2px 8px rgba(169, 178, 255, 0.2);
     transform: translateY(-1px);
+}
+
+.filter-group select:focus {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237fa7f4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
 }
 
 .filter-actions {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     grid-column: 1 / -1;
     justify-content: center;
-    margin-top: 8px;
+    margin-top: 12px;
 }
 
 .btn-filter, .btn-reset {
-    padding: 10px 24px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.btn-filter {
-    background: linear-gradient(135deg, #a9b2ff 0%, #8f9bff 100%);
-    color: white;
-    border: none;
-    padding: 11px 26px;
-    border-radius: 8px;
+    padding: 12px 28px;
+    border-radius: 10px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
     display: inline-block;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 6px rgba(169, 178, 255, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    letter-spacing: 0.3px;
+}
+
+.btn-filter {
+    background: linear-gradient(135deg, #7fa7f4 0%, #6f9fe6 100%);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 12px rgba(127, 167, 244, 0.35), 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-filter::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-filter:hover::before {
+    left: 100%;
 }
 
 .btn-filter:hover {
-    background: linear-gradient(135deg, #8f9bff 0%, #7a89ff 100%);
+    background: linear-gradient(135deg, #6f9fe6 0%, #5a8dd4 100%);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(169, 178, 255, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+    box-shadow: 0 6px 16px rgba(127, 167, 244, 0.45), 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-filter:active {
+    transform: translateY(0);
 }
 
 .btn-reset {
-    background: #f5f5f5;
-    color: #666;
-    border: 1px solid #ddd;
+    background: white;
+    color: #2b4d9a;
+    border: 2px solid #e5e7eb;
 }
 
 .btn-reset:hover {
-    background: #e5e5e5;
+    background: #f8faff;
+    border-color: #a9b2ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(169, 178, 255, 0.2);
 }
 
 /* OFFERS LIST */

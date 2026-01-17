@@ -10,7 +10,8 @@ class AdminController {
         
         // Check if user is logged in and is admin
         if (!isset($_SESSION['user_id']) || !$_SESSION['is_admin']) {
-            header('Location: /CarShare/index.php?action=login');
+            $returnUrl = urlencode($_SERVER['REQUEST_URI']);
+            header('Location: /CarShare/index.php?action=login&return_url=' . $returnUrl);
             exit();
         }
 

@@ -1,70 +1,267 @@
-<h1>Paiement du trajet</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement - CarShare</title>
+    <link rel="stylesheet" href="/CarShare/assets/styles/trip_payment.css">
+</head>
+<body>
+    <?php require __DIR__ . "/components/header.php"; ?>
 
-  <div class="card">
-
-    <?php if (isset($error)): ?>
-      <div class="error-message">
-        <?= htmlspecialchars($error) ?>
-      </div>
-    <?php endif; ?>
-
-    <div class="payment-info">
-      <div class="section-title">Récapitulatif du trajet</div>
-
-      <table>
-        <tr><td><strong>Trajet :</strong></td><td><?= htmlspecialchars($carpooling['start_location']) ?> → <?= htmlspecialchars($carpooling['end_location']) ?></td></tr>
-        <tr><td><strong>Date :</strong></td><td><?= date('d/m/Y', strtotime($carpooling['start_date'])) ?></td></tr>
-        <tr><td><strong>Heure :</strong></td><td><?= date('H:i', strtotime($carpooling['start_date'])) ?></td></tr>
-        <tr><td><strong>Conducteur :</strong></td><td><?= htmlspecialchars($carpooling['first_name']) ?> (⭐ <?= $carpooling['global_rating'] ? round($carpooling['global_rating'], 1) : 'N/A' ?>)</td></tr>
-      </table>
-
-      <div class="total-price">
-        Total : <?= number_format($carpooling['price'], 2) ?> € TTC
-      </div>
-    </div>
-
-    <form class="payment-form" method="POST" action="/CarShare/index.php?action=payment&carpooling_id=<?= $carpooling['id'] ?>">
-      <div class="section-title">Informations de paiement</div>
-
-      <div>
-        <label>Nom sur la carte</label>
-        <input type="text" name="card_name" placeholder="Ex : Marie Dupont" required>
-      </div>
-
-      <div>
-        <label>Numéro de carte</label>
-        <input type="text" name="card_number" placeholder="1234 5678 9012 3456" required>
-      </div>
-
-      <div style="display:flex; gap:20px;">
-        <div style="flex:1;">
-          <label>Expiration</label>
-          <input type="text" name="card_expiry" placeholder="MM/AA" required>
+    <main>
+        <div class="payment-header">
+            <h1>
+                <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="5" width="20" height="14" rx="2"/>
+                    <line x1="2" y1="10" x2="22" y2="10"/>
+                </svg>
+                Paiement du trajet
+            </h1>
+            <p class="payment-subtitle">Complétez vos informations pour finaliser votre réservation</p>
         </div>
-        <div style="flex:1;">
-          <label>CVV</label>
-          <input type="text" name="card_cvv" placeholder="123" required>
+
+        <div class="payment-container">
+            <?php if (isset($error)): ?>
+                <div class="error-message">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <?= htmlspecialchars($error) ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="payment-grid">
+                <!-- Récapitulatif -->
+                <div class="summary-card">
+                    <div class="card-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 11l3 3L22 4"/>
+                            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+                        </svg>
+                        <h2>Récapitulatif du trajet</h2>
+                    </div>
+
+                    <div class="trip-details">
+                        <!-- Route -->
+                        <div class="detail-row route">
+                            <div class="route-indicator">
+                                <div class="route-dot start"></div>
+                                <div class="route-line"></div>
+                                <div class="route-dot end"></div>
+                            </div>
+                            <div class="route-info">
+                                <div class="location-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="10" r="3"/>
+                                        <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z"/>
+                                    </svg>
+                                    <?= htmlspecialchars($carpooling['start_location']) ?>
+                                </div>
+                                <div class="arrow-separator">↓</div>
+                                <div class="location-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                        <circle cx="12" cy="10" r="3"/>
+                                    </svg>
+                                    <?= htmlspecialchars($carpooling['end_location']) ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Date -->
+                        <div class="detail-row">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            <div>
+                                <div class="label">Date de départ</div>
+                                <div class="value"><?= date('d/m/Y', strtotime($carpooling['start_date'])) ?></div>
+                            </div>
+                        </div>
+
+                        <!-- Heure -->
+                        <div class="detail-row">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            <div>
+                                <div class="label">Heure de départ</div>
+                                <div class="value"><?= date('H:i', strtotime($carpooling['start_date'])) ?></div>
+                            </div>
+                        </div>
+
+                        <!-- Conducteur -->
+                        <div class="detail-row">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            <div>
+                                <div class="label">Conducteur</div>
+                                <div class="value">
+                                    <?= htmlspecialchars($carpooling['first_name']) ?>
+                                    <span class="rating">★ <?= $carpooling['global_rating'] ? round($carpooling['global_rating'], 1) : 'N/A' ?></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prix -->
+                    <div class="price-summary">
+                        <div class="price-row">
+                            <span>Prix par place</span>
+                            <span><?= number_format($carpooling['price'], 2) ?> €</span>
+                        </div>
+                        <div class="price-total">
+                            <span style="font-weight: 700; font-size: 18px;">Total</span>
+                            <span class="total-amount"><?= number_format($carpooling['price'], 2) ?> €</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulaire de paiement -->
+                <div class="payment-card">
+                    <div class="card-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="5" width="20" height="14" rx="2"/>
+                            <line x1="2" y1="10" x2="22" y2="10"/>
+                        </svg>
+                        <h2>Informations de paiement</h2>
+                    </div>
+
+                    <form id="payment-form" method="POST" action="/CarShare/index.php?action=payment&carpooling_id=<?= $carpooling['id'] ?>" novalidate>
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
+
+                        <!-- Nom sur la carte -->
+                        <div class="form-group">
+                            <label>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                                Nom sur la carte
+                            </label>
+                            <input 
+                                type="text" 
+                                id="card_holder" 
+                                name="card_holder" 
+                                placeholder="Ex : Marie Dupont" 
+                                required
+                            >
+                            <div class="error-msg" id="error-card_holder"></div>
+                        </div>
+
+                        <!-- Numéro de carte -->
+                        <div class="form-group">
+                            <label>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="5" width="20" height="14" rx="2"/>
+                                    <line x1="2" y1="10" x2="22" y2="10"/>
+                                </svg>
+                                Numéro de carte
+                            </label>
+                            <input 
+                                type="text" 
+                                id="card_number" 
+                                name="card_number" 
+                                placeholder="1234 5678 9012 3456" 
+                                maxlength="19"
+                                required
+                            >
+                            <div class="error-msg" id="error-card_number"></div>
+                        </div>
+
+                        <!-- Expiration et CVV -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                        <line x1="16" y1="2" x2="16" y2="6"/>
+                                        <line x1="8" y1="2" x2="8" y2="6"/>
+                                        <line x1="3" y1="10" x2="21" y2="10"/>
+                                    </svg>
+                                    Expiration
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="expiry_date" 
+                                    name="expiry_date" 
+                                    placeholder="MM/AA" 
+                                    maxlength="5"
+                                    required
+                                >
+                                <div class="error-msg" id="error-expiry_date"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                    </svg>
+                                    CVV
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="cvv" 
+                                    name="cvv" 
+                                    placeholder="123" 
+                                    maxlength="4"
+                                    required
+                                >
+                                <div class="error-msg" id="error-cvv"></div>
+                            </div>
+                        </div>
+
+                        <!-- Badge sécurité -->
+                        <div class="security-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            <span>Paiement 100% sécurisé et crypté</span>
+                        </div>
+
+                        <!-- Acceptation CGV -->
+                        <div class="legal-consent">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="accept_terms" name="accept_terms" required>
+                                <span class="consent-text">
+                                    J'accepte les conditions CarShare pour cette réservation (
+                                    <a href="/CarShare/index.php?action=cgv" target="_blank">CGV</a>,
+                                    <a href="/CarShare/index.php?action=cgu" target="_blank">CGU</a>,
+                                    <a href="/CarShare/index.php?action=legal" target="_blank">Mentions légales</a>
+                                    )
+                                </span>
+                            </label>
+                            <div class="error-msg" id="error-accept_terms"></div>
+                        </div>
+
+                        <!-- Bouton payer -->
+                        <button type="submit" class="btn-payer" id="btn-submit">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Confirmer la réservation
+                        </button>
+
+                        <p class="payment-info-text">
+                            En cliquant sur "Confirmer la réservation", vous acceptez que vos informations de paiement soient traitées de manière sécurisée.
+                        </p>
+                    </form>
+                </div>
+            </div>
         </div>
-      </div>
+    </main>
 
-      <p class="legal-consent" style="margin:12px 0;">
-        <label>
-          <input type="checkbox" name="accept_terms" value="1" required>
-          <span>
-            J'accepte les conditions CarShare pour cette réservation (
-            <a href="/CarShare/index.php?action=cgv" target="_blank">CGV</a>,
-            <a href="/CarShare/index.php?action=cgu" target="_blank">CGU</a>,
-            <a href="/CarShare/index.php?action=legal" target="_blank">Mentions légales</a>
-            )
-          </span>
-        </label>
-      </p>
-
-      <button type="submit" class="btn-payer">Payer maintenant</button>
-
-      <div class="details-resume">
-        En cliquant sur "Payer maintenant", vous confirmez votre réservation.
-      </div>
-    </form>
-
-  </div>
+    <script src="/CarShare/assets/js/payment-form.js"></script>
+</body>
+</html>

@@ -386,7 +386,7 @@
                   </div>
                 </div>
 
-                <form class="trip-form trip-form-modern" method="POST" action="/CarShare/index.php?action=create_trip_submit" novalidate>
+                <form class="trip-form trip-form-modern" method="POST" action="/CarShare/index.php?action=create_trip_submit" novalidate data-persist="true" data-persist-key="publish-trip-form">
                   
                   <!-- Conseil contextuel étape 1 -->
                   <div class="contextual-tip" data-step="1">
@@ -434,7 +434,7 @@
                           value="<?= htmlspecialchars($formData['dep-street'] ?? '') ?>"
                           pattern="^[a-zA-Z0-9À-ÿ\s\-'.,/]+$"
                           maxlength="150"
-                          title="Lettres, chiffres, espaces, tirets, apostrophes autorisés (pas de backslash)"
+                          title="Format: Rue de la République, Avenue Victor Hugo"
                         />
                       </div>
 
@@ -445,21 +445,21 @@
                           name="dep-city"
                           type="text"
                           class="form-input city-autocomplete" 
-                          placeholder="Recherchez une ville en France"
+                          placeholder="Recherchez une ville ou code postal"
                           value="<?= htmlspecialchars($formData['dep-city'] ?? '') ?>"
                           autocomplete="off"
                           required
-                          pattern="^[a-zA-ZÀ-ÿ\s\-']+$"
+                          pattern="^[a-zA-Z0-9À-ÿ\s\-']+$"
                           maxlength="100"
                           minlength="2"
-                          title="Seules les lettres sont autorisées (pas de chiffres ni caractères spéciaux)"
+                          title="Ville ou code postal (lettres et chiffres autorisés)"
                         />
                         <div class="autocomplete-dropdown" id="dep-city-dropdown"></div>
                       </div>
                     </div>
                   </div>
 
-                  <div class="section-divider form-section" data-section="1">
+                  <div class="section-divider" data-section="1">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <line x1="12" y1="5" x2="12" y2="19"/>
                       <polyline points="19 12 12 19 5 12"/>
@@ -505,11 +505,11 @@
                           name="arr-street"
                           type="text"
                           class="form-input" 
-                          placeholder="Ex: Avenue des Champs"
+                          placeholder="Ex: Avenue des Champs-Élysées"
                           value="<?= htmlspecialchars($formData['arr-street'] ?? '') ?>"
                           pattern="^[a-zA-Z0-9À-ÿ\s\-'.,/]+$"
                           maxlength="150"
-                          title="Lettres, chiffres, espaces, tirets, apostrophes autorisés (pas de backslash)"
+                          title="Format: Avenue Victor Hugo, Boulevard de la Liberté"
                         />
                       </div>
 
@@ -520,23 +520,14 @@
                           name="arr-city"
                           type="text"
                           class="form-input city-autocomplete" 
-                          placeholder="Recherchez une ville en France"
+                          placeholder="Recherchez une ville ou code postal"
                           value="<?= htmlspecialchars($formData['arr-city'] ?? '') ?>"
                           autocomplete="off"
                           required
-                          pattern="^[a-zA-ZÀ-ÿ\s\-']+$"
+                          pattern="^[a-zA-Z0-9À-ÿ\s\-']+$"
                           maxlength="100"
                           minlength="2"
-                          title="Seules les lettres sont autorisées (pas de chiffres ni caractères spéciaux)"
-                        />
-                        <div class="autocomplete-dropdown" id="arr-city-dropdown"></div>
-                      </div>
-                          autocomplete="off"
-                          required
-                          pattern="^[a-zA-ZÀ-ÿ\s\-']+$"
-                          maxlength="100"
-                          minlength="2"
-                          title="Seules les lettres sont autorisées (pas de chiffres ni caractères spéciaux)"
+                          title="Ville ou code postal (lettres et chiffres autorisés)"
                         />
                         <div class="autocomplete-dropdown" id="arr-city-dropdown"></div>
                       </div>
@@ -708,6 +699,7 @@
                       </svg>
                       Précédent
                     </button>
+                    
                     <button type="button" class="btn btn-primary btn-next">
                       <span>Suivant</span>
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -715,21 +707,21 @@
                         <polyline points="12 5 19 12 12 19"/>
                       </svg>
                     </button>
+                    
                     <button type="submit" class="btn btn-primary btn-submit" style="display: none;">
                       <span>Publier mon trajet</span>
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                        <polyline points="12 5 19 12 12 19"/>
+                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
                       </svg>
                     </button>
                   </div>
                 </form>
               </div>
             </div>
-            </div>
 
-            <script src="/CarShare/assets/js/create-trip-enhanced.js"></script>
             <script src="/CarShare/assets/js/city-autocomplete-enhanced.js"></script>
+            <script src="/CarShare/assets/js/create-trip-enhanced.js"></script>
             <?php
         }
 

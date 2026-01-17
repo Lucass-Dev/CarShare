@@ -17,19 +17,32 @@ $userId = $_SESSION['user_id'] ?? null;
     <nav class="header-nav">
         <a href="index.php?action=search" class="nav-link">Trouver un trajet</a>
         <a href="index.php?action=create_trip" class="nav-link">Proposer un trajet</a>
-        <a href="index.php?action=contact" class="nav-link">Contact</a>
+        <a href="index.php?action=offers" class="nav-link">Offres</a>
     </nav>
 
     <!-- Compact Search Bar -->
     <div class="header-search">
-        <input type="text" 
-               id="global-search" 
-               placeholder="Rechercher un utilisateur..." 
-               autocomplete="off">
-        <button type="button" class="search-toggle">
-            <span class="search-icon">🔍</span>
-        </button>
+        <div class="search-input-container">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input type="text" 
+                   id="global-search" 
+                   placeholder="Rechercher un utilisateur..." 
+                   autocomplete="off">
+        </div>
         <div class="search-results" id="search-results"></div>
+    </div>
+
+    <!-- Contact Link -->
+    <div class="header-actions">
+        <a href="index.php?action=contact" class="nav-link nav-link--contact">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+            </svg>
+            <span>Contact</span>
+        </a>
     </div>
 
     <div class="header-icons">
@@ -65,7 +78,7 @@ $userId = $_SESSION['user_id'] ?? null;
                 </ul>
             <?php else: ?>
                 <ul class="dropdown-menu">
-                    <li><a href="?action=login">Se connecter</a></li>
+                    <li><a href="?action=login&return_url=<?= urlencode($_SERVER['REQUEST_URI']) ?>">Se connecter</a></li>
                     <li><a href="?action=register">S'inscrire</a></li>
                 </ul>
             <?php endif; ?>

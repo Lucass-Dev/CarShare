@@ -162,7 +162,7 @@
         </div>
       </div>
 
-      <div class="section-divider">
+      <div class="section-divider" data-section="1">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="12" y1="5" x2="12" y2="19"/>
           <polyline points="19 12 12 19 5 12"/>
@@ -360,18 +360,27 @@
       </div>
 
       <div class="form-actions">
-        <button type="button" class="btn btn-secondary" onclick="history.back()">
+        <button type="button" class="btn btn-secondary btn-prev" style="display: none;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="19" y1="12" x2="5" y2="12"/>
             <polyline points="12 19 5 12 12 5"/>
           </svg>
-          Annuler
+          Précédent
         </button>
-        <button type="submit" class="btn btn-primary">
-          <span>Publier mon trajet</span>
+        
+        <button type="button" class="btn btn-primary btn-next">
+          <span>Suivant</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="5" y1="12" x2="19" y2="12"/>
             <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </button>
+        
+        <button type="submit" class="btn btn-primary btn-submit" style="display: none;">
+          <span>Publier mon trajet</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
           </svg>
         </button>
       </div>
@@ -481,4 +490,5 @@
   </div>
 </div>
 
+<script src="/CarShare/assets/js/city-autocomplete-enhanced.js"></script>
 <script src="/CarShare/assets/js/create-trip-enhanced.js"></script>

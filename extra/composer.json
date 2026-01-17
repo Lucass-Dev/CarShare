@@ -1,0 +1,18 @@
+{
+    "name": "carshare/application",
+    "description": "CarShare - Plateforme de covoiturage",
+    "type": "project",
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "CarShare\\": "src/"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "7.4"
+        }
+    }
+}

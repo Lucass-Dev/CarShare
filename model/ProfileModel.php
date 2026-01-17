@@ -65,4 +65,17 @@ class ProfileModel {
             return false;
         }
     }
+
+    public function deleteAccount($userId) {
+        // Delete user from database
+        $stmt = $this->db->prepare("DELETE FROM users WHERE id = ?");
+        
+        try {
+            $stmt->execute([$userId]);
+            return true;
+        } catch (PDOException $e) {
+            error_log('Erreur suppression compte : ' . $e->getMessage());
+            return false;
+        }
+    }
 }

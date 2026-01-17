@@ -274,6 +274,11 @@
 /* Form Sections */
 .form-section {
   margin-bottom: 3rem;
+  display: none; /* Masqué par défaut, affiché par JavaScript */
+}
+
+.form-section.active {
+  display: block !important;
 }
 
 .section-header {
@@ -557,6 +562,18 @@
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(48, 101, 173, 0.4);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 4px 12px rgba(48, 101, 173, 0.2);
+}
+
+.btn-primary:disabled:hover {
+  transform: none;
+  box-shadow: 0 4px 12px rgba(48, 101, 173, 0.2);
 }
 
 .btn-secondary {

@@ -10,11 +10,11 @@
   
   <form method="POST" action="/CarShare/index.php?action=register" novalidate>
     <div class="form-field">
-      <input type="text" name="last_name" placeholder="Nom" required maxlength="50" pattern="[a-zA-ZÀ-ÿ\s'-]+" />
+      <input type="text" name="last_name" placeholder="Nom *" required maxlength="50" pattern="[a-zA-ZÀ-ÿ\s'-]+" title="Le nom est obligatoire (2-50 caractères, lettres uniquement)" />
     </div>
     
     <div class="form-field">
-      <input type="text" name="first_name" placeholder="Prénom" required maxlength="50" pattern="[a-zA-ZÀ-ÿ\s'-]+" />
+      <input type="text" name="first_name" placeholder="Prénom *" required maxlength="50" pattern="[a-zA-ZÀ-ÿ\s'-]+" title="Le prénom est obligatoire (2-50 caractères, lettres uniquement)" />
     </div>
     
     <div class="form-field">

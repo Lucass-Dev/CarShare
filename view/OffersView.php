@@ -3,43 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toutes les offres - CarShare</title>
-    <link rel="stylesheet" href="./assets/styles/footer.css">
+    <title>Offres de covoiturage - CarShare</title>
+    <link rel="stylesheet" href="/CarShare/assets/styles/offers.css">
 </head>
 <body>
     <div class="offers-page">
+        <!-- Page Header -->
         <div class="offers-header">
             <h1>Toutes les offres de covoiturage</h1>
             <p class="offers-subtitle"><?= $totalOffers ?> trajet<?= $totalOffers > 1 ? 's' : '' ?> disponible<?= $totalOffers > 1 ? 's' : '' ?></p>
         </div>
 
+
+
         <!-- Filters Section -->
         <div class="offers-filters">
-            <form method="GET" action="index.php" class="filters-form">
+            <form method="GET" action="" class="filters-form">
                 <input type="hidden" name="action" value="offers">
                 
                 <div class="filter-group">
-                    <label for="ville_depart">Ville de départ</label>
+                    <label for="search">Rechercher une ville</label>
                     <input type="text" 
-                           id="ville_depart" 
-                           name="ville_depart" 
-                           class="city-autocomplete"
-                           placeholder="Ex: Paris"
+                           id="search" 
+                           name="search" 
+                           placeholder="Départ ou arrivée"
                            autocomplete="off"
-                           value="<?= htmlspecialchars($filters['ville_depart']) ?>">
-                    <div class="autocomplete-dropdown" id="ville_depart-dropdown"></div>
-                </div>
-
-                <div class="filter-group">
-                    <label for="ville_arrivee">Ville d'arrivée</label>
-                    <input type="text" 
-                           id="ville_arrivee" 
-                           name="ville_arrivee" 
-                           class="city-autocomplete"
-                           placeholder="Ex: Lyon"
-                           autocomplete="off"
-                           value="<?= htmlspecialchars($filters['ville_arrivee']) ?>">
-                    <div class="autocomplete-dropdown" id="ville_arrivee-dropdown"></div>
+                           value="<?= htmlspecialchars($search) ?>">
                 </div>
 
                 <div class="filter-group">
@@ -47,7 +36,7 @@
                     <input type="date" 
                            id="date_depart" 
                            name="date_depart"
-                           value="<?= htmlspecialchars($filters['date_depart']) ?>"
+                           value="<?= htmlspecialchars($dateFilter) ?>"
                            min="<?= date('Y-m-d') ?>">
                 </div>
 
@@ -58,7 +47,7 @@
                            name="prix_max" 
                            placeholder="Ex: 50"
                            min="0"
-                           value="<?= htmlspecialchars($filters['prix_max']) ?>">
+                           value="<?= htmlspecialchars($priceMax) ?>">
                 </div>
 
                 <div class="filter-group">
@@ -68,12 +57,32 @@
                            name="places_min" 
                            min="1"
                            max="8"
-                           value="<?= htmlspecialchars($filters['places_min']) ?>">
+                           value="<?= htmlspecialchars($placesMin) ?>">
+                </div>
+
+                <div class="filter-group">
+                    <label for="sort">Trier par</label>
+                    <select id="sort" name="sort" onchange="this.form.submit()">
+                        <option value="date" <?= $sortBy === 'date' ? 'selected' : '' ?>>Date</option>
+                        <option value="price" <?= $sortBy === 'price' ? 'selected' : '' ?>>Prix</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="order">Ordre</label>
+                    <select id="order" name="order" onchange="this.form.submit()">
+                        <option value="asc" <?= $sortOrder === 'asc' ? 'selected' : '' ?>>
+                            <?= $sortBy === 'price' ? 'Moins cher' : 'Plus proche' ?>
+                        </option>
+                        <option value="desc" <?= $sortOrder === 'desc' ? 'selected' : '' ?>>
+                            <?= $sortBy === 'price' ? 'Plus cher' : 'Plus loin' ?>
+                        </option>
+                    </select>
                 </div>
 
                 <div class="filter-actions">
                     <button type="submit" class="btn-filter">Filtrer</button>
-                    <a href="index.php?action=offers" class="btn-reset">Réinitialiser</a>
+                    <a href="?action=offers" class="btn-reset">Réinitialiser</a>
                 </div>
             </form>
         </div>
@@ -83,11 +92,19 @@
             <?php if (empty($offers)): ?>
                 <div class="no-offers">
                     <p>Aucune offre disponible pour le moment</p>
-                    <a href="index.php?action=create_trip" class="btn-create">Proposer un trajet</a>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <a href="?action=create_trip" class="btn-create">Proposer un trajet</a>
+                    <?php else: ?>
+                        <a href="?action=login&return_url=<?= urlencode($_SERVER['REQUEST_URI']) ?>" class="btn-create">Se connecter</a>
+                    <?php endif; ?>
                 </div>
             <?php else: ?>
-                <?php foreach ($offers as $offer): ?>
-                    <a href="index.php?action=trip_details&id=<?= $offer['id'] ?>" class="offer-card">
+                <?php 
+                $currentUrl = urlencode($_SERVER['REQUEST_URI']);
+                foreach ($offers as $offer): 
+                    $isOwnOffer = isset($_SESSION['user_id']) && $_SESSION['user_id'] == $offer['provider_id'];
+                ?>
+                    <a href="?action=trip_details&id=<?= $offer['id'] ?>" class="offer-card" style="<?= $isOwnOffer ? 'pointer-events: none; opacity: 0.7;' : '' ?>">
                         <div class="offer-driver">
                             <div class="driver-avatar">
                                 <div class="avatar-initials">
@@ -157,13 +174,13 @@
         <?php if ($totalPages > 1): ?>
             <div class="pagination">
                 <?php if ($page > 1): ?>
-                    <a href="?action=offers&page=<?= $page - 1 ?><?= http_build_query($filters) ? '&' . http_build_query($filters) : '' ?>" 
+                    <a href="?action=offers&page=<?= $page - 1 ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?><?= !empty($sortBy) ? '&sort=' . $sortBy : '' ?><?= !empty($sortOrder) ? '&order=' . $sortOrder : '' ?><?= !empty($dateFilter) ? '&date_depart=' . $dateFilter : '' ?><?= !empty($priceMax) ? '&prix_max=' . $priceMax : '' ?><?= !empty($placesMin) ? '&places_min=' . $placesMin : '' ?>" 
                        class="pagination-btn">Précédent</a>
                 <?php endif; ?>
 
                 <div class="pagination-pages">
                     <?php for ($i = max(1, $page - 2); $i <= min($totalPages, $page + 2); $i++): ?>
-                        <a href="?action=offers&page=<?= $i ?><?= http_build_query($filters) ? '&' . http_build_query($filters) : '' ?>" 
+                        <a href="?action=offers&page=<?= $i ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?><?= !empty($sortBy) ? '&sort=' . $sortBy : '' ?><?= !empty($sortOrder) ? '&order=' . $sortOrder : '' ?><?= !empty($dateFilter) ? '&date_depart=' . $dateFilter : '' ?><?= !empty($priceMax) ? '&prix_max=' . $priceMax : '' ?><?= !empty($placesMin) ? '&places_min=' . $placesMin : '' ?>" 
                            class="pagination-page <?= $i === $page ? 'active' : '' ?>">
                             <?= $i ?>
                         </a>
@@ -171,28 +188,71 @@
                 </div>
 
                 <?php if ($page < $totalPages): ?>
-                    <a href="?action=offers&page=<?= $page + 1 ?><?= http_build_query($filters) ? '&' . http_build_query($filters) : '' ?>" 
+                    <a href="?action=offers&page=<?= $page + 1 ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?><?= !empty($sortBy) ? '&sort=' . $sortBy : '' ?><?= !empty($sortOrder) ? '&order=' . $sortOrder : '' ?><?= !empty($dateFilter) ? '&date_depart=' . $dateFilter : '' ?><?= !empty($priceMax) ? '&prix_max=' . $priceMax : '' ?><?= !empty($placesMin) ? '&places_min=' . $placesMin : '' ?>" 
                        class="pagination-btn">Suivant</a>
                 <?php endif; ?>
             </div>
         <?php endif; ?>
     </div>
 
-    <script src="/CarShare/assets/js/city-autocomplete-enhanced.js"></script>
     <script>
-        // Initialize city autocomplete for filters
-        document.addEventListener('DOMContentLoaded', function() {
-            const villeDepart = document.getElementById('ville_depart');
-            const villeArrivee = document.getElementById('ville_arrivee');
-            
-            if (villeDepart) {
-                initCityAutocomplete(villeDepart, 'ville_depart-dropdown');
-            }
-            
-            if (villeArrivee) {
-                initCityAutocomplete(villeArrivee, 'ville_arrivee-dropdown');
-            }
+    // Auto-submit form when search input changes (with debounce)
+    let searchTimeout;
+    const searchInput = document.querySelector('input[name="search"]');
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                this.form.submit();
+            }, 800);
         });
+    }
+
+    // Auto-submit on other filter changes
+    const priceInput = document.querySelector('input[name="prix_max"]');
+    const placesInput = document.querySelector('input[name="places_min"]');
+    
+    if (priceInput) {
+        priceInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                this.form.submit();
+            }, 800);
+        });
+    }
+    
+    if (placesInput) {
+        placesInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                this.form.submit();
+            }, 800);
+        });
+    }
+
+    // Update order select label based on sort type
+    const sortSelect = document.querySelector('select[name="sort"]');
+    const orderSelect = document.querySelector('select[name="order"]');
+
+    if (sortSelect && orderSelect) {
+        sortSelect.addEventListener('change', function() {
+            updateOrderLabels(this.value, orderSelect);
+        });
+        
+        // Initialize on load
+        updateOrderLabels(sortSelect.value, orderSelect);
+    }
+
+    function updateOrderLabels(sortType, orderSelect) {
+        const options = orderSelect.options;
+        if (sortType === 'price') {
+            options[0].text = 'Moins cher';
+            options[1].text = 'Plus cher';
+        } else {
+            options[0].text = 'Plus proche';
+            options[1].text = 'Plus loin';
+        }
+    }
     </script>
 </body>
 </html>

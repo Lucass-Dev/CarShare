@@ -228,8 +228,7 @@ class SecurityValidator {
     }
 
     /**
-     * Validation pour nom de rue - STRICT
-     * Pas de backslash, chevrons, accolades
+     * Validation pour nom de rue
      */
     static validateStreetName(value) {
         const sanitized = this.sanitizeInput(value);
@@ -238,24 +237,92 @@ class SecurityValidator {
             return { valid: true, value: sanitized, error: null };
         }
 
-        // Bloquer caractères dangereux
+        // Bloquer caractères dangereux de base
         if (/[<>{}[\]\\|`]/.test(sanitized)) {
             return { 
                 valid: false, 
                 value: sanitized, 
-                error: 'La rue ne peut pas contenir de caractères spéciaux dangereux' 
+                error: 'La rue contient des caractères interdits' 
             };
         }
 
-        // Format: lettres, chiffres, espaces, tirets, apostrophes, points, virgules, slash
-        if (!/^[a-zA-Z0-9À-ÿ\s\-'.,/]+$/.test(sanitized)) {
+        // Vérifier menaces de sécurité
+        const threats = this.detectThreats(sanitized);
+        if (threats.length > 0) {
             return { 
                 valid: false, 
                 value: sanitized, 
-                error: 'La rue contient des caractères non autorisés' 
+                error: 'Caractères dangereux détectés' 
             };
         }
 
+        // Format: lettres, chiffres, espaces, tirets, apostrophes, points, virgules, slashes
+        if (!/^[a-zA-Z0-9À-ÿ\s\-'.,\/]+$/.test(sanitized)) {
+            return { 
+                valid: false, 
+                value: sanitized, 
+                error: 'La rue contient des caractères non valides' 
+            };
+        }
+
+        // VALIDATION MINIMALE : Une rue doit contenir au moins 2 lettres consécutives
+        // Bloque: "/1000", "12345", "....", "///"
+        // Accepte: "Rue 123", "12 Rue", "Avenue A"
+        if (!/[a-zA-ZÀ-ÿ]{2,}/.test(sanitized)) {
+            return { 
+                valid: false, 
+                value: sanitized, 
+                error: 'Le nom de rue doit contenir au moins 2 lettres consécutives' 
+            };
+        }
+
+        // Bloquer séquences de chiffres trop longues (> 5)
+        // Bloque: "123456", "Rue 1234567" mais accepte "Rue 12345", "75001"
+        if (/\d{6,}/.test(sanitized)) {
+            return { 
+                valid: false, 
+                value: sanitized, 
+                error: 'Séquence de chiffres trop longue (max 5 chiffres consécutifs)' 
+            };
+        }
+
+        // Bloquer répétitions excessives du même caractère (> 3 fois)
+        // Bloque: "aaaa", "1111", "....", "----"
+        // Accepte: "aaa", "111", "..."
+        if (/(.)\1{3,}/.test(sanitized)) {
+            return { 
+                valid: false, 
+                value: sanitized, 
+                error: 'Répétition excessive de caractères détectée' 
+            };
+        }
+
+        // Bloquer alternance trop fréquente chiffres/lettres (indicateur de gibberish)
+        // Bloque: "a1b2c3d4", "r5t6y7u8", "fhbih8"
+        // Accepte: "Rue 123", "12 Avenue"
+        const letterDigitSwitches = (sanitized.match(/[a-zA-Z]\d|\d[a-zA-Z]/g) || []).length;
+        if (letterDigitSwitches > 3) {
+            return { 
+                valid: false, 
+                value: sanitized, 
+                error: 'Format de rue invalide (trop d\'alternances lettres/chiffres)' 
+            };
+        }
+
+        // Vérifier présence de voyelles (au moins 20% des lettres)
+        // Bloque: "fhbih8", "grtpl", "xyz123"
+        // Accepte: "Rue", "Avenue", "Boulevard"
+        const letters = sanitized.match(/[a-zA-ZÀ-ÿ]/g) || [];
+        const vowels = sanitized.match(/[aeiouyàâäéèêëïîôùûüÿœæAEIOUYÀÂÄÉÈÊËÏÎÔÙÛÜŸŒÆ]/g) || [];
+        if (letters.length > 4 && vowels.length / letters.length < 0.2) {
+            return { 
+                valid: false, 
+                value: sanitized, 
+                error: 'Format de rue invalide (trop peu de voyelles)' 
+            };
+        }
+
+        // Vérifier longueur
         if (sanitized.length > 150) {
             return { 
                 valid: false, 
@@ -264,13 +331,39 @@ class SecurityValidator {
             };
         }
 
-        // Vérifier menaces
-        const threats = this.detectThreats(sanitized);
-        if (threats.length > 0) {
+        // Validation du format français
+        const trimmed = sanitized.trim().toLowerCase();
+        
+        // Vérifier si commence par un type de voie valide
+        const startsWithValidType = this.validStreetTypes.some(type => {
+            return trimmed.startsWith(type + ' ') || trimmed === type;
+        });
+
+        // Vérifier si contient un type de voie (même au milieu)
+        const containsValidType = this.validStreetTypes.some(type => {
+            return new RegExp('\\b' + type + '\\b', 'i').test(trimmed);
+        });
+
+        // Si aucun type de voie détecté et pas un numéro devant, avertir
+        if (!startsWithValidType && !containsValidType && !/^\d+/.test(trimmed)) {
+            console.warn('Format de rue inhabituel détecté:', sanitized);
+        }
+
+        // Bloquer les patterns suspects
+        if (/\d{5,}/.test(sanitized)) {
             return { 
                 valid: false, 
                 value: sanitized, 
-                error: 'Caractères interdits détectés' 
+                error: 'Séquence de chiffres trop longue détectée' 
+            };
+        }
+
+        // Bloquer répétitions suspectes
+        if (/(.)\\1{4,}/.test(sanitized)) {
+            return { 
+                valid: false, 
+                value: sanitized, 
+                error: 'Répétition de caractères suspecte' 
             };
         }
 

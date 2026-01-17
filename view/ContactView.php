@@ -53,6 +53,16 @@ class ContactView {
                             </svg>
                             <span>Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.</span>
                         </div>
+                        <?php if (isset($_GET['email_warning'])): ?>
+                        <div class="alert alert-error">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                            <span>Votre message a été enregistré, mais l'email de notification n'a pas pu être envoyé. Vérifiez les logs PHP (xampp/php/logs/php_error_log) pour plus de détails.</span>
+                        </div>
+                        <?php endif; ?>
                     <?php endif; ?>
 
                     <?php if ($error): ?>
@@ -72,13 +82,23 @@ class ContactView {
                                         echo 'Veuillez entrer une adresse email valide.';
                                         break;
                                     case 'message_too_short':
-                                        echo 'Votre message doit contenir au moins 10 caractères.';
+                                    case 'message_length':
+                                        echo 'Votre message doit contenir entre 10 et 5000 caractères.';
                                         break;
-                                    case 'db_error':
-                                        echo 'Une erreur est survenue. Veuillez réessayer.';
+                                    case 'email_error':
+                                        echo 'Erreur lors de l\'envoi de l\'email. Veuillez réessayer ou contactez-nous directement à carshare.cov@gmail.com';
+                                        break;
+                                    case 'invalid_name':
+                                        echo 'Le nom entré n\'est pas valide.';
+                                        break;
+                                    case 'invalid_subject':
+                                        echo 'Le sujet doit contenir entre 3 et 200 caractères.';
+                                        break;
+                                    case 'invalid_input':
+                                        echo 'Les données entrées contiennent des caractères non autorisés.';
                                         break;
                                     default:
-                                        echo 'Une erreur est survenue.';
+                                        echo 'Une erreur est survenue. Veuillez réessayer.';
                                 }
                                 ?>
                             </span>
@@ -99,7 +119,7 @@ class ContactView {
                                 </div>
                             </div>
 
-                            <form action="index.php?action=contact_submit" method="POST" class="contact-form-modern">
+                            <form action="index.php?action=contact_submit" method="POST" class="contact-form-modern" data-persist="true" data-persist-key="contact-form" autocomplete="off">
                                 <div class="form-row">
                                     <div class="form-field">
                                         <label for="name">
@@ -109,7 +129,7 @@ class ContactView {
                                             </svg>
                                             Nom complet <span class="required">*</span>
                                         </label>
-                                        <input type="text" id="name" name="name" class="form-input" required placeholder="Jean Dupont">
+                                        <input type="text" id="name" name="name" class="form-input" required placeholder="Jean Dupont" autocomplete="off">
                                     </div>
 
                                     <div class="form-field">
@@ -120,7 +140,7 @@ class ContactView {
                                             </svg>
                                             Adresse email <span class="required">*</span>
                                         </label>
-                                        <input type="email" id="email" name="email" class="form-input" required placeholder="exemple@email.com">
+                                        <input type="email" id="email" name="email" class="form-input" required placeholder="exemple@email.com" autocomplete="off">
                                     </div>
                                 </div>
 
@@ -133,7 +153,7 @@ class ContactView {
                                         </svg>
                                         Sujet de votre message <span class="required">*</span>
                                     </label>
-                                    <select id="subject" name="subject" class="form-input" required>
+                                    <select id="subject" name="subject" class="form-input" required autocomplete="off">
                                         <option value="">Sélectionnez un sujet</option>
                                         <option value="question">Question générale</option>
                                         <option value="reservation">Problème de réservation</option>
@@ -152,7 +172,7 @@ class ContactView {
                                         </svg>
                                         Votre message <span class="required">*</span>
                                     </label>
-                                    <textarea id="message" name="message" rows="7" class="form-input" required placeholder="Décrivez votre demande en détail. Plus votre message sera précis, plus nous pourrons vous aider efficacement..."></textarea>
+                                    <textarea id="message" name="message" rows="7" class="form-input" required placeholder="Décrivez votre demande en détail. Plus votre message sera précis, plus nous pourrons vous aider efficacement..." autocomplete="off"></textarea>
                                     <small class="field-hint">Minimum 10 caractères</small>
                                 </div>
 
@@ -244,6 +264,7 @@ class ContactView {
                     </div>
                 </div>
             </main>
+        <script src="./assets/js/form-persistence.js"></script>
         <?php
     }
 }
