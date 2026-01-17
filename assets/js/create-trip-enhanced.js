@@ -397,6 +397,49 @@ document.addEventListener('DOMContentLoaded', function() {
     // Empêcher form-enhancements.js de gérer ce formulaire
     form.classList.add('custom-validation');
     
+    // Appliquer le filtrage de sécurité sur tous les champs texte
+    if (typeof SecurityValidator !== 'undefined') {
+        // Numéros de rue - bloquer décimaux et caractères dangereux
+        const streetNumbers = form.querySelectorAll('#dep-num, #arr-num');
+        streetNumbers.forEach(input => {
+            SecurityValidator.setupInputFiltering(input, {
+                allowedPattern: /[0-9a-zA-Z\s\-]/,  // Chiffres, lettres, espaces, tirets uniquement
+                maxLength: 10,
+                blockDangerous: true
+            });
+        });
+        
+        // Rues - bloquer backslash et chevrons
+        const streets = form.querySelectorAll('#dep-street, #arr-street');
+        streets.forEach(input => {
+            SecurityValidator.setupInputFiltering(input, {
+                allowedPattern: /[a-zA-Z0-9À-ÿ\s\-'.,/]/,  // Pas de backslash ni <>{}[]
+                maxLength: 150,
+                blockDangerous: true
+            });
+        });
+        
+        // Villes - seulement lettres
+        const cities = form.querySelectorAll('#dep-city, #arr-city');
+        cities.forEach(input => {
+            SecurityValidator.setupInputFiltering(input, {
+                allowedPattern: /[a-zA-ZÀ-ÿ\s\-']/,  // Lettres uniquement, pas de chiffres
+                maxLength: 100,
+                blockDangerous: true
+            });
+        });
+        
+        // Prix - seulement chiffres et point
+        const priceInput = form.querySelector('#price');
+        if (priceInput) {
+            SecurityValidator.setupInputFiltering(priceInput, {
+                allowedPattern: /[0-9.]/,
+                maxLength: 6,  // 250.99
+                blockDangerous: true
+            });
+        }
+    }
+    
     const notificationManager = new NotificationManager();
     const submitButton = form.querySelector('button[type="submit"]');
     const originalButtonText = submitButton ? submitButton.textContent : 'Publier';
@@ -740,3 +783,240 @@ function setupRealtimeValidation(fields, notificationManager) {
         }
     });
 }
+
+// ==================== STEP NAVIGATION ====================
+// Gestion de la navigation par étapes
+
+class StepNavigator {
+    constructor(form) {
+        this.form = form;
+        this.currentStep = 1;
+        this.totalSteps = 3;
+        
+        this.sections = form.querySelectorAll('.form-section[data-section]');
+        this.progressSteps = document.querySelectorAll('.progress-steps .step');
+        this.tips = document.querySelectorAll('.contextual-tip[data-step]');
+        
+        this.btnNext = form.querySelector('.btn-next');
+        this.btnPrev = form.querySelector('.btn-prev');
+        this.btnSubmit = form.querySelector('.btn-submit');
+        
+        this.init();
+    }
+    
+    init() {
+        // Initialiser l'affichage
+        this.showStep(this.currentStep);
+        
+        // Événements des boutons
+        if (this.btnNext) {
+            this.btnNext.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.validateAndNext();
+            });
+        }
+        
+        if (this.btnPrev) {
+            this.btnPrev.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.goToPrevStep();
+            });
+        }
+        
+        // Cliquer sur les indicateurs d'étape
+        this.progressSteps.forEach((step) => {
+            step.addEventListener('click', () => {
+                const targetStep = parseInt(step.dataset.step);
+                if (targetStep < this.currentStep) {
+                    this.goToStep(targetStep);
+                }
+            });
+        });
+    }
+    
+    showStep(stepNum) {
+        // Masquer toutes les sections
+        this.sections.forEach(section => {
+            const sectionStep = parseInt(section.dataset.section);
+            if (sectionStep === stepNum) {
+                section.style.display = 'block';
+                section.classList.add('active');
+            } else {
+                section.style.display = 'none';
+                section.classList.remove('active');
+            }
+        });
+        
+        // Masquer les dividers sauf ceux de l'étape courante
+        const dividers = this.form.querySelectorAll('.section-divider');
+        dividers.forEach(divider => {
+            const dividerStep = parseInt(divider.dataset?.section || '0');
+            divider.style.display = (dividerStep === stepNum) ? 'flex' : 'none';
+        });
+        
+        // Mettre à jour les indicateurs de progression
+        this.progressSteps.forEach(step => {
+            const stepIndex = parseInt(step.dataset.step);
+            step.classList.remove('active', 'completed');
+            
+            if (stepIndex === stepNum) {
+                step.classList.add('active');
+            } else if (stepIndex < stepNum) {
+                step.classList.add('completed');
+            }
+        });
+        
+        // Conseils contextuels
+        this.tips.forEach(tip => {
+            const tipStep = parseInt(tip.dataset.step);
+            tip.style.display = (tipStep === stepNum) ? 'flex' : 'none';
+        });
+        
+        // Gestion des boutons
+        if (this.btnPrev) {
+            this.btnPrev.style.display = (stepNum > 1) ? 'flex' : 'none';
+        }
+        
+        if (this.btnNext) {
+            this.btnNext.style.display = (stepNum < this.totalSteps) ? 'flex' : 'none';
+        }
+        
+        if (this.btnSubmit) {
+            this.btnSubmit.style.display = (stepNum === this.totalSteps) ? 'flex' : 'none';
+        }
+        
+        // Scroll vers le haut du formulaire
+        this.form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
+    validateCurrentStep() {
+        const fieldsToValidate = this.getFieldsForStep(this.currentStep);
+        let isValid = true;
+        let firstInvalidField = null;
+        
+        fieldsToValidate.forEach(fieldInfo => {
+            const field = document.getElementById(fieldInfo.id);
+            if (!field) return;
+            
+            let result;
+            switch (fieldInfo.type) {
+                case 'city':
+                    result = SecureValidator.validateCity(field.value, fieldInfo.label, field);
+                    break;
+                case 'street':
+                    result = SecureValidator.validateStreet(field.value, fieldInfo.label);
+                    break;
+                case 'streetNumber':
+                    result = SecureValidator.validateStreetNumber(field.value, fieldInfo.label);
+                    break;
+                case 'date':
+                    result = SecureValidator.validateDate(field.value);
+                    break;
+                case 'time':
+                    result = SecureValidator.validateTime(field.value);
+                    break;
+                case 'places':
+                    result = SecureValidator.validatePlaces(field.value);
+                    break;
+                case 'price':
+                    result = SecureValidator.validatePrice(field.value);
+                    break;
+                default:
+                    result = { valid: true, errors: [] };
+            }
+            
+            if (!result.valid) {
+                isValid = false;
+                FieldStyler.markAsInvalid(field, result.errors[0]);
+                if (!firstInvalidField) {
+                    firstInvalidField = field;
+                }
+            } else if (field.value.trim() || fieldInfo.required) {
+                FieldStyler.markAsValid(field);
+            }
+        });
+        
+        // Vérification supplémentaire: villes différentes (étape 1)
+        if (this.currentStep === 1 && isValid) {
+            const depCity = document.getElementById('dep-city');
+            const arrCity = document.getElementById('arr-city');
+            
+            if (depCity && arrCity && depCity.value.trim() && arrCity.value.trim()) {
+                if (depCity.value.trim().toLowerCase() === arrCity.value.trim().toLowerCase()) {
+                    isValid = false;
+                    FieldStyler.markAsInvalid(depCity, 'Les villes de départ et d\'arrivée doivent être différentes');
+                    FieldStyler.markAsInvalid(arrCity);
+                    firstInvalidField = depCity;
+                }
+            }
+        }
+        
+        if (!isValid && firstInvalidField) {
+            firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstInvalidField.focus();
+        }
+        
+        return isValid;
+    }
+    
+    getFieldsForStep(stepNum) {
+        switch (stepNum) {
+            case 1:
+                return [
+                    { id: 'dep-city', type: 'city', label: 'ville de départ', required: true },
+                    { id: 'arr-city', type: 'city', label: 'ville d\'arrivée', required: true },
+                    { id: 'dep-street', type: 'street', label: 'rue de départ', required: false },
+                    { id: 'arr-street', type: 'street', label: 'rue d\'arrivée', required: false },
+                    { id: 'dep-num', type: 'streetNumber', label: 'numéro de départ', required: false },
+                    { id: 'arr-num', type: 'streetNumber', label: 'numéro d\'arrivée', required: false }
+                ];
+            case 2:
+                return [
+                    { id: 'date', type: 'date', label: 'date', required: true },
+                    { id: 'time', type: 'time', label: 'heure', required: true },
+                    { id: 'price', type: 'price', label: 'prix', required: false },
+                    { id: 'places', type: 'places', label: 'places', required: true }
+                ];
+            case 3:
+                return []; // Options sont des checkboxes, pas de validation requise
+            default:
+                return [];
+        }
+    }
+    
+    validateAndNext() {
+        if (this.validateCurrentStep()) {
+            this.goToNextStep();
+        }
+    }
+    
+    goToNextStep() {
+        if (this.currentStep < this.totalSteps) {
+            this.currentStep++;
+            this.showStep(this.currentStep);
+        }
+    }
+    
+    goToPrevStep() {
+        if (this.currentStep > 1) {
+            this.currentStep--;
+            this.showStep(this.currentStep);
+        }
+    }
+    
+    goToStep(stepNum) {
+        if (stepNum >= 1 && stepNum <= this.totalSteps) {
+            this.currentStep = stepNum;
+            this.showStep(this.currentStep);
+        }
+    }
+}
+
+// Initialiser la navigation par étapes après le chargement
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.trip-form');
+    if (form && form.querySelector('.btn-next')) {
+        // Initialiser le navigateur d'étapes
+        window.stepNavigator = new StepNavigator(form);
+    }
+});

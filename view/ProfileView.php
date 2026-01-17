@@ -123,6 +123,72 @@
                     </div>
                 </form>
             </div>
+
+            <!-- Security / Password Card -->
+            <div class="profile-card">
+                <div class="card-header">
+                    <h2>Sécurité</h2>
+                    <button type="button" class="btn btn-edit" id="editPasswordBtn">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                            <path d="M10.586 1.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM8.586 3.586L1 11.172V14h2.828l7.586-7.586L8.586 3.586z" fill="currentColor"/>
+                        </svg>
+                        Modifier le mot de passe
+                    </button>
+                </div>
+
+                <form method="POST" action="/CarShare/index.php?action=profile" id="passwordForm" novalidate>
+                    <input type="hidden" name="update_password" value="1">
+                    
+                    <div class="card-body">
+                        <div class="password-info" id="passwordInfo">
+                            <p class="text-muted">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="vertical-align: middle; margin-right: 8px;">
+                                    <path d="M8 14A6 6 0 108 2a6 6 0 000 12z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M8 6v4M8 10v.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                Dernière modification : Jamais modifié
+                            </p>
+                        </div>
+
+                        <div class="password-fields" style="display: none;">
+                            <div class="info-field full-width">
+                                <label>Mot de passe actuel <span class="required">*</span></label>
+                                <input type="password" name="current_password" class="form-input" placeholder="Votre mot de passe actuel" required>
+                                <small class="field-help">Pour des raisons de sécurité, veuillez confirmer votre mot de passe actuel</small>
+                            </div>
+
+                            <div class="info-field full-width">
+                                <label>Nouveau mot de passe <span class="required">*</span></label>
+                                <input type="password" name="new_password" class="form-input" placeholder="Minimum 12 caractères" minlength="12" required>
+                                <div class="password-strength-meter">
+                                    <div class="strength-bar">
+                                        <div class="strength-bar-fill"></div>
+                                    </div>
+                                    <div class="strength-text"></div>
+                                    <ul class="strength-requirements">
+                                        <li data-req="length">Au moins 12 caractères</li>
+                                        <li data-req="uppercase">Une majuscule</li>
+                                        <li data-req="lowercase">Une minuscule</li>
+                                        <li data-req="number">Un chiffre</li>
+                                        <li data-req="special">Un caractère spécial</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="info-field full-width">
+                                <label>Confirmer le nouveau mot de passe <span class="required">*</span></label>
+                                <input type="password" name="confirm_new_password" class="form-input" placeholder="Retapez le nouveau mot de passe" required>
+                                <div class="password-match-indicator"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer" style="display: none;">
+                        <button type="submit" class="btn btn-primary">Modifier le mot de passe</button>
+                        <button type="button" class="btn btn-secondary" id="cancelPasswordBtn">Annuler</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </main>

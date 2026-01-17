@@ -313,202 +313,423 @@
         }
 
         public static function display_publish_form(){
+            $success = $success ?? false; 
             ?>
-            <link rel="stylesheet" href="./assets/styles/create-trip-enhanced.css">
-            <?php 
-            $success = isset($_GET['success']) && $_GET['success'] == 1;
-            $hasError = isset($_GET['error']) && $_GET['error'] == 1;
-            ?>
-            <section class="hero">
-            <div class="hero__overlay">
-            <h1 class="hero__title">Proposer un nouveau trajet</h1>
+            <link rel="stylesheet" href="/CarShare/assets/styles/trip-form-modern.css">
+            <link rel="stylesheet" href="/CarShare/assets/styles/create-trip-enhanced.css">
+            <script src="/CarShare/assets/js/security-validator.js"></script>
 
-            <?php if ($success): ?>
-                <div class="server-message server-message--success">
-                    <div class="server-message__icon">✅</div>
-                    <div class="server-message__content">
-                        <strong>Trajet créé avec succès !</strong>
-                        Votre trajet est maintenant visible par les autres utilisateurs.
-                    </div>
+            <div class="trip-publish-container">
+              <!-- Compact Header -->
+              <div class="trip-compact-header">
+                <div class="compact-header-badge">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                  </svg>
+                  <span>Nouveau trajet</span>
                 </div>
-            <?php endif; ?>
+                <h1 class="compact-header-title">Publier un trajet</h1>
+              </div>
 
-            <?php 
-            $errors = $_SESSION['trip_form_errors'] ?? [];
-            $formData = $_SESSION['trip_form_data'] ?? [];
-            if (!empty($errors)): 
-            ?>
-                <div class="server-message server-message--error">
-                    <div class="server-message__icon">⚠️</div>
-                    <div class="server-message__content">
-                        <strong>Veuillez corriger les erreurs suivantes :</strong>
-                        <ul>
-                            <?php foreach ($errors as $err): ?>
-                                <li><?= htmlspecialchars($err) ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
+              <?php if ($success): ?>
+                <div class="alert alert-success">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                  </svg>
+                  <span>Trajet créé avec succès ! Il est maintenant visible par tous les utilisateurs.</span>
                 </div>
-            <?php 
-                // Clear errors after displaying
+              <?php endif; ?>
+
+              <?php 
+              $errors = $_SESSION['trip_form_errors'] ?? [];
+              $formData = $_SESSION['trip_form_data'] ?? [];
+              if (!empty($errors)): 
+              ?>
+                <div class="alert alert-error">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <div>
+                    <strong>Erreurs détectées :</strong>
+                    <ul>
+                      <?php foreach ($errors as $err): ?>
+                        <li><?= htmlspecialchars($err) ?></li>
+                      <?php endforeach; ?>
+                    </ul>
+                  </div>
+                </div>
+              <?php 
                 unset($_SESSION['trip_form_errors']);
-            endif; 
-            ?>
+              endif; 
+              ?>
 
-            <form class="trip-form" method="POST" action="/CarShare/index.php?action=create_trip_submit" novalidate>
-                <div class="trip-form__row">
-                <div class="form__group form__group--small">
-                    <label class="form__label" for="dep-num">N° voie</label>
-                    <input 
-                    id="dep-num" 
-                    name="dep-num"
-                    class="form__input" 
-                    placeholder="N° voie"
-                    value="<?= htmlspecialchars($formData['dep-num'] ?? '') ?>"
-                    />
+              <div class="trip-form-centered">
+
+                <!-- Progress Steps -->
+                <div class="progress-steps">
+                  <div class="step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Itinéraire</div>
+                  </div>
+                  <div class="step-connector"></div>
+                  <div class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Horaires & Prix</div>
+                  </div>
+                  <div class="step-connector"></div>
+                  <div class="step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Options</div>
+                  </div>
                 </div>
 
-                <div class="form__group">
-                    <label class="form__label" for="dep-street">Rue</label>
-                    <input 
-                    id="dep-street" 
-                    name="dep-street"
-                    class="form__input" 
-                    placeholder="Rue"
-                    value="<?= htmlspecialchars($formData['dep-street'] ?? '') ?>"
-                    />
-                </div>
+                <form class="trip-form trip-form-modern" method="POST" action="/CarShare/index.php?action=create_trip_submit" novalidate>
+                  
+                  <!-- Conseil contextuel étape 1 -->
+                  <div class="contextual-tip" data-step="1">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5"/>
+                    </svg>
+                    <p><strong>Astuce :</strong> Soyez précis sur votre itinéraire pour attirer plus de passagers</p>
+                  </div>
 
-                <div class="form__group">
-                    <label class="form__label" for="dep-city">Ville de départ <span class="form__required">*</span></label>
-                    <input 
-                    id="dep-city" 
-                    name="dep-city"
-                    class="form__input city-autocomplete" 
-                    placeholder="Ville (France)"
-                    value="<?= htmlspecialchars($formData['dep-city'] ?? '') ?>"
-                    autocomplete="off"
-                    required
-                    />
-                    <div class="autocomplete-dropdown" id="dep-city-dropdown"></div>
-                </div>
-                </div>
-
-                <div class="trip-form__row">
-                <div class="form__group form__group--small">
-                    <label class="form__label" for="arr-num">N° voie</label>
-                    <input 
-                    id="arr-num" 
-                    name="arr-num"
-                    class="form__input" 
-                    placeholder="N° voie"
-                    value="<?= htmlspecialchars($formData['arr-num'] ?? '') ?>"
-                    />
-                </div>
-
-                <div class="form__group">
-                    <label class="form__label" for="arr-street">Rue</label>
-                    <input 
-                    id="arr-street" 
-                    name="arr-street"
-                    class="form__input" 
-                    placeholder="Rue"
-                    value="<?= htmlspecialchars($formData['arr-street'] ?? '') ?>"
-                    />
-                </div>
-
-                <div class="form__group">
-                    <label class="form__label" for="arr-city">Ville d'arrivée <span class="form__required">*</span></label>
-                    <input 
-                    id="arr-city" 
-                    name="arr-city"
-                    class="form__input city-autocomplete" 
-                    placeholder="Ville (France)"
-                    value="<?= htmlspecialchars($formData['arr-city'] ?? '') ?>"
-                    autocomplete="off"
-                    required
-                    />
-                    <div class="autocomplete-dropdown" id="arr-city-dropdown"></div>
-                </div>
-                </div>
-
-                <div class="trip-form__row trip-form__row--compact">
-                <div class="form__group form__group--small">
-                    <label class="form__label" for="date">Date <span class="form__required">*</span></label>
-                    <input 
-                    id="date" 
-                    name="date"
-                    class="form__input" 
-                    type="date"
-                    value="<?= htmlspecialchars($formData['date'] ?? '') ?>"
-                    required
-                    />
-                </div>
-
-                <div class="form__group form__group--small">
-                    <label class="form__label" for="time">Heure</label>
-                    <input 
-                    id="time" 
-                    name="time"
-                    class="form__input" 
-                    type="time"
-                    value="<?= htmlspecialchars($formData['time'] ?? '') ?>"
-                    />
-                </div>
-
-                <div class="form__group form__group--small">
-                    <label class="form__label" for="price">Prix (€)</label>
-                    <input 
-                    id="price" 
-                    name="price"
-                    class="form__input" 
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    placeholder="0.00"
-                    value="<?= htmlspecialchars($formData['price'] ?? '') ?>"
-                    />
-                </div>
-                </div>
-
-                <div class="trip-form__row trip-form__row--options">
-                    <fieldset class="options">
-                        <legend class="options__title">Options</legend>
-                        
-                        <div class="form__group form__group--small">
-                            <label class="form__label" for="places">Nombre de place(s) <span class="form__required">*</span></label>
-                            <select id="places" name="places" class="form__input" required>
-                                <option value="0">0</option>
-                                <?php for ($i = 1; $i <= 10; $i++): ?>
-                                <option value="<?= $i ?>" <?= (isset($formData['places']) && $formData['places'] == $i) ? 'selected' : '' ?>>
-                                    <?= $i ?>
-                                </option>
-                                <?php endfor; ?>
-                            </select>
-                        </div>
-
-                        <label class="options__item"><input type="checkbox" name="animals" <?= isset($formData['animals']) ? 'checked' : '' ?>> Animaux</label>
-                        <label class="options__item"><input type="checkbox" name="smoking" <?= isset($formData['smoking']) ? 'checked' : '' ?>> Fumeur</label>
-                    </fieldset>
-
-                    <div class="trip-form__actions trip-form__actions--side">
-                        <button type="submit" class="btn btn--primary btn--pill">Proposer ce trajet</button>
+                  <!-- Section 1: Départ -->
+                  <div class="form-section" data-section="1">
+                    <div class="section-header">
+                      <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <circle cx="12" cy="10" r="3"/>
+                          <path d="M12 2a8 8 0 00-8 8.2C4 15.5 12 22 12 22s8-6.5 8-11.8A8 8 0 0012 2z"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <h2>Point de départ</h2>
+                        <p>Où commencera votre trajet ?</p>
+                      </div>
                     </div>
-                </div>
-                </div>
-            </form>
 
-            <!-- Datalist for location autocomplete -->
-            <datalist id="locations-list">
-                <?php foreach ($locations as $location): ?>
-                <option value="<?= htmlspecialchars($location['name']) ?>">
-                    <?= htmlspecialchars($location['postal_code']) ?>
-                </option>
-                <?php endforeach; ?>
-            </datalist>
+                    <div class="form-grid">
+                      <div class="form-field form-field-small">
+                        <label for="dep-num">N° voie</label>
+                        <input 
+                          id="dep-num" 
+                          name="dep-num"
+                          class="form-input" 
+                          placeholder="Ex: 10"
+!                          value="<?= htmlspecialchars($formData['dep-num'] ?? '') ?>"
+                        />
+                      </div>
+
+                      <div class="form-field">
+                        <label for="dep-street">Rue</label>
+                        <input 
+                          id="dep-street" 
+                          name="dep-street"
+                          type="text"
+                          class="form-input" 
+                          placeholder="Ex: Rue de la République"
+                          value="<?= htmlspecialchars($formData['dep-street'] ?? '') ?>"
+                          pattern="^[a-zA-Z0-9À-ÿ\s\-'.,/]+$"
+                          maxlength="150"
+                          title="Lettres, chiffres, espaces, tirets, apostrophes autorisés (pas de backslash)"
+                        />
+                      </div>
+
+                      <div class="form-field form-field-full">
+                        <label for="dep-city">Ville de départ <span class="required">*</span></label>
+                        <input 
+                          id="dep-city" 
+                          name="dep-city"
+                          type="text"
+                          class="form-input city-autocomplete" 
+                          placeholder="Recherchez une ville en France"
+                          value="<?= htmlspecialchars($formData['dep-city'] ?? '') ?>"
+                          autocomplete="off"
+                          required
+                          pattern="^[a-zA-ZÀ-ÿ\s\-']+$"
+                          maxlength="100"
+                          minlength="2"
+                          title="Seules les lettres sont autorisées (pas de chiffres ni caractères spéciaux)"
+                        />
+                        <div class="autocomplete-dropdown" id="dep-city-dropdown"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="section-divider form-section" data-section="1">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="12" y1="5" x2="12" y2="19"/>
+                      <polyline points="19 12 12 19 5 12"/>
+                    </svg>
+                  </div>
+
+                  <!-- Section 2: Arrivée -->
+                  <div class="form-section" data-section="1">
+                    <div class="section-header">
+                      <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                          <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <h2>Point d'arrivée</h2>
+                        <p>Où se terminera votre trajet ?</p>
+                      </div>
+                    </div>
+
+                    <div class="form-grid">
+                      <div class="form-field form-field-small">
+                        <label for="arr-num">N° voie</label>
+                        <input 
+                          id="arr-num" 
+                          name="arr-num"
+                          type="text"
+                          class="form-input" 
+                          placeholder="Ex: 25"
+                          value="<?= htmlspecialchars($formData['arr-num'] ?? '') ?>"
+                          pattern="^[0-9]+\s*(bis|ter|quater|[A-Za-z])?\s*(-[0-9]+)?$"
+                          maxlength="10"
+                          inputmode="text"
+                          title="Format: 25, 25bis, 25B ou 25-27 (pas de point ni virgule)"
+                        />
+                      </div>
+
+                      <div class="form-field">
+                        <label for="arr-street">Rue</label>
+                        <input 
+                          id="arr-street" 
+                          name="arr-street"
+                          type="text"
+                          class="form-input" 
+                          placeholder="Ex: Avenue des Champs"
+                          value="<?= htmlspecialchars($formData['arr-street'] ?? '') ?>"
+                          pattern="^[a-zA-Z0-9À-ÿ\s\-'.,/]+$"
+                          maxlength="150"
+                          title="Lettres, chiffres, espaces, tirets, apostrophes autorisés (pas de backslash)"
+                        />
+                      </div>
+
+                      <div class="form-field form-field-full">
+                        <label for="arr-city">Ville d'arrivée <span class="required">*</span></label>
+                        <input 
+                          id="arr-city" 
+                          name="arr-city"
+                          type="text"
+                          class="form-input city-autocomplete" 
+                          placeholder="Recherchez une ville en France"
+                          value="<?= htmlspecialchars($formData['arr-city'] ?? '') ?>"
+                          autocomplete="off"
+                          required
+                          pattern="^[a-zA-ZÀ-ÿ\s\-']+$"
+                          maxlength="100"
+                          minlength="2"
+                          title="Seules les lettres sont autorisées (pas de chiffres ni caractères spéciaux)"
+                        />
+                        <div class="autocomplete-dropdown" id="arr-city-dropdown"></div>
+                      </div>
+                          autocomplete="off"
+                          required
+                          pattern="^[a-zA-ZÀ-ÿ\s\-']+$"
+                          maxlength="100"
+                          minlength="2"
+                          title="Seules les lettres sont autorisées (pas de chiffres ni caractères spéciaux)"
+                        />
+                        <div class="autocomplete-dropdown" id="arr-city-dropdown"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Conseil contextuel étape 2 -->
+                  <div class="contextual-tip" data-step="2">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M12 6v6l4 2"/>
+                    </svg>
+                    <p><strong>Astuce :</strong> Prix recommandé : 0,05-0,08€/km. Soyez flexible sur l'horaire pour plus de réservations</p>
+                  </div>
+
+                  <!-- Section 3: Date & Prix -->
+                  <div class="form-section" data-section="2">
+                    <div class="section-header">
+                      <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                          <line x1="16" y1="2" x2="16" y2="6"/>
+                          <line x1="8" y1="2" x2="8" y2="6"/>
+                          <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <h2>Date et tarif</h2>
+                        <p>Quand partez-vous et à quel prix ?</p>
+                      </div>
+                    </div>
+
+                    <div class="form-grid">
+                      <div class="form-field">
+                        <label for="date">Date du trajet <span class="required">*</span></label>
+                        <input 
+                          id="date" 
+                          name="date"
+                          class="form-input" 
+                          type="date"
+                          value="<?= htmlspecialchars($formData['date'] ?? '') ?>"
+                          required
+                        />
+                      </div>
+
+                      <div class="form-field">
+                        <label for="time">Heure de départ</label>
+                        <input 
+                          id="time" 
+                          name="time"
+                          class="form-input" 
+                          type="time"
+                          value="<?= htmlspecialchars($formData['time'] ?? '') ?>"
+                        />
+                      </div>
+
+                      <div class="form-field">
+                        <label for="price">Prix par passager</label>
+                        <div class="input-with-icon">
+                          <input 
+                            id="price" 
+                            name="price"
+                            class="form-input" 
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            max="250"
+                            placeholder="0.00"
+                            inputmode="decimal"
+                            pattern="^\d+(\.\d{1,2})?$"
+                            title="Format: 15.50 (2 décimales max)"
+                            value="<?= htmlspecialchars($formData['price'] ?? '') ?>"
+                          />
+                          <span class="input-icon">€</span>
+                        </div>
+                        <small class="field-hint">Maximum 250€ (participation aux frais, 2 décimales max)</small>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Conseil contextuel étape 3 -->
+                  <div class="contextual-tip" data-step="3">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M9 12l2 2 4-4"/>
+                      <circle cx="12" cy="12" r="10"/>
+                    </svg>
+                    <p><strong>Astuce :</strong> Plus vous acceptez d'options, plus vous élargissez votre audience de passagers</p>
+                  </div>
+
+                  <!-- Section 4: Options -->
+                  <div class="form-section" data-section="3">
+                    <div class="section-header">
+                      <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <circle cx="12" cy="12" r="10"/>
+                          <line x1="12" y1="16" x2="12" y2="12"/>
+                          <line x1="12" y1="8" x2="12.01" y2="8"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <h2>Préférences du trajet</h2>
+                        <p>Personnalisez les conditions de votre covoiturage</p>
+                      </div>
+                    </div>
+
+                    <div class="form-grid">
+                      <div class="form-field">
+                        <label for="places">Nombre de places disponibles <span class="required">*</span></label>
+                        <select id="places" name="places" class="form-input" required>
+                          <option value="">Choisir...</option>
+                          <?php for ($i = 1; $i <= 10; $i++): ?>
+                            <option value="<?= $i ?>" <?= (isset($formData['places']) && $formData['places'] == $i) ? 'selected' : '' ?>>
+                              <?= $i ?> place<?= $i > 1 ? 's' : '' ?>
+                            </option>
+                          <?php endfor; ?>
+                        </select>
+                      </div>
+
+                      <div class="form-field form-field-full">
+                        <label>Options de confort</label>
+                        <div class="checkbox-group">
+                          <label class="checkbox-label">
+                            <input type="checkbox" name="animals" <?= isset($formData['animals']) ? 'checked' : '' ?>>
+                            <span class="checkbox-icon">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+                                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+                                <path d="M2 2l7.586 7.586"/>
+                                <circle cx="11" cy="11" r="2"/>
+                              </svg>
+                            </span>
+                            <span class="checkbox-text">Animaux acceptés</span>
+                          </label>
+
+                          <label class="checkbox-label">
+                            <input type="checkbox" name="smoking" <?= isset($formData['smoking']) ? 'checked' : '' ?>>
+                            <span class="checkbox-icon">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 8c0-3.3-2.7-6-6-6"/>
+                                <path d="M12 2C9.6 2 7.6 3.8 7.1 6.2"/>
+                                <line x1="2" y1="16" x2="22" y2="16"/>
+                                <line x1="2" y1="20" x2="22" y2="20"/>
+                              </svg>
+                            </span>
+                            <span class="checkbox-text">Fumeur accepté</span>
+                          </label>
+
+                          <label class="checkbox-label">
+                            <input type="checkbox" name="luggage" <?= isset($formData['luggage']) ? 'checked' : '' ?>>
+                            <span class="checkbox-icon">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                                <circle cx="8.5" cy="7" r="4"/>
+                                <polyline points="17 11 19 13 23 9"/>
+                              </svg>
+                            </span>
+                            <span class="checkbox-text">Bagages volumineux possibles</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-actions">
+                    <button type="button" class="btn btn-secondary btn-prev" style="display: none;">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="19" y1="12" x2="5" y2="12"/>
+                        <polyline points="12 19 5 12 12 5"/>
+                      </svg>
+                      Précédent
+                    </button>
+                    <button type="button" class="btn btn-primary btn-next">
+                      <span>Suivant</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                      </svg>
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-submit" style="display: none;">
+                      <span>Publier mon trajet</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                      </svg>
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
-        </section>
-        <script src="./assets/js/create-trip-enhanced.js"></script>
+            </div>
+
+            <script src="/CarShare/assets/js/create-trip-enhanced.js"></script>
+            <script src="/CarShare/assets/js/city-autocomplete-enhanced.js"></script>
             <?php
         }
 

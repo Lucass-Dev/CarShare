@@ -50,7 +50,7 @@ $action = $_GET['action'] ?? 'home';
         'signalement' => 'report-user.css',
         'login' => 'conn.css',
         'forgot_password' => 'conn.css',
-        'register' => ['inscr.css', 'password-validator.css'],
+        'register' => ['inscr.css', 'password-validator.css', 'register-validation.css'],
         'trip_details' => 'trip-details-enhanced.css',
         'payment' => 'trip_payment.css',
         'booking_confirmation' => 'confirmation_reservation.css',
@@ -64,6 +64,7 @@ $action = $_GET['action'] ?? 'home';
         'cgv' => 'legal.css',
         'faq' => 'FAQ.css',
         'contact' => 'contact.css',
+        'about' => 'about.css',
         'search' => ['search-enhancements.css', 'city-autocomplete.css'],
         'display_search' => ['search-enhancements.css', 'city-autocomplete.css'],
         'home' => ['search-enhancements.css', 'city-autocomplete.css'],
@@ -237,6 +238,16 @@ switch ($action) {
     case "faq":
         require_once __DIR__ . "/controller/FAQController.php";
         (new FAQController())->render();
+        break;
+
+    case "daily_carshare":
+        require_once __DIR__ . "/controller/DailyCarShareController.php";
+        (new DailyCarShareController())->render();
+        break;
+
+    case "about":
+        require_once __DIR__ . "/controller/AboutController.php";
+        (new AboutController())->render();
         break;
 
     case "contact":

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../model/TripFormModel.php';
+require_once __DIR__ . '/../model/SecurityValidator.php';
 
 class TripFormController
 {
@@ -71,7 +72,7 @@ class TripFormController
         $error = $_GET['error'] ?? null;
         $success = $_GET['success'] ?? null;
 
-        // Use TripView to display the form
+        // Use TripView to display the modern form
         require_once __DIR__ . '/../view/TripView.php';
         TripView::display_publish_form();
     }
@@ -96,37 +97,20 @@ class TripFormController
 
         $errors = [];
 
-        // Get and validate form data with enhanced security
-        $depCity = $this->sanitizeInput($_POST['dep-city'] ?? '');
-        $depStreet = $this->sanitizeInput($_POST['dep-street'] ?? '');
-        $depNum = $this->sanitizeInput($_POST['dep-num'] ?? '');
-        $arrCity = $this->sanitizeInput($_POST['arr-city'] ?? '');
-        $arrStreet = $this->sanitizeInput($_POST['arr-street'] ?? '');
-        $arrNum = $this->sanitizeInput($_POST['arr-num'] ?? '');
-        $date = $_POST['date'] ?? '';
-        $time = $_POST['time'] ?? '';
-        $places = (int)($_POST['places'] ?? 0);
-        $price = isset($_POST['price']) && $_POST['price'] !== '' ? floatval($_POST['price']) : null;
+        // Get and sanitize form data using new SecurityValidator
+        $depCity = SecurityValidator::validateCityName($_POST['dep-city'] ?? '', $errors, 'ville de départ', true);
+        $arrCity = SecurityValidator::validateCityName($_POST['arr-city'] ?? '', $errors, 'ville d\'arrivée', true);
+        $depStreet = SecurityValidator::validateStreetName($_POST['dep-street'] ?? '', $errors, 'rue de départ');
+        $arrStreet = SecurityValidator::validateStreetName($_POST['arr-street'] ?? '', $errors, 'rue d\'arrivée');
+        $depNum = SecurityValidator::validateStreetNumber($_POST['dep-num'] ?? '', $errors, 'numéro de départ');
+        $arrNum = SecurityValidator::validateStreetNumber($_POST['arr-num'] ?? '', $errors, 'numéro d\'arrivée');
         
-        // Security validation - detect malicious patterns
-        $this->validateSecurity($depCity, $errors, 'ville de départ');
-        $this->validateSecurity($arrCity, $errors, 'ville d\'arrivée');
-        $this->validateSecurity($depStreet, $errors, 'rue de départ');
-        $this->validateSecurity($arrStreet, $errors, 'rue d\'arrivée');
-
-        // Validate and sanitize streets using Model methods
-        $depStreet = TripFormModel::validateStreetName($depStreet, $errors, 'rue de départ');
-        $arrStreet = TripFormModel::validateStreetName($arrStreet, $errors, 'rue d\'arrivée');
-        $depNum = TripFormModel::validateStreetNumber($depNum, $errors, 'numéro de voie de départ');
-        $arrNum = TripFormModel::validateStreetNumber($arrNum, $errors, 'numéro de voie d\'arrivée');
-
-        // Validation
-        if (empty($depCity)) {
-            $errors[] = "La ville de départ est obligatoire";
-        }
-        if (empty($arrCity)) {
-            $errors[] = "La ville d'arrivée est obligatoire";
-        }
+        $date = SecurityValidator::sanitizeInput($_POST['date'] ?? '');
+        $time = SecurityValidator::sanitizeInput($_POST['time'] ?? '');
+        $places = SecurityValidator::validateInteger($_POST['places'] ?? '', $errors, 'nombre de places', 1, 10, true);
+        $price = SecurityValidator::validatePrice($_POST['price'] ?? '', $errors, 0, 250, false);
+        
+        // Validate date
         if (empty($date)) {
             $errors[] = "La date est obligatoire";
         } else {
@@ -140,18 +124,6 @@ class TripFormController
             $maxDate = strtotime('+1 year');
             if ($tripDate > $maxDate) {
                 $errors[] = "La date ne peut pas dépasser un an dans le futur";
-            }
-        }
-        if ($places < 1 || $places > 10) {
-            $errors[] = "Le nombre de places doit être entre 1 et 10";
-        }
-        
-        // Validate price if provided
-        if ($price !== null) {
-            if ($price < 0) {
-                $errors[] = "Le prix doit être un nombre positif";
-            } elseif ($price > 250) {
-                $errors[] = "Le prix ne peut pas dépasser 250 € (participation aux frais de trajet)";
             }
         }
 

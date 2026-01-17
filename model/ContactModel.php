@@ -6,7 +6,7 @@ class ContactModel {
     private $db;
 
     public function __construct() {
-        $this->db = Database::getInstance();
+        $this->db = Database::getDb();
     }
 
     public function saveMessage($name, $email, $subject, $message) {

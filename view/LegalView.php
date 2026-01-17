@@ -17,7 +17,7 @@ class LegalView {
                 <p><strong>SIRET :</strong> 123 456 789 00012</p>
                 <p><strong>Numéro de TVA intracommunautaire :</strong> FR12 123456789</p>
                 <p><strong>Directeur de publication :</strong> Jean Dupont</p>
-                <p><strong>Email :</strong> contact@carshare-hextech.fr</p>
+                <p><strong>Email :</strong> carshare.cov@gmail.com</p>
                 <p><strong>Téléphone :</strong> +33 1 23 45 67 89</p>
             </div>
 
@@ -37,7 +37,7 @@ class LegalView {
             <div class="legal-section">
                 <h2>Données personnelles</h2>
                 <p>Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification, de suppression et de portabilité de vos données personnelles.</p>
-                <p>Pour exercer ces droits, contactez-nous à : dpo@carshare-hextech.fr</p>
+                <p>Pour exercer ces droits, contactez-nous à : carshare.cov@gmail.com</p>
             </div>
 
             <div class="legal-section">

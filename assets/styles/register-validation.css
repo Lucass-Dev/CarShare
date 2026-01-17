@@ -1,0 +1,248 @@
+/* Registration Form Enhanced Styles */
+
+/* Email validation indicator */
+.email-validation-indicator,
+.email-confirm-indicator {
+    margin-top: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.email-validation-indicator.checking,
+.email-confirm-indicator.checking {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.email-validation-indicator.valid,
+.email-confirm-indicator.valid {
+    background: #d4edda;
+    color: #155724;
+}
+
+.email-validation-indicator.invalid,
+.email-confirm-indicator.invalid {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.email-validation-indicator .icon,
+.email-confirm-indicator .icon {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Spinner animation */
+.email-validation-indicator .spinner,
+.email-confirm-indicator .spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid #1976d2;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Password strength meter */
+.password-strength-meter {
+    margin-top: 12px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.strength-bar {
+    width: 100%;
+    height: 8px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.strength-bar-fill {
+    height: 100%;
+    width: 0%;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.strength-text {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.strength-requirements {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+}
+
+.strength-requirements li {
+    font-size: 13px;
+    color: #6c757d;
+    padding: 4px 0;
+    position: relative;
+    padding-left: 24px;
+}
+
+.strength-requirements li::before {
+    content: '○';
+    position: absolute;
+    left: 0;
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.strength-requirements li.met {
+    color: #28a745;
+}
+
+.strength-requirements li.met::before {
+    content: '✓';
+    color: #28a745;
+}
+
+/* Input error state */
+.input-error {
+    border-color: #dc3545 !important;
+    background-color: #fff5f5 !important;
+}
+
+.field-error {
+    color: #dc3545;
+    font-size: 13px;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.field-error::before {
+    content: '⚠';
+    font-weight: bold;
+}
+
+/* Form errors display */
+.form-errors {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+    color: #721c24;
+}
+
+.form-errors strong {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.form-errors ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.form-errors li {
+    margin: 6px 0;
+    font-size: 14px;
+}
+
+/* Input focus enhancements */
+input:focus {
+    outline: none;
+    border-color: #3065ad;
+    box-shadow: 0 0 0 3px rgba(48, 101, 173, 0.1);
+}
+
+input.input-error:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+/* Button disabled state */
+button[type="submit"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Submitting state */
+form.submitting {
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+/* Required field indicator */
+.form-required {
+    color: #dc3545;
+    font-weight: bold;
+    margin-left: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .password-strength-meter {
+        padding: 12px;
+    }
+    
+    .strength-requirements {
+        font-size: 12px;
+    }
+    
+    .email-validation-indicator,
+    .email-confirm-indicator {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+}
+
+/* Success message animation */
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-errors,
+.email-validation-indicator,
+.email-confirm-indicator {
+    animation: slideInDown 0.3s ease;
+}
+
+/* Tooltip for password requirements */
+.password-tooltip {
+    position: relative;
+}
+
+.password-tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-bottom: 8px;
+}

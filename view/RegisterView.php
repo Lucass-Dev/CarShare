@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/CarShare/assets/styles/register-validation.css">
 <div class="login-box">
   <h2>S'inscrire</h2>
   
@@ -7,12 +8,30 @@
     </div>
   <?php endif; ?>
   
-  <form method="POST" action="/CarShare/index.php?action=register">
-    <input type="text" name="last_name" placeholder="Nom" required />
-    <input type="text" name="first_name" placeholder="Prénom" required />
-    <input type="email" name="email" placeholder="Email" required />
-    <input type="password" name="password" placeholder="Mot de passe (min 12 caractères)" required minlength="12" />
-    <input type="password" name="confirm_password" placeholder="Confirmation" required />
+  <form method="POST" action="/CarShare/index.php?action=register" novalidate>
+    <div class="form-field">
+      <input type="text" name="last_name" placeholder="Nom" required maxlength="50" pattern="[a-zA-ZÀ-ÿ\s'-]+" />
+    </div>
+    
+    <div class="form-field">
+      <input type="text" name="first_name" placeholder="Prénom" required maxlength="50" pattern="[a-zA-ZÀ-ÿ\s'-]+" />
+    </div>
+    
+    <div class="form-field">
+      <input type="email" name="email" placeholder="Email" required />
+    </div>
+    
+    <div class="form-field">
+      <input type="email" name="email_confirm" placeholder="Confirmer l'email" required />
+    </div>
+    
+    <div class="form-field">
+      <input type="password" name="password" placeholder="Mot de passe (min 12 caractères)" required minlength="12" />
+    </div>
+    
+    <div class="form-field">
+      <input type="password" name="confirm_password" placeholder="Confirmer le mot de passe" required />
+    </div>
 
     <p class="legal-consent">
       <label>
@@ -33,3 +52,5 @@
     </div>
   </form>
 </div>
+
+<script src="/CarShare/assets/js/register-validation.js"></script>

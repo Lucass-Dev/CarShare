@@ -1,3 +1,4 @@
+<!-- FOOTER START - UNIQUE INSTANCE -->
 <footer class="modern-footer">
     <div class="footer-content">
         <div class="footer-section">
@@ -12,7 +13,7 @@
         <div class="footer-section">
             <h3>Informations</h3>
             <ul>
-                <li><a href="#" onclick="alert('Page en construction'); return false;">Qui sommes-nous ?</a></li>
+                <li><a href="index.php?action=about">Qui sommes-nous ?</a></li>
                 <li><a href="index.php?action=faq">FAQ</a></li>
                 <li><a href="index.php?action=contact">Nous contacter</a></li>
                 <li><a href="index.php?action=cgu">Conditions générales</a></li>
@@ -24,7 +25,7 @@
         <div class="footer-section">
             <h3>En savoir plus</h3>
             <ul>
-                <li><a href="index.php?action=faq">Covoiturage du quotidien</a></li>
+                <li><a href="index.php?action=daily_carshare">Covoiturage au quotidien</a></li>
                 <li><a href="#" onclick="alert('Page en construction'); return false;">Blog de voyage</a></li>
             </ul>
             <div class="footer-contact">
@@ -43,3 +44,4 @@
         <p>&copy; <?php echo date('Y'); ?> CarShare by HexTech. Tous droits réservés.</p>
     </div>
 </footer>
+<!-- FOOTER END - UNIQUE INSTANCE -->

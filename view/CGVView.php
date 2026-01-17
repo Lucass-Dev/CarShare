@@ -13,7 +13,7 @@ class CGVView {
                     <h2>1. Mentions Légales</h2>
                     <p>Le site Carshare.fr est édité par la société Hextech, SAS au capital de 3000 €, dont le siège social est situé au 10 rue de Vanves, 92130 Issy-Les-Moulineaux, immatriculée au RCS de Nanterre sous le numéro 123 456 789 101112.</p>
                     <div class="contact-info">
-                        <p><strong>Contact :</strong> contact@carshare.fr</p>
+                        <p><strong>Contact :</strong> carshare.cov@gmail.com</p>
                         <p><strong>TVA :</strong> Non applicable (Article 293 B du CGI)</p>
                     </div>
                 </div>
@@ -68,7 +68,7 @@ class CGVView {
 
                 <div class="legal-section">
                     <h2>7. Médiation et Litiges</h2>
-                    <p>En cas de litige non résolu par le service client (contact@carshare.fr), l'Utilisateur peut recourir gratuitement au médiateur de la consommation suivant : <strong>AME Conso</strong></p>
+                    <p>En cas de litige non résolu par le service client (carshare.cov@gmail.com), l'Utilisateur peut recourir gratuitement au médiateur de la consommation suivant : <strong>AME Conso</strong></p>
                     <p>Les présentes conditions sont régies par la loi française. En cas de contestation, et à défaut d'accord amiable, les tribunaux français seront seuls compétents.</p>
                 </div>
             </div>
