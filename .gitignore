@@ -12,9 +12,7 @@
 .idea/**/dictionaries
 .idea/**/shelf
 .idea/
-./config.php
-config.php
-assets/upp/*
+assets/upp/
 
 # AWS User-specific
 .idea/**/aws.xml
