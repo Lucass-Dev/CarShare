@@ -27,8 +27,8 @@
         <h2>Rechercher un trajet</h2>
         <form class="search-form" method="GET" action="index.php">
             <input type="hidden" name="action" value="search">
-            <input type="text" name="start_place" placeholder="Ville de départ" required>
-            <input type="text" name="end_place" placeholder="Ville d'arrivée" required>
+            <input type="text" name="start_place" placeholder="Ville de départ" data-city-autocomplete required>
+            <input type="text" name="end_place" placeholder="Ville d'arrivée" data-city-autocomplete required>
             <input type="date" name="date" required>
             <input type="number" name="seats" placeholder="Passagers" min="1" max="10" value="1">
             <button type="submit" class="search-button">Rechercher</button>
@@ -96,6 +96,8 @@
         <img src="./assets/img/Ville_eco.jpg" alt="Ville écologique">
     </div>
 </section>
+<!-- Autocomplétion des villes -->
+<script src="<?= asset('js/city-autocomplete.js?v=' . time()) ?>"></script>
 <?php
         } // Fin de la méthode render()
     } // Fin de la classe HomeView

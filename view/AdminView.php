@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin - CarShare</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/AdminView.css">
+    <link rel="stylesheet" href="<?= asset('styles/AdminView.css') ?>">
     <link rel="stylesheet" href="./assets/styles/footer.css">
 </head>
 <body>
@@ -17,15 +17,15 @@
             <span>CarShare Admin</span>
         </div>
         <nav class="nav-menu">
-            <a href="/CarShare/index.php?action=admin" class="nav-item active">
-                <i class="fas fa-chart-line"></i>
+            <a href="<?= url('index.php?action=admin') ?>" class="nav-item active">
+                <i class="fas fa-tachometer-alt"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="/CarShare/index.php?action=profile" class="nav-item">
+            <a href="<?= url('index.php?action=profile') ?>" class="nav-item">
                 <i class="fas fa-user"></i>
-                <span>Mon Profil</span>
+                <span>Mon profil</span>
             </a>
-            <a href="/CarShare/index.php?action=logout" class="nav-item">
+            <a href="<?= url('index.php?action=logout') ?>" class="nav-item">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Déconnexion</span>
             </a>

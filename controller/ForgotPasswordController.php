@@ -6,6 +6,19 @@ require_once __DIR__ . "/../model/Config.php";
 
 class ForgotPasswordController {
 
+    private function sanitizeInput($input) {
+        if (!is_string($input)) return '';
+        $input = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $input);
+        return trim($input);
+    }
+    
+    private function validateSecurity($value) {
+        if (empty($value)) return true;
+        if (preg_match('/\\x00|\\0+|%00|\\u0000/i', $value)) return false;
+        if (preg_match('/(SELECT|INSERT|SCRIPT|<script|javascript:)/i', $value)) return false;
+        return true;
+    }
+
     public function render() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -15,10 +28,12 @@ class ForgotPasswordController {
         $success = null;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = trim($_POST['email'] ?? '');
+            $email = $this->sanitizeInput($_POST['email'] ?? '');
 
             if (empty($email)) {
                 $error = "Veuillez entrer votre adresse email";
+            } elseif (!$this->validateSecurity($email)) {
+                $error = "Caractères interdits détectés";
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $error = "Adresse email invalide";
             } else {

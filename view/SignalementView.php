@@ -1,6 +1,6 @@
 <?php
 if (!isset($userData) || !is_array($userData) || empty($userData['id'])) {
-    header('Location: /CarShare/index.php?action=signalement');
+    header('Location: ' . url('index.php?action=signalement'));
     exit;
 }
 ?>
@@ -54,7 +54,7 @@ if (!isset($userData) || !is_array($userData) || empty($userData['id'])) {
         </div>
 
         <!-- Formulaire -->
-        <form method="POST" action="/CarShare/index.php?action=signalement_submit" class="report-form">
+        <form method="POST" action="<?= url('index.php?action=signalement_submit') ?>" class="report-form">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($userData['id']) ?>">
             <?php if (!empty($userData['carpooling_id'])): ?>
             <input type="hidden" name="carpooling_id" value="<?= htmlspecialchars($userData['carpooling_id']) ?>">
@@ -97,4 +97,4 @@ if (!isset($userData) || !is_array($userData) || empty($userData['id'])) {
         </form>
     </section>
 
-<script src="/CarShare/assets/js/signalement-form.js"></script>
+<script src="<?= asset('js/signalement-form.js') ?>"></script>

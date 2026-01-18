@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/CarShare/assets/styles/page_profil.css">
+<link rel="stylesheet" href="<?= asset('styles/page_profil.css') ?>">
 
 <main class="profile-container">
     <?php if (isset($error)): ?>
@@ -31,7 +31,7 @@
                 <p class="profile-email"><?= htmlspecialchars($user['email'] ?? '') ?></p>
             </div>
             
-            <a href="/CarShare/index.php?action=logout" class="btn btn-logout-sidebar">Se déconnecter</a>
+            <a href="<?= url('index.php?action=logout') ?>" class="btn btn-logout-sidebar">Se déconnecter</a>
         </aside>
 
         <!-- Main Content -->
@@ -48,7 +48,7 @@
                     </button>
                 </div>
 
-                <form method="POST" action="/CarShare/index.php?action=profile" id="profileForm">
+                <form method="POST" action="<?= url('index.php?action=profile') ?>" id="profileForm">
                     <input type="hidden" name="update_profile" value="1">
                     
                     <div class="card-body">
@@ -92,7 +92,7 @@
                     </button>
                 </div>
 
-                <form method="POST" action="/CarShare/index.php?action=profile" id="vehicleForm">
+                <form method="POST" action="<?= url('index.php?action=profile') ?>" id="vehicleForm">
                     <input type="hidden" name="update_vehicle" value="1">
                     
                     <div class="card-body">
@@ -136,7 +136,7 @@
                     </button>
                 </div>
 
-                <form method="POST" action="/CarShare/index.php?action=profile" id="passwordForm" novalidate>
+                <form method="POST" action="<?= url('index.php?action=profile') ?>" id="passwordForm" novalidate>
                     <input type="hidden" name="update_password" value="1">
                     
                     <div class="card-body">
@@ -400,7 +400,8 @@
 }
 </style>
 
-<script src="/CarShare/assets/js/profile.js"></script>
+<script src="<?= asset('js/profile.js') ?>"></script>
+<script src="<?= asset('js/universal-form-protection.js') ?>"></script>
 <script>
 // Custom modal functions
 function showCustomModal() {

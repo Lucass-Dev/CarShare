@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/CarShare/assets/styles/trip-details-enhanced.css">
+<link rel="stylesheet" href="<?= asset('styles/trip-details-enhanced.css') ?>">
 
 <div class="trip-details-container">
     <!-- Header avec route -->
@@ -152,7 +152,7 @@
         <!-- Carte conducteur -->
         <div class="driver-card">
             <div class="driver-header">
-                <img src="/CarShare/assets/img/avatar.jpg" alt="<?= htmlspecialchars($carpooling['first_name']) ?>" class="driver-avatar">
+                <img src="<?= asset('img/avatar.jpg') ?>" alt="<?= htmlspecialchars($carpooling['first_name']) ?>" class="driver-avatar">
                 <div class="driver-info">
                     <h3><?= htmlspecialchars($carpooling['first_name']) ?> <?= isset($carpooling['last_name']) ? strtoupper(substr($carpooling['last_name'], 0, 1)) . '.' : '' ?></h3>
                     <div class="driver-rating">
@@ -182,7 +182,7 @@
             <!-- Actions -->
             <div class="trip-actions" style="margin-top: 24px;">
                 <?php if (strtotime($carpooling['start_date']) > time() && $carpooling['available_places'] > 0): ?>
-                    <a href="/CarShare/index.php?action=payment&carpooling_id=<?= $carpooling['id'] ?>" class="btn-reserve">
+                    <a href="<?= url('index.php?action=payment&carpooling_id=' . $carpooling['id']) ?>" class="btn-reserve">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                             <polyline points="22 4 12 14.01 9 11.01"/>

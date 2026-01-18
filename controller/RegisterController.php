@@ -25,18 +25,42 @@ class RegisterController {
     
     /**
      * Validate input for security threats (SQL injection, XSS, etc.)
+     * Protection renforcée contre : null bytes, hex encoding, binaire, décimal, backslash
      */
     private function validateSecurity($value, $fieldName = 'champ') {
         if (empty($value)) {
             return ['valid' => true];
         }
         
+        // Détection null bytes (toutes formes)
+        if (preg_match('/\x00|\\x00|\\0+|\\u0000|%00/i', $value)) {
+            return [
+                'valid' => false,
+                'error' => "Caractères nuls détectés dans '{$fieldName}'"
+            ];
+        }
+        
+        // Détection encoding hexadécimal suspect
+        if (preg_match('/(\\x[0-9a-fA-F]{2}|%[0-9a-fA-F]{2}){4,}/', $value)) {
+            return [
+                'valid' => false,
+                'error' => "Encodage suspect détecté dans '{$fieldName}'"
+            ];
+        }
+        
+        // Détection tentatives d'échappement backslash
+        if (preg_match('/\\\\[\'"]|\\\\x|\\\\u/', $value)) {
+            return [
+                'valid' => false,
+                'error' => "Tentative d'échappement détectée dans '{$fieldName}'"
+            ];
+        }
+        
         // Patterns de détection d'attaques
         $patterns = [
-            'sql' => '/(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE|UNION|SCRIPT)\b|--|;|\/\*|\*\/|xp_|sp_)/i',
-            'xss' => '/<script|<iframe|<object|<embed|javascript:|onerror|onload|onclick|onmouseover/i',
-            'hex' => '/(\\\\x[0-9a-fA-F]{2}|%[0-9a-fA-F]{2}){3,}/',
-            'html' => '/<[^>]+>/'
+            'sql' => '/(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE|UNION|SCRIPT|DECLARE)\b|--|;|\/\*|\*\/|xp_|sp_)/i',
+            'xss' => '/<script|<iframe|<object|<embed|<applet|javascript:|data:text\/html|vbscript:|onload|onerror|onclick|onmouseover/i',
+            'html' => '/<[a-z][\s\S]*>/i'
         ];
         
         foreach ($patterns as $type => $pattern) {
@@ -186,7 +210,7 @@ class RegisterController {
                 $emailConfirmValidation = $this->validateEmail($emailConfirm);
                 if (!$emailConfirmValidation['valid']) {
                     $error = "La confirmation de l'email est invalide";
-                } elseif ($email !== $emailConfirmValidation['value']) {
+                } elseif (strtolower(trim($email)) !== strtolower(trim($emailConfirmValidation['value']))) {
                     $error = "Les adresses email ne correspondent pas";
                 }
             }

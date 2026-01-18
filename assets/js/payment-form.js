@@ -15,10 +15,85 @@
         accept_terms: false
     };
 
+    // Variable pour empêcher les soumissions multiples
+    let isSubmitting = false;
+
     // Initialisation
     document.addEventListener('DOMContentLoaded', function() {
         initializeForm();
+        setupSeatsCountHandler();
+        checkForErrors();
+        updateSubmitButton(); // Initialiser l'état du bouton
     });
+
+    /**
+     * Met à jour l'état du bouton selon la validation
+     */
+    function updateSubmitButton() {
+        const submitBtn = document.getElementById('btn-submit');
+        if (!submitBtn) return;
+
+        const allValid = Object.values(validationState).every(v => v === true);
+        
+        if (allValid) {
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+            submitBtn.style.cursor = 'pointer';
+        } else {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+        }
+    }
+
+    /**
+     * Vérifier si la page contient des erreurs au chargement
+     * (après soumission du formulaire avec erreurs)
+     */
+    function checkForErrors() {
+        const errorMessage = document.querySelector('.error-message');
+        const submitBtn = document.getElementById('btn-submit');
+        
+        if (errorMessage && submitBtn) {
+            // Réinitialiser l'état de soumission et le bouton si des erreurs sont présentes
+            isSubmitting = false;
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Confirmer la réservation
+            `;
+        }
+    }
+
+    /**
+     * Gestion du nombre de places
+     */
+    function setupSeatsCountHandler() {
+        const seatsSelect = document.getElementById('seats_count');
+        const totalAmountEl = document.getElementById('total-amount');
+        const selectedSeatsEl = document.getElementById('selected-seats');
+        const seatsRow = document.getElementById('seats-row');
+        
+        if (!seatsSelect || !totalAmountEl) return;
+
+        seatsSelect.addEventListener('change', function() {
+            const seatsCount = parseInt(this.value) || 1;
+            const unitPrice = parseFloat(totalAmountEl.dataset.unitPrice) || 0;
+            const totalPrice = seatsCount * unitPrice;
+            
+            totalAmountEl.textContent = totalPrice.toFixed(2) + ' €';
+            
+            if (selectedSeatsEl) {
+                selectedSeatsEl.textContent = seatsCount;
+            }
+            
+            if (seatsRow) {
+                seatsRow.style.display = seatsCount > 1 ? 'flex' : 'none';
+            }
+        });
+    }
 
     function initializeForm() {
         const form = document.getElementById('payment-form');
@@ -62,6 +137,7 @@
         if (value === '') {
             showError(input, errorEl, 'Le nom du titulaire est obligatoire');
             validationState.card_holder = false;
+            updateSubmitButton();
             return false;
         }
 
@@ -91,6 +167,7 @@
 
         showSuccess(input);
         validationState.card_holder = true;
+        updateSubmitButton();
         return true;
     }
 
@@ -126,29 +203,34 @@
         if (value === '') {
             showError(input, errorEl, 'Le numéro de carte est obligatoire');
             validationState.card_number = false;
+            updateSubmitButton();
             return false;
         }
 
         if (!/^\d+$/.test(value)) {
             showError(input, errorEl, 'Le numéro de carte ne doit contenir que des chiffres');
             validationState.card_number = false;
+            updateSubmitButton();
             return false;
         }
 
         if (value.length !== 16) {
             showError(input, errorEl, 'Le numéro de carte doit contenir 16 chiffres');
             validationState.card_number = false;
+            updateSubmitButton();
             return false;
         }
 
         if (!luhnCheck(value)) {
             showError(input, errorEl, 'Numéro de carte invalide');
             validationState.card_number = false;
+            updateSubmitButton();
             return false;
         }
 
         showSuccess(input);
         validationState.card_number = true;
+        updateSubmitButton();
         return true;
     }
 
@@ -208,12 +290,14 @@
         if (value === '') {
             showError(input, errorEl, 'La date d\'expiration est obligatoire');
             validationState.expiry_date = false;
+            updateSubmitButton();
             return false;
         }
 
         if (!/^\d{2}\/\d{2}$/.test(value)) {
             showError(input, errorEl, 'Format invalide (MM/AA)');
             validationState.expiry_date = false;
+            updateSubmitButton();
             return false;
         }
 
@@ -222,6 +306,7 @@
         if (month < 1 || month > 12) {
             showError(input, errorEl, 'Mois invalide (01-12)');
             validationState.expiry_date = false;
+            updateSubmitButton();
             return false;
         }
 
@@ -232,17 +317,20 @@
         if (year < currentYear || (year === currentYear && month < currentMonth)) {
             showError(input, errorEl, 'La carte est expirée');
             validationState.expiry_date = false;
+            updateSubmitButton();
             return false;
         }
 
         if (year > currentYear + 10) {
             showError(input, errorEl, 'Date d\'expiration trop éloignée');
             validationState.expiry_date = false;
+            updateSubmitButton();
             return false;
         }
 
         showSuccess(input);
         validationState.expiry_date = true;
+        updateSubmitButton();
         return true;
     }
 
@@ -272,23 +360,27 @@
         if (value === '') {
             showError(input, errorEl, 'Le CVV est obligatoire');
             validationState.cvv = false;
+            updateSubmitButton();
             return false;
         }
 
         if (!/^\d+$/.test(value)) {
             showError(input, errorEl, 'Le CVV ne doit contenir que des chiffres');
             validationState.cvv = false;
+            updateSubmitButton();
             return false;
         }
 
         if (value.length < 3 || value.length > 4) {
             showError(input, errorEl, 'Le CVV doit contenir 3 ou 4 chiffres');
             validationState.cvv = false;
+            updateSubmitButton();
             return false;
         }
 
         showSuccess(input);
         validationState.cvv = true;
+        updateSubmitButton();
         return true;
     }
 
@@ -318,10 +410,12 @@
                 errorEl.style.display = 'block';
             }
             validationState.accept_terms = false;
+            updateSubmitButton();
             return false;
         }
 
         validationState.accept_terms = true;
+        updateSubmitButton();
         return true;
     }
 
@@ -330,6 +424,11 @@
      */
     function handleFormSubmit(e) {
         e.preventDefault();
+
+        // Empêcher les soumissions multiples
+        if (isSubmitting) {
+            return false;
+        }
 
         const cardHolder = document.getElementById('card_holder').value;
         const cardNumber = document.getElementById('card_number').value.replace(/\s/g, '');
@@ -346,14 +445,37 @@
 
         if (!isValid) {
             showGlobalError('Veuillez corriger toutes les erreurs avant de soumettre');
-            return;
+            return false;
         }
 
+        // Marquer comme en cours de soumission
+        isSubmitting = true;
+
         const submitBtn = document.getElementById('btn-submit');
+        const originalBtnContent = submitBtn.innerHTML;
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span style="display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(5,18,32,.3); border-radius: 50%; border-top-color: #051220; animation: spin 1s linear infinite;"></span> Traitement en cours...';
 
-        e.target.submit();
+        // Timeout de sécurité (30 secondes)
+        const timeoutId = setTimeout(function() {
+            isSubmitting = false;
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnContent;
+            showGlobalError('La requête a pris trop de temps. Veuillez réessayer.');
+        }, 30000);
+
+        // Soumettre le formulaire
+        try {
+            e.target.submit();
+        } catch (error) {
+            clearTimeout(timeoutId);
+            isSubmitting = false;
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnContent;
+            showGlobalError('Une erreur est survenue lors de la soumission. Veuillez réessayer.');
+        }
+
+        return false;
     }
 
     /**

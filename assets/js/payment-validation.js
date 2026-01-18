@@ -476,9 +476,36 @@
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span class="loading"></span> Traitement en cours...';
 
+        // Sécurité: restaurer le bouton après 10 secondes en cas de problème réseau
+        setTimeout(() => {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Confirmer la réservation
+                `;
+            }
+        }, 10000);
+
         // Submit form
         e.target.submit();
     }
+    
+    // Restaurer le bouton au chargement de la page (navigation arrière, erreur serveur)
+    window.addEventListener('pageshow', function() {
+        const submitBtn = document.getElementById('btn-submit');
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Confirmer la réservation
+            `;
+        }
+    });
 
     /**
      * Helper Functions

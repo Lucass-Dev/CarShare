@@ -315,9 +315,9 @@
         public static function display_publish_form(){
             $success = $success ?? false; 
             ?>
-            <link rel="stylesheet" href="/CarShare/assets/styles/trip-form-modern.css">
-            <link rel="stylesheet" href="/CarShare/assets/styles/create-trip-enhanced.css">
-            <script src="/CarShare/assets/js/security-validator.js"></script>
+            <link rel="stylesheet" href="<?= asset('styles/trip-form-modern.css') ?>">
+            <link rel="stylesheet" href="<?= asset('styles/create-trip-enhanced.css') ?>">
+            <script src="<?= asset('js/security-validator.js') ?>"></script>
 
             <div class="trip-publish-container">
               <!-- Compact Header -->
@@ -386,7 +386,7 @@
                   </div>
                 </div>
 
-                <form class="trip-form trip-form-modern" method="POST" action="/CarShare/index.php?action=create_trip_submit" novalidate data-persist="true" data-persist-key="publish-trip-form">
+                <form class="trip-form trip-form-modern" method="POST" action="<?= url('index.php?action=create_trip_submit') ?>" novalidate data-persist="true" data-persist-key="publish-trip-form">
                   
                   <!-- Conseil contextuel étape 1 -->
                   <div class="contextual-tip" data-step="1">
@@ -720,8 +720,8 @@
               </div>
             </div>
 
-            <script src="/CarShare/assets/js/city-autocomplete-enhanced.js"></script>
-            <script src="/CarShare/assets/js/create-trip-enhanced.js"></script>
+            <script src="<?= asset('js/city-autocomplete-enhanced.js') ?>"></script>
+            <script src="<?= asset('js/create-trip-enhanced.js') ?>"></script>
             <?php
         }
 
@@ -786,7 +786,7 @@
             endif; 
             ?>
 
-            <form class="trip-form" method="POST" action="/CarShare/index.php?action=edit_trip_submit" novalidate>
+            <form class="trip-form" method="POST" action="<?= url('index.php?action=edit_trip_submit') ?>" novalidate>
                 <input type="hidden" name="trip_id" value="<?= htmlspecialchars($trip['id']) ?>">
                 
                 <div class="trip-form__row">

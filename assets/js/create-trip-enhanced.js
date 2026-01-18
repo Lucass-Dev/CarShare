@@ -575,9 +575,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Affichage des erreurs ou soumission
         if (!isValid) {
-            e.preventDefault();            e.stopImmediatePropagation();
+            e.preventDefault();
+            e.stopImmediatePropagation();
             
-            // Restaurer le bouton immédiatement
+            // Restaurer le bouton immédiatement en cas d'erreur
             if (submitButton) {
                 submitButton.disabled = false;
                 submitButton.classList.remove('loading');
@@ -586,7 +587,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const spinner = submitButton.querySelector('.spinner');
                 if (spinner) spinner.remove();
             }
-                        notificationManager.showMultiple(allErrors, 'error');
+            
+            notificationManager.showMultiple(allErrors, 'error');
             
             // Scroll vers le premier champ invalide
             const firstInvalidField = form.querySelector('.field--invalid');
@@ -597,8 +599,26 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             // Tout est valide, laisser le formulaire se soumettre normalement
             notificationManager.show('Vérification en cours...', 'info', 1000);
+            
+            // Sécurité: restaurer le bouton après 10 secondes en cas de problème réseau
+            if (submitButton) {
+                setTimeout(() => {
+                    submitButton.disabled = false;
+                    submitButton.classList.remove('loading');
+                    submitButton.textContent = originalButtonText;
+                }, 10000);
+            }
             // Ne pas appeler e.preventDefault() ni form.submit() 
             // Le formulaire se soumettra naturellement
+        }
+    });
+    
+    // Restaurer le bouton au chargement de la page (en cas d'erreur serveur)
+    window.addEventListener('pageshow', () => {
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.classList.remove('loading');
+            submitButton.textContent = originalButtonText;
         }
     });
 });

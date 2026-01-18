@@ -92,33 +92,26 @@ main {
 
 .login-box input:hover {
   border-color: #d1d5db;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .login-box input:focus {
   outline: none;
   border-color: #a9b2ff;
   box-shadow: 0 0 0 4px rgba(169, 178, 255, 0.15), 0 4px 12px rgba(169, 178, 255, 0.2);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
-/* Password toggle button */
-.password-toggle {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-  padding: 5px;
-  z-index: 10;
-  opacity: 0.6;
-  transition: opacity 0.3s ease;
+/* Input valide */
+.login-box input:valid:not(:placeholder-shown) {
+  border-color: #10b981;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.02) 0%, rgba(16, 185, 129, 0.01) 100%);
 }
 
-.password-toggle:hover {
-  opacity: 1;
+/* Input invalide */
+.login-box input:invalid:not(:placeholder-shown):not(:focus) {
+  border-color: #ef4444;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.02) 0%, rgba(239, 68, 68, 0.01) 100%);
 }
 
 .buttons {

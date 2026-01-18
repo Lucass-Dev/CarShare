@@ -265,6 +265,7 @@ class ContactView {
                 </div>
             </main>
         <script src="./assets/js/form-persistence.js"></script>
+        <script src="./assets/js/universal-form-protection.js"></script>
         <?php
     }
 }

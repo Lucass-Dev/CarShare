@@ -367,7 +367,7 @@
                 </div>
             </div>
 
-            <form method="POST" action="/CarShare/index.php?action=rating_submit" id="ratingForm">
+            <form method="POST" action="<?= url('index.php?action=rating_submit') ?>" id="ratingForm">
                 <input type="hidden" name="user_id" value="<?= htmlspecialchars($driver['id']) ?>">
                 <?php if (!empty($driver['carpooling_id'])): ?>
                 <input type="hidden" name="carpooling_id" value="<?= htmlspecialchars($driver['carpooling_id']) ?>">

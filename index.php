@@ -1,9 +1,9 @@
 <?php
+// Charger la configuration globale
+require_once __DIR__ . '/config.php';
+
 // Start output buffering to allow header redirects after content output
 ob_start();
-
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
 // Handle disconnect before any output
 if (isset($_GET['action']) && $_GET['action'] === 'disconnect') {
@@ -12,7 +12,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'disconnect') {
     }
     session_unset();
     session_destroy();
-    header('Location: /CarShare/index.php?action=home');
+    header('Location: ' . url('index.php?action=home'));
     exit();
 }
 
@@ -25,22 +25,37 @@ $action = $_GET['action'] ?? 'home';
     <meta charset="UTF-8">
     <title>CarShare</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Configuration JavaScript globale -->
+    <script>
+        // Configuration accessible par tous les scripts JavaScript
+        window.APP_CONFIG = {
+            basePath: '<?= BASE_PATH ?>',
+            baseUrl: '<?= BASE_URL ?>'
+        };
+    </script>
+    
+    <!-- Anti-cache et performance -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 
     <?php if ($action === 'rating'): ?>
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <?php endif; ?>
     
-    <link rel="stylesheet" href="/CarShare/assets/styles/header.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/footer.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/index.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/home.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/searchPage.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/form-enhancements.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/global-enhancements.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/autocomplete.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/design-improvements.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/custom-dialogs.css">
-    <link rel="stylesheet" href="/CarShare/assets/styles/notification-system.css">
+    <?php $cacheBuster = '?v=' . time(); ?>
+    <link rel="stylesheet" href="<?= asset('styles/header.css') . $cacheBuster ?>">
+    <link rel="stylesheet" href="<?= asset('styles/footer.css') . $cacheBuster ?>">
+    <link rel="stylesheet" href="<?= asset('styles/index.css') . $cacheBuster ?>">
+    <link rel="stylesheet" href="<?= asset('styles/home.css') . $cacheBuster ?>">
+    <link rel="stylesheet" href="<?= asset('styles/searchPage.css') . $cacheBuster ?>">
+    <link rel="stylesheet" href="<?= asset('styles/form-enhancements.css') . $cacheBuster ?>">
+    <link rel="stylesheet" href="<?= asset('styles/global-enhancements.css') . $cacheBuster ?>">
+    <link rel="stylesheet" href="<?= asset('styles/autocomplete.css') . $cacheBuster ?>">
+    <link rel="stylesheet" href="<?= asset('styles/design-improvements.css') ?>">
+    <link rel="stylesheet" href="<?= asset('styles/custom-dialogs.css') ?>">
+    <link rel="stylesheet" href="<?= asset('styles/notification-system.css') ?>"
     
     <?php
     // Load page-specific CSS based on action
@@ -76,18 +91,19 @@ $action = $_GET['action'] ?? 'home';
     if (isset($pageCss[$action])) {
         $css = is_array($pageCss[$action]) ? $pageCss[$action] : [$pageCss[$action]];
         foreach ($css as $file) {
-            echo '<link rel="stylesheet" href="/CarShare/assets/styles/' . $file . '">';
+            echo '<link rel="stylesheet" href="' . asset('styles/' . $file) . '">';
         }
     }
     ?>
     
     <!-- Core JavaScript -->
-    <script src="/CarShare/assets/js/fix-copy-paste.js"></script>
-    <script src="/CarShare/assets/js/custom-dialogs.js"></script>
-    <script src="/CarShare/assets/js/form-enhancements.js" defer></script>
-    <script src="/CarShare/assets/js/notification-system.js" defer></script>
-    <script src="/CarShare/assets/js/validation-message-hub.js" defer></script>
-    <script src="/CarShare/assets/js/global-enhancements.js" defer></script>
+    <script src="<?= asset('js/url-helper.js') ?>"></script>
+    <script src="<?= asset('js/fix-copy-paste.js') ?>"></script>
+    <script src="<?= asset('js/custom-dialogs.js') ?>"></script>
+    <script src="<?= asset('js/form-enhancements.js') ?>" defer></script>
+    <script src="<?= asset('js/notification-system.js') ?>" defer></script>
+    <script src="<?= asset('js/validation-message-hub.js') ?>" defer></script>
+    <script src="<?= asset('js/global-enhancements.js') ?>" defer></script>
     
     <?php
     // Load page-specific JavaScript based on action
@@ -108,7 +124,7 @@ $action = $_GET['action'] ?? 'home';
     if (isset($pageJs[$action])) {
         $js = is_array($pageJs[$action]) ? $pageJs[$action] : [$pageJs[$action]];
         foreach ($js as $file) {
-            echo '<script src="/CarShare/assets/js/' . $file . '" defer></script>';
+            echo '<script src="' . asset('js/' . $file) . '" defer></script>';
         }
     }
     ?>
@@ -235,6 +251,11 @@ switch ($action) {
     case "my_trips":
         require_once __DIR__ . "/controller/BookingController.php";
         (new BookingController())->myTrips();
+        break;
+
+    case "cancel_booking":
+        require_once __DIR__ . "/controller/BookingController.php";
+        (new BookingController())->cancelBooking();
         break;
 
     case "faq":

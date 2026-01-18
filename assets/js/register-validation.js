@@ -13,17 +13,41 @@ class RegistrationFormHandler {
 
         this.emailCheckTimeout = null;
         
-        // Reset button state on page load (in case of server error reload)
-        this.resetSubmitButton();
+        // CORRECTION CRITIQUE : Forcer la réactivation de tous les champs au chargement
+        this.forceFormReactivation();
         
         this.init();
+    }
+
+    forceFormReactivation() {
+        // Réactiver absolument TOUS les champs
+        this.form.querySelectorAll('input, button').forEach(element => {
+            element.disabled = false;
+            element.removeAttribute('disabled');
+        });
+        
+        // Réinitialiser le bouton de soumission
+        const submitBtn = this.form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.removeAttribute('disabled');
+            submitBtn.textContent = 'S\'inscrire';
+            submitBtn.style.opacity = '1';
+            submitBtn.style.pointerEvents = 'auto';
+            submitBtn.style.cursor = 'pointer';
+        }
+        
+        console.log('[RegisterForm] Tous les champs et boutons ont été réactivés');
     }
 
     resetSubmitButton() {
         const submitBtn = this.form.querySelector('button[type="submit"]');
         if (submitBtn) {
             submitBtn.disabled = false;
+            submitBtn.removeAttribute('disabled');
             submitBtn.textContent = 'S\'inscrire';
+            submitBtn.style.opacity = '1';
+            submitBtn.style.pointerEvents = 'auto';
         }
     }
 
@@ -168,7 +192,7 @@ class RegistrationFormHandler {
 
     async checkEmailAvailability(email, indicator) {
         try {
-            const response = await fetch('/CarShare/api/check-email.php', {
+            const response = await fetch(apiUrl('check-email.php'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -294,15 +318,9 @@ class RegistrationFormHandler {
 
     // Security validation for all inputs
     addSecurityValidation() {
-        const textInputs = [this.firstNameInput, this.lastNameInput];
-        
-        textInputs.forEach(input => {
-            if (!input) return;
-
-            input.addEventListener('input', (e) => {
-                this.validateInputSecurity(e.target);
-            });
-        });
+        // VALIDATION DÉSACTIVÉE EN TEMPS RÉEL
+        // La validation de sécurité sera faite uniquement lors de la soumission
+        // pour ne pas bloquer l'utilisateur pendant la saisie
     }
 
     validateInputSecurity(input) {
@@ -323,6 +341,7 @@ class RegistrationFormHandler {
             }
         });
 
+        // Ne jamais bloquer les champs, juste marquer visuellement
         if (isDangerous) {
             input.classList.add('input-error');
             this.showFieldError(input, 'Caractères interdits détectés');
@@ -400,6 +419,10 @@ class RegistrationFormHandler {
 
             if (errors.length > 0) {
                 e.preventDefault();
+                
+                // CORRECTION CRITIQUE: Utiliser forceFormReactivation pour garantir l'accès
+                this.forceFormReactivation();
+                
                 this.displayErrors(errors);
                 return false;
             }
@@ -409,10 +432,47 @@ class RegistrationFormHandler {
             if (submitBtn) {
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Inscription en cours...';
+                
+                // Sécurité : restaurer le bouton après 10 secondes en cas de problème réseau
+                setTimeout(() => {
+                    console.log('[RegisterForm] Timeout de sécurité, réactivation');
+                    this.forceFormReactivation();
+                }, 10000);
             }
 
             // Allow form to submit normally to server
         });
+        
+        // CORRECTION CRITIQUE : Réactivation au retour arrière ou rechargement de page
+        window.addEventListener('pageshow', (event) => {
+            console.log('[RegisterForm] pageshow event détecté');
+            this.forceFormReactivation();
+        });
+        
+        // CORRECTION CRITIQUE : Réactivation quand la page devient visible
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                console.log('[RegisterForm] Page visible, réactivation');
+                this.forceFormReactivation();
+            }
+        });
+        
+        // CORRECTION CRITIQUE : Intercepter la touche Entrée
+        this.form.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                // S'assurer que tous les champs sont accessibles avant soumission
+                this.form.querySelectorAll('input, button').forEach(element => {
+                    element.disabled = false;
+                });
+            }
+        });
+        
+        // CORRECTION CRITIQUE : Si une erreur serveur est affichée, réactiver immédiatement
+        const serverError = document.querySelector('.error-message, .form-errors');
+        if (serverError) {
+            console.log('[RegisterForm] Erreur serveur détectée, réactivation forcée');
+            this.forceFormReactivation();
+        }
     }
 
     validateName(name) {

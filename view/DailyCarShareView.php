@@ -226,7 +226,7 @@ class DailyCarShareView {
                 <section class="daily-cta">
                     <h2>Prêt à partager vos trajets ?</h2>
                     <p>Rejoignez la communauté CarShare et commencez à publier vos trajets dès aujourd'hui</p>
-                    <a href="/CarShare/index.php?action=create_trip" class="cta-button">
+                    <a href="<?= url('index.php?action=create_trip') ?>" class="cta-button">
                         <span>Publier un trajet</span>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="5" y1="12" x2="19" y2="12"/>

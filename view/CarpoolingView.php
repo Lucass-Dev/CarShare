@@ -8,7 +8,7 @@
         </div>
       <?php endif; ?>
 
-      <form class="trip-form" method="POST" action="/CarShare/index.php?action=create_trip">
+      <form class="trip-form" method="POST" action="<?= url('index.php?action=create_trip') ?>">
         <div class="trip-form__row">
           <div class="form__group">
             <label class="form__label" for="dep-city">Adresse de départ <span class="form__required">*</span></label>

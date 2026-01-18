@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Offres de covoiturage - CarShare</title>
-    <link rel="stylesheet" href="/CarShare/assets/styles/offers.css">
+    <link rel="stylesheet" href="<?= asset('styles/offers.css') ?>">
 </head>
 <body>
     <div class="offers-page">
@@ -95,7 +95,7 @@
                     <?php if (isset($_SESSION['user_id'])): ?>
                         <a href="?action=create_trip" class="btn-create">Proposer un trajet</a>
                     <?php else: ?>
-                        <a href="?action=login&return_url=<?= urlencode($_SERVER['REQUEST_URI']) ?>" class="btn-create">Se connecter</a>
+                        <a href="?action=login&return_url=<?= urlencode('?action=offers') ?>" class="btn-create">Se connecter</a>
                     <?php endif; ?>
                 </div>
             <?php else: ?>

@@ -34,17 +34,27 @@ class ContactController {
     
     /**
      * Validate input for security threats
+     * Protection renforcée contre null bytes, hex, binaire, backslash
      */
     private function validateSecurity($value, $fieldName = 'champ') {
         if (empty($value)) {
             return true;
         }
         
+        // Détection null bytes
+        if (preg_match('/\\x00|\\0+|%00|\\u0000/i', $value)) {
+            return false;
+        }
+        
+        // Détection encodage suspect
+        if (preg_match('/(\\\\x[0-9a-fA-F]{2}|%[0-9a-fA-F]{2}){4,}/', $value)) {
+            return false;
+        }
+        
         // Patterns de détection d'attaques
         $patterns = [
-            'sql' => '/(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE|UNION|SCRIPT)\b|--|;|\/\*|\*\/|xp_|sp_)/i',
-            'xss' => '/<script|<iframe|<object|<embed|javascript:|onerror|onload|onclick|onmouseover/i',
-            'hex' => '/(\\\\x[0-9a-fA-F]{2}|%[0-9a-fA-F]{2}){3,}/',
+            'sql' => '/(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE|UNION|SCRIPT|DECLARE)\b|--|;\/\*|\*\/|xp_|sp_)/i',
+            'xss' => '/<script|<iframe|<object|<embed|<applet|javascript:|data:text\/html|onerror|onload|onclick|onmouseover/i',
         ];
         
         foreach ($patterns as $type => $pattern) {

@@ -292,13 +292,13 @@
             </div>
             
             <div class="button-group">
-                <a href="/CarShare/index.php?action=messaging" class="btn btn-primary">
+                <a href="<?= url('index.php?action=messaging') ?>" class="btn btn-primary">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
                     </svg>
                     Voir mes messages
                 </a>
-                <a href="/CarShare/index.php?action=history" class="btn btn-secondary">
+                <a href="<?= url('index.php?action=history') ?>" class="btn btn-secondary">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"/>
                         <polyline points="12 6 12 12 16 14"/>
@@ -308,7 +308,7 @@
             </div>
             
             <div style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #e0e0e0;">
-                <a href="/CarShare/index.php?action=home" style="color: #2b4d9a; text-decoration: none; font-weight: 500;">
+                <a href="<?= url('index.php?action=home') ?>" style="color: #2b4d9a; text-decoration: none; font-weight: 500;">
                     ← Retour à l'accueil
                 </a>
             </div>

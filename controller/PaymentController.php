@@ -33,6 +33,10 @@ class PaymentController {
             exit();
         }
 
+        // Calculer le nombre de places déjà réservées pour ce trajet
+        $bookingModel = new BookingModel();
+        $bookedPlacesCount = $bookingModel->getBookedPlacesCount($carpoolingId);
+
         $error = null;
         $success = null;
 
@@ -90,22 +94,39 @@ class PaymentController {
                     $errors[] = "Vous devez accepter les CGV, les CGU et les Mentions légales";
                 }
                 
+                // Seats count validation
+                $seatsCount = isset($_POST['seats_count']) ? (int)$_POST['seats_count'] : 1;
+                if ($seatsCount < 1) {
+                    $errors[] = "Le nombre de places doit être au moins 1";
+                } else if ($seatsCount > $carpooling['available_places']) {
+                    $errors[] = "Le nombre de places demandé n'est plus disponible";
+                }
+                
                 if (!empty($errors)) {
                     $error = implode('<br>', $errors);
                 } else {
                     $bookingModel = new BookingModel();
-                    $bookingId = $bookingModel->createBooking($_SESSION['user_id'], $carpoolingId);
+                    $bookingId = $bookingModel->createMultipleBookings($_SESSION['user_id'], $carpoolingId, $seatsCount);
 
                     if ($bookingId) {
                         // Invalide le token CSRF après succès pour éviter la réutilisation
                         unset($_SESSION['payment_csrf_token']);
 
-                        // Envoyer notification privée au conducteur
-                        $this->sendBookingNotification($_SESSION['user_id'], $carpooling);
+                        // Envoyer notification privée au conducteur (ne pas bloquer si erreur)
+                        try {
+                            $this->sendBookingNotification($_SESSION['user_id'], $carpooling, $seatsCount);
+                        } catch (Exception $e) {
+                            error_log("Erreur notification réservation : " . $e->getMessage());
+                        }
                         
-                        // Envoyer emails de confirmation
-                        $this->sendBookingEmails($_SESSION['user_id'], $carpooling);
+                        // Envoyer emails de confirmation (ne pas bloquer si erreur)
+                        try {
+                            $this->sendBookingEmails($_SESSION['user_id'], $carpooling, $seatsCount);
+                        } catch (Exception $e) {
+                            error_log("Erreur emails confirmation : " . $e->getMessage());
+                        }
 
+                        // Redirection immédiate vers la page de confirmation
                         header('Location: /CarShare/index.php?action=booking_confirmation&booking_id=' . $bookingId);
                         exit();
                     } else {
@@ -241,23 +262,24 @@ class PaymentController {
     /**
      * Envoyer un message automatique au conducteur après réservation
      */
-    private function sendBookingNotification($bookerId, $carpooling) {
+    private function sendBookingNotification($bookerId, $carpooling, $seatsCount = 1) {
         try {
             $messagingModel = new MessagingModel();
             
             // Créer ou récupérer la conversation
             $conversationId = $messagingModel->getOrCreateConversation($bookerId, $carpooling['provider_id']);
             
-            // Formater le message pour le conducteur
-            $message = "🎉 Nouvelle réservation pour votre trajet !\n\n";
-            $message .= "📍 Départ : " . $carpooling['start_location'] . "\n";
-            $message .= "📍 Arrivée : " . $carpooling['end_location'] . "\n";
-            $message .= "📅 Date : " . date('d/m/Y', strtotime($carpooling['start_date'])) . "\n";
-            $message .= "🕐 Heure : " . date('H:i', strtotime($carpooling['start_date'])) . "\n";
-            $message .= "💰 Prix : " . number_format($carpooling['price'], 2) . " €\n\n";
-            $message .= "Un passager vient de réserver une place sur ce trajet.\n";
-            $message .= "Vous pouvez gérer cette réservation depuis votre tableau de bord.\n\n";
-            $message .= "Bon voyage ! 🚗";
+            // Formater le message pour le conducteur (sans emoji)
+            $message = "Nouvelle reservation pour votre trajet\n\n";
+            $message .= "Depart : " . $carpooling['start_location'] . "\n";
+            $message .= "Arrivee : " . $carpooling['end_location'] . "\n";
+            $message .= "Date : " . date('d/m/Y', strtotime($carpooling['start_date'])) . "\n";
+            $message .= "Heure : " . date('H:i', strtotime($carpooling['start_date'])) . "\n";
+            $message .= "Nombre de places reservees : " . $seatsCount . "\n";
+            $message .= "Prix total : " . number_format($carpooling['price'] * $seatsCount, 2) . " EUR\n\n";
+            $message .= "Un passager vient de reserver " . $seatsCount . " place" . ($seatsCount > 1 ? 's' : '') . " sur ce trajet.\n";
+            $message .= "Vous pouvez gerer cette reservation depuis votre tableau de bord.\n\n";
+            $message .= "Bon voyage !";
             
             // Envoyer le message au conducteur
             $messagingModel->sendMessage($conversationId, $bookerId, $carpooling['provider_id'], $message);
@@ -272,7 +294,7 @@ class PaymentController {
     /**
      * Envoyer les emails de confirmation de réservation
      */
-    private function sendBookingEmails($bookerId, $carpooling) {
+    private function sendBookingEmails($bookerId, $carpooling, $seatsCount = 1) {
         try {
             $emailService = new EmailService();
             $db = Database::getDb();
@@ -293,7 +315,7 @@ class PaymentController {
             }
             
             // 1. Email au passager
-            $bookerEmail = $this->buildBookerConfirmationEmail($booker, $provider, $carpooling);
+            $bookerEmail = $this->buildBookerConfirmationEmail($booker, $provider, $carpooling, $seatsCount);
             $mailSent1 = $emailService->sendBookingConfirmationToBooker(
                 $booker['email'],
                 $booker['first_name'] . ' ' . $booker['last_name'],
@@ -303,7 +325,7 @@ class PaymentController {
             );
             
             // 2. Email au conducteur
-            $providerEmail = $this->buildProviderNotificationEmail($booker, $provider, $carpooling);
+            $providerEmail = $this->buildProviderNotificationEmail($booker, $provider, $carpooling, $seatsCount);
             $mailSent2 = $emailService->sendBookingNotificationToProvider(
                 $provider['email'],
                 $provider['first_name'] . ' ' . $provider['last_name'],
@@ -322,8 +344,10 @@ class PaymentController {
     /**
      * Construire l'email de confirmation pour le passager
      */
-    private function buildBookerConfirmationEmail($booker, $provider, $carpooling) {
-        $subject = "Réservation confirmée - CarShare";
+    private function buildBookerConfirmationEmail($booker, $provider, $carpooling, $seatsCount = 1) {
+        $subject = "Reservation confirmee - CarShare";
+        
+        $totalPrice = $carpooling['price'] * $seatsCount;
         
         $body = '
 <!DOCTYPE html>
@@ -344,36 +368,42 @@ class PaymentController {
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎉 Réservation Confirmée !</h1>
+            <h1>Reservation Confirmee</h1>
         </div>
         <div class="content">
             <p>Bonjour <strong>' . htmlspecialchars($booker['first_name'] . ' ' . $booker['last_name']) . '</strong>,</p>
-            <p>Votre réservation a été confirmée avec succès. Voici les détails de votre trajet :</p>
+            <p>Votre reservation a ete confirmee avec succes. Voici les details de votre trajet :</p>
             
             <div class="trip-details">
                 <div class="detail-row">
-                    <span class="label">📍 Départ :</span> ' . htmlspecialchars($carpooling['start_location']) . '
+                    <span class="label">Depart :</span> ' . htmlspecialchars($carpooling['start_location']) . '
                 </div>
                 <div class="detail-row">
-                    <span class="label">📍 Arrivée :</span> ' . htmlspecialchars($carpooling['end_location']) . '
+                    <span class="label">Arrivee :</span> ' . htmlspecialchars($carpooling['end_location']) . '
                 </div>
                 <div class="detail-row">
-                    <span class="label">📅 Date :</span> ' . date('d/m/Y', strtotime($carpooling['start_date'])) . '
+                    <span class="label">Date :</span> ' . date('d/m/Y', strtotime($carpooling['start_date'])) . '
                 </div>
                 <div class="detail-row">
-                    <span class="label">🕐 Heure de départ :</span> ' . date('H:i', strtotime($carpooling['start_date'])) . '
+                    <span class="label">Heure de depart :</span> ' . date('H:i', strtotime($carpooling['start_date'])) . '
                 </div>
                 <div class="detail-row">
-                    <span class="label">🚗 Conducteur :</span> ' . htmlspecialchars($provider['first_name'] . ' ' . $provider['last_name']) . '
+                    <span class="label">Conducteur :</span> ' . htmlspecialchars($provider['first_name'] . ' ' . $provider['last_name']) . '
                 </div>
                 <div class="detail-row">
-                    <span class="label">💰 Prix :</span> ' . number_format($carpooling['price'], 2) . ' €
+                    <span class="label">Nombre de places reservees :</span> ' . $seatsCount . '
+                </div>
+                <div class="detail-row">
+                    <span class="label">Prix par place :</span> ' . number_format($carpooling['price'], 2) . ' EUR
+                </div>
+                <div class="detail-row">
+                    <span class="label">Prix total :</span> <strong>' . number_format($totalPrice, 2) . ' EUR</strong>
                 </div>
             </div>
             
             <p>Vous pouvez contacter votre conducteur via la messagerie CarShare.</p>
             
-            <p>Bon voyage ! 🚗</p>
+            <p>Bon voyage !</p>
         </div>
         <div class="footer">
             <p>&copy; 2026 CarShare - Tous droits réservés</p>
@@ -383,16 +413,18 @@ class PaymentController {
 </html>';
         
         $altBody = "Bonjour " . $booker['first_name'] . " " . $booker['last_name'] . ",\n\n";
-        $altBody .= "Votre réservation a été confirmée avec succès !\n\n";
-        $altBody .= "Détails du trajet :\n";
-        $altBody .= "- Départ : " . $carpooling['start_location'] . "\n";
-        $altBody .= "- Arrivée : " . $carpooling['end_location'] . "\n";
+        $altBody .= "Votre reservation a ete confirmee avec succes !\n\n";
+        $altBody .= "Details du trajet :\n";
+        $altBody .= "- Depart : " . $carpooling['start_location'] . "\n";
+        $altBody .= "- Arrivee : " . $carpooling['end_location'] . "\n";
         $altBody .= "- Date : " . date('d/m/Y', strtotime($carpooling['start_date'])) . "\n";
         $altBody .= "- Heure : " . date('H:i', strtotime($carpooling['start_date'])) . "\n";
         $altBody .= "- Conducteur : " . $provider['first_name'] . " " . $provider['last_name'] . "\n";
-        $altBody .= "- Prix : " . number_format($carpooling['price'], 2) . " €\n\n";
+        $altBody .= "- Nombre de places : " . $seatsCount . "\n";
+        $altBody .= "- Prix par place : " . number_format($carpooling['price'], 2) . " EUR\n";
+        $altBody .= "- Prix total : " . number_format($totalPrice, 2) . " EUR\n\n";
         $altBody .= "Bon voyage !\n\n";
-        $altBody .= "L'équipe CarShare";
+        $altBody .= "L'equipe CarShare";
         
         return ['subject' => $subject, 'body' => $body, 'altBody' => $altBody];
     }
@@ -400,8 +432,10 @@ class PaymentController {
     /**
      * Construire l'email de notification pour le conducteur
      */
-    private function buildProviderNotificationEmail($booker, $provider, $carpooling) {
-        $subject = "Nouvelle réservation sur votre trajet - CarShare";
+    private function buildProviderNotificationEmail($booker, $provider, $carpooling, $seatsCount = 1) {
+        $subject = "Nouvelle reservation sur votre trajet - CarShare";
+        
+        $totalPrice = $carpooling['price'] * $seatsCount;
         
         $body = '
 <!DOCTYPE html>
@@ -455,29 +489,31 @@ class PaymentController {
                 <p>Vous pouvez contacter votre passager pour finaliser les détails du trajet.</p>
             </div>
             
-            <p><strong>Gestion de la réservation :</strong><br>
-Vous pouvez gérer cette réservation (annuler si nécessaire) depuis votre tableau de bord CarShare.</p>
+            <p><strong>Gestion de la reservation :</strong><br>
+Vous pouvez gerer cette reservation (annuler si necessaire) depuis votre tableau de bord CarShare.</p>
             
-            <p>Bonne route ! 🚗</p>
+            <p>Bonne route !</p>
         </div>
         <div class="footer">
-            <p>&copy; 2026 CarShare - Tous droits réservés</p>
+            <p>&copy; 2026 CarShare - Tous droits reserves</p>
         </div>
     </div>
 </body>
 </html>';
         
         $altBody = "Bonjour " . $provider['first_name'] . " " . $provider['last_name'] . ",\n\n";
-        $altBody .= "Bonne nouvelle ! Un passager vient de réserver une place sur votre trajet :\n\n";
-        $altBody .= "Détails du trajet :\n";
-        $altBody .= "- Départ : " . $carpooling['start_location'] . "\n";
-        $altBody .= "- Arrivée : " . $carpooling['end_location'] . "\n";
+        $altBody .= "Bonne nouvelle ! Un passager vient de reserver " . $seatsCount . " place" . ($seatsCount > 1 ? 's' : '') . " sur votre trajet :\n\n";
+        $altBody .= "Details du trajet :\n";
+        $altBody .= "- Depart : " . $carpooling['start_location'] . "\n";
+        $altBody .= "- Arrivee : " . $carpooling['end_location'] . "\n";
         $altBody .= "- Date : " . date('d/m/Y', strtotime($carpooling['start_date'])) . "\n";
         $altBody .= "- Heure : " . date('H:i', strtotime($carpooling['start_date'])) . "\n";
         $altBody .= "- Passager : " . $booker['first_name'] . " " . $booker['last_name'] . "\n";
-        $altBody .= "- Prix : " . number_format($carpooling['price'], 2) . " €\n\n";
+        $altBody .= "- Nombre de places : " . $seatsCount . "\n";
+        $altBody .= "- Prix par place : " . number_format($carpooling['price'], 2) . " EUR\n";
+        $altBody .= "- Prix total : " . number_format($totalPrice, 2) . " EUR\n\n";
         $altBody .= "Un message vous attend dans votre messagerie CarShare.\n";
-        $altBody .= "Vous pouvez gérer cette réservation depuis votre tableau de bord.\n\n";
+        $altBody .= "Vous pouvez gerer cette reservation depuis votre tableau de bord.\n\n";
         $altBody .= "Bonne route !\n\n";
         $altBody .= "L'équipe CarShare";
         

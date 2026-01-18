@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paiement - CarShare</title>
-    <link rel="stylesheet" href="/CarShare/assets/styles/trip_payment.css">
+    <link rel="stylesheet" href="<?= asset('styles/trip_payment.css') ?>">
 </head>
 <body>
     <?php require __DIR__ . "/components/header.php"; ?>
@@ -111,17 +111,40 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Places disponibles -->
+                        <div class="detail-row">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            <div>
+                                <div class="label">Places</div>
+                                <div class="value">
+                                    <?php 
+                                        $totalPlaces = (int)$carpooling['available_places'] + (int)$bookedPlacesCount;
+                                        echo $carpooling['available_places'] . ' disponibles / ' . $totalPlaces . ' totales';
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Prix -->
                     <div class="price-summary">
                         <div class="price-row">
                             <span>Prix par place</span>
-                            <span><?= number_format($carpooling['price'], 2) ?> €</span>
+                            <span id="unit-price"><?= number_format($carpooling['price'], 2) ?> €</span>
+                        </div>
+                        <div class="price-row" id="seats-row" style="display: none;">
+                            <span>Nombre de places</span>
+                            <span id="selected-seats">1</span>
                         </div>
                         <div class="price-total">
                             <span style="font-weight: 700; font-size: 18px;">Total</span>
-                            <span class="total-amount"><?= number_format($carpooling['price'], 2) ?> €</span>
+                            <span class="total-amount" id="total-amount" data-unit-price="<?= $carpooling['price'] ?>"><?= number_format($carpooling['price'], 2) ?> €</span>
                         </div>
                     </div>
                 </div>
@@ -136,8 +159,32 @@
                         <h2>Informations de paiement</h2>
                     </div>
 
-                    <form id="payment-form" method="POST" action="/CarShare/index.php?action=payment&carpooling_id=<?= $carpooling['id'] ?>" novalidate>
+                    <form id="payment-form" method="POST" action="<?= url('index.php?action=payment&carpooling_id=' . $carpooling['id']) ?>" novalidate>
                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
+
+                        <!-- Nombre de places à réserver -->
+                        <div class="form-group">
+                            <label>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                                Nombre de places à réserver
+                            </label>
+                            <select 
+                                id="seats_count" 
+                                name="seats_count" 
+                                required
+                                style="width: 100%; padding: 14px 16px; border: 2px solid #e0e6ed; border-radius: 12px; font-size: 15px; background: white; cursor: pointer;"
+                            >
+                                <?php for ($i = 1; $i <= min(5, $carpooling['available_places']); $i++): ?>
+                                    <option value="<?= $i ?>"><?= $i ?> place<?= $i > 1 ? 's' : '' ?></option>
+                                <?php endfor; ?>
+                            </select>
+                            <div class="error-msg" id="error-seats_count"></div>
+                        </div>
 
                         <!-- Nom sur la carte -->
                         <div class="form-group">
@@ -236,9 +283,9 @@
                                 <input type="checkbox" id="accept_terms" name="accept_terms" required>
                                 <span class="consent-text">
                                     J'accepte les conditions CarShare pour cette réservation (
-                                    <a href="/CarShare/index.php?action=cgv" target="_blank">CGV</a>,
-                                    <a href="/CarShare/index.php?action=cgu" target="_blank">CGU</a>,
-                                    <a href="/CarShare/index.php?action=legal" target="_blank">Mentions légales</a>
+                                    <a href="<?= url('index.php?action=cgv') ?>" target="_blank">CGV</a>,
+                                    <a href="<?= url('index.php?action=cgu') ?>" target="_blank">CGU</a>,
+                                    <a href="<?= url('index.php?action=legal') ?>" target="_blank">Mentions légales</a>
                                     )
                                 </span>
                             </label>
@@ -262,6 +309,6 @@
         </div>
     </main>
 
-    <script src="/CarShare/assets/js/payment-form.js"></script>
+    <script src="<?= asset('js/payment-form.js') ?>"></script>
 </body>
 </html>

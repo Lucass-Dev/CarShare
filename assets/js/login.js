@@ -22,28 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Show password toggle
-    if (passwordInput) {
-        const toggleButton = document.createElement('button');
-        toggleButton.type = 'button';
-        toggleButton.className = 'password-toggle';
-        toggleButton.innerHTML = '👁️';
-        toggleButton.title = 'Afficher/Masquer le mot de passe';
-        
-        passwordInput.parentNode.style.position = 'relative';
-        passwordInput.parentNode.appendChild(toggleButton);
-        
-        toggleButton.addEventListener('click', () => {
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleButton.innerHTML = '🙈';
-            } else {
-                passwordInput.type = 'password';
-                toggleButton.innerHTML = '👁️';
-            }
-        });
-    }
-
     // Show error animation if error exists
     const errorMessage = document.querySelector('.error-message');
     if (errorMessage) {

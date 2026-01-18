@@ -1,5 +1,5 @@
 <!-- Vue pour les trajets créés par l'utilisateur (conducteur) -->
-<link rel="stylesheet" href="/CarShare/assets/styles/my-trips.css">
+<link rel="stylesheet" href="<?= asset('styles/my-trips.css') ?>">
 
 <div class="page-container">
     <div class="page-header">
@@ -20,7 +20,7 @@
         </div>
     <?php endif; ?>
 
-    <?php if (isset($_GET['success']) && $_GET['success'] === 'trip_deleted'): ?>
+                    <?php if (isset($_GET['success']) && $_GET['success'] === 'trip_deleted'): ?>
         <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
             <svg style="width: 24px; height: 24px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9 11 12 14 22 4"/>
@@ -29,6 +29,24 @@
             <div>
                 <strong>Trajet supprimé avec succès !</strong>
                 <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 14px;">Le trajet et toutes les réservations associées ont été supprimés.</p>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <?php if (isset($_GET['success']) && $_GET['success'] === 'booking_canceled'): ?>
+        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+            <svg style="width: 24px; height: 24px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 11 12 14 22 4"/>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+            <div>
+                <strong>Réservation annulée avec succès !</strong>
+                <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 14px;">
+                    <?php 
+                    $seats = isset($_GET['seats']) ? (int)$_GET['seats'] : 1;
+                    echo $seats . ' place' . ($seats > 1 ? 's' : '') . ' ' . ($seats > 1 ? 'ont' : 'a') . ' été remise' . ($seats > 1 ? 's' : '') . ' disponible' . ($seats > 1 ? 's' : '') . '.';
+                    ?>
+                </p>
             </div>
         </div>
     <?php endif; ?>
@@ -49,7 +67,8 @@
                         'unauthorized' => 'Vous n\'êtes pas autorisé à effectuer cette action.',
                         'delete_failed' => 'Impossible de supprimer le trajet. Veuillez réessayer.',
                         'trip_not_found' => 'Trajet introuvable.',
-                        'invalid_request' => 'Requête invalide.'
+                        'invalid_request' => 'Requête invalide.',
+                        'cancel_failed' => 'Impossible d\'annuler la réservation. Veuillez réessayer.'
                     ];
                     echo $errorMessages[$_GET['error']] ?? 'Une erreur est survenue.';
                     ?>
@@ -141,7 +160,7 @@
                 Trajets à venir
                 <?php 
                 $upcomingCount = 0;
-                foreach ($carpoolings as $trip) {
+                foreach ($carpoolingsWithBookings as $trip) {
                     if (strtotime($trip['start_date']) > time()) {
                         $upcomingCount++;
                     }
@@ -165,7 +184,7 @@
 
         <?php 
         $hasUpcoming = false;
-        foreach ($carpoolings as $trip): 
+        foreach ($carpoolingsWithBookings as $trip): 
             if (strtotime($trip['start_date']) > time()): 
                 $hasUpcoming = true;
                 $tripId = $trip['trip_id'] ?? $trip['id'];
@@ -257,6 +276,37 @@
                     </div>
                 </div>
                 
+                <!-- Reservations Section -->
+                <?php if (!empty($trip['bookings'])): ?>
+                <div style="background: #f8fafc; padding: 16px; border-radius: 8px; margin: 16px 20px;">
+                    <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #334155;">
+                        Reservations (<?= count($trip['bookings']) ?> passager<?= count($trip['bookings']) > 1 ? 's' : '' ?>)
+                    </h4>
+                    <?php foreach ($trip['bookings'] as $booking): ?>
+                    <div style="background: white; padding: 12px; border-radius: 6px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0;">
+                        <div>
+                            <div style="font-weight: 500; color: #1e293b;">
+                                <?= htmlspecialchars($booking['first_name'] . ' ' . $booking['last_name']) ?>
+                            </div>
+                            <div style="font-size: 13px; color: #64748b;">
+                                <?= $booking['seats_count'] ?> place<?= $booking['seats_count'] > 1 ? 's' : '' ?> reservee<?= $booking['seats_count'] > 1 ? 's' : '' ?>
+                                <?php if ($booking['global_rating']): ?>
+                                    - Note: <?= round($booking['global_rating'], 1) ?>/5
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <form method="POST" action="index.php?action=cancel_booking" style="display: inline;" onsubmit="return confirm('Voulez-vous vraiment annuler cette reservation ? Les <?= $booking['seats_count'] ?> place<?= $booking['seats_count'] > 1 ? 's' : '' ?> seront remises disponibles.');">
+                            <input type="hidden" name="booker_id" value="<?= $booking['booker_id'] ?>">
+                            <input type="hidden" name="carpooling_id" value="<?= $trip['id'] ?>">
+                            <button type="submit" style="background: #ef4444; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: 500;">
+                                Annuler
+                            </button>
+                        </form>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+                
                 <div class="trip-card__actions">
                     <a href="index.php?action=trip_details&id=<?= $tripId ?>" class="btn btn--secondary btn--small">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -341,7 +391,7 @@
                 Trajets terminés
                 <?php 
                 $pastCount = 0;
-                foreach ($carpoolings as $trip) {
+                foreach ($carpoolingsWithBookings as $trip) {
                     if (strtotime($trip['start_date']) <= time()) {
                         $pastCount++;
                     }
@@ -355,7 +405,7 @@
 
         <?php 
         $hasPast = false;
-        foreach ($carpoolings as $trip): 
+        foreach ($carpoolingsWithBookings as $trip): 
             if (strtotime($trip['start_date']) <= time()): 
                 $hasPast = true;
                 $tripId = $trip['trip_id'] ?? $trip['id'];
@@ -402,6 +452,28 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Reservations Section for Past Trips -->
+                <?php if (!empty($trip['bookings'])): ?>
+                <div style="background: #f8fafc; padding: 16px; border-radius: 8px; margin: 16px 20px;">
+                    <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #334155;">
+                        Passagers (<?= count($trip['bookings']) ?>)
+                    </h4>
+                    <?php foreach ($trip['bookings'] as $booking): ?>
+                    <div style="background: white; padding: 12px; border-radius: 6px; margin-bottom: 8px; border: 1px solid #e2e8f0;">
+                        <div style="font-weight: 500; color: #1e293b;">
+                            <?= htmlspecialchars($booking['first_name'] . ' ' . $booking['last_name']) ?>
+                        </div>
+                        <div style="font-size: 13px; color: #64748b;">
+                            <?= $booking['seats_count'] ?> place<?= $booking['seats_count'] > 1 ? 's' : '' ?>
+                            <?php if ($booking['global_rating']): ?>
+                                - Note: <?= round($booking['global_rating'], 1) ?>/5
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
                 
                 <div class="trip-card__actions">
                     <span class="btn btn--ghost btn--small btn--disabled" disabled>

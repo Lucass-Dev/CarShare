@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/CarShare/assets/styles/history-enhanced.css">
+<link rel="stylesheet" href="<?= asset('styles/history-enhanced.css') ?>">
 
 <div class="page-container">
     <div class="page-header">
@@ -217,10 +217,10 @@
                             <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
                             <line x1="12" y1="9" x2="12" y2="13"/>
                             <line x1="12" y1="17" x2="12.01" y2="17"/>
-                     span class="btn btn--ghost btn--small btn--disabled" disabled>
-                        Détails non accessibles
-                    </spanutton>
-                    <a href="?action=trip_details&id=<?= $booking['trip_id'] ?>" class="btn btn--ghost btn--small">
+                        </svg>
+                        Signaler
+                    </button>
+                    <a href="?action=trip_details&id=<?= $bookingTripId ?>" class="btn btn--ghost btn--small">
                         Détails
                     </a>
                 </div>
@@ -238,4 +238,4 @@
     </section>
 </div>
 
-<script src="/CarShare/assets/js/rating-report-modals.js"></script>
+<script src="<?= asset('js/rating-report-modals.js') ?>"></script>

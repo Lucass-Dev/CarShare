@@ -29,8 +29,7 @@ $userId = $_SESSION['user_id'] ?? null;
             </svg>
             <input type="text" 
                    id="global-search" 
-                   placeholder="Rechercher un utilisateur..." 
-                   autocomplete="off">
+                   placeholder="Rechercher un utilisateur...">
         </div>
         <div class="search-results" id="search-results"></div>
     </div>
@@ -78,7 +77,7 @@ $userId = $_SESSION['user_id'] ?? null;
                 </ul>
             <?php else: ?>
                 <ul class="dropdown-menu">
-                    <li><a href="?action=login&return_url=<?= urlencode($_SERVER['REQUEST_URI']) ?>">Se connecter</a></li>
+                    <li><a href="?action=login&return_url=<?= urlencode('?action=' . ($action ?? 'home')) ?>">Se connecter</a></li>
                     <li><a href="?action=register">S'inscrire</a></li>
                 </ul>
             <?php endif; ?>
@@ -86,7 +85,7 @@ $userId = $_SESSION['user_id'] ?? null;
     </div>
 </header>
 
-<!-- Load global search script -->
-<script src="/CarShare/assets/js/global-search.js"></script>
+<!-- Load global search script with cache busting -->
+<script src="<?= asset('js/global-search.js?v=' . time()) ?>"></script>
 <!-- Load header dropdown script -->
-<script src="/CarShare/assets/js/header-dropdown.js"></script>
+<script src="<?= asset('js/header-dropdown.js?v=' . time()) ?>"></script>

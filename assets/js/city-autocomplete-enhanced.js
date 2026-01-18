@@ -9,7 +9,7 @@ class CityAutocomplete {
         this.options = {
             minChars: 2,
             debounceDelay: 300,
-            apiUrl: '/CarShare/api/cities.php',
+            apiUrl: apiUrl('cities.php'),
             ...options
         };
         

@@ -3,6 +3,35 @@ require_once __DIR__ . "/../model/LoginModel.php";
 
 class LoginController {
 
+    /**
+     * Sanitize and validate input against attacks
+     */
+    private function sanitizeInput($input) {
+        if (!is_string($input)) return '';
+        // Remove control characters and null bytes
+        $input = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $input);
+        return trim($input);
+    }
+    
+    private function validateSecurity($value) {
+        if (empty($value)) return true;
+        
+        // Détection null bytes et encodages suspects
+        if (preg_match('/\\x00|\\0+|%00|\\u0000/i', $value)) return false;
+        
+        // Détection patterns SQL/XSS
+        $patterns = [
+            '/(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|SCRIPT|--|;\/\*)/i',
+            '/<script|<iframe|javascript:|onerror|onload/i'
+        ];
+        
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $value)) return false;
+        }
+        
+        return true;
+    }
+
     public function render() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -10,10 +39,13 @@ class LoginController {
         $error = null;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'] ?? '';
-            $password = $_POST['password'] ?? '';
+            $email = $this->sanitizeInput($_POST['email'] ?? '');
+            $password = $_POST['password'] ?? ''; // Ne pas sanitize le password
 
-            if ($email && $password) {
+            // Validation sécurité
+            if (!$this->validateSecurity($email)) {
+                $error = "Caractères interdits détectés";
+            } elseif ($email && $password) {
                 $model = new LoginModel();
                 $user = $model->authenticate($email, $password);
 
@@ -27,9 +59,23 @@ class LoginController {
                     // Check for return URL
                     $returnUrl = $_POST['return_url'] ?? $_GET['return_url'] ?? null;
                     
+                    // Ne JAMAIS rediriger vers register après connexion
+                    if ($returnUrl && !empty($returnUrl)) {
+                        // Bloquer les redirections vers register/login
+                        if (strpos($returnUrl, 'action=register') !== false || 
+                            strpos($returnUrl, 'action=login') !== false) {
+                            $returnUrl = null; // Ignorer cette redirection
+                        }
+                    }
+                    
                     // Redirect based on priority: return_url > admin > profile
                     if ($returnUrl && !empty($returnUrl)) {
-                        header('Location: ' . $returnUrl);
+                        // Si returnUrl commence par ?, c'est relatif, sinon absolu
+                        if (strpos($returnUrl, '?') === 0) {
+                            header('Location: /CarShare/index.php' . $returnUrl);
+                        } else {
+                            header('Location: ' . $returnUrl);
+                        }
                     } elseif ($user['is_admin']) {
                         header('Location: /CarShare/index.php?action=admin');
                     } else {

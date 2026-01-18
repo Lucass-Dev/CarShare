@@ -93,6 +93,51 @@ class BookingController {
         $model = new BookingModel();
         $carpoolings = $model->getCarpoolingsByProvider($_SESSION['user_id'], $search, $sortBy, $sortOrder);
 
+        // Get bookings for each carpooling
+        $carpoolingsWithBookings = [];
+        foreach ($carpoolings as $carpooling) {
+            $bookings = $model->getBookingsByCarpooling($carpooling['id']);
+            $carpooling['bookings'] = $bookings;
+            $carpoolingsWithBookings[] = $carpooling;
+        }
+
         require __DIR__ . "/../view/MyTripsView.php";
+    }
+
+    /**
+     * Cancel a booking (for trip provider)
+     */
+    public function cancelBooking() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /CarShare/index.php?action=login');
+            exit();
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /CarShare/index.php?action=my_trips&error=invalid_request');
+            exit();
+        }
+
+        $bookerId = isset($_POST['booker_id']) ? (int)$_POST['booker_id'] : 0;
+        $carpoolingId = isset($_POST['carpooling_id']) ? (int)$_POST['carpooling_id'] : 0;
+
+        if (!$bookerId || !$carpoolingId) {
+            header('Location: /CarShare/index.php?action=my_trips&error=invalid_request');
+            exit();
+        }
+
+        $model = new BookingModel();
+        $result = $model->cancelUserBookingsForTrip($bookerId, $carpoolingId, $_SESSION['user_id']);
+
+        if ($result) {
+            header('Location: /CarShare/index.php?action=my_trips&success=booking_canceled&seats=' . $result);
+        } else {
+            header('Location: /CarShare/index.php?action=my_trips&error=cancel_failed');
+        }
+        exit();
     }
 }

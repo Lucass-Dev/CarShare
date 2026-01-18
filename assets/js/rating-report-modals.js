@@ -206,7 +206,7 @@ class RatingReportSystem {
             submitBtn.innerHTML = '<span class="spinner"></span> Envoi...';
 
             try {
-                const response = await fetch('/CarShare/api/rating.php', {
+                const response = await fetch(apiUrl('rating.php'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -250,7 +250,7 @@ class RatingReportSystem {
             submitBtn.innerHTML = '<span class="spinner"></span> Envoi...';
 
             try {
-                const response = await fetch('/CarShare/api/report.php', {
+                const response = await fetch(apiUrl('report.php'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
