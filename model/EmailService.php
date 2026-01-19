@@ -184,6 +184,93 @@ class EmailService {
     }
     
     /**
+     * Send admin account activation confirmation to the user
+     * 
+     * @param string $userEmail User email address
+     * @param string $userName User full name
+     * @return bool Success status
+     */
+    public function sendAdminAccountActivatedEmail($userEmail, $userName) {
+        try {
+            $mail = $this->getMailer();
+            
+            $mail->addAddress($userEmail, $userName);
+            $mail->isHTML(true);
+            $mail->Subject = '✅ Votre compte administrateur CarShare est activé !';
+            
+            $safeUserName = htmlspecialchars($userName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $baseUrl = Config::getProductionUrl();
+            $loginLink = $baseUrl . "index.php?action=admin_login";
+            
+            $mail->Body = '
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #6b21a8 0%, #9333ea 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+        .content { background: #faf5ff; padding: 30px; border-radius: 0 0 8px 8px; }
+        .success-box { background: white; padding: 20px; border-left: 4px solid #10b981; margin: 20px 0; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .button { display: inline-block; background: linear-gradient(135deg, #6b21a8 0%, #9333ea 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: bold; }
+        .info-box { background: #fffbeb; border: 1px solid #fcd34d; padding: 16px; border-radius: 8px; margin: 20px 0; }
+        .footer { text-align: center; color: #64748b; font-size: 12px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎉 Félicitations !</h1>
+        </div>
+        <div class="content">
+            <p>Bonjour <strong>' . $safeUserName . '</strong>,</p>
+            
+            <div class="success-box">
+                <h2 style="color: #10b981; margin-top: 0;">✅ Votre compte administrateur est activé !</h2>
+                <p style="margin-bottom: 0;">Votre demande de compte administrateur a été approuvée. Vous pouvez maintenant accéder à l\'espace administrateur de CarShare.</p>
+            </div>
+            
+            <p><strong>Vous pouvez désormais :</strong></p>
+            <ul style="color: #4b5563; line-height: 1.8;">
+                <li>Gérer les utilisateurs de la plateforme</li>
+                <li>Modérer les trajets et les réservations</li>
+                <li>Accéder aux statistiques et rapports</li>
+                <li>Administrer tous les paramètres du site</li>
+            </ul>
+            
+            <p style="text-align: center;">
+                <a href="' . $loginLink . '" class="button">Se connecter maintenant</a>
+            </p>
+            
+            <div class="info-box">
+                <strong>📌 Vos identifiants :</strong><br>
+                <strong>Email :</strong> ' . htmlspecialchars($userEmail, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '<br>
+                <strong>Mot de passe :</strong> Celui que vous avez défini lors de l\'inscription
+            </div>
+            
+            <p><strong>Besoin d\'aide ?</strong></p>
+            <p>Si vous avez des questions ou besoin d\'assistance, n\'hésitez pas à contacter l\'équipe technique à <a href="mailto:carshare.cov@gmail.com" style="color: #6b21a8;">carshare.cov@gmail.com</a></p>
+            
+            <p>Bienvenue dans l\'équipe administrative de CarShare ! 🚀</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2026 CarShare - Tous droits réservés</p>
+        </div>
+    </div>
+</body>
+</html>';
+            
+            $mail->AltBody = "Bonjour $userName,\n\nFélicitations ! Votre compte administrateur CarShare a été activé.\n\nVous pouvez maintenant vous connecter à l'espace administrateur :\n$loginLink\n\nEmail : $userEmail\nMot de passe : Celui que vous avez défini lors de l'inscription\n\nBienvenue dans l'équipe administrative !\n\nCordialement,\nL'équipe CarShare";
+            
+            return $mail->send();
+        } catch (Exception $e) {
+            error_log('Erreur envoi email activation admin : ' . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
      * Send password reset email with secure link
      * 
      * @param string $email User email
@@ -372,4 +459,76 @@ class EmailService {
             return false;
         }
     }
-}
+
+    /**
+     * Envoyer un email de confirmation de suppression de compte admin
+     */
+    public function sendAdminAccountDeletionConfirmation($email, $name) {
+        try {
+            $mail = $this->getMailer();
+            
+            $mail->addAddress($email, $name);
+            $mail->isHTML(true);
+            $mail->Subject = 'Confirmation de suppression de votre compte administrateur CarShare';
+            
+            $mail->Body = '
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .content { background: #fff5f5; padding: 30px; border-radius: 0 0 10px 10px; }
+        .icon { font-size: 48px; margin-bottom: 10px; }
+        h1 { margin: 0; font-size: 24px; }
+        .message { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #dc3545; }
+        .warning-box { background: #fff3cd; border: 2px solid #ffc107; padding: 15px; border-radius: 8px; margin: 20px 0; }
+        .footer { text-align: center; color: #666; font-size: 12px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="icon">🛡️</div>
+            <h1>Compte Administrateur Supprimé</h1>
+        </div>
+        <div class="content">
+            <p>Bonjour ' . htmlspecialchars($name) . ',</p>
+            
+            <div class="message">
+                <p><strong>Votre compte administrateur CarShare a été définitivement supprimé.</strong></p>
+                <p>Tous vos privilèges d\'administration ont été révoqués et vos données ont été effacées de nos serveurs.</p>
+            </div>
+            
+            <div class="warning-box">
+                <p><strong>⚠️ Important :</strong></p>
+                <ul>
+                    <li>Vos accès au tableau de bord administrateur sont révoqués</li>
+                    <li>Vous ne pouvez plus gérer les utilisateurs et trajets</li>
+                    <li>Cette action est irréversible</li>
+                </ul>
+            </div>
+            
+            <p>Si cette suppression n\'était pas volontaire ou si vous pensez qu\'il s\'agit d\'une erreur, veuillez contacter immédiatement notre équipe technique.</p>
+            
+            <p>Merci pour votre contribution à CarShare.</p>
+            
+            <div class="footer">
+                <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
+                <p>&copy; ' . date('Y') . ' CarShare - Service de covoiturage</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>';
+            
+            $mail->AltBody = "Bonjour $name,\n\nVotre compte administrateur CarShare a été définitivement supprimé.\n\nTous vos privilèges d'administration ont été révoqués et vos données ont été effacées de nos serveurs.\n\nSi cette suppression n'était pas volontaire, contactez immédiatement notre équipe technique.\n\nMerci pour votre contribution à CarShare.\n\nCordialement,\nL'équipe CarShare";
+            
+            return $mail->send();
+        } catch (Exception $e) {
+            error_log('Erreur envoi email suppression compte admin : ' . $e->getMessage());
+            return false;
+        }
+    }

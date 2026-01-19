@@ -227,13 +227,13 @@
                             <td>
                                 <a href="<?= url('index.php?action=admin_user_details&id=' . $user['id']) ?>" class="btn-admin btn-sm">Voir</a>
                                 <a href="<?= url('index.php?action=admin_toggle_verification&id=' . $user['id']) ?>" 
-                                   class="btn-admin btn-sm" 
-                                   onclick="return confirm('Modifier le statut de vérification ?')">
+                                   class="btn-admin btn-sm admin-confirm-link" 
+                                   data-confirm="Modifier le statut de vérification ?">
                                     <?= $user['is_verified_user'] ? 'Retirer' : 'Vérifier' ?>
                                 </a>
                                 <a href="<?= url('index.php?action=admin_delete_user&id=' . $user['id']) ?>" 
-                                   class="btn-admin btn-sm btn-danger" 
-                                   onclick="return confirm('Supprimer cet utilisateur ? (Action irréversible)')">
+                                   class="btn-admin btn-sm btn-danger admin-confirm-link" 
+                                   data-confirm="Supprimer cet utilisateur ? (Action irréversible)">
                                     Supprimer
                                 </a>
                             </td>

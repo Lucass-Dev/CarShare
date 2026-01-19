@@ -124,7 +124,7 @@ $action = $_GET['action'] ?? 'home';
     // Load page-specific JavaScript based on action
     $pageJs = [
         'register' => ['password-validator.js', 'register.js'],
-        'admin_register' => ['password-validator.js'],
+        'admin_register' => ['password-validator.js', 'register.js'],
         'login' => ['login.js'],
         'admin_login' => ['login.js'],
         'create_trip' => ['city-autocomplete-enhanced.js', 'create-trip-enhanced.js'],
@@ -153,15 +153,13 @@ $action = $_GET['action'] ?? 'home';
 
 <?php
 // Routes that don't need header/footer wrapper
-// Admin routes (unified controller)
-if (strpos($action, 'admin_') === 0) {
+// Admin routes (unified controller) - EXCLUDE registration routes
+$excludedAdminRoutes = ['admin_register', 'admin_registration_pending', 'admin_email_validation', 'admin_login'];
+if (strpos($action, 'admin_') === 0 && !in_array($action, $excludedAdminRoutes)) {
     require_once __DIR__ . "/controller/AdminControllerUnified.php";
     $controller = new AdminControllerUnified();
     
     switch ($action) {
-        case 'admin_login':
-            $controller->showLogin();
-            break;
         case 'admin_process_login':
             $controller->processLogin();
             break;
@@ -197,6 +195,9 @@ if (strpos($action, 'admin_') === 0) {
             break;
         case 'admin_password_update':
             $controller->updatePassword();
+            break;
+        case 'admin_delete_account':
+            $controller->deleteAccount();
             break;
         case 'admin_logout':
             $controller->logout();

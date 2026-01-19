@@ -4,21 +4,105 @@
 document.addEventListener('DOMContentLoaded', () => {
     const passwordInput = document.querySelector('input[name="password"]');
     const confirmInput = document.querySelector('input[name="confirm_password"]');
+    const submitBtn = document.getElementById('register-submit-btn');
+    const form = document.getElementById('register-form');
+
+    let validator = null;
 
     if (passwordInput) {
         // Initialize password validator
-        const validator = new PasswordValidator(passwordInput, confirmInput);
+        validator = new PasswordValidator(passwordInput, confirmInput);
 
         // Enhance form submission
-        const form = passwordInput.closest('form');
         if (form) {
             form.addEventListener('submit', (e) => {
                 if (!validator.isValid()) {
                     e.preventDefault();
-                    FormEnhancer.showError('Veuillez corriger les erreurs dans le formulaire');
+                    if (typeof FormEnhancer !== 'undefined') {
+                        FormEnhancer.showError('Veuillez corriger les erreurs dans le formulaire');
+                    }
                 }
             });
         }
+    }
+
+    // ✅ Fonction de validation complète du formulaire
+    function validateAllFields() {
+        if (!form || !submitBtn) return;
+
+        const lastName = form.querySelector('input[name="last_name"]');
+        const firstName = form.querySelector('input[name="first_name"]');
+        const email = form.querySelector('input[name="email"]');
+        const emailConfirm = form.querySelector('input[name="email_confirm"]');
+        const password = form.querySelector('input[name="password"]');
+        const confirmPassword = form.querySelector('input[name="confirm_password"]');
+        const cguCheckbox = form.querySelector('input[name="accept_terms"]');
+
+        // Vérifier que tous les champs obligatoires sont remplis
+        const isLastNameValid = lastName && lastName.value.trim().length >= 2;
+        const isFirstNameValid = firstName && firstName.value.trim().length >= 2;
+        const isEmailValid = email && isValidEmail(email.value.trim()) && email.validity.valid;
+        const isEmailConfirmValid = emailConfirm && email && emailConfirm.value === email.value && emailConfirm.value.trim() !== '';
+        const isPasswordValid = password && password.value.length >= 12;
+        const isPasswordConfirmValid = confirmPassword && password && confirmPassword.value === password.value && confirmPassword.value !== '';
+        
+        // Vérifier la force du mot de passe si validator existe
+        let isPasswordStrongEnough = true;
+        if (validator && password && password.value) {
+            const pwd = password.value;
+            isPasswordStrongEnough = pwd.length >= 12 &&
+                /[A-Z]/.test(pwd) &&
+                /[a-z]/.test(pwd) &&
+                /[0-9]/.test(pwd) &&
+                /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
+        }
+
+        // Pour formulaire normal : vérifier CGU
+        let isCguAccepted = true;
+        if (cguCheckbox) {
+            isCguAccepted = cguCheckbox.checked;
+        }
+
+        // Tous les champs doivent être valides
+        const allValid = isLastNameValid && 
+                        isFirstNameValid && 
+                        isEmailValid && 
+                        isEmailConfirmValid && 
+                        isPasswordValid && 
+                        isPasswordStrongEnough &&
+                        isPasswordConfirmValid &&
+                        isCguAccepted;
+
+        // Activer/désactiver le bouton
+        if (allValid) {
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+            submitBtn.style.cursor = 'pointer';
+        } else {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+        }
+    }
+
+    // Désactiver le bouton au départ
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+        submitBtn.style.cursor = 'not-allowed';
+    }
+
+    // Écouter tous les changements dans le formulaire
+    if (form) {
+        const allInputs = form.querySelectorAll('input, textarea, select');
+        allInputs.forEach(input => {
+            input.addEventListener('input', validateAllFields);
+            input.addEventListener('change', validateAllFields);
+            input.addEventListener('blur', validateAllFields);
+        });
+
+        // Vérifier immédiatement au chargement
+        setTimeout(validateAllFields, 100);
     }
 
     // Add character counter to name fields

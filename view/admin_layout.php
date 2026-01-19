@@ -105,9 +105,23 @@
         
         // Confirm delete actions
         document.querySelectorAll('[data-confirm]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                if (!confirm(btn.dataset.confirm)) {
-                    e.preventDefault();
+            btn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const confirmed = await new Promise(resolve => {
+                    adminAlert.confirm(btn.dataset.confirm, 
+                        () => resolve(true), 
+                        () => resolve(false)
+                    );
+                });
+                if (confirmed) {
+                    // Remove event listener and trigger click
+                    const newBtn = btn.cloneNode(true);
+                    btn.parentNode.replaceChild(newBtn, btn);
+                    if (btn.tagName === 'A') {
+                        window.location.href = newBtn.href;
+                    } else {
+                        newBtn.click();
+                    }
                 }
             });
         });
@@ -116,5 +130,8 @@
     
     <!-- Autosuggestion Admin -->
     <script src="<?= url('assets/js/admin-autosuggest.js?v=' . time()) ?>"></script>
+    
+    <!-- Alertes personnalisées Admin -->
+    <script src="<?= url('assets/js/admin-alerts.js?v=' . time()) ?>"></script>
 </body>
 </html>
