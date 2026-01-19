@@ -117,6 +117,9 @@ class TripModel {
 
         $stmt->execute($params);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($results as $key => $value) {
+            $results[$key]["remaining_places"] = TripModel::getRemainingPlaces($value["id"]);
+        }
         return $results;
 
     }
@@ -271,6 +274,16 @@ class TripModel {
             return true;
         } catch (\Throwable $th) {
             echo $th->getMessage();
+        }
+    }
+
+    static function getRemainingPlaces($carpooling_id){
+        $query = "SELECT carpoolings.available_places-count(carpooling_id) as 'remaining_places' FROM `bookings` INNER JOIN carpoolings ON carpooling_id=carpoolings.id GROUP by carpooling_id HAVING carpooling_id=:id";
+        $stmt = Database::getDb()->prepare($query);
+        $result = $stmt->execute([":id" => $carpooling_id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result) {
+            return $result["remaining_places"];
         }
     }
 }

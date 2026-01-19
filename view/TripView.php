@@ -329,7 +329,7 @@ class TripView{
 
                                 <div class="trip-details">
                                     <p>Date: <?php echo htmlspecialchars($carpooling['start_date']); ?></p>
-                                    <p>Places: <?php echo htmlspecialchars($carpooling['available_places']); ?></p>
+                                    <p>Places: <?php echo htmlspecialchars($carpooling['remaining_places']); ?></p>
                                 
                                     <P>Prix : <span><?php echo $carpooling["price"];?> €</span></P>
                                     <a href="?controller=trip&action=details&trip_id=<?php echo $carpooling['id'];?>">Voir plus ></a>

@@ -184,6 +184,7 @@ class TripController {
                             $uid = $_SESSION["user_id"];
                         }
                         $carpoolings = TripModel::getCarpooling($start_id, $end_id, $requested_date, $requested_hour, $requested_seats, $filters, $uid);
+                        
                         TripView::display_search_results($carpoolings);
                     }
                 ?>
