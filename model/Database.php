@@ -15,8 +15,13 @@ class Database {
     }
 
     public function getConnection() {
+        include_once __DIR__ . '/../config.php';
         if (self::$db === null) {
             try {
+                
+                if (!defined('DB_HOST')) {
+                    die('ERREUR : config.php n\'est pas chargé !');
+                }
                 // Utiliser les constantes définies dans config.php
                 $dsn = "mysql:host=" . DB_HOST . 
                        ";port=" . (defined('DB_PORT') ? DB_PORT : '3306') . 

@@ -1,6 +1,6 @@
 <?php
 // Charger la configuration globale
-require_once __DIR__ . '/config.php';
+include_once __DIR__ . '/config.php';
 
 // Start output buffering to allow header redirects after content output
 ob_start();

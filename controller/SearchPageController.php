@@ -114,5 +114,5 @@
         }
     }   
 ?>
-<script src="/CarShare/script/searchPage.js"></script>
-<script src="/CarShare/assets/js/city-autocomplete-enhanced.js"></script>
+<script src="/script/searchPage.js"></script>
+<script src="/assets/js/city-autocomplete-enhanced.js"></script>

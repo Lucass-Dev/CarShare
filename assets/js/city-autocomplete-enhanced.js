@@ -75,7 +75,9 @@ class CityAutocomplete {
     
     async searchCities(query) {
         try {
-            const response = await fetch(`${this.options.apiUrl}?q=${encodeURIComponent(query)}`);
+            console.log(this.options.apiUrl);
+            
+            const response = await fetch(`.${this.options.apiUrl}?q=${encodeURIComponent(query)}`);
             
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
@@ -83,6 +85,7 @@ class CityAutocomplete {
             }
             
             const data = await response.json();
+            
             
             // Check if error in response
             if (data.error) {
