@@ -18,7 +18,22 @@ class CityAutocomplete {
         this.currentFocus = -1;
         this.cities = [];
         
+        // Determine which hidden input to populate based on input name/id
+        this.hiddenInput = this.getHiddenInput();
+        
         this.init();
+    }
+    
+    getHiddenInput() {
+        const inputName = this.input.name || this.input.id;
+        
+        if (inputName.includes('start') || inputName.includes('dep')) {
+            return document.getElementById('form_start_input');
+        } else if (inputName.includes('end') || inputName.includes('arr')) {
+            return document.getElementById('form_end_input');
+        }
+        
+        return null;
     }
     
     init() {
@@ -141,6 +156,11 @@ class CityAutocomplete {
         this.input.dataset.cityName = city.name;
         this.input.dataset.postalCode = city.postal_code;
         this.input.dataset.selectedFromList = 'true';
+        
+        // Populate hidden input with city ID
+        if (this.hiddenInput) {
+            this.hiddenInput.value = city.id;
+        }
         
         // Remove any error styling
         this.input.classList.remove('field--invalid');
