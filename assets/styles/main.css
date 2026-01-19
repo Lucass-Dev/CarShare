@@ -1,0 +1,66 @@
+/* ====================================
+   MAIN.CSS - CARSHARE FUSION
+   Fichier maître qui charge tous les CSS d'Eliarisoa
+   ==================================== */
+
+/* === BASE & GLOBAL === */
+@import url('design-improvements.css');
+@import url('global-enhancements.css');
+@import url('header.css');
+@import url('footer.css');
+@import url('home.css');
+@import url('index.css');
+
+/* === AUTHENTIFICATION === */
+@import url('conn.css');
+@import url('inscr.css');
+@import url('password-validator.css');
+@import url('password-toggle-checkbox.css');
+@import url('register-validation.css');
+
+/* === TRAJETS === */
+@import url('trip-details-enhanced.css');
+@import url('trip-form-modern.css');
+@import url('create-trip-enhanced.css');
+@import url('searchPage.css');
+@import url('search-enhancements.css');
+
+/* === PROFIL === */
+@import url('page_profil.css');
+@import url('user-profile.css');
+@import url('history-enhanced.css');
+@import url('my-trips.css');
+
+/* === MESSAGERIE === */
+@import url('mp.css');
+
+/* === ADMINISTRATION === */
+@import url('AdminView.css');
+
+/* === RÉSERVATION & PAIEMENT === */
+@import url('confirmation_reservation.css');
+@import url('trip_payment.css');
+
+/* === NOTATION & SIGNALEMENT === */
+@import url('rating.css');
+@import url('report-user.css');
+
+/* === FONCTIONNALITÉS UNIQUES ELIARISOA === */
+@import url('offers-enhanced.css');
+@import url('daily-carshare.css');
+@import url('user-search-enhanced.css');
+
+/* === COMPOSANTS === */
+@import url('autocomplete.css');
+@import url('city-autocomplete.css');
+@import url('modal-system.css');
+@import url('notification-system.css');
+@import url('custom-dialogs.css');
+@import url('form-enhancements.css');
+
+/* === PAGES STATIQUES === */
+@import url('FAQ.css');
+@import url('contact-modern.css');
+@import url('contact.css');
+@import url('about.css');
+@import url('legal.css');

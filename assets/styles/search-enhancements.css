@@ -1,0 +1,214 @@
+/**
+ * Search Page Modern Styles - 2025 UI
+ */
+
+/* Search Input Wrapper */
+.search-input-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.search-input-wrapper.focused {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+}
+
+.search-loader {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.search-loader.searching {
+    animation: searchPulse 1s infinite;
+}
+
+.search-loader.found {
+    opacity: 1;
+    color: #28a745;
+    animation: searchSuccess 0.5s ease;
+}
+
+@keyframes searchPulse {
+    0%, 100% { opacity: 0.3; transform: translateY(-50%) scale(1); }
+    50% { opacity: 0.8; transform: translateY(-50%) scale(1.2); }
+}
+
+@keyframes searchSuccess {
+    0% { transform: translateY(-50%) scale(1); }
+    50% { transform: translateY(-50%) scale(1.3); }
+    100% { transform: translateY(-50%) scale(1); }
+}
+
+/* Button Ripple Effect */
+.btn-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(0);
+    animation: rippleEffect 0.6s ease-out;
+    pointer-events: none;
+}
+
+@keyframes rippleEffect {
+    to {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+/* Filter Collapse Animation */
+[data-toggle="collapse"] {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+[data-toggle="collapse"]:hover {
+    color: #007bff;
+}
+
+[data-toggle="collapse"]::after {
+    content: '▼';
+    margin-left: 8px;
+    font-size: 12px;
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+[data-toggle="collapse"].active::after {
+    transform: rotate(180deg);
+}
+
+.collapse {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.collapse.show {
+    max-height: 1000px;
+}
+
+/* Loading Overlay */
+.search-loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.search-loading-overlay.show {
+    opacity: 1;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid #e9ecef;
+    border-top-color: #007bff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 20px;
+}
+
+.loading-content p {
+    font-size: 18px;
+    color: #495057;
+    font-weight: 500;
+}
+
+/* Results Animation */
+.animate-ready {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.animate-in {
+    animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced Date Input */
+input[type="date"].has-value {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-color: #007bff;
+}
+
+/* Trip Card Hover Effects */
+.trip-card,
+.result-item {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.trip-card:hover,
+.result-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Filter Button States */
+.filter-btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+}
+
+.filter-btn:active {
+    transform: translateY(0);
+}
+
+.filter-btn.active {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+}
+
+/* Smooth Transitions */
+* {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .search-input-wrapper.focused {
+        transform: scale(1);
+    }
+    
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .loading-content p {
+        font-size: 16px;
+    }
+}

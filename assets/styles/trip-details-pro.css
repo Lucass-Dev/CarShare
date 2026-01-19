@@ -1,0 +1,502 @@
+/* Variables de design cohérentes avec le thème */
+:root {
+  --primary: #6f9fe6;
+  --primary-dark: #5a8dd4;
+  --primary-light: #eef4ff;
+  --text-main: #1f2a37;
+  --text-secondary: #6b7280;
+  --text-light: #9ca3af;
+  --white: #ffffff;
+  --bg-page: #f9fafb;
+  --border: #e5e7eb;
+  --border-hover: #d1d5db;
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.1);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.1);
+  --radius: 12px;
+  --transition: all 0.2s ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.trip-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+  background: var(--bg-page);
+  min-height: 100vh;
+}
+
+/* En-tête simplifié */
+.trip-header {
+  background: white;
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 16px;
+  transition: var(--transition);
+}
+
+.back-btn:hover {
+  color: var(--primary);
+}
+
+.trip-header-route {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.trip-header-route .city {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.trip-header-route .arrow {
+  color: var(--primary);
+}
+
+.trip-header-date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+.trip-header-date svg {
+  color: var(--primary);
+}
+
+/* Grid 2 colonnes */
+.trip-grid {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Colonne gauche */
+.trip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Colonne droite sticky */
+.trip-sidebar {
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Cartes génériques */
+.card {
+  background: white;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(to bottom, white, var(--bg-page));
+}
+
+.card-header svg {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* Itinéraire */
+.locations {
+  padding: 24px;
+}
+
+.location {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.location-marker {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.location-marker.start {
+  background: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+.location-marker.end {
+  background: var(--success);
+  box-shadow: 0 0 0 4px var(--success-light);
+}
+
+.location-text {
+  flex: 1;
+}
+
+.location-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.location-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.location-line {
+  width: 2px;
+  height: 32px;
+  background: linear-gradient(to bottom, var(--primary-light), var(--success-light));
+  margin-left: 5px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+/* Détails */
+.details-list {
+  padding: 20px 24px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.detail-row:not(:last-child) {
+  border-bottom: 1px solid var(--border);
+}
+
+.detail-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.detail-value {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.badge-places {
+  background: var(--success-light);
+  color: var(--success);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Options */
+.options {
+  padding: 20px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.option-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid rgba(111, 159, 230, 0.2);
+}
+
+.option-badge svg {
+  flex-shrink: 0;
+}
+
+/* Prix */
+.price-card {
+  border: 2px solid var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+.price-content {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.price-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.price-amount {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.btn-book {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 2px 8px rgba(111, 159, 230, 0.3);
+  white-space: nowrap;
+}
+
+.btn-book:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(111, 159, 230, 0.4);
+}
+
+.btn-book.disabled {
+  background: var(--text-light);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-book.disabled:hover {
+  transform: none;
+}
+
+/* Carte Google Maps */
+.map-card {
+  padding: 0;
+}
+
+.map-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+}
+
+.map-header h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.map-link:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.map-container {
+  height: 300px;
+  position: relative;
+  background: var(--bg-page);
+}
+
+.map-container iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Conducteur */
+.driver-card {
+  padding: 0;
+}
+
+.driver-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.driver-header h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.driver-content {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.driver-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border);
+}
+
+.driver-info {
+  flex: 1;
+}
+
+.driver-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.driver-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.driver-rating svg {
+  color: #fbbf24;
+}
+
+.driver-stats {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  padding: 16px 20px;
+  background: var(--bg-page);
+  border-top: 1px solid var(--border);
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 2px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.stat-divider {
+  width: 1px;
+  background: var(--border);
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .trip-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trip-sidebar {
+    position: static;
+  }
+
+  .map-container {
+    height: 250px;
+  }
+
+  .price-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-book {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .trip-page {
+    padding: 16px 12px 40px;
+  }
+
+  .trip-header {
+    padding: 16px;
+  }
+
+  .trip-header-route .city {
+    font-size: 20px;
+  }
+
+  .card-header,
+  .details-list,
+  .locations,
+  .options {
+    padding: 16px;
+  }
+
+  .price-amount {
+    font-size: 28px;
+  }
+}

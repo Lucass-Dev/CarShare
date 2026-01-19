@@ -1,0 +1,136 @@
+/* 
+ * User Search Enhanced Styles
+ * Styles supplémentaires pour la recherche d'utilisateurs
+ */
+
+/* Ajustements pour les cartes utilisateur */
+.offers-list .offer-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.offers-list .offer-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(43, 77, 154, 0.15);
+}
+
+/* Avatar initials styling */
+.driver-avatar .avatar-initials {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+
+/* Search prompt styling */
+.search-prompt-icon {
+    font-size: 4em;
+    margin-bottom: 20px;
+}
+
+.no-offers h2 {
+    color: #2b4d9a;
+    margin-bottom: 10px;
+}
+
+.no-offers p {
+    color: #666;
+}
+
+.no-results-icon {
+    font-size: 4em;
+    margin-bottom: 15px;
+}
+
+/* User type badges */
+.route-label {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: #2b4d9a;
+    font-size: 0.9em;
+}
+
+.route-city {
+    color: #666;
+    font-size: 0.9em;
+}
+
+/* Stats styling */
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.detail-icon {
+    font-size: 18px;
+}
+
+.detail-text {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* Price section as view profile button */
+.offer-price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    color: white;
+    min-width: 120px;
+}
+
+.offer-price .price-amount {
+    font-size: 0.95em;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.offer-price .price-label {
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .offers-page {
+        padding: 20px 15px;
+    }
+    
+    .offers-header h1 {
+        font-size: 24px;
+    }
+    
+    .filter-group {
+        min-width: 100%;
+    }
+    
+    .filters-form {
+        grid-template-columns: 1fr;
+    }
+    
+    .offer-card {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 15px;
+    }
+    
+    .offer-price {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}

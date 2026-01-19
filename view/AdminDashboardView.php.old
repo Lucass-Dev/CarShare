@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - CarShare</title>
+    <link rel="icon" href="<?= asset('img/carshare.png') ?>" type="image/png">
+    <link rel="stylesheet" href="<?= asset('styles/admin-dashboard.css') ?>">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="admin-body">
+    <!-- HEADER -->
+    <header class="admin-header">
+        <div class="admin-header-content">
+            <a href="<?= url('index.php?action=admin_dashboard') ?>" class="admin-logo">
+                <img src="<?= asset('img/carshare.png') ?>" alt="CarShare">
+                <span>CarShare Admin</span>
+            </a>
+            
+            <div class="admin-user-menu">
+                <div class="admin-user-info">
+                    <div class="admin-user-name"><?= htmlspecialchars($_SESSION['user_name'] ?? 'Admin') ?></div>
+                    <div class="admin-user-role">👑 Administrateur</div>
+                </div>
+                <a href="<?= url('index.php?action=admin_profile') ?>" class="admin-btn admin-btn-logout">⚙️ Profil</a>
+                <a href="<?= url('index.php?action=admin_logout') ?>" class="admin-btn admin-btn-logout">🚪 Déconnexion</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="admin-container">
+        <?php
+        // Messages de succès/erreur
+        if (isset($_SESSION['admin_success'])): ?>
+            <div class="admin-message admin-message-success">
+                ✅ <?= htmlspecialchars($_SESSION['admin_success']) ?>
+            </div>
+            <?php unset($_SESSION['admin_success']); endif;
+        
+        if (isset($_SESSION['admin_error'])): ?>
+            <div class="admin-message admin-message-error">
+                ❌ <?= htmlspecialchars($_SESSION['admin_error']) ?>
+            </div>
+            <?php unset($_SESSION['admin_error']); endif;
+        ?>
+
+        <?php
+        // Charger la vue appropriée
+        if (isset($contentView) && file_exists($contentView)) {
+            require $contentView;
+        } else {
+            echo "<p>Vue non trouvée</p>";
+        }
+        ?>
+    </div>
+</body>
+</html>
