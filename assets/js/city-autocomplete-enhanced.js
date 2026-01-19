@@ -1,15 +1,8 @@
 /**
  * City Autocomplete - Real-time search with debouncing
  * Searches cities from database as user types
+ * Uses global apiUrl() from url-helper.js
  */
-
-// Helper function to get API URL
-function apiUrl(endpoint) {
-    const basePath = window.location.pathname.includes('CarShare') 
-        ? window.location.pathname.substring(0, window.location.pathname.indexOf('CarShare') + 8)
-        : '/CarShare';
-    return basePath + '/assets/api/' + endpoint;
-}
 
 class CityAutocomplete {
     constructor(inputElement, options = {}) {

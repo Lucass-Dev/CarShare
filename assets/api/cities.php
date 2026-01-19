@@ -32,11 +32,11 @@ try {
     $stmt = $db->prepare("
         SELECT id, name, postal_code 
         FROM location 
-        WHERE name LIKE :query1 OR postal_code LIKE :query2
+        WHERE name LIKE ? OR postal_code LIKE ?
         ORDER BY 
             CASE 
-                WHEN name LIKE :exactMatch THEN 1
-                WHEN name LIKE :query1 THEN 2
+                WHEN name LIKE ? THEN 1
+                WHEN name LIKE ? THEN 2
                 ELSE 3
             END,
             name ASC
@@ -47,9 +47,10 @@ try {
     $exactMatch = $query;
     
     $stmt->execute([
-        'query1' => $searchQuery,
-        'query2' => $searchQuery,
-        'exactMatch' => $exactMatch
+        $searchQuery,      // name LIKE
+        $searchQuery,      // postal_code LIKE
+        $exactMatch,       // exact match
+        $searchQuery       // fuzzy match
     ]);
     
     $cities = $stmt->fetchAll(PDO::FETCH_ASSOC);

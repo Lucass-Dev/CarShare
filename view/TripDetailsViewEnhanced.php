@@ -154,7 +154,7 @@ $formattedDate = $frenchDays[$dayNum] . ' ' . date('j', strtotime($carpooling['s
                 <div class="price-content">
                     <div class="price-info">
                         <div class="price-label">Prix par passager</div>
-                        <div class="price-amount"><?= number_format($carpooling['price'], 2) ?> €</div>
+                        <div class="price-amount"><?= number_format((float)($carpooling['price'] ?? 0), 2) ?> €</div>
                     </div>
                     <?php if (isset($_SESSION['user_id']) && $carpooling['provider_id'] == $_SESSION['user_id']): ?>
                         <button class="btn-book disabled" disabled>

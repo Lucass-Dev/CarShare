@@ -78,8 +78,9 @@ class AdminAutoSuggest {
     }
     
     async fetchSuggestions(query) {
+        const basePath = window.APP_CONFIG?.basePath || '';
         const response = await fetch(
-            `assets/api/admin_search_suggestions.php?type=${this.type}&q=${encodeURIComponent(query)}`
+            `${basePath}assets/api/admin_search_suggestions.php?type=${this.type}&q=${encodeURIComponent(query)}`
         );
         
         if (!response.ok) {

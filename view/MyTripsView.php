@@ -109,7 +109,8 @@
         <form method="GET" action="" class="filters-form">
             <input type="hidden" name="action" value="my_trips">
             
-            <div class="filter-group">
+            <div class="filter-group search-group">
+                <label class="filter-label">Rechercher</label>
                 <div class="search-input-wrapper">
                     <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8"/>
@@ -133,7 +134,7 @@
                 </div>
             </div>
             
-            <div class="filter-group">
+            <div class="filter-group sort-group">
                 <label class="filter-label">Trier par</label>
                 <select name="sort" class="filter-select" onchange="this.form.submit()">
                     <option value="date" <?= ($sortBy ?? 'date') === 'date' ? 'selected' : '' ?>>Date</option>
@@ -141,7 +142,7 @@
                 </select>
             </div>
             
-            <div class="filter-group">
+            <div class="filter-group order-group">
                 <label class="filter-label">Ordre</label>
                 <select name="order" class="filter-select" onchange="this.form.submit()">
                     <option value="desc" <?= ($sortOrder ?? 'desc') === 'desc' ? 'selected' : '' ?>>
@@ -153,7 +154,7 @@
                 </select>
             </div>
             
-            <button type="submit" class="btn btn--secondary btn--small" style="display: none;">
+            <button type="submit" class="btn btn--secondary btn--filter-submit">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
                 </svg>
