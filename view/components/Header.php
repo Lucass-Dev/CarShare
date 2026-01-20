@@ -126,6 +126,22 @@ if ($isLoggedIn && $userId && !$isAdmin) {
     </div>
 </header>
 
+<script>
+// Fonction utilitaire pour générer les URLs API
+function apiUrl(endpoint) {
+    const basePath = '<?= BASE_PATH ?>';
+    const cleanEndpoint = endpoint.replace(/^\//, '');
+    return basePath + 'assets/api/' + cleanEndpoint;
+}
+
+// Fonction utilitaire pour générer les URLs
+function url(path) {
+    const basePath = '<?= BASE_PATH ?>';
+    const cleanPath = path.replace(/^\//, '');
+    return basePath + cleanPath;
+}
+</script>
+
 <!-- Load global search script with cache busting -->
 <script src="<?= asset('js/global-search.js?v=' . time()) ?>"></script>
 <!-- Load header dropdown script -->

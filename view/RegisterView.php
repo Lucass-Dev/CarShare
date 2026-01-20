@@ -118,148 +118,156 @@
 </div>
 
 <script>
-// 🔒 INSCRIPTION ANTI-FREEZE + VALIDATION - Version Corrigée
+// ✅ INSCRIPTION - Version FINALE avec validation en temps réel
 (function() {
   'use strict';
   
-  const form = document.getElementById('register-form');
-  const submitBtn = document.getElementById('register-submit-btn');
-  const cguCheckbox = document.querySelector('input[name="accept_terms"]');
+  console.log('[CarShare] Chargement script inscription');
   
-  // FONCTION D'URGENCE : Réactivation totale
-  function unlockForm() {
-    if (!form) return;
-    
-    form.querySelectorAll('input, button, select, textarea').forEach(el => {
-      el.disabled = false;
-      el.removeAttribute('disabled');
-      el.style.opacity = '1';
-      el.style.pointerEvents = 'auto';
-    });
-    
-    if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'S\'inscrire';
-      submitBtn.style.cursor = 'pointer';
-    }
-    
-    console.log('[CarShare] Formulaire débloqué');
-  }
-  
-  // Fonction d'affichage d'erreur
-  function showError(message) {
-    // Supprimer les anciennes erreurs JS
-    const oldError = form.querySelector('.js-error-message');
-    if (oldError) oldError.remove();
-    
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'error-message js-error-message';
-    errorDiv.style.cssText = 'background: #fee2e2; color: #dc2626; padding: 14px 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(239, 68, 68, 0.2); font-weight: 600; animation: shake 0.5s;';
-    errorDiv.innerHTML = '<strong>⚠️ Erreur :</strong> ' + message;
-    
-    form.insertBefore(errorDiv, form.firstChild);
-    errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-  
-  // Déblocage immédiat au chargement
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', unlockForm);
-  } else {
-    unlockForm();
-  }
-  
-  // Déblocage sur événements critiques
-  window.addEventListener('pageshow', unlockForm);
-  document.addEventListener('visibilitychange', function() {
-    if (!document.hidden) unlockForm();
-  });
-  
-  // VALIDATION AVANT SOUMISSION
-  if (form) {
-    form.addEventListener('submit', function(e) {
-      // Supprimer les anciennes erreurs JS
-      const oldError = form.querySelector('.js-error-message');
-      if (oldError) oldError.remove();
+  // Fonction pour débloquer le formulaire SAUF le bouton submit (géré par register.js)
+  function garantirFormulaireUtilisable() {
+    try {
+      const form = document.getElementById('register-form');
+      if (!form) return;
       
-      // VALIDATION CGU OBLIGATOIRE
-      if (cguCheckbox && !cguCheckbox.checked) {
-        e.preventDefault();
-        showError('Vous devez accepter les CGU, CGV et Mentions légales pour continuer');
-        cguCheckbox.focus();
-        return false;
+      // Activer TOUS les éléments SAUF le bouton submit
+      form.querySelectorAll('input, textarea, select, a').forEach(function(element) {
+        // Ne pas toucher aux champs disabled intentionnellement
+        if (element.hasAttribute('readonly')) return;
+        
+        // Retirer attributs bloquants
+        element.removeAttribute('readonly');
+        
+        // S'assurer que le style permet l'interaction
+        element.style.pointerEvents = '';
+        if (element.tagName !== 'BUTTON') {
+          element.style.opacity = '';
+          element.style.cursor = '';
+        }
+      });
+      
+      // Réinitialiser le bouton submit SEULEMENT s'il est en mode "Inscription..."
+      const submitBtn = document.getElementById('register-submit-btn');
+      if (submitBtn && submitBtn.textContent === 'Inscription...') {
+        submitBtn.textContent = 'S\'inscrire';
+        // Le disabled sera géré par register.js selon la validation
       }
       
-      // VALIDATION BASIQUE DES CHAMPS
+    } catch (error) {
+      // Ignorer les erreurs silencieusement
+    }
+  }
+  
+  // Appeler la fonction de déblocage toutes les 500ms (garantie absolue)
+  setInterval(garantirFormulaireUtilisable, 500);
+  
+  // Appeler immédiatement
+  garantirFormulaireUtilisable();
+  
+  // Fonction d'initialisation principale
+  function init() {
+    const form = document.getElementById('register-form');
+    if (!form) return;
+    
+    console.log('[CarShare] Formulaire trouvé, initialisation...');
+    
+    // Débloquer immédiatement
+    garantirFormulaireUtilisable();
+    
+    // === VALIDATION SIMPLE (sans blocage) ===
+    form.addEventListener('submit', function(e) {
+      console.log('[CarShare] Soumission du formulaire');
+      
+      // Supprimer anciennes erreurs
+      const oldErrors = document.querySelectorAll('.js-error-message');
+      oldErrors.forEach(function(err) { err.remove(); });
+      
+      // Récupérer les champs
       const lastName = form.querySelector('input[name="last_name"]');
       const firstName = form.querySelector('input[name="first_name"]');
       const email = form.querySelector('input[name="email"]');
       const emailConfirm = form.querySelector('input[name="email_confirm"]');
       const password = form.querySelector('input[name="password"]');
       const confirmPassword = form.querySelector('input[name="confirm_password"]');
+      const cguCheckbox = form.querySelector('input[name="accept_terms"]');
+      
+      // Fonction helper pour afficher une erreur
+      function afficherErreur(message, champAFocuser) {
+        e.preventDefault();
+        
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message js-error-message';
+        errorDiv.innerHTML = '<strong>⚠️</strong> ' + message;
+        form.insertBefore(errorDiv, form.firstChild);
+        
+        if (champAFocuser) {
+          setTimeout(function() { champAFocuser.focus(); }, 100);
+        }
+        
+        // CRITIQUE: Garantir que le formulaire reste utilisable après l'erreur
+        setTimeout(garantirFormulaireUtilisable, 100);
+        setTimeout(garantirFormulaireUtilisable, 300);
+        setTimeout(garantirFormulaireUtilisable, 500);
+        
+        return false;
+      }
+      
+      // Validations
+      if (!cguCheckbox || !cguCheckbox.checked) {
+        return afficherErreur('Vous devez accepter les CGU, CGV et Mentions légales', cguCheckbox);
+      }
       
       if (!lastName || !lastName.value.trim()) {
-        e.preventDefault();
-        showError('Le nom est obligatoire');
-        lastName.focus();
-        return false;
+        return afficherErreur('Le nom est obligatoire', lastName);
       }
       
       if (!firstName || !firstName.value.trim()) {
-        e.preventDefault();
-        showError('Le prénom est obligatoire');
-        firstName.focus();
-        return false;
+        return afficherErreur('Le prénom est obligatoire', firstName);
       }
       
       if (!email || !email.value.trim()) {
-        e.preventDefault();
-        showError('L\'email est obligatoire');
-        email.focus();
-        return false;
+        return afficherErreur('L\'email est obligatoire', email);
       }
       
-      if (email.value !== emailConfirm.value) {
-        e.preventDefault();
-        showError('Les adresses email ne correspondent pas');
-        emailConfirm.focus();
-        return false;
+      if (!emailConfirm || email.value !== emailConfirm.value) {
+        return afficherErreur('Les adresses email ne correspondent pas', emailConfirm);
       }
       
-      if (password.value.length < 12) {
-        e.preventDefault();
-        showError('Le mot de passe doit contenir au moins 12 caractères');
-        password.focus();
-        return false;
+      if (!password || password.value.length < 12) {
+        return afficherErreur('Le mot de passe doit contenir au moins 12 caractères', password);
       }
       
-      if (password.value !== confirmPassword.value) {
-        e.preventDefault();
-        showError('Les mots de passe ne correspondent pas');
-        confirmPassword.focus();
-        return false;
+      if (!confirmPassword || password.value !== confirmPassword.value) {
+        return afficherErreur('Les mots de passe ne correspondent pas', confirmPassword);
       }
       
-      // ✅ VALIDATION PASSÉE - AUTORISER LA SOUMISSION
-      console.log('[CarShare] Formulaire valide, soumission...');
-      
-      // Désactiver temporairement (évite double-soumission)
+      // Si tout est valide, laisser le formulaire se soumettre normalement
+      console.log('[CarShare] Validation OK, soumission...');
+      const submitBtn = document.getElementById('register-submit-btn');
       if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.textContent = 'Inscription...';
       }
       
-      // Sécurité : Réactiver après 5 secondes en cas de problème
-      setTimeout(unlockForm, 5000);
-      
-      // LAISSER LE FORMULAIRE SE SOUMETTRE NORMALEMENT
       return true;
     });
+    
+    console.log('[CarShare] ✓ Initialisation terminée');
   }
   
-  // Si erreur PHP présente, débloquer immédiatement
-  if (document.querySelector('.error-message:not(.js-error-message)')) {
-    unlockForm();
+  // Lancer l'initialisation dès que possible
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
   }
+  
+  // Débloquer sur tous les événements importants
+  window.addEventListener('load', garantirFormulaireUtilisable);
+  window.addEventListener('pageshow', garantirFormulaireUtilisable);
+  document.addEventListener('visibilitychange', garantirFormulaireUtilisable);
+  
+  console.log('[CarShare] Script inscription chargé ✓');
 })();
 </script>
 

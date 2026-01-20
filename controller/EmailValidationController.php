@@ -109,7 +109,6 @@ class EmailValidationController {
                     $error = "Ce compte n'est pas un compte administrateur";
                 } else {
                     // Admin account validated - activate user
-                    // Note: Assuming is_verified_user field controls account activation
                     $db = Database::getDb();
                     $stmt = $db->prepare("UPDATE users SET is_verified_user = 1 WHERE id = ?");
                     $stmt->execute([$user['id']]);
@@ -119,7 +118,19 @@ class EmailValidationController {
                     // Delete token
                     $tokenManager->deleteToken($token);
                     
-                    $_SESSION['admin_activation_success'] = "Le compte administrateur de " . htmlspecialchars($user['first_name'] . ' ' . $user['last_name']) . " a été activé avec succès.";
+                    // ✅ Send confirmation email to the new admin
+                    require_once __DIR__ . '/../model/EmailService.php';
+                    $emailService = new EmailService();
+                    $fullName = $user['first_name'] . ' ' . $user['last_name'];
+                    $emailSent = $emailService->sendAdminAccountActivatedEmail($user['email'], $fullName);
+                    
+                    if ($emailSent) {
+                        error_log("Email de confirmation envoyé à {$user['email']} pour activation compte admin");
+                        $_SESSION['admin_activation_success'] = "Le compte administrateur de " . htmlspecialchars($fullName) . " a été activé avec succès. Un email de confirmation lui a été envoyé.";
+                    } else {
+                        error_log("Échec envoi email de confirmation à {$user['email']} pour activation compte admin");
+                        $_SESSION['admin_activation_success'] = "Le compte administrateur de " . htmlspecialchars($fullName) . " a été activé avec succès.";
+                    }
                 }
             }
         }

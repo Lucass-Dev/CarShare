@@ -4,17 +4,22 @@
  * Returns cities matching the search query
  */
 
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 
-// Enable error logging
+// Enable error logging but disable display
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
+require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/../../model/Database.php';
 
 try {
     $db = Database::getDb();
+    
+    if (!$db) {
+        throw new Exception('Impossible de se connecter à la base de données');
+    }
     
     $query = isset($_GET['q']) ? trim($_GET['q']) : '';
     
@@ -27,24 +32,43 @@ try {
     $stmt = $db->prepare("
         SELECT id, name, postal_code 
         FROM location 
-        WHERE name LIKE :query1 OR postal_code LIKE :query2
-        ORDER BY name ASC
+        WHERE name LIKE ? OR postal_code LIKE ?
+        ORDER BY 
+            CASE 
+                WHEN name LIKE ? THEN 1
+                WHEN name LIKE ? THEN 2
+                ELSE 3
+            END,
+            name ASC
         LIMIT 10
     ");
     
     $searchQuery = $query . '%';
+    $exactMatch = $query;
+    
     $stmt->execute([
-        'query1' => $searchQuery,
-        'query2' => $searchQuery
+        $searchQuery,      // name LIKE
+        $searchQuery,      // postal_code LIKE
+        $exactMatch,       // exact match
+        $searchQuery       // fuzzy match
     ]);
+    
     $cities = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     echo json_encode($cities);
     
 } catch (PDOException $e) {
+    error_log('[CarShare API cities.php] Erreur PDO: ' . $e->getMessage());
     http_response_code(500);
-    echo json_encode(['error' => 'Erreur base de données: ' . $e->getMessage()]);
+    echo json_encode([
+        'error' => 'Erreur de connexion à la base de données',
+        'message' => $e->getMessage()
+    ]);
 } catch (Exception $e) {
+    error_log('[CarShare API cities.php] Erreur: ' . $e->getMessage());
     http_response_code(500);
-    echo json_encode(['error' => 'Erreur lors de la recherche: ' . $e->getMessage()]);
+    echo json_encode([
+        'error' => 'Erreur lors de la recherche',
+        'message' => $e->getMessage()
+    ]);
 }

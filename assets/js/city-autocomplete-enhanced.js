@@ -1,6 +1,7 @@
 /**
  * City Autocomplete - Real-time search with debouncing
  * Searches cities from database as user types
+ * Uses global apiUrl() from url-helper.js
  */
 
 class CityAutocomplete {

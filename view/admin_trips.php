@@ -203,7 +203,7 @@
                             <td><?= number_format($trip['price'], 2) ?> €</td>
                             <td><?= $trip['available_places'] ?></td>
                             <td>
-                                <form method="POST" action="<?= url('index.php?action=admin_delete_trip') ?>" style="display: inline;" onsubmit="return confirm('Supprimer ce trajet ?')">
+                                <form method="POST" action="<?= url('index.php?action=admin_delete_trip') ?>" style="display: inline;" class="admin-delete-form" data-confirm="Supprimer ce trajet ?">
                                     <input type="hidden" name="trip_id" value="<?= $trip['id'] ?>">
                                     <button type="submit" class="btn-admin btn-sm btn-danger">Supprimer</button>
                                 </form>
@@ -226,5 +226,26 @@
         <?php endif; ?>
     </div>
 </div>
+
+<script>
+// Gérer les formulaires avec confirmation
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.admin-delete-form').forEach(form => {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const confirmMsg = this.dataset.confirm;
+            adminAlert.confirm(
+                confirmMsg,
+                () => {
+                    // Clone form and submit without event listener
+                    const newForm = this.cloneNode(true);
+                    this.parentNode.replaceChild(newForm, this);
+                    newForm.submit();
+                }
+            );
+        });
+    });
+});
+</script>
 
 <?php require_once __DIR__ . '/components/footer.php'; ?>

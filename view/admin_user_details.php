@@ -233,7 +233,7 @@
             </button>
         </form>
         
-        <form method="POST" action="<?= url('index.php?action=admin_delete_user') ?>" style="display: inline;" onsubmit="return confirm('Supprimer cet utilisateur ? (Action irréversible)')">
+        <form method="POST" action="<?= url('index.php?action=admin_delete_user') ?>" style="display: inline;" class="admin-delete-form" data-confirm="Supprimer cet utilisateur ? (Action irréversible)">
             <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
             <button type="submit" class="btn-admin btn-danger">Supprimer l'utilisateur</button>
         </form>
@@ -267,5 +267,26 @@
         </div>
     <?php endif; ?>
 </div>
+
+<script>
+// Gérer les formulaires avec confirmation
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.admin-delete-form').forEach(form => {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const confirmMsg = this.dataset.confirm;
+            adminAlert.confirm(
+                confirmMsg,
+                () => {
+                    // Clone form and submit without event listener
+                    const newForm = this.cloneNode(true);
+                    this.parentNode.replaceChild(newForm, this);
+                    newForm.submit();
+                }
+            );
+        });
+    });
+});
+</script>
 
 <?php require_once __DIR__ . '/components/footer.php'; ?>

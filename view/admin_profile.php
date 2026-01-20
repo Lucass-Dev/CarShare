@@ -160,6 +160,114 @@
             <button type="submit" class="btn-admin">Changer le mot de passe</button>
         </form>
     </div>
+
+    <!-- Delete Account Card - DANGER ZONE -->
+    <div class="profile-card" style="border: 2px solid #dc3545;">
+        <h3 style="color: #dc3545; border-color: #dc3545;">⚠️ Zone de danger</h3>
+        <form method="POST" action="<?= url('index.php?action=admin_delete_account') ?>" id="deleteAdminAccountForm">
+            <input type="hidden" name="delete_account" value="1">
+            
+            <div class="danger-warning" style="background: #fff5f5; border: 2px solid #fecaca; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0; margin-top: 4px;">
+                        <path d="M12 2L1 21h22L12 2zm0 6l1 8h-2l1-8zm0 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z" fill="#dc3545"/>
+                    </svg>
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0 0 8px 0; color: #dc3545; font-size: 1.1rem; cursor: pointer;" id="showDeleteFieldsBtn">
+                            Supprimer mon compte administrateur
+                        </h4>
+                        <p style="margin: 0; color: #721c24; line-height: 1.6;">
+                            Cette action est <strong>définitive et irréversible</strong>. Toutes vos données personnelles seront supprimées de manière permanente.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="delete-fields" style="display: none;">
+                <div class="form-group">
+                    <label for="confirm_password_delete">Votre mot de passe <span style="color: #dc3545;">*</span></label>
+                    <input type="password" id="confirm_password_delete" name="confirm_password" class="form-input" placeholder="Confirmez votre mot de passe" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_text">Tapez "SUPPRIMER" pour confirmer <span style="color: #dc3545;">*</span></label>
+                    <input type="text" id="confirm_text" name="confirm_text" class="form-input" placeholder="SUPPRIMER" required style="text-transform: uppercase;">
+                    <small style="color: #6c757d; font-size: 0.9rem; display: block; margin-top: 0.5rem;">
+                        Tapez le mot SUPPRIMER en majuscules pour confirmer la suppression.
+                    </small>
+                </div>
+
+                <div class="info-warning" style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 1rem; margin: 1.5rem 0;">
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0; margin-top: 2px;">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#856404"/>
+                        </svg>
+                        <p style="margin: 0; color: #856404; font-size: 0.95rem; line-height: 1.6;">
+                            <strong>Rappel :</strong> Un email de confirmation vous sera envoyé après la suppression de votre compte administrateur.
+                        </p>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <button type="submit" class="btn-admin" style="background: #dc3545; flex: 1;" id="confirmDeleteAdminBtn">
+                        Je comprends, supprimer mon compte
+                    </button>
+                    <button type="button" class="btn-admin" style="background: #6c757d; flex: 1;" id="cancelDeleteAdminBtn">
+                        Annuler
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
+
+<!-- Alertes personnalisées Admin -->
+<script src="<?= asset('js/admin-alerts.js') ?>"></script>
+
+<script>
+// Delete account confirmation pour admin
+(function() {
+    const deleteForm = document.getElementById('deleteAdminAccountForm');
+    const deleteFields = deleteForm.querySelector('.delete-fields');
+    const showBtn = document.getElementById('showDeleteFieldsBtn');
+    const cancelBtn = document.getElementById('cancelDeleteAdminBtn');
+    const confirmBtn = document.getElementById('confirmDeleteAdminBtn');
+    
+    // Afficher les champs de confirmation
+    showBtn.addEventListener('click', function() {
+        deleteFields.style.display = 'block';
+        this.style.cursor = 'default';
+    });
+    
+    // Annuler la suppression
+    cancelBtn.addEventListener('click', function() {
+        deleteFields.style.display = 'none';
+        deleteForm.reset();
+    });
+    
+    // Confirmation finale avant soumission
+    confirmBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const password = deleteForm.querySelector('input[name="confirm_password"]').value;
+        const confirmText = deleteForm.querySelector('input[name="confirm_text"]').value;
+        
+        if (!password) {
+            adminAlert.error('Veuillez entrer votre mot de passe');
+            return;
+        }
+        
+        if (confirmText.toUpperCase() !== 'SUPPRIMER') {
+            adminAlert.error('Veuillez taper "SUPPRIMER" pour confirmer');
+            return;
+        }
+        
+        adminAlert.confirm(
+            'Êtes-vous absolument sûr de vouloir supprimer définitivement votre compte administrateur ? Cette action est irréversible !',
+            () => deleteForm.submit()
+        );
+    });
+})();
+</script>
 
 <?php require_once __DIR__ . '/components/footer.php'; ?>

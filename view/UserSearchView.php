@@ -14,35 +14,62 @@
 
     <!-- Filters Section -->
     <div class="offers-filters">
-        <form method="GET" action="<?= url('index.php') ?>" class="filters-form">
+        <form method="GET" action="<?= url('index.php') ?>" class="filters-form filters-form--enhanced">
             <input type="hidden" name="action" value="user_search">
             
-            <div class="filter-group">
-                <label for="search">Rechercher</label>
-                <input type="text" 
-                       id="search" 
-                       name="q" 
-                       placeholder="Nom ou prénom..."
-                       autocomplete="off"
-                       value="<?= htmlspecialchars($query) ?>"
-                       autofocus>
+            <div class="filter-group filter-group--search">
+                <label for="search">Rechercher un utilisateur</label>
+                <div class="search-input-container">
+                    <svg class="search-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    <input type="text" 
+                           id="search" 
+                           name="q" 
+                           class="search-input-field"
+                           placeholder="Nom ou prénom..."
+                           autocomplete="off"
+                           value="<?= htmlspecialchars($query) ?>"
+                           autofocus>
+                    <?php if (!empty($query)): ?>
+                        <a href="<?= url('index.php?action=user_search') ?>" class="search-clear-btn" title="Effacer">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </a>
+                    <?php endif; ?>
+                </div>
             </div>
 
             <?php if (!empty($query)): ?>
-            <div class="filter-group">
+            <div class="filter-group filter-group--sort">
                 <label for="sort">Trier par</label>
-                <select id="sort" name="sort" onchange="this.form.submit()">
+                <select id="sort" name="sort" class="filter-select-enhanced" onchange="this.form.submit()">
                     <option value="name" <?= ($sortBy ?? 'name') === 'name' ? 'selected' : '' ?>>Nom</option>
                     <option value="rating" <?= $sortBy === 'rating' ? 'selected' : '' ?>>Note</option>
-                    <option value="trips" <?= $sortBy === 'trips' ? 'selected' : '' ?>>Trajets</option>
+                    <option value="trips" <?= $sortBy === 'trips' ? 'selected' : '' ?>>Nombre de trajets</option>
                 </select>
             </div>
             <?php endif; ?>
 
             <div class="filter-actions">
-                <button type="submit" class="btn-filter">Rechercher</button>
+                <button type="submit" class="btn-filter">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    Rechercher
+                </button>
                 <?php if (!empty($query)): ?>
-                    <a href="<?= url('index.php?action=user_search') ?>" class="btn-reset">Réinitialiser</a>
+                    <a href="<?= url('index.php?action=user_search') ?>" class="btn-reset">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                            <path d="M3 3v5h5"/>
+                        </svg>
+                        Réinitialiser
+                    </a>
                 <?php endif; ?>
             </div>
         </form>

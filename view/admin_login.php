@@ -127,3 +127,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
+<!-- Alertes personnalisées Admin -->
+<script src="<?= asset('js/admin-alerts.js') ?>"></script>

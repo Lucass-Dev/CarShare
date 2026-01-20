@@ -579,6 +579,43 @@ class AdminModelEnhanced {
     }
 
     /**
+     * Supprimer le compte administrateur
+     */
+    public function deleteAdminAccount($adminId) {
+        try {
+            $this->db->beginTransaction();
+            
+            // Supprimer toutes les données liées
+            // 1. Messages envoyés ou reçus
+            $stmt = $this->db->prepare("DELETE FROM messages WHERE sender_id = :id OR receiver_id = :id");
+            $stmt->bindValue(':id', $adminId, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            // 2. Notifications
+            $stmt = $this->db->prepare("DELETE FROM notifications WHERE user_id = :id");
+            $stmt->bindValue(':id', $adminId, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            // 3. Tokens de validation
+            $stmt = $this->db->prepare("DELETE FROM email_validation_tokens WHERE user_id = :id");
+            $stmt->bindValue(':id', $adminId, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            // 4. Supprimer le compte admin
+            $stmt = $this->db->prepare("DELETE FROM users WHERE id = :id AND is_admin = 1");
+            $stmt->bindValue(':id', $adminId, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            $this->db->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            error_log("Erreur lors de la suppression du compte admin: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Réinitialise le mot de passe d'un utilisateur
      */
     public function resetUserPassword($userId, $newPasswordHash) {

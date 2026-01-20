@@ -99,6 +99,17 @@ function asset($asset) {
 }
 
 /**
+ * Get API path
+ * @param string $endpoint The API endpoint
+ * @return string The API URL
+ */
+function apiUrl($endpoint) {
+    // Remove leading slash if present
+    $endpoint = ltrim($endpoint, '/');
+    return BASE_PATH . 'assets/api/' . $endpoint;
+}
+
+/**
  * Sanitize output for HTML
  * @param string $value
  * @return string

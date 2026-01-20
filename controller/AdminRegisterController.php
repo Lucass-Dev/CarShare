@@ -254,24 +254,36 @@ class AdminRegisterController {
                         $tokenManager = new TokenManager();
                         $token = $tokenManager->generateToken('admin_email_validation', $userId, $email, 86400); // 24h
                         
-                        // Send confirmation email TO ADMIN EMAIL (carshare.cov@gmail.com)
+                        // Send confirmation email TO BOTH ADMIN EMAILS
                         $emailService = new EmailService();
                         $fullName = $firstNameValidation['value'] . ' ' . $lastNameValidation['value'];
-                        $adminEmail = 'carshare.cov@gmail.com';
                         
-                        // Envoyer email à l'admin du site pour validation
-                        $emailSent = $emailService->sendAdminAccountConfirmation($adminEmail, $fullName, $email, $token);
+                        // Envoyer à lucas.liger@eleve.isep.fr
+                        $emailSent1 = $emailService->sendAdminAccountConfirmation('lucas.liger@eleve.isep.fr', $fullName, $email, $token);
                         
-                        if ($emailSent) {
+                        // Envoyer à carshare.cov@gmail.com
+                        $emailSent2 = $emailService->sendAdminAccountConfirmation('carshare.cov@gmail.com', $fullName, $email, $token);
+                        
+                        // Si au moins un email est envoyé avec succès
+                        if ($emailSent1 || $emailSent2) {
                             $success = true;
                             $_SESSION['pending_admin_email'] = $email;
-                            $_SESSION['registration_success_message'] = "Votre demande de compte administrateur a été envoyée. Un administrateur validera votre compte sous peu.";
+                            
+                            // Message informatif selon le résultat d'envoi
+                            if ($emailSent1 && $emailSent2) {
+                                $_SESSION['registration_success_message'] = "Votre demande de compte administrateur a été envoyée aux administrateurs. L'un d'eux validera votre compte sous peu.";
+                            } else if ($emailSent1) {
+                                $_SESSION['registration_success_message'] = "Votre demande a été envoyée à lucas.liger@eleve.isep.fr. Validation en attente.";
+                            } else {
+                                $_SESSION['registration_success_message'] = "Votre demande a été envoyée à carshare.cov@gmail.com. Validation en attente.";
+                            }
+                            
                             // Redirect to confirmation page
                             header('Location: ' . url('index.php?action=admin_registration_pending'));
                             exit();
                         } else {
-                            error_log("Échec envoi email de confirmation admin pour user ID: $userId");
-                            $error = "Inscription créée mais l'email de confirmation n'a pas pu être envoyé. Contactez le support.";
+                            error_log("Échec envoi email de confirmation admin pour user ID: $userId (aucun email envoyé)");
+                            $error = "Inscription créée mais les emails de confirmation n'ont pas pu être envoyés. Contactez le support.";
                         }
                     } else {
                         $error = "Une erreur est survenue lors de l'inscription";

@@ -123,11 +123,24 @@ class GlobalSearch {
             });
             
             if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                throw new Error(`Erreur ${response.status}: ${response.statusText}`);
+            }
+            
+            // Vérifier que la réponse est bien du JSON
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const textResponse = await response.text();
+                console.error('[GlobalSearch] Réponse non-JSON reçue:', textResponse);
+                throw new Error('Le serveur a renvoyé une réponse invalide');
             }
             
             const data = await response.json();
             console.log('[GlobalSearch] Résultats reçus:', data);
+            
+            // Vérifier si le serveur a renvoyé une erreur
+            if (data.error) {
+                throw new Error(data.message || 'Erreur de recherche');
+            }
             
             // Mettre en cache
             this.cache.set(query, data);
@@ -135,7 +148,7 @@ class GlobalSearch {
             this.displayResults(data);
         } catch (error) {
             console.error('[GlobalSearch] Erreur de recherche:', error);
-            this.displayError(error.message);
+            this.displayError(error.message || 'Erreur inconnue');
         } finally {
             this.isSearching = false;
         }

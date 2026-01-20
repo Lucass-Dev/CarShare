@@ -343,6 +343,70 @@ class AdminControllerUnified {
     }
 
     /**
+     * Suppression du compte admin
+     */
+    public function deleteAccount() {
+        $this->checkAdminAuth();
+        
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            redirect(url('index.php?action=admin_profile'));
+            exit;
+        }
+        
+        $adminId = $_SESSION['user_id'];
+        $confirmPassword = $_POST['confirm_password'] ?? '';
+        $confirmText = $_POST['confirm_text'] ?? '';
+        
+        // Récupérer les infos admin avant suppression
+        $admin = $this->model->getAdminProfile($adminId);
+        
+        if (!$admin) {
+            $_SESSION['admin_error'] = "Profil introuvable";
+            redirect(url('index.php?action=admin_profile'));
+            exit;
+        }
+        
+        // Validation des confirmations
+        if (empty($confirmPassword)) {
+            $_SESSION['admin_error'] = "Le mot de passe est requis pour supprimer le compte";
+            redirect(url('index.php?action=admin_profile'));
+            exit;
+        }
+        
+        // Vérifier le mot de passe
+        if (!$this->model->verifyAdminPassword($adminId, $confirmPassword)) {
+            $_SESSION['admin_error'] = "Le mot de passe est incorrect";
+            redirect(url('index.php?action=admin_profile'));
+            exit;
+        }
+        
+        if (strtoupper(trim($confirmText)) !== 'SUPPRIMER') {
+            $_SESSION['admin_error'] = "Veuillez taper 'SUPPRIMER' pour confirmer";
+            redirect(url('index.php?action=admin_profile'));
+            exit;
+        }
+        
+        // Supprimer le compte
+        if ($this->model->deleteAdminAccount($adminId)) {
+            // Envoyer email de confirmation
+            require_once __DIR__ . '/../model/EmailService.php';
+            $emailService = new EmailService();
+            $fullName = $admin['first_name'] . ' ' . $admin['last_name'];
+            $emailService->sendAdminAccountDeletionConfirmation($admin['email'], $fullName);
+            
+            // Détruire la session et rediriger
+            session_unset();
+            session_destroy();
+            header('Location: ' . url('index.php?action=home&admin_account_deleted=1'));
+            exit;
+        } else {
+            $_SESSION['admin_error'] = "Erreur lors de la suppression du compte. Veuillez contacter le support.";
+            redirect(url('index.php?action=admin_profile'));
+            exit;
+        }
+    }
+
+    /**
      * Afficher le formulaire de connexion admin
      */
     public function showLogin() {
