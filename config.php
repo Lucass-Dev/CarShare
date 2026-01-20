@@ -13,13 +13,13 @@ $isProduction = (
 );
 
 if ($isProduction) {
-    // Configuration production (Aiven Cloud)
-    define('DB_HOST', 'mysq-carshare-mailsacrifice14-49e2.k.aivencloud.com');
-    define('DB_PORT', '12919');
-    define('DB_NAME', 'defaultdb');
-    define('DB_USER', 'avnadmin');
-    define('DB_PASS', 'AVNS_XNovxzBfxwaL50YjpsJ');
-    define('DB_SSL_MODE', 'REQUIRED');
+     // Configuration locale (XAMPP)
+    define('DB_HOST', getenv('DB_HOST'));
+    define('DB_PORT', '3306');
+    define('DB_NAME', getenv('DB_NAME'));
+    define('DB_USER', getenv('DB_USER'));
+    define('DB_PASS', getenv('DB_PASS')); // XAMPP default
+    define('DB_SSL_MODE', false);
 } else {
     // Configuration locale (XAMPP)
     define('DB_HOST', getenv('DB_HOST'));
