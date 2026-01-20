@@ -22,11 +22,11 @@ if ($isProduction) {
     define('DB_SSL_MODE', 'REQUIRED');
 } else {
     // Configuration locale (XAMPP)
-    define('DB_HOST', 'localhost');
+    define('DB_HOST', getenv('DB_HOST'));
     define('DB_PORT', '3306');
-    define('DB_NAME', 'carshare');
-    define('DB_USER', 'root');
-    define('DB_PASS', ''); // XAMPP default
+    define('DB_NAME', getenv('DB_NAME'));
+    define('DB_USER', getenv('DB_USER'));
+    define('DB_PASS', getenv('DB_PASS')); // XAMPP default
     define('DB_SSL_MODE', false);
 }
 
