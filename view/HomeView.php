@@ -97,7 +97,6 @@
     </div>
 </section>
 <!-- Autocomplétion des villes -->
-<script src="<?= asset('js/city-autocomplete.js?v=' . time()) ?>"></script>
 <?php
         } // Fin de la méthode render()
     } // Fin de la classe HomeView

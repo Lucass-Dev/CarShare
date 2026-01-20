@@ -27,6 +27,38 @@
             return $tolerance_date.":00";
 
         }
+        /**
+         * Replace SQL parameter tokens with values from array
+         * Useful for debugging SQL queries
+         * 
+         * @param string $sql SQL query with :param tokens
+         * @param array $params Array of parameters [':param' => value]
+         * @return string SQL query with tokens replaced
+         */
+        public function replaceSqlTokens(string $sql, array $params): string {
+            $result = $sql;
+            
+            foreach ($params as $token => $value) {
+                // Ensure token starts with colon
+                $tokenKey = strpos($token, ':') === 0 ? $token : ':' . $token;
+                
+                // Format value based on type
+                if ($value === null) {
+                    $replacement = 'NULL';
+                } elseif (is_bool($value)) {
+                    $replacement = $value ? '1' : '0';
+                } elseif (is_numeric($value)) {
+                    $replacement = (string)$value;
+                } else {
+                    $replacement = "'" . addslashes($value) . "'";
+                }
+                
+                $result = str_replace($tokenKey, $replacement, $result);
+            }
+            
+            return $result;
+        }
+
         public function getCarpooling($start_id, $end_id, $date, $hour, $seats, $filters) : array{
             $results = "";
             $db = Database::getDb();
@@ -46,7 +78,6 @@
             $start_date = $this->getToleranceDate($date, $hour, $filters['start_time_range_before'], true);
             $tolerance_date = $this->getToleranceDate($date, $hour, $filters['start_time_range_after'], false);
 
-
             $sql .= " AND c.start_date >= :start_date
                     AND c.start_date <= :tolerance
                     AND c.available_places >= :seats
@@ -56,29 +87,26 @@
                     AND c.luggage_allowed = :luggage_allowed
                     ";
 
-            
             $sql .= "ORDER BY c.start_date ASC";
-
 
             $stmt = $db->prepare($sql);
             $params = [
                 ':start_id' => $start_id,
                 ':start_date' => $start_date,
                 ':seats' => $seats,
-                ':pets_allowed' => $filters['pets_allowed'],
-                ':smoker_allowed' => $filters['smoker_allowed'],
-                ':luggage_allowed' => $filters['luggage_allowed'],
+                ':pets_allowed' => isset($filters['pets_allowed']) && !empty($filters['pets_allowed']) ? 1 : 0,
+                ':smoker_allowed' => isset($filters['smoker_allowed']) && !empty($filters['smoker_allowed']) ? 1 : 0,
+                ':luggage_allowed' => isset($filters['luggage_allowed']) && !empty($filters['luggage_allowed']) ? 1 : 0,
                 ':tolerance' => $tolerance_date
             ];
 
             if (!empty($end_id)) {
                 $params[':end_id'] = $end_id;
             }
-
+            
             $stmt->execute($params);
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $results;
-
         }
 
         public function getAllCarpoolings() : array{

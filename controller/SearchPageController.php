@@ -57,7 +57,7 @@
                         <?php $this->searchPageView->display_search_filters(); ?>
                     </aside>
                     
-                    <main class="search-results">
+                    <div class="search-results">
                         <?php
                         if (isset($_GET['action']) && $_GET['action'] === 'display_search') {
                             $filters = array();
@@ -95,7 +95,7 @@
                             $this->searchPageView->display_search_results($carpoolings);
                         }
                         ?>
-                    </main>
+                    </div>
                 </div>
             <?php
         }
@@ -114,5 +114,4 @@
         }
     }   
 ?>
-<script src="/script/searchPage.js"></script>
 <script src="/assets/js/city-autocomplete-enhanced.js"></script>

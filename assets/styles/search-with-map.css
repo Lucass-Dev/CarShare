@@ -6,7 +6,6 @@
 /* ===== MAIN LAYOUT WITH MAP ===== */
 .search-results-with-map {
     display: grid;
-    grid-template-columns: 1fr 550px;
     gap: 20px;
     align-items: start;
     margin-top: 20px;

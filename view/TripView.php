@@ -210,6 +210,7 @@
 
         public static function display_search_results(array $carpoolings){
             ?>
+            
             <div class="search-result-container">
                 <?php
                 if (empty($carpoolings)) {

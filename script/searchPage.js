@@ -1,3 +1,24 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const afterInput = document.getElementById('start_time_range_after');
+    const beforeInput = document.getElementById('start_time_range_before');
+    const afterValue = document.getElementById('after-value');
+    const beforeValue = document.getElementById('before-value');
+
+    function updateTimeDisplay(input, display) {
+        const hours = parseInt(input.value);
+        display.textContent = hours + 'h';
+    }
+
+    if (afterInput && afterValue) {
+        updateTimeDisplay(afterInput, afterValue);
+        afterInput.addEventListener('input', () => updateTimeDisplay(afterInput, afterValue));
+    }
+
+    if (beforeInput && beforeValue) {
+        updateTimeDisplay(beforeInput, beforeValue);
+        beforeInput.addEventListener('input', () => updateTimeDisplay(beforeInput, beforeValue));
+    }
+});
 const params = new URLSearchParams(window.location.search);
 let link = ""
 let start_input = document.getElementById('start_place');
