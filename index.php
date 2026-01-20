@@ -490,7 +490,7 @@ switch ($action) {
 ?>
 </main>
 
-<?php require __DIR__ . "/view/components/footer.php"; ?>
+<?php require __DIR__ . "/view/components/Footer.php"; ?>
 
 </body>
 </html>

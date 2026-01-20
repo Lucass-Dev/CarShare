@@ -110,7 +110,6 @@
             for ($i = 0; $i < count($results); $i++){
                 $results[$i]['remaining_places'] = self::getRemainingPlaces($results[$i]['id']);
             }
-            print_r($results);
             return $results;
         }
 
