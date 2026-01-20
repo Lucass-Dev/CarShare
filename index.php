@@ -219,7 +219,7 @@ if ($action === 'admin') {
 }
 
 // Show header for other pages
-require __DIR__ . "/view/components/header.php";
+require __DIR__ . "/view/components/Header.php";
 ?>
 
 <main>
