@@ -5,27 +5,16 @@
     class SearchPageModel
     {
         public function getToleranceDate($start_date, $start_hour, $tolerance_hour, $before) : string{
+            $dateTime = new DateTime($start_date . " " . $start_hour);
+            $interval = new DateInterval('PT' . abs($tolerance_hour) . 'H');
             
             if($before){
-                $new_hour = intval( explode(":", $start_hour)[0]) - intval($tolerance_hour);
-                if ($new_hour < 0) {
-                    $new_hour += 24;
-                    $date_array = explode("-", explode(" ", $start_date)[0]);
-                    $start_date = $date_array[0] . "-" . $date_array[1] . "-" . sprintf("%02d", intval($date_array[2]) - 1);
-                }
+                $dateTime->sub($interval);
             }else{
-                $new_hour = intval( explode(":", $start_hour)[0]) + intval($tolerance_hour);
-                if ($new_hour > 23) {
-                    $new_hour -= 24;
-                    $date_array = explode("-", explode(" ", $start_date)[0]);
-                    $start_date = $date_array[0] . "-" . $date_array[1] . "-" . sprintf("%02d", intval($date_array[2]) + 1);
-                }
+                $dateTime->add($interval);
             }
-
-            $tolerance_date = $start_date." ". strval($new_hour);
-            $tolerance_date .= ":".explode(":", $start_hour)[1];
-            return $tolerance_date.":00";
-
+            
+            return $dateTime->format('Y-m-d H:i:s');
         }
         /**
          * Replace SQL parameter tokens with values from array
@@ -60,6 +49,7 @@
         }
 
         public function getCarpooling($start_id, $end_id, $date, $hour, $seats, $filters) : array{
+            if(empty($hour)) $hour = "00:00";
             $results = "";
             $db = Database::getDb();
 
@@ -75,37 +65,52 @@
                 $sql .= " AND c.end_id = :end_id";
             }
 
-            $start_date = $this->getToleranceDate($date, $hour, $filters['start_time_range_before'], true);
-            $tolerance_date = $this->getToleranceDate($date, $hour, $filters['start_time_range_after'], false);
+            if ($hour === "00:00") {
+                $start_date = $date . " 00:00:00";
+                $tolerance_date = $date . " 23:59:59";
+            } else {
+                $start_date = $this->getToleranceDate($date, $hour, $filters['start_time_range_before'], true);
+                $tolerance_date = $this->getToleranceDate($date, $hour, $filters['start_time_range_after'], false);
+            }
 
             $sql .= " AND c.start_date >= :start_date
                     AND c.start_date <= :tolerance
                     AND c.available_places >= :seats
-                    AND c.available_places > 0
-                    AND c.pets_allowed = :pets_allowed
-                    AND c.smoker_allowed = :smoker_allowed
-                    AND c.luggage_allowed = :luggage_allowed
-                    ";
+                    AND c.available_places > 0";
 
-            $sql .= "ORDER BY c.start_date ASC";
-
-            $stmt = $db->prepare($sql);
             $params = [
                 ':start_id' => $start_id,
                 ':start_date' => $start_date,
                 ':seats' => $seats,
-                ':pets_allowed' => isset($filters['pets_allowed']) && !empty($filters['pets_allowed']) ? 1 : 0,
-                ':smoker_allowed' => isset($filters['smoker_allowed']) && !empty($filters['smoker_allowed']) ? 1 : 0,
-                ':luggage_allowed' => isset($filters['luggage_allowed']) && !empty($filters['luggage_allowed']) ? 1 : 0,
                 ':tolerance' => $tolerance_date
             ];
+
+            if (isset($filters['pets_allowed']) && !empty($filters['pets_allowed'])) {
+                $sql .= " AND c.pets_allowed = :pets_allowed";
+                $params[':pets_allowed'] = 1;
+            }
+
+            if (isset($filters['smoker_allowed']) && !empty($filters['smoker_allowed'])) {
+                $sql .= " AND c.smoker_allowed = :smoker_allowed";
+                $params[':smoker_allowed'] = 1;
+            }
+
+            if (isset($filters['luggage_allowed']) && !empty($filters['luggage_allowed'])) {
+                $sql .= " AND c.luggage_allowed = :luggage_allowed";
+                $params[':luggage_allowed'] = 1;
+            }
 
             if (!empty($end_id)) {
                 $params[':end_id'] = $end_id;
             }
+            $stmt = $db->prepare($sql);
             
             $stmt->execute($params);
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            for ($i = 0; $i < count($results); $i++){
+                $results[$i]['remaining_places'] = self::getRemainingPlaces($results[$i]['id']);
+            }
+            print_r($results);
             return $results;
         }
 
@@ -137,6 +142,29 @@
             $stmt->bindParam(':query', $searchTerm, PDO::PARAM_STR);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        public static function getRemainingPlaces($carpooling_id){
+            $db = Database::getDb();
+            
+            // Get available places
+            $stmt = $db->prepare("SELECT available_places FROM carpoolings WHERE id = :id");
+            $stmt->execute([':id' => $carpooling_id]);
+            $carpooling = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$carpooling) {
+                return 0; // or throw error
+            }
+            
+            $available = $carpooling['available_places'];
+            
+            // Get number of bookings
+            $stmt = $db->prepare("SELECT COUNT(*) as booking_count FROM bookings WHERE carpooling_id = :id");
+            $stmt->execute([':id' => $carpooling_id]);
+            $booking = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $booked = $booking['booking_count'];
+            
+            return $available - $booked;
         }
     }
     

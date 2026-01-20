@@ -88,7 +88,7 @@
                                 'end_lat' => $carpooling['end_latitude'] ?? 0,
                                 'end_lng' => $carpooling['end_longitude'] ?? 0,
                                 'price' => $carpooling['price'],
-                                'available_places' => $carpooling['available_places']
+                                'remaining_places' => $carpooling['remaining_places'],
                             ];
                             ?>
                                 <div class="search-result-card" data-trip-id="<?php echo $tripId; ?>" 
@@ -114,7 +114,7 @@
                                             </div>
                                             <div class="info-item">
                                                 <span class="info-label">Places:</span>
-                                                <span><?php echo htmlspecialchars($carpooling['available_places']); ?> disponible<?php echo $carpooling['available_places'] > 1 ? 's' : ''; ?></span>
+                                                <span><?php echo htmlspecialchars($carpooling['remaining_places']); ?> disponible<?php echo $carpooling['remaining_places'] > 1 ? 's' : ''; ?></span>
                                             </div>
                                             <div class="info-item">
                                                 <span class="info-label">Conducteur:</span>

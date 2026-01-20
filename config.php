@@ -26,7 +26,7 @@ if ($isProduction) {
     define('DB_PORT', '3306');
     define('DB_NAME', 'carshare');
     define('DB_USER', 'root');
-    define('DB_PASS', 'root'); // XAMPP default
+    define('DB_PASS', ''); // XAMPP default
     define('DB_SSL_MODE', false);
 }
 

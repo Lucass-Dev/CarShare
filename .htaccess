@@ -14,8 +14,7 @@ RewriteRule ^(.*)$ index.php [L,QSA]
 
 # Protection des fichiers sensibles
 <FilesMatch "\.(sql|log|env|md|txt|json|yml|yaml|lock)$">
-    Order allow,deny
-    Deny from all
+    Require all denied
 </FilesMatch>
 
 # Protection du dossier model, controller, config
