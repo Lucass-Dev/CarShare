@@ -108,18 +108,6 @@
                         <?php 
                         ?>
                         
-                        <!-- Badges d'état -->
-                        <?php if ($isInactive || $isComplete): ?>
-                        <div class="trip-status-badges">
-                            <?php if ($isInactive): ?>
-                                <span class="status-badge inactive">Inactif</span>
-                            <?php endif; ?>
-                            <?php if ($isComplete): ?>
-                                <span class="status-badge complete">Complet</span>
-                            <?php endif; ?>
-                        </div>
-                        <?php endif; ?>
-                        
                         <div class="offer-driver">
                             <div class="driver-avatar">
                                 <div class="avatar-initials">
