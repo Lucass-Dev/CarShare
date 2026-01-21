@@ -13,13 +13,13 @@
                         <div class="search-fields-row">
                             <div class="field">
                                 <label for="start_place">Départ</label>
-                                <input type="text" id="start_place" placeholder="Ville de départ" required value="<?php echo ($start_name != null && $start_name != "") ? htmlspecialchars($start_name) : ""?>">
+                                <input type="text" id="start-place" placeholder="Ville de départ" required value="<?php echo ($start_name != null && $start_name != "") ? htmlspecialchars($start_name) : ""?>">
                                 <div id="start-suggestion-box" class="suggestion-box"></div>
                             </div>
 
                             <div class="field">
                                 <label for="end_place">Arrivée</label>
-                                <input type="text" id="end_place" placeholder="Ville d'arrivée" value="<?php echo ($end_name != null && $end_name != "") ? htmlspecialchars($end_name) : ""?>">
+                                <input type="text" id="end-place" placeholder="Ville d'arrivée" value="<?php echo ($end_name != null && $end_name != "") ? htmlspecialchars($end_name) : ""?>">
                                 <div id="end-suggestion-box" class="suggestion-box"></div>
                             </div>
 
@@ -240,6 +240,7 @@
                 </div>
             </div>
             <?php
+
         }
     }
 ?>

@@ -100,7 +100,7 @@ $action = $_GET['action'] ?? 'home';
         'offers' => 'offers.css',
         'daily_carshare' => 'daily-carshare.css',
         'messaging' => 'mp.css',
-        'messaging_conversation' => 'mp.css'
+        'messaging_conversation' => 'messaging-conversation.css'
     ];
     
     if (isset($pageCss[$action])) {
@@ -494,6 +494,7 @@ switch ($action) {
 <?php require __DIR__ . "/view/components/Footer.php"; ?>
 
 </body>
+
 </html>
 <?php
 // Flush output buffer

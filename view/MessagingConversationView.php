@@ -4,294 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conversation avec <?= htmlspecialchars($conversationInfo['other_user_name']) ?></title>
+    <link rel="stylesheet" href="./assets/styles/messaging-conversation.css">
     <link rel="stylesheet" href="./assets/styles/footer.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f6f8fa;
-            color: #24292f;
-            line-height: 1.6;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .chat-layout {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            height: 100vh;
-        }
-
-        .conversations-sidebar {
-            background: white;
-            border-right: 1px solid #d0d7de;
-            overflow-y: auto;
-        }
-
-        .sidebar-header {
-            padding: 16px;
-            border-bottom: 1px solid #d0d7de;
-            position: sticky;
-            top: 0;
-            background: white;
-            z-index: 10;
-        }
-
-        .sidebar-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #24292f;
-            margin-bottom: 8px;
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            color: #0969da;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        .conversation-item {
-            padding: 12px 16px;
-            border-bottom: 1px solid #d0d7de;
-            cursor: pointer;
-            transition: background 0.2s;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .conversation-item:hover {
-            background: #f6f8fa;
-        }
-
-        .conversation-item.active {
-            background: #ddf4ff;
-            border-left: 3px solid #0969da;
-        }
-
-        .conversation-item-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: #24292f;
-            margin-bottom: 4px;
-        }
-
-        .conversation-item-preview {
-            font-size: 12px;
-            color: #57606a;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            background: white;
-        }
-
-        .chat-header {
-            padding: 16px 24px;
-            border-bottom: 1px solid #d0d7de;
-            background: white;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-shrink: 0;
-        }
-
-        .chat-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            font-weight: 600;
-            color: white;
-        }
-
-        .chat-user-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: #24292f;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px;
-            background: #f6f8fa;
-            min-height: 0;
-        }
-
-        .message {
-            margin-bottom: 16px;
-            display: flex;
-            gap: 12px;
-        }
-
-        .message.sent {
-            flex-direction: row-reverse;
-        }
-
-        .message-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
-            color: white;
-            flex-shrink: 0;
-        }
-
-        .message-content {
-            max-width: 60%;
-        }
-
-        .message-bubble {
-            padding: 10px 14px;
-            border-radius: 12px;
-            font-size: 14px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: pre-wrap;
-        }
-
-        .message.received .message-bubble {
-            background: white;
-            border: 1px solid #d0d7de;
-            color: #24292f;
-        }
-
-        .message.sent .message-bubble {
-            background: #0969da;
-            color: white;
-        }
-
-        .message-time {
-            font-size: 11px;
-            color: #57606a;
-            margin-top: 4px;
-            padding: 0 4px;
-        }
-
-        .message.sent .message-time {
-            text-align: right;
-        }
-
-        .chat-input-container {
-            padding: 16px 24px;
-            background: white;
-            flex-shrink: 0;
-            border-top: 1px solid #d0d7de;
-        }
-
-        .chat-input-form {
-            display: flex;
-            gap: 12px;
-        }
-
-        .chat-input {
-            flex: 1;
-            padding: 10px 14px;
-            border: 1px solid #d0d7de;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: inherit;
-            resize: none;
-            max-height: 120px;
-        }
-
-        .chat-input:focus {
-            outline: none;
-            border-color: #0969da;
-            box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);
-        }
-
-        .send-button {
-            padding: 10px 20px;
-            background: #0969da;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .send-button:hover {
-            background: #0550ae;
-        }
-
-        .send-button:disabled {
-            background: #d0d7de;
-            cursor: not-allowed;
-        }
-
-        @media (max-width: 768px) {
-            .chat-layout {
-                grid-template-columns: 1fr;
-            }
-
-            .conversations-sidebar {
-                display: none;
-            }
-
-            .message-content {
-                max-width: 80%;
-            }
-        }
-    </style>
 </head>
-<body>
+<body class="chat-page">
     <div class="chat-layout">
         <!-- Sidebar -->
         <div class="conversations-sidebar">
             <div class="sidebar-header">
                 <a href="index.php?action=messaging" class="back-link">
-                    <span>←</span> Toutes les conversations
+                    <span>←</span> Conversations
                 </a>
             </div>
-            <?php foreach ($conversations as $conv): ?>
-                <a href="index.php?action=messaging_conversation&conversation_id=<?= $conv['id'] ?>" 
-                   class="conversation-item <?= $conv['id'] == $conversationId ? 'active' : '' ?>">
-                    <div class="conversation-item-name">
-                        <?= htmlspecialchars($conv['other_user_name']) ?>
-                        <?php if (isset($conv['unread_count']) && $conv['unread_count'] > 0 && $conv['id'] != $conversationId): ?>
-                            <span style="background: #0969da; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: 6px;">
-                                <?= $conv['unread_count'] ?>
-                            </span>
-                        <?php endif; ?>
-                    </div>
-                    <?php if ($conv['last_message']): ?>
-                        <div class="conversation-item-preview">
-                            <?= htmlspecialchars(mb_substr($conv['last_message'], 0, 40)) ?>
-                            <?= mb_strlen($conv['last_message']) > 40 ? '...' : '' ?>
+            <div class="conversations-list">
+                <?php foreach ($conversations as $conv): ?>
+                    <a href="index.php?action=messaging_conversation&conversation_id=<?= $conv['id'] ?>" 
+                       class="conversation-item <?= $conv['id'] == $conversationId ? 'active' : '' ?>">
+                        <div class="conversation-item-name">
+                            <span><?= htmlspecialchars($conv['other_user_name']) ?></span>
+                            <?php if (isset($conv['unread_count']) && $conv['unread_count'] > 0 && $conv['id'] != $conversationId): ?>
+                                <span class="unread-badge"><?= $conv['unread_count'] ?></span>
+                            <?php endif; ?>
                         </div>
-                    <?php endif; ?>
-                </a>
-            <?php endforeach; ?>
+                        <?php if ($conv['last_message']): ?>
+                            <div class="conversation-item-preview">
+                                <?= htmlspecialchars(mb_substr($conv['last_message'], 0, 40)) ?>
+                                <?= mb_strlen($conv['last_message']) > 40 ? '...' : '' ?>
+                            </div>
+                        <?php endif; ?>
+                    </a>
+                <?php endforeach; ?>
+            </div>
         </div>
 
         <!-- Chat -->
@@ -361,7 +104,7 @@
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendButton');
 
-        // Auto-resize textarea
+        // Auto-resize textarea on input
         messageInput.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = Math.min(this.scrollHeight, 120) + 'px';
@@ -371,18 +114,23 @@
         messageInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                messageForm.dispatchEvent(new Event('submit'));
+                if (messageInput.value.trim().length > 0) {
+                    messageForm.dispatchEvent(new Event('submit'));
+                }
             }
         });
 
-        // Send message
+        // Send message via form submission
         messageForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const content = messageInput.value.trim();
             if (!content) return;
 
+            // Disable button and show loading state
             sendButton.disabled = true;
+            const originalText = sendButton.textContent;
+            sendButton.textContent = 'Envoi...';
             
             try {
                 const formData = new FormData();
@@ -395,32 +143,45 @@
                     body: formData
                 });
 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
                 const result = await response.json();
 
                 if (result.success) {
+                    // Clear input and reset height
                     messageInput.value = '';
                     messageInput.style.height = 'auto';
+                    
+                    // Add message to chat
                     addMessageToChat(currentUserId, content, result.timestamp, true);
+                    
+                    // Focus back on input
+                    messageInput.focus();
                 } else {
-                    showNotification('Erreur lors de l\'envoi du message', 'error');
+                    console.error('Erreur serveur:', result.error);
+                    showError('Erreur lors de l\'envoi du message');
                 }
             } catch (error) {
                 console.error('Erreur:', error);
-                showNotification('Erreur lors de l\'envoi du message', 'error');
+                showError('Erreur lors de l\'envoi du message. Vérifiez votre connexion.');
+            } finally {
+                // Re-enable button
+                sendButton.disabled = false;
+                sendButton.textContent = originalText;
             }
-
-            sendButton.disabled = false;
-            messageInput.focus();
         });
 
-        // Add message to chat
+        // Add message to chat UI
         function addMessageToChat(senderId, content, timestamp, isSent) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${isSent ? 'sent' : 'received'}`;
             
             const timeStr = 'À l\'instant';
-            const initials = isSent ? '<?= strtoupper(substr($_SESSION['first_name'] ?? 'U', 0, 1) . substr($_SESSION['last_name'] ?? 'U', 0, 1)) ?>' : 
-                                      '<?= strtoupper(substr($conversationInfo['other_user_name'], 0, 2)) ?>';
+            const initials = isSent ? 
+                '<?= strtoupper(substr($_SESSION['first_name'] ?? 'U', 0, 1) . substr($_SESSION['last_name'] ?? 'U', 0, 1)) ?>' : 
+                '<?= strtoupper(substr($conversationInfo['other_user_name'], 0, 2)) ?>';
             
             messageDiv.innerHTML = `
                 <div class="message-avatar">${initials}</div>
@@ -434,40 +195,70 @@
             scrollToBottom();
         }
 
-        // Scroll to bottom
+        // Scroll to bottom of messages
         function scrollToBottom() {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            setTimeout(() => {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 0);
         }
 
-        // Escape HTML
+        // Escape HTML for security
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
 
+        // Show error message
+        function showError(message) {
+            // Utiliser le système de notification existant s'il est disponible
+            if (typeof showNotification === 'function') {
+                showNotification(message, 'error');
+            } else {
+                alert(message);
+            }
+        }
+
         // Poll for new messages every 3 seconds
         let lastMessageId = <?= !empty($messages) ? end($messages)['id'] : 0 ?>;
+        let pollingInterval;
         
-        setInterval(async () => {
-            try {
-                const response = await fetch(`index.php?action=get_new_messages&conversation_id=${conversationId}&last_message_id=${lastMessageId}`);
-                const result = await response.json();
+        function startPolling() {
+            pollingInterval = setInterval(async () => {
+                try {
+                    const response = await fetch(`index.php?action=get_new_messages&conversation_id=${conversationId}&last_message_id=${lastMessageId}`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
 
-                if (result.success && result.messages.length > 0) {
-                    result.messages.forEach(msg => {
-                        const isSent = msg.sender_id == currentUserId;
-                        addMessageToChat(msg.sender_id, msg.content, msg.created_at, isSent);
-                        lastMessageId = Math.max(lastMessageId, msg.id);
-                    });
+                    const result = await response.json();
+
+                    if (result.success && result.messages && result.messages.length > 0) {
+                        result.messages.forEach(msg => {
+                            const isSent = msg.sender_id == currentUserId;
+                            addMessageToChat(msg.sender_id, msg.content, msg.created_at, isSent);
+                            lastMessageId = Math.max(lastMessageId, msg.id);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Erreur polling:', error);
                 }
-            } catch (error) {
-                console.error('Erreur polling:', error);
-            }
-        }, 3000);
+            }, 3000);
+        }
 
-        // Initial scroll to bottom
-        scrollToBottom();
+        // Start polling on page load
+        window.addEventListener('load', function() {
+            scrollToBottom();
+            startPolling();
+        });
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', function() {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+            }
+        });
     </script>
 </body>
 </html>
