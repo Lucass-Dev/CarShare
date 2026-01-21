@@ -4,6 +4,43 @@
  * Architecture Lucas + Sécurité/Fonctionnalités Eliarisoa
  */
 
+// ===== LOAD .ENV FILE =====
+function loadEnv($path) {
+    if (!file_exists($path)) {
+        return false;
+    }
+    
+    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        // Ignorer les commentaires
+        if (strpos(trim($line), '#') === 0) {
+            continue;
+        }
+        
+        // Parser la ligne KEY=VALUE
+        if (strpos($line, '=') !== false) {
+            list($name, $value) = explode('=', $line, 2);
+            $name = trim($name);
+            $value = trim($value);
+            
+            // Supprimer les guillemets si présents
+            $value = trim($value, '"\'');
+            
+            // Définir la variable d'environnement
+            if (!getenv($name)) {
+                putenv("$name=$value");
+                $_ENV[$name] = $value;
+                $_SERVER[$name] = $value;
+            }
+        }
+    }
+    return true;
+}
+
+// Charger le fichier .env
+$envPath = __DIR__ . '/.env';
+loadEnv($envPath);
+
 // ===== DATABASE CONFIGURATION =====
 // Détection environnement (production vs local)
 $isProduction = (
@@ -13,20 +50,20 @@ $isProduction = (
 );
 
 if ($isProduction) {
-     // Configuration locale (XAMPP)
-    define('DB_HOST', getenv('DB_HOST'));
+     // Configuration production
+    define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
     define('DB_PORT', '3306');
-    define('DB_NAME', getenv('DB_NAME'));
-    define('DB_USER', getenv('DB_USER'));
-    define('DB_PASS', getenv('DB_PASS')); // XAMPP default
+    define('DB_NAME', getenv('DB_NAME') ?: 'carshare');
+    define('DB_USER', getenv('DB_USER') ?: 'root');
+    define('DB_PASS', getenv('DB_PASS') ?: '');
     define('DB_SSL_MODE', false);
 } else {
     // Configuration locale (XAMPP)
-    define('DB_HOST', getenv('DB_HOST'));
+    define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
     define('DB_PORT', '3306');
-    define('DB_NAME', getenv('DB_NAME'));
-    define('DB_USER', getenv('DB_USER'));
-    define('DB_PASS', getenv('DB_PASS')); // XAMPP default
+    define('DB_NAME', getenv('DB_NAME') ?: 'carshare');
+    define('DB_USER', getenv('DB_USER') ?: 'root');
+    define('DB_PASS', getenv('DB_PASS') ?: ''); // XAMPP default
     define('DB_SSL_MODE', false);
 }
 

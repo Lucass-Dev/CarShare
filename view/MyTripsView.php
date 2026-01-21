@@ -487,15 +487,43 @@
                         Passagers (<?= count($trip['bookings']) ?>)
                     </h4>
                     <?php foreach ($trip['bookings'] as $booking): ?>
-                    <div style="background: white; padding: 12px; border-radius: 6px; margin-bottom: 8px; border: 1px solid #e2e8f0;">
-                        <div style="font-weight: 500; color: #1e293b;">
-                            <?= htmlspecialchars($booking['first_name'] . ' ' . $booking['last_name']) ?>
+                    <div style="background: white; padding: 12px; border-radius: 6px; margin-bottom: 8px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 500; color: #1e293b;">
+                                <?= htmlspecialchars($booking['first_name'] . ' ' . $booking['last_name']) ?>
+                            </div>
+                            <div style="font-size: 13px; color: #64748b;">
+                                <?= $booking['seats_count'] ?> place<?= $booking['seats_count'] > 1 ? 's' : '' ?>
+                                <?php if ($booking['global_rating']): ?>
+                                    - Note: <?= round($booking['global_rating'], 1) ?>/5
+                                <?php endif; ?>
+                            </div>
                         </div>
-                        <div style="font-size: 13px; color: #64748b;">
-                            <?= $booking['seats_count'] ?> place<?= $booking['seats_count'] > 1 ? 's' : '' ?>
-                            <?php if ($booking['global_rating']): ?>
-                                - Note: <?= round($booking['global_rating'], 1) ?>/5
-                            <?php endif; ?>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn--secondary btn--small rate-btn" 
+                                    data-action="rate-user" 
+                                    data-user-id="<?= $booking['booker_id'] ?>" 
+                                    data-user-name="<?= htmlspecialchars($booking['first_name'] . ' ' . $booking['last_name']) ?>" 
+                                    title="Noter ce passager"
+                                    style="padding: 6px 10px; font-size: 13px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                </svg>
+                                Noter
+                            </button>
+                            <button class="btn btn--outline btn--small report-btn" 
+                                    data-action="report-user" 
+                                    data-user-id="<?= $booking['booker_id'] ?>" 
+                                    data-user-name="<?= htmlspecialchars($booking['first_name'] . ' ' . $booking['last_name']) ?>" 
+                                    title="Signaler un problème"
+                                    style="padding: 6px 10px; font-size: 13px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                    <line x1="12" y1="9" x2="12" y2="13"/>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                                </svg>
+                                Signaler
+                            </button>
                         </div>
                     </div>
                     <?php endforeach; ?>
@@ -596,3 +624,5 @@ async function confirmDeleteTrip(tripId) {
     }
 }
 </script>
+
+<script src="<?= asset('js/rating-report-modals.js') ?>"></script>

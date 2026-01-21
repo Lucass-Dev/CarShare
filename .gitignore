@@ -619,3 +619,12 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/webstorm,vs,jetbrains,macos,windows,linux
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Upload directories
+uploads/
+temp/tokens/
