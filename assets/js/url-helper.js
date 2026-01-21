@@ -48,8 +48,9 @@ function asset(assetPath) {
  * @returns {string} L'URL complète de l'API
  */
 function apiUrl(apiPath) {
+    
     apiPath = apiPath.replace(/^\/+/, '');
-    return window.APP_CONFIG.basePath + '/assets/api/' + apiPath;
+    return window.APP_CONFIG.baseUrl + '/assets/api/' + apiPath;
 }
 
 // Log pour debug
