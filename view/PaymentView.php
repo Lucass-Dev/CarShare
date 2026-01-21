@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="<?= asset('styles/trip_payment.css') ?>">
 </head>
 <body>
-    <?php require __DIR__ . "/components/header.php"; ?>
 
     <main>
         <div class="payment-header">
