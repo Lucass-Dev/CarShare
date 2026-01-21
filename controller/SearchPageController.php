@@ -114,4 +114,3 @@
         }
     }   
 ?>
-<script src="/assets/js/city-autocomplete-enhanced.js"></script>

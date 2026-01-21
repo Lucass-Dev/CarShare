@@ -106,9 +106,6 @@
                 ?>
                     <a href="<?= url('index.php?action=trip_details&id=' . $offer['id']) ?>" class="offer-card" style="<?= $isOwnOffer ? 'pointer-events: none; opacity: 0.7;' : '' ?>">
                         <?php 
-                        // Badge uniquement pour status inactif ou complet (pas besoin de "passé" car filtré)
-                        $isInactive = $offer['status'] == 0;
-                        $isComplete = $offer['available_places'] == 0;
                         ?>
                         
                         <!-- Badges d'état -->
