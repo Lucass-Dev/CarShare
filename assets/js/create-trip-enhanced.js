@@ -26,7 +26,7 @@ const SecurityConfig = {
 };
 
 // Classe pour gérer les notifications modernes
-class NotificationManager {
+class TripNotificationManager {
     constructor() {
         this.container = this.createContainer();
     }
@@ -121,7 +121,7 @@ class NotificationManager {
 }
 
 // Classe de validation sécurisée
-class SecureValidator {
+class TripSecureValidator {
     static sanitizeInput(value) {
         if (typeof value !== 'string') return '';
         return value.trim();
@@ -501,7 +501,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    const notificationManager = new NotificationManager();
+    const notificationManager = new TripNotificationManager();
     const submitButton = form.querySelector('button[type="submit"]');
     const originalButtonText = submitButton ? submitButton.textContent : 'Publier';
     
@@ -537,16 +537,16 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Validation de tous les champs
         const validations = {
-            depCity: SecureValidator.validateCity(fields.depCity.value, 'ville de départ', fields.depCity),
-            arrCity: SecureValidator.validateCity(fields.arrCity.value, 'ville d\'arrivée', fields.arrCity),
-            depStreet: SecureValidator.validateStreet(fields.depStreet.value, 'rue de départ'),
-            arrStreet: SecureValidator.validateStreet(fields.arrStreet.value, 'rue d\'arrivée'),
-            depNum: SecureValidator.validateStreetNumber(fields.depNum.value, 'numéro de départ'),
-            arrNum: SecureValidator.validateStreetNumber(fields.arrNum.value, 'numéro d\'arrivée'),
-            date: SecureValidator.validateDate(fields.date.value),
-            time: SecureValidator.validateTime(fields.time.value, fields.date.value),
-            places: SecureValidator.validatePlaces(fields.places.value),
-            price: SecureValidator.validatePrice(fields.price.value)
+            depCity: TripSecureValidator.validateCity(fields.depCity.value, 'ville de départ', fields.depCity),
+            arrCity: TripSecureValidator.validateCity(fields.arrCity.value, 'ville d\'arrivée', fields.arrCity),
+            depStreet: TripSecureValidator.validateStreet(fields.depStreet.value, 'rue de départ'),
+            arrStreet: TripSecureValidator.validateStreet(fields.arrStreet.value, 'rue d\'arrivée'),
+            depNum: TripSecureValidator.validateStreetNumber(fields.depNum.value, 'numéro de départ'),
+            arrNum: TripSecureValidator.validateStreetNumber(fields.arrNum.value, 'numéro d\'arrivée'),
+            date: TripSecureValidator.validateDate(fields.date.value),
+            time: TripSecureValidator.validateTime(fields.time.value, fields.date.value),
+            places: TripSecureValidator.validatePlaces(fields.places.value),
+            price: TripSecureValidator.validatePrice(fields.price.value)
         };
         
         // Vérifier que les villes sont différentes
@@ -643,7 +643,7 @@ function setupRealtimeValidation(fields, notificationManager) {
             if (!field || !field.dataset.duplicateCityError) return;
             delete field.dataset.duplicateCityError;
             const label = index === 0 ? 'ville de départ' : 'ville d\'arrivée';
-            const result = SecureValidator.validateCity(field.value, label, field);
+            const result = TripSecureValidator.validateCity(field.value, label, field);
             if (result.valid) {
                 if (field.dataset.selectedFromList === 'true') {
                     FieldStyler.markAsValid(field);
@@ -673,7 +673,7 @@ function setupRealtimeValidation(fields, notificationManager) {
                 return;
             }
             
-            const result = SecureValidator.validateCity(this.value, 'ville de départ', this);
+            const result = TripSecureValidator.validateCity(this.value, 'ville de départ', this);
             if (result.valid) {
                 FieldStyler.markAsValid(this);
             } else {
@@ -695,7 +695,7 @@ function setupRealtimeValidation(fields, notificationManager) {
             return;
         }
         
-        const result = SecureValidator.validateCity(this.value, 'ville de départ', this);
+        const result = TripSecureValidator.validateCity(this.value, 'ville de départ', this);
         if (!result.valid && this.value.trim()) {
             FieldStyler.markAsInvalid(this, result.errors[0]);
         }
@@ -717,7 +717,7 @@ function setupRealtimeValidation(fields, notificationManager) {
                 return;
             }
             
-            const result = SecureValidator.validateCity(this.value, 'ville d\'arrivée', this);
+            const result = TripSecureValidator.validateCity(this.value, 'ville d\'arrivée', this);
             if (result.valid) {
                 FieldStyler.markAsValid(this);
             } else {
@@ -739,7 +739,7 @@ function setupRealtimeValidation(fields, notificationManager) {
             return;
         }
         
-        const result = SecureValidator.validateCity(this.value, 'ville d\'arrivée', this);
+        const result = TripSecureValidator.validateCity(this.value, 'ville d\'arrivée', this);
         if (!result.valid && this.value.trim()) {
             FieldStyler.markAsInvalid(this, result.errors[0]);
         }
@@ -749,7 +749,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     // Rues
     fields.depStreet.addEventListener('input', function() {
         if (this.value.trim()) {
-            const result = SecureValidator.validateStreet(this.value, 'rue de départ');
+            const result = TripSecureValidator.validateStreet(this.value, 'rue de départ');
             if (result.valid) {
                 FieldStyler.markAsValid(this);
             } else {
@@ -762,7 +762,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     
     fields.depStreet.addEventListener('blur', function() {
         if (this.value.trim()) {
-            const result = SecureValidator.validateStreet(this.value, 'rue de départ');
+            const result = TripSecureValidator.validateStreet(this.value, 'rue de départ');
             if (!result.valid) {
                 FieldStyler.markAsInvalid(this, result.errors[0]);
             }
@@ -771,7 +771,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     
     fields.arrStreet.addEventListener('input', function() {
         if (this.value.trim()) {
-            const result = SecureValidator.validateStreet(this.value, 'rue d\'arrivée');
+            const result = TripSecureValidator.validateStreet(this.value, 'rue d\'arrivée');
             if (result.valid) {
                 FieldStyler.markAsValid(this);
             } else {
@@ -784,7 +784,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     
     fields.arrStreet.addEventListener('blur', function() {
         if (this.value.trim()) {
-            const result = SecureValidator.validateStreet(this.value, 'rue d\'arrivée');
+            const result = TripSecureValidator.validateStreet(this.value, 'rue d\'arrivée');
             if (!result.valid) {
                 FieldStyler.markAsInvalid(this, result.errors[0]);
             }
@@ -794,7 +794,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     // Numéros de voie
     fields.depNum.addEventListener('input', function() {
         if (this.value.trim()) {
-            const result = SecureValidator.validateStreetNumber(this.value, 'numéro de départ');
+            const result = TripSecureValidator.validateStreetNumber(this.value, 'numéro de départ');
             if (result.valid) {
                 FieldStyler.markAsValid(this);
             } else {

@@ -39,13 +39,26 @@
         });
     });
     
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
+    // Wait for body to be available before observing
+    function setupObserver() {
+        if (document.body) {
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        } else {
+            // Retry after a short delay
+            setTimeout(setupObserver, 10);
+        }
+    }
+    
+    setupObserver();
     
     // Also run after DOM is fully loaded
-    document.addEventListener('DOMContentLoaded', enableCopyPaste);
+    document.addEventListener('DOMContentLoaded', function() {
+        enableCopyPaste();
+        setupObserver();
+    });
     
     console.log('✓ Copy/Paste/Select enabled for all form inputs');
 })();

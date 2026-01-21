@@ -155,6 +155,7 @@ class GlobalSearch {
     }
 
     displayResults(data) {
+        console.log(data);
         if (!data.users || data.users.length === 0) {
             console.log('[GlobalSearch] Aucun résultat');
             this.displayNoResults();

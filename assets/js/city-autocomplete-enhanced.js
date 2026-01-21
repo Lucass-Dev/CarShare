@@ -4,7 +4,7 @@
  * Uses global apiUrl() from url-helper.js
  */
 
-class CityAutocomplete {
+class CityAutocompleteEnhanced {
     constructor(inputElement, options = {}) {
         this.input = inputElement;
         this.options = {
@@ -240,20 +240,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const homeStartPlace = document.querySelector('input[name="start_place"]');
     const homeEndPlace = document.querySelector('input[name="end_place"]');
     
-    if (homeStartPlace) new CityAutocomplete(homeStartPlace);
-    if (homeEndPlace) new CityAutocomplete(homeEndPlace);
+    if (homeStartPlace) new CityAutocompleteEnhanced(homeStartPlace);
+    if (homeEndPlace) new CityAutocompleteEnhanced(homeEndPlace);
     
     // Search page
-    const searchStartPlace = document.getElementById('start_place');
-    const searchEndPlace = document.getElementById('end_place');
+    const searchStartPlace = document.getElementById('start-place');
+    const searchEndPlace = document.getElementById('end-place');
     
-    if (searchStartPlace) new CityAutocomplete(searchStartPlace);
-    if (searchEndPlace) new CityAutocomplete(searchEndPlace);
+    if (searchStartPlace) new CityAutocompleteEnhanced(searchStartPlace);
+    if (searchEndPlace) new CityAutocompleteEnhanced(searchEndPlace);
     
     // Trip form
     const depCity = document.getElementById('dep-city');
     const arrCity = document.getElementById('arr-city');
     
-    if (depCity) new CityAutocomplete(depCity);
-    if (arrCity) new CityAutocomplete(arrCity);
+    if (depCity) new CityAutocompleteEnhanced(depCity);
+    if (arrCity) new CityAutocompleteEnhanced(arrCity);
 });
