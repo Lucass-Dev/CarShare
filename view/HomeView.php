@@ -36,8 +36,11 @@
         <h2>Rechercher un trajet</h2>
         <form class="search-form" method="GET" action="index.php">
             <input type="hidden" name="action" value="search">
+            <input type="hidden" id="form_start_input" name="form_start_input">
+
+            <input type="hidden" id="form_end_input" name="form_end_input">
             <input type="text" name="start_place" placeholder="Ville de départ" data-city-autocomplete required>
-            <input type="text" name="end_place" placeholder="Ville d'arrivée" data-city-autocomplete required>
+            <input type="text" name="end_place" placeholder="Ville d'arrivée" data-city-autocomplete>
             <input type="date" name="date" required>
             <input type="number" name="seats" placeholder="Passagers" min="1" max="10" value="1">
             <button type="submit" class="search-button">Rechercher</button>
