@@ -43,7 +43,8 @@ class Database {
                 
             } catch (PDOException $e) {
                 error_log("Erreur connexion BD: " . $e->getMessage());
-                die("Erreur de connexion à la base de données. Veuillez réessayer plus tard.");
+                // Lancer une exception au lieu de die() pour permettre la gestion d'erreur
+                throw new Exception("Impossible de se connecter à la base de données. Veuillez vérifier que MySQL est démarré.");
             }
         }
         return self::$db;

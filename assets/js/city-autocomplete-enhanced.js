@@ -91,16 +91,19 @@ class CityAutocompleteEnhanced {
     
     async searchCities(query) {
         try {
-            console.log(this.options.apiUrl);
+            console.log('Recherche:', query, 'URL:', this.options.apiUrl);
             
-            const response = await fetch(`.${this.options.apiUrl}?q=${encodeURIComponent(query)}`);
+            const response = await fetch(`${this.options.apiUrl}?q=${encodeURIComponent(query)}`);
             
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
                 throw new Error(errorData.error || 'Erreur de recherche');
             }
             
-            const data = await response.json();
+            const text = await response.text();
+            console.log('Réponse brute:', text.substring(0, 200));
+            
+            const data = JSON.parse(text);
             
             
             // Check if error in response

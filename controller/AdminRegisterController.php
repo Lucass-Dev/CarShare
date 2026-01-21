@@ -236,11 +236,12 @@ class AdminRegisterController {
             
             // Check if email already exists
             if (!$error) {
-                $model = new RegisterModel();
-                
-                if ($model->emailExists($email)) {
-                    $error = "Cet email est déjà utilisé";
-                } else {
+                try {
+                    $model = new RegisterModel();
+                    
+                    if ($model->emailExists($email)) {
+                        $error = "Cet email est déjà utilisé";
+                    } else {
                     // Create ADMIN user with sanitized data
                     $userId = $model->createAdminUser(
                         $firstNameValidation['value'],
@@ -288,6 +289,10 @@ class AdminRegisterController {
                     } else {
                         $error = "Une erreur est survenue lors de l'inscription";
                     }
+                }
+                } catch (Exception $e) {
+                    error_log("Erreur lors de l'inscription admin: " . $e->getMessage());
+                    $error = "Erreur de connexion à la base de données. Veuillez vérifier que MySQL est démarré dans XAMPP.";
                 }
             }
         }

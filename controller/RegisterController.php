@@ -235,41 +235,46 @@ class RegisterController {
             
             // Check if email already exists
             if (!$error) {
-                $model = new RegisterModel();
-                
-                if ($model->emailExists($email)) {
-                    $error = "Cet email est déjà utilisé";
-                } else {
-                    // Create user with sanitized data
-                    $userId = $model->createUser(
-                        $firstNameValidation['value'],
-                        $lastNameValidation['value'],
-                        $email,
-                        $password
-                    );
+                try {
+                    $model = new RegisterModel();
                     
-                    if ($userId) {
-                        // Generate email validation token
-                        $tokenManager = new TokenManager();
-                        $token = $tokenManager->generateToken('email_validation', $userId, $email, 86400); // 24h
-                        
-                        // Send confirmation email
-                        $emailService = new EmailService();
-                        $fullName = $firstNameValidation['value'] . ' ' . $lastNameValidation['value'];
-                        $emailSent = $emailService->sendRegistrationConfirmation($email, $fullName, $token);
-                        
-                        if ($emailSent) {
-                            $success = true;
-                            $_SESSION['pending_email'] = $email;
-                            // Redirect to confirmation page
-                            redirect(url('index.php?action=registration_pending'));
-                        } else {
-                            error_log("Échec envoi email de confirmation pour user ID: $userId");
-                            $error = "Inscription créée mais l'email de confirmation n'a pas pu être envoyé. Contactez le support.";
-                        }
+                    if ($model->emailExists($email)) {
+                        $error = "Cet email est déjà utilisé";
                     } else {
-                        $error = "Une erreur est survenue lors de l'inscription";
+                        // Create user with sanitized data
+                        $userId = $model->createUser(
+                            $firstNameValidation['value'],
+                            $lastNameValidation['value'],
+                            $email,
+                            $password
+                        );
+                        
+                        if ($userId) {
+                            // Generate email validation token
+                            $tokenManager = new TokenManager();
+                            $token = $tokenManager->generateToken('email_validation', $userId, $email, 86400); // 24h
+                            
+                            // Send confirmation email
+                            $emailService = new EmailService();
+                            $fullName = $firstNameValidation['value'] . ' ' . $lastNameValidation['value'];
+                            $emailSent = $emailService->sendRegistrationConfirmation($email, $fullName, $token);
+                            
+                            if ($emailSent) {
+                                $success = true;
+                                $_SESSION['pending_email'] = $email;
+                                // Redirect to confirmation page
+                                redirect(url('index.php?action=registration_pending'));
+                            } else {
+                                error_log("Échec envoi email de confirmation pour user ID: $userId");
+                                $error = "Inscription créée mais l'email de confirmation n'a pas pu être envoyé. Contactez le support.";
+                            }
+                        } else {
+                            $error = "Une erreur est survenue lors de l'inscription";
+                        }
                     }
+                } catch (Exception $e) {
+                    error_log("Erreur lors de l'inscription: " . $e->getMessage());
+                    $error = "Erreur de connexion à la base de données. Veuillez vérifier que MySQL est démarré dans XAMPP.";
                 }
             }
         }

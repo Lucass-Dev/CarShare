@@ -4,12 +4,17 @@
  * Returns cities matching the search query
  */
 
+// Désactiver complètement l'affichage des erreurs
+ini_set('display_errors', '0');
+ini_set('display_startup_errors', '0');
+error_reporting(0);
+
+// Démarrer le buffer pour capturer toute sortie non désirée
+ob_start();
+
+// Headers JSON
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
-
-// Enable error logging but disable display
-ini_set('display_errors', 0);
-error_reporting(E_ALL);
 
 require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/../../model/Database.php';
@@ -55,20 +60,27 @@ try {
     
     $cities = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
+    // Nettoyer le buffer et envoyer uniquement le JSON
+    ob_clean();
     echo json_encode($cities);
     
 } catch (PDOException $e) {
     error_log('[CarShare API cities.php] Erreur PDO: ' . $e->getMessage());
+    ob_clean();
     http_response_code(500);
     echo json_encode([
         'error' => 'Erreur de connexion à la base de données',
-        'message' => $e->getMessage()
+        'details' => $e->getMessage()
     ]);
 } catch (Exception $e) {
     error_log('[CarShare API cities.php] Erreur: ' . $e->getMessage());
+    ob_clean();
     http_response_code(500);
     echo json_encode([
         'error' => 'Erreur lors de la recherche',
-        'message' => $e->getMessage()
+        'details' => $e->getMessage()
     ]);
 }
+
+// Fin du buffer et envoi propre
+ob_end_flush();

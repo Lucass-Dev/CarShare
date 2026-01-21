@@ -720,6 +720,10 @@
                 </form>
               </div>
             </div>
+            
+            <!-- Scripts pour l'autocomplétion des villes -->
+            <script src="<?= asset('js/url-helper.js') ?>"></script>
+            <script src="<?= asset('js/city-autocomplete-enhanced.js') ?>"></script>
             <?php
         }
 

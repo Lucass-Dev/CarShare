@@ -502,7 +502,8 @@
                         <div style="display: flex; gap: 8px;">
                             <button class="btn btn--secondary btn--small rate-btn" 
                                     data-action="rate-user" 
-                                    data-user-id="<?= $booking['booker_id'] ?>" 
+                                    data-user-id="<?= $booking['booker_id'] ?>"
+                                    data-carpooling-id="<?= $trip['id'] ?>"
                                     data-user-name="<?= htmlspecialchars($booking['first_name'] . ' ' . $booking['last_name']) ?>" 
                                     title="Noter ce passager"
                                     style="padding: 6px 10px; font-size: 13px;">
@@ -514,6 +515,7 @@
                             <button class="btn btn--outline btn--small report-btn" 
                                     data-action="report-user" 
                                     data-user-id="<?= $booking['booker_id'] ?>" 
+                                    data-carpooling-id="<?= $trip['id'] ?>"
                                     data-user-name="<?= htmlspecialchars($booking['first_name'] . ' ' . $booking['last_name']) ?>" 
                                     title="Signaler un problème"
                                     style="padding: 6px 10px; font-size: 13px;">
@@ -626,3 +628,4 @@ async function confirmDeleteTrip(tripId) {
 </script>
 
 <script src="<?= asset('js/rating-report-modals.js') ?>"></script>
+<script src="<?= asset('js/trip-rating-report.js') ?>"></script>

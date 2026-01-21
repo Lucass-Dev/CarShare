@@ -1,47 +1,47 @@
 /**
- * Modern Rating & Report System - Modal-based 2026
- * Dynamic modals instead of separate pages
+ * Rating & Report System - Spécifique aux trajets
+ * Formulaires et notifications pour noter/signaler un trajet
  */
 
-class RatingReportSystem {
+class TripRatingReportSystem {
     constructor() {
         this.init();
     }
 
     init() {
-        this.attachRatingHandlers();
-        this.attachReportHandlers();
+        this.attachTripRatingHandlers();
+        this.attachTripReportHandlers();
     }
 
-    attachRatingHandlers() {
-        document.querySelectorAll('[data-action="rate-user"]:not([data-carpooling-id])').forEach(button => {
+    attachTripRatingHandlers() {
+        document.querySelectorAll('[data-action="rate-user"][data-carpooling-id]').forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
-                const userId = button.getAttribute('data-user-id');
+                const carpoolingId = button.getAttribute('data-carpooling-id');
                 const userName = button.getAttribute('data-user-name');
-                this.openRatingModal(userId, userName);
+                this.openTripRatingModal(carpoolingId, userName);
             });
         });
     }
 
-    attachReportHandlers() {
-        document.querySelectorAll('[data-action="report-user"]:not([data-carpooling-id])').forEach(button => {
+    attachTripReportHandlers() {
+        document.querySelectorAll('[data-action="report-user"][data-carpooling-id]').forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
-                const userId = button.getAttribute('data-user-id');
+                const carpoolingId = button.getAttribute('data-carpooling-id');
                 const userName = button.getAttribute('data-user-name');
-                this.openReportModal(userId, userName);
+                this.openTripReportModal(carpoolingId, userName);
             });
         });
     }
 
-    openRatingModal(userId, userName) {
+    openTripRatingModal(carpoolingId, userName) {
         const modal = this.createModal(`
             <div class="modal-header">
-                <h3>⭐ Noter ${userName}</h3>
+                <h3>⭐ Noter le conducteur : ${userName}</h3>
                 <button class="modal-close">&times;</button>
             </div>
-            <form class="rating-form" data-user-id="${userId}">
+            <form class="rating-form" data-carpooling-id="${carpoolingId}">
                 <div class="rating-section">
                     <label>Note globale</label>
                     <div class="star-rating" data-rating="0">
@@ -62,16 +62,16 @@ class RatingReportSystem {
         `);
 
         this.initStarRating(modal);
-        this.handleRatingSubmit(modal, userId);
+        this.handleTripRatingSubmit(modal, carpoolingId);
     }
 
-    openReportModal(userId, userName) {
+    openTripReportModal(carpoolingId, userName) {
         const modal = this.createModal(`
             <div class="modal-header">
-                <h3>⚠️ Signaler ${userName}</h3>
+                <h3>⚠️ Signaler le conducteur : ${userName}</h3>
                 <button class="modal-close">&times;</button>
             </div>
-            <form class="report-form" data-user-id="${userId}">
+            <form class="report-form" data-carpooling-id="${carpoolingId}">
                 <div class="form-group">
                     <label>Motif du signalement *</label>
                     <select name="reason" required>
@@ -102,7 +102,7 @@ class RatingReportSystem {
             </form>
         `);
 
-        this.handleReportSubmit(modal, userId);
+        this.handleTripReportSubmit(modal, carpoolingId);
     }
 
     createModal(content) {
@@ -118,7 +118,6 @@ class RatingReportSystem {
         document.body.appendChild(modal);
         setTimeout(() => modal.classList.add('active'), 10);
 
-        // Close handlers
         modal.querySelector('.modal-close')?.addEventListener('click', () => this.closeModal(modal));
         modal.querySelector('.modal-cancel')?.addEventListener('click', () => this.closeModal(modal));
         modal.querySelector('.modal-overlay')?.addEventListener('click', () => this.closeModal(modal));
@@ -127,8 +126,8 @@ class RatingReportSystem {
     }
 
     initStarRating(modal) {
-        modal.querySelectorAll('.star-rating, .star-rating-small').forEach(container => {
-            const stars = container.querySelectorAll('.star, .star-small');
+        modal.querySelectorAll('.star-rating').forEach(container => {
+            const stars = container.querySelectorAll('.star');
             
             stars.forEach((star, index) => {
                 star.addEventListener('click', () => {
@@ -161,7 +160,7 @@ class RatingReportSystem {
         });
     }
 
-    handleRatingSubmit(modal, userId) {
+    handleTripRatingSubmit(modal, carpoolingId) {
         const form = modal.querySelector('.rating-form');
         
         form.addEventListener('submit', async (e) => {
@@ -171,7 +170,7 @@ class RatingReportSystem {
             const comment = form.querySelector('[name="comment"]').value;
 
             if (globalRating === '0') {
-                showNotification('Veuillez sélectionner une note', 'warning');
+                this.showBigNotification('⚠️ Veuillez sélectionner une note', 'warning');
                 return;
             }
 
@@ -180,11 +179,11 @@ class RatingReportSystem {
             submitBtn.innerHTML = '<span class="spinner"></span> Envoi...';
 
             try {
-                const response = await fetch(apiUrl('rating.php'), {
+                const response = await fetch(apiUrl('rating_trajet.php'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        user_id: userId,
+                        carpooling_id: carpoolingId,
                         rating: globalRating,
                         content: comment
                     })
@@ -192,23 +191,22 @@ class RatingReportSystem {
 
                 const result = await response.json();
                 
+                this.closeModal(modal);
+                
                 if (result.success) {
-                    this.closeModal(modal);
-                    this.showNotification('✅ Note envoyée avec succès !', 'success');
-                    setTimeout(() => location.reload(), 1500);
+                    this.showBigNotification('✅ Note enregistrée avec succès !', 'success');
+                    setTimeout(() => location.reload(), 1000);
                 } else {
-                    // Fermer le modal et afficher le message d'erreur
-                    this.closeModal(modal);
-                    this.showNotification('⚠️ ' + result.message, 'warning');
+                    this.showBigNotification('⚠️ ' + result.message, 'warning');
                 }
             } catch (error) {
                 this.closeModal(modal);
-                this.showNotification('❌ Erreur lors de l\'envoi: ' + error.message, 'error');
+                this.showBigNotification('❌ Erreur : ' + error.message, 'error');
             }
         });
     }
 
-    handleReportSubmit(modal, userId) {
+    handleTripReportSubmit(modal, carpoolingId) {
         const form = modal.querySelector('.report-form');
         
         form.addEventListener('submit', async (e) => {
@@ -222,11 +220,11 @@ class RatingReportSystem {
             submitBtn.innerHTML = '<span class="spinner"></span> Envoi...';
 
             try {
-                const response = await fetch(apiUrl('report.php'), {
+                const response = await fetch(apiUrl('report_trajet.php'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        user_id: userId,
+                        carpooling_id: carpoolingId,
                         reason: reason,
                         description: description
                     })
@@ -234,17 +232,16 @@ class RatingReportSystem {
 
                 const result = await response.json();
                 
+                this.closeModal(modal);
+                
                 if (result.success) {
-                    this.closeModal(modal);
-                    this.showNotification('✅ Signalement enregistré', 'success');
+                    this.showBigNotification('✅ Signalement enregistré', 'success');
                 } else {
-                    // Fermer le modal et afficher le message d'erreur
-                    this.closeModal(modal);
-                    this.showNotification('⚠️ ' + result.message, 'warning');
+                    this.showBigNotification('⚠️ ' + result.message, 'warning');
                 }
             } catch (error) {
                 this.closeModal(modal);
-                this.showNotification('❌ Erreur lors de l\'envoi: ' + error.message, 'error');
+                this.showBigNotification('❌ Erreur : ' + error.message, 'error');
             }
         });
     }
@@ -254,44 +251,78 @@ class RatingReportSystem {
         setTimeout(() => modal.remove(), 300);
     }
 
-    showNotification(message, type = 'success') {
+    showBigNotification(message, type = 'success') {
+        // Supprimer les anciennes notifications
+        document.querySelectorAll('.big-notification').forEach(n => n.remove());
+        
+        const colors = {
+            success: { bg: '#10b981', border: '#059669' },
+            warning: { bg: '#f59e0b', border: '#d97706' },
+            error: { bg: '#ef4444', border: '#dc2626' }
+        };
+        
         const icons = {
             success: '✅',
-            error: '❌',
             warning: '⚠️',
-            info: 'ℹ️'
+            error: '❌'
         };
         
         const notification = document.createElement('div');
-        notification.className = `notification notification--${type}`;
-        notification.innerHTML = `
-            <div class="notification__icon">${icons[type] || icons.info}</div>
-            <div class="notification__content">
-                <div class="notification__message">${message}</div>
-            </div>
+        notification.className = 'big-notification';
+        notification.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            z-index: 10000;
+            border-left: 5px solid ${colors[type].border};
+            min-width: 300px;
+            max-width: 500px;
+            text-align: center;
+            animation: slideInBig 0.3s ease-out;
         `;
+        
+        notification.innerHTML = `
+            <div style="font-size: 48px; margin-bottom: 15px;">${icons[type]}</div>
+            <div style="font-size: 18px; font-weight: 600; color: #111827; margin-bottom: 10px;">${message}</div>
+            <div style="width: 100%; height: 4px; background: ${colors[type].bg}; border-radius: 2px; margin-top: 20px;"></div>
+        `;
+        
+        // Ajouter le style d'animation si pas déjà présent
+        if (!document.getElementById('big-notification-styles')) {
+            const style = document.createElement('style');
+            style.id = 'big-notification-styles';
+            style.textContent = `
+                @keyframes slideInBig {
+                    from {
+                        opacity: 0;
+                        transform: translate(-50%, -60%);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translate(-50%, -50%);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
         document.body.appendChild(notification);
         
-        setTimeout(() => notification.classList.add('notification--show'), 10);
         setTimeout(() => {
-            notification.classList.remove('notification--show');
+            notification.style.opacity = '0';
+            notification.style.transform = 'translate(-50%, -40%)';
+            notification.style.transition = 'all 0.3s ease-out';
             setTimeout(() => notification.remove(), 300);
-        }, 4000);
+        }, 1000);
     }
 }
 
-// Initialize on DOM ready
+// Initialiser au chargement
 document.addEventListener('DOMContentLoaded', () => {
-    new RatingReportSystem();
+    new TripRatingReportSystem();
 });
-
-// Export for manual triggering
-window.openRatingModal = (userId, userName) => {
-    const system = new RatingReportSystem();
-    system.openRatingModal(userId, userName);
-};
-
-window.openReportModal = (userId, userName) => {
-    const system = new RatingReportSystem();
-    system.openReportModal(userId, userName);
-};

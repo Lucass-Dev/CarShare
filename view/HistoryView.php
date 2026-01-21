@@ -200,7 +200,8 @@
                 <div class="trip-card__actions">
                     <button class="btn btn--secondary btn--small rate-btn" 
                             data-action="rate-user" 
-                            data-user-id="<?= $booking['provider_id'] ?>" 
+                            data-user-id="<?= $booking['provider_id'] ?>"
+                            data-carpooling-id="<?= $bookingTripId ?>"
                             data-user-name="<?= htmlspecialchars($booking['provider_first_name']) ?>" 
                             title="Noter ce conducteur">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -211,6 +212,7 @@
                     <button class="btn btn--outline btn--small report-btn" 
                             data-action="report-user" 
                             data-user-id="<?= $booking['provider_id'] ?>" 
+                            data-carpooling-id="<?= $bookingTripId ?>"
                             data-user-name="<?= htmlspecialchars($booking['provider_first_name']) ?>" 
                             title="Signaler un problème">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -237,3 +239,5 @@
         <?php endif; ?>
     </section>
 </div>
+
+<script src="<?= asset('js/trip-rating-report.js') ?>"></script>
