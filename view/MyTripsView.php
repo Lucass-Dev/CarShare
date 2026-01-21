@@ -627,5 +627,6 @@ async function confirmDeleteTrip(tripId) {
 }
 </script>
 
+<script src="<?= asset('js/url-helper.js') ?>"></script>
 <script src="<?= asset('js/rating-report-modals.js') ?>"></script>
 <script src="<?= asset('js/trip-rating-report.js') ?>"></script>

@@ -240,4 +240,5 @@
     </section>
 </div>
 
+<script src="<?= asset('js/url-helper.js') ?>"></script>
 <script src="<?= asset('js/trip-rating-report.js') ?>"></script>
