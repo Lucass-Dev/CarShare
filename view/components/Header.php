@@ -114,12 +114,6 @@ if ($isLoggedIn && $userId && !$isAdmin) {
                     <li><a href="?action=login&return_url=<?= urlencode('?action=' . ($action ?? 'home')) ?>">Se connecter</a></li>
                     <li><a href="?action=register">S'inscrire</a></li>
                     <li class="dropdown-divider"></li>
-                    <li><a href="?action=admin_login" style="color: #6b21a8; font-weight: 600;">
-                        <svg style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                        </svg>
-                        Admin
-                    </a></li>
                 </ul>
             <?php endif; ?>
         </div>
