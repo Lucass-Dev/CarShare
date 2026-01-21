@@ -180,8 +180,6 @@
 .trip-card--expired {
   border-left: 4px solid var(--error);
   opacity: 0.6;
-  pointer-events: none;
-  cursor: not-allowed;
 }
 
 .trip-card--expired .trip-card__main {
@@ -218,8 +216,6 @@
 .trip-card__badge--expired {
   background: linear-gradient(135deg, var(--error) 0%, #dc2626 100%);
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4), 0 0 0 2px rgba(255, 255, 255, 0.3) inset;
-}
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
 }
 
 .trip-card__badge--completed {

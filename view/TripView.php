@@ -720,9 +720,6 @@
                 </form>
               </div>
             </div>
-
-            <script src="<?= asset('js/city-autocomplete-enhanced.js') ?>"></script>
-            <script src="<?= asset('js/create-trip-enhanced.js') ?>"></script>
             <?php
         }
 

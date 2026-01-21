@@ -807,7 +807,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     
     fields.depNum.addEventListener('blur', function() {
         if (this.value.trim()) {
-            const result = SecureValidator.validateStreetNumber(this.value, 'numéro de départ');
+            const result = TripSecureValidator.validateStreetNumber(this.value, 'numéro de départ');
             if (!result.valid) {
                 FieldStyler.markAsInvalid(this, result.errors[0]);
             }
@@ -816,7 +816,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     
     fields.arrNum.addEventListener('input', function() {
         if (this.value.trim()) {
-            const result = SecureValidator.validateStreetNumber(this.value, 'numéro d\'arrivée');
+            const result = TripSecureValidator.validateStreetNumber(this.value, 'numéro d\'arrivée');
             if (result.valid) {
                 FieldStyler.markAsValid(this);
             } else {
@@ -829,7 +829,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     
     fields.arrNum.addEventListener('blur', function() {
         if (this.value.trim()) {
-            const result = SecureValidator.validateStreetNumber(this.value, 'numéro d\'arrivée');
+            const result = TripSecureValidator.validateStreetNumber(this.value, 'numéro d\'arrivée');
             if (!result.valid) {
                 FieldStyler.markAsInvalid(this, result.errors[0]);
             }
@@ -839,7 +839,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     // Date
     fields.date.addEventListener('input', function() {
         if (this.value) {
-            const result = SecureValidator.validateDate(this.value);
+            const result = TripSecureValidator.validateDate(this.value);
             if (!result.valid) {
                 FieldStyler.markAsInvalid(this, result.errors[0]);
             } else {
@@ -847,7 +847,7 @@ function setupRealtimeValidation(fields, notificationManager) {
             }
             // Revalider l'heure si elle existe
             if (fields.time && fields.time.value) {
-                const timeResult = SecureValidator.validateTime(fields.time.value, this.value);
+                const timeResult = TripSecureValidator.validateTime(fields.time.value, this.value);
                 if (!timeResult.valid) {
                     FieldStyler.markAsInvalid(fields.time, timeResult.errors[0]);
                 } else {
@@ -866,7 +866,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     });
     
     fields.date.addEventListener('change', function() {
-        const result = SecureValidator.validateDate(this.value);
+        const result = TripSecureValidator.validateDate(this.value);
         if (!result.valid) {
             FieldStyler.markAsInvalid(this, result.errors[0]);
         } else {
@@ -874,7 +874,7 @@ function setupRealtimeValidation(fields, notificationManager) {
         }
         // Revalider l'heure si elle existe
         if (fields.time && fields.time.value) {
-            const timeResult = SecureValidator.validateTime(fields.time.value, this.value);
+            const timeResult = TripSecureValidator.validateTime(fields.time.value, this.value);
             if (!timeResult.valid) {
                 FieldStyler.markAsInvalid(fields.time, timeResult.errors[0]);
             } else {
@@ -887,7 +887,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     
     fields.date.addEventListener('blur', function() {
         if (this.value) {
-            const result = SecureValidator.validateDate(this.value);
+            const result = TripSecureValidator.validateDate(this.value);
             if (!result.valid) {
                 FieldStyler.markAsInvalid(this, result.errors[0]);
             }
@@ -898,7 +898,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     fields.time.addEventListener('input', function() {
         if (this.value) {
             const dateValue = fields.date ? fields.date.value : null;
-            const result = SecureValidator.validateTime(this.value, dateValue);
+            const result = TripSecureValidator.validateTime(this.value, dateValue);
             if (!result.valid) {
                 FieldStyler.markAsInvalid(this, result.errors[0]);
             } else {
@@ -912,7 +912,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     fields.time.addEventListener('change', function() {
         if (this.value) {
             const dateValue = fields.date ? fields.date.value : null;
-            const result = SecureValidator.validateTime(this.value, dateValue);
+            const result = TripSecureValidator.validateTime(this.value, dateValue);
             if (!result.valid) {
                 FieldStyler.markAsInvalid(this, result.errors[0]);
             } else {
@@ -924,7 +924,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     fields.time.addEventListener('blur', function() {
         if (this.value) {
             const dateValue = fields.date ? fields.date.value : null;
-            const result = SecureValidator.validateTime(this.value, dateValue);
+            const result = TripSecureValidator.validateTime(this.value, dateValue);
             if (!result.valid) {
                 FieldStyler.markAsInvalid(this, result.errors[0]);
             }
@@ -934,7 +934,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     // Places
     fields.places.addEventListener('input', function() {
         if (this.value) {
-            const result = SecureValidator.validatePlaces(this.value);
+            const result = TripSecureValidator.validatePlaces(this.value);
             if (!result.valid) {
                 FieldStyler.markAsInvalid(this, result.errors[0]);
             } else {
@@ -944,7 +944,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     });
     
     fields.places.addEventListener('change', function() {
-        const result = SecureValidator.validatePlaces(this.value);
+        const result = TripSecureValidator.validatePlaces(this.value);
         if (!result.valid) {
             FieldStyler.markAsInvalid(this, result.errors[0]);
         } else {
@@ -964,7 +964,7 @@ function setupRealtimeValidation(fields, notificationManager) {
         }
         
         if (this.value) {
-            const result = SecureValidator.validatePrice(this.value);
+            const result = TripSecureValidator.validatePrice(this.value);
             if (result.valid) {
                 FieldStyler.markAsValid(this);
             } else {
@@ -977,7 +977,7 @@ function setupRealtimeValidation(fields, notificationManager) {
     
     fields.price.addEventListener('blur', function() {
         if (this.value) {
-            const result = SecureValidator.validatePrice(this.value);
+            const result = TripSecureValidator.validatePrice(this.value);
             if (!result.valid) {
                 FieldStyler.markAsInvalid(this, result.errors[0]);
             }
@@ -1113,27 +1113,27 @@ class StepNavigator {
             let result;
             switch (fieldInfo.type) {
                 case 'city':
-                    result = SecureValidator.validateCity(field.value, fieldInfo.label, field);
+                    result = TripSecureValidator.validateCity(field.value, fieldInfo.label, field);
                     break;
                 case 'street':
-                    result = SecureValidator.validateStreet(field.value, fieldInfo.label);
+                    result = TripSecureValidator.validateStreet(field.value, fieldInfo.label);
                     break;
                 case 'streetNumber':
-                    result = SecureValidator.validateStreetNumber(field.value, fieldInfo.label);
+                    result = TripSecureValidator.validateStreetNumber(field.value, fieldInfo.label);
                     break;
                 case 'date':
-                    result = SecureValidator.validateDate(field.value);
+                    result = TripSecureValidator.validateDate(field.value);
                     break;
                 case 'time':
                     const dateField = document.getElementById('date');
                     const dateValue = dateField ? dateField.value : null;
-                    result = SecureValidator.validateTime(field.value, dateValue);
+                    result = TripSecureValidator.validateTime(field.value, dateValue);
                     break;
                 case 'places':
-                    result = SecureValidator.validatePlaces(field.value);
+                    result = TripSecureValidator.validatePlaces(field.value);
                     break;
                 case 'price':
-                    result = SecureValidator.validatePrice(field.value);
+                    result = TripSecureValidator.validatePrice(field.value);
                     break;
                 default:
                     result = { valid: true, errors: [] };

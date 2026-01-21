@@ -237,5 +237,3 @@
         <?php endif; ?>
     </section>
 </div>
-
-<script src="<?= asset('js/rating-report-modals.js') ?>"></script>
