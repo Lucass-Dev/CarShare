@@ -165,11 +165,12 @@
                 }
             } catch (error) {
                 console.error('Erreur:', error);
-                showError('Erreur lors de l\'envoi du message. Vérifiez votre connexion.');
+                //showError('Erreur lors de l\'envoi du message. Vérifiez votre connexion.');
             } finally {
                 // Re-enable button
                 sendButton.disabled = false;
                 sendButton.textContent = originalText;
+                //header("Refresh:0");
             }
         });
 

@@ -221,7 +221,6 @@ body.chat-page {
     font-size: 14px;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    white-space: pre-wrap;
     line-height: 1.4;
 }
 
@@ -293,7 +292,7 @@ body.chat-page {
 .send-button {
     padding: 12px 20px;
     background: #0969da;
-    color: white;
+    color: white !important;
     border: none;
     border-radius: 8px;
     font-size: 14px;

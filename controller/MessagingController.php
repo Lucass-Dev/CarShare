@@ -69,6 +69,7 @@ class MessagingController {
      * Send a message (AJAX endpoint)
      */
     public function sendMessage() {
+        ob_end_clean();
         header('Content-Type: application/json');
 
         $userId = $_SESSION['user_id'];
@@ -99,6 +100,7 @@ class MessagingController {
      * Get new messages (AJAX endpoint for polling)
      */
     public function getNewMessages() {
+        ob_end_clean();
         header('Content-Type: application/json');
 
         $userId = $_SESSION['user_id'];
