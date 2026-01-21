@@ -243,7 +243,6 @@
     </style>
 </head>
 <body>
-    <?php require_once __DIR__ . '/components/header.php'; ?>
     
     <div class="success-container">
         <div class="success-card">
@@ -314,7 +313,5 @@
             </div>
         </div>
     </div>
-
-    <?php require_once __DIR__ . '/components/footer.php'; ?>
 </body>
 </html>
